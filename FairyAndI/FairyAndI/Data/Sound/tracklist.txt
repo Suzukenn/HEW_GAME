@@ -1,0 +1,10 @@
+Data/Sound/BGM/Game.wav 1 BGM_GAME
+Data/Sound/BGM/GameOver.wav 0 BGM_GAMEOVER
+Data/Sound/BGM/Opening.wav 1 BGM_OPENING
+Data/Sound/SE/Break.wav 0 SE_BREAK
+Data/Sound/SE/Damage.wav 0 SE_DAMAGE
+Data/Sound/SE/Decision.wav 0 SE_DECISION
+Data/Sound/SE/Hit.wav 0 SE_HIT
+Data/Sound/SE/Instantiate.wav 0 SE_INSTANTIATE
+Data/Sound/SE/Jump.wav 0 SE_JUMP
+Data/Sound/SE/Shot.wav 0 SE_SHOT
