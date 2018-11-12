@@ -32,7 +32,7 @@ void GAMEOVER::Draw(void)
 HRESULT GAMEOVER::Initialize(void)
 {
     //---オブジェクトの初期化処理---//
-    if (FAILED(Back.Initialize(TEXT("Data/Game/GameOver.png"))))
+    if (FAILED(Back.Initialize(TEXT("Data/GameOver/GameOver.png"))))
     {
         return E_FAIL;
     }

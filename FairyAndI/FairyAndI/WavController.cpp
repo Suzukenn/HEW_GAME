@@ -88,7 +88,7 @@ bool WAVCONTROLLER::Load(LPCTSTR filepath)
 
 	//音声データを読み込む
     WaveData.resize(DataChunk.cksize);
-    if (mmioRead(Mmio, (HPSTR)&WaveData.at(0), DataChunk.cksize) != DataChunk.cksize)
+    if (mmioRead(Mmio, (HPSTR)WaveData.data(), DataChunk.cksize) != DataChunk.cksize)
     {
         MessageBox(nullptr, TEXT("音楽データを読み込めませんでした"), filepath, MB_ICONSTOP | MB_OK);
         mmioClose(Mmio, 0);
@@ -109,11 +109,11 @@ bool WAVCONTROLLER::Load(LPCTSTR filepath)
 //
 //引数：なし
 //
-//戻り値：(WAVEFORMATEX*)フォーマットのアドレス
+//戻り値：(const WAVEFORMATEX&)フォーマットのアドレス
 /////////////////////////////////////////////
-const WAVEFORMATEX* WAVCONTROLLER::GetFormat(void)
+const WAVEFORMATEX& WAVCONTROLLER::GetFormat(void)
 {
-	return &WaveFormat;
+	return WaveFormat;
 }
 
 /////////////////////////////////////////////
@@ -123,9 +123,9 @@ const WAVEFORMATEX* WAVCONTROLLER::GetFormat(void)
 //
 //引数：なし
 //
-//戻り値：(UINT32*)フォーマットのアドレス
+//戻り値：(UINT32)フォーマットのアドレス
 /////////////////////////////////////////////
-const UINT32 WAVCONTROLLER::GetLoop(void)
+UINT32 WAVCONTROLLER::GetLoop(void)
 {
     return LoopCount;
 }
@@ -137,11 +137,11 @@ const UINT32 WAVCONTROLLER::GetLoop(void)
 //
 //引数：なし
 //
-//戻り値：(BYTE*)Wavデータのアドレス
+//戻り値：(const BYTE)Wavデータのアドレス
 /////////////////////////////////////////////
-const BYTE* WAVCONTROLLER::GetWaveData(void)
+const BYTE& WAVCONTROLLER::GetWaveData(void)
 {
-	return &WaveData.at(0);
+	return WaveData.at(0);
 }
 
 /////////////////////////////////////////////
@@ -151,9 +151,9 @@ const BYTE* WAVCONTROLLER::GetWaveData(void)
 //
 //引数：なし
 //
-//戻り値：(size_t*)データサイズのアドレス
+//戻り値：(size_t)データサイズのアドレス
 /////////////////////////////////////////////
-const std::size_t WAVCONTROLLER::GetWaveSize(void)
+std::size_t WAVCONTROLLER::GetWaveSize(void)
 {
 	return WaveData.size();
 }

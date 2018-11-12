@@ -21,8 +21,8 @@ void BUTTON::Draw(void)
     pDevice = GetDevice();
 
     //---書式設定---//
-    pDevice->SetStreamSource(0, VertexBuffer, 0, sizeof(VERTEX)); //頂点書式設定
-    pDevice->SetFVF(FVF_VERTEX);                                  //フォーマット設定
+    pDevice->SetStreamSource(0, VertexBuffer, 0, sizeof(VERTEX_2D)); //頂点書式設定
+    pDevice->SetFVF(FVF_VERTEX_2D);                                  //フォーマット設定
     pDevice->SetTexture(0, Graphic);                              //テクスチャ設定
 
     //---頂点バッファによる背景描画---//
@@ -45,7 +45,7 @@ HRESULT BUTTON::Initialize(LPTSTR filepath, D3DXVECTOR2 position, D3DXVECTOR2 si
 	HRESULT hResult;
 	LPDIRECT3DDEVICE9 pDevice;
 
-    VERTEX* pVertex;
+    VERTEX_2D* pVertex;
 
 	//---初期化処理---//
 	pDevice = GetDevice();
@@ -62,7 +62,7 @@ HRESULT BUTTON::Initialize(LPTSTR filepath, D3DXVECTOR2 position, D3DXVECTOR2 si
 	}
 
 	//---頂点バッファの生成---//
-	hResult = pDevice->CreateVertexBuffer(sizeof(VERTEX) * 4, 0, FVF_VERTEX, D3DPOOL_MANAGED, &VertexBuffer, nullptr);
+	hResult = pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4, 0, FVF_VERTEX_2D, D3DPOOL_MANAGED, &VertexBuffer, nullptr);
 	if (FAILED(hResult))
 	{
 		return hResult;

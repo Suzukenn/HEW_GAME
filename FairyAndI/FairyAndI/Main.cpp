@@ -60,7 +60,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     g_pD3DDevice.reset(new LPDIRECT3DDEVICE9());
 
 #ifdef _DEBUG
-    g_pD3DXFont.reset(new LPD3DXFONT);
+    g_pD3DXFont.reset(new LPD3DXFONT());
 #endif
 
     //乱数シード値の初期化
@@ -235,7 +235,7 @@ void Draw(void)
 #endif
 
         //Direct3Dによる描画の終了
-        const_cast<IDirect3DDevice9*>(*g_pD3DDevice)->EndScene();
+        (*g_pD3DDevice)->EndScene();
     }
 
     //バックバッファとフロントバッファの入れ替え
@@ -272,6 +272,12 @@ HRESULT Initialize(HINSTANCE instance, HWND handle)
     }
 
     //---シーン初期化---//
+    if (SUCCEEDED(hResult))
+    {
+        hResult = SCENEMANAGER::Initialize();
+    }
+
+    //---デバッグ表示初期化---//
     if (SUCCEEDED(hResult))
     {
         hResult = SCENEMANAGER::Initialize();
@@ -375,8 +381,8 @@ HRESULT SetupEnvironment(HWND handle)
     }
 
     //---レンダーステートパラメータの設定---//
-    (*g_pD3DDevice)->SetRenderState(D3DRS_CULLMODE, D3DCULL_NONE);			//カリングしない
-    (*g_pD3DDevice)->SetRenderState(D3DRS_ZENABLE, FALSE);					//Zバッファを使用しない
+    (*g_pD3DDevice)->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);			//裏面のカリング
+    (*g_pD3DDevice)->SetRenderState(D3DRS_ZENABLE, TRUE);					//Zバッファを使用
     (*g_pD3DDevice)->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);			//アルファブレンドを行う
     (*g_pD3DDevice)->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		//アルファソースカラーの指定
     (*g_pD3DDevice)->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	//アルファデスティネーションカラーの指定
@@ -384,8 +390,8 @@ HRESULT SetupEnvironment(HWND handle)
     //---サンプラーステートパラメータの設定---//
     (*g_pD3DDevice)->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);	//テクスチャアドレッシング方法(U値)を設定
     (*g_pD3DDevice)->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);	//テクスチャアドレッシング方法(V値)を設定
-    (*g_pD3DDevice)->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_POINT);	    //テクスチャ縮小フィルタモードを設定
-    (*g_pD3DDevice)->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_POINT);	    //テクスチャ拡大フィルタモードを設定
+    (*g_pD3DDevice)->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);	    //テクスチャ拡大フィルタモードを設定
+    (*g_pD3DDevice)->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);	    //テクスチャ縮小フィルタモードを設定
 
     //---テクスチャステージステートの設定---//
     (*g_pD3DDevice)->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	//アルファブレンディング処理

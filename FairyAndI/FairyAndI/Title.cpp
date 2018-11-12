@@ -2,6 +2,7 @@
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "SoundManager.h"
+#include "TrainingButton.h"
 #include "Title.h"
 
 //＝＝＝関数定義＝＝＝//
@@ -19,6 +20,7 @@ void TITLE::Draw(void)
     //---オブジェクトの描画処理---//
     Back.Draw();
     StartButton.Draw();
+    TrainingButton.Draw();
 }
 
 /////////////////////////////////////////////
@@ -33,12 +35,17 @@ void TITLE::Draw(void)
 HRESULT TITLE::Initialize(void)
 {
     //---オブジェクトの初期化処理---//
-    if (FAILED(Back.Initialize(TEXT("Data/Game/Title.png"))))
+    if (FAILED(Back.Initialize(TEXT("Data/Title/Title.png"))))
     {
         return E_FAIL;
     }
 
-    if (FAILED(StartButton.Initialize(TEXT("Data/UI/GameStartButton.png"), { 300.0F, 400.0F }, { 200.0F, 50.0F })))
+    if (FAILED(StartButton.Initialize(TEXT("Data/Title/UI/GameStartButton.png"), { 500.0F, 500.0F }, { 200.0F, 50.0F })))
+    {
+        return E_FAIL;
+    }
+
+    if (FAILED(TrainingButton.Initialize(TEXT("Data/Title/UI/Training.tga"), { 800.0F, 500.0F }, { 200.0F, 50.0F })))
     {
         return E_FAIL;
     }
@@ -63,6 +70,7 @@ void TITLE::Uninitialize(void)
     //---オブジェクトの終了処理---//
     Back.Uninitialize();
     StartButton.Uninitialize();
+    TrainingButton.Uninitialize();
 
     //---BGM停止---//
     SOUNDMANAGER::Stop(TEXT("BGM_OPENING"));
@@ -82,4 +90,5 @@ void TITLE::Update(void)
     //---オブジェクトの更新処理---//
     Back.Update();
     StartButton.Update();
+    TrainingButton.Update();
 }
