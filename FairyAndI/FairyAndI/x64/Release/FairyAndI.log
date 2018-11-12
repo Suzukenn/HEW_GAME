@@ -1,8 +1,10 @@
-﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (x64\Release\) contains files shared from another project (SKATER_GIRL_RESTART.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+﻿  TrainingButton.cpp
+  SceneManager.cpp
+  Title.cpp
   コード生成しています。
-  24 of 1173 functions ( 2.0%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    27 functions had inline decision re-evaluated but remain unchanged
+  45 of 1361 functions ( 3.3%) were compiled, the rest were copied from previous compilation.
+    2 functions were new in current compilation
+    10 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)

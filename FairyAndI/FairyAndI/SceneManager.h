@@ -9,6 +9,7 @@
 //—ñ‹“Œ^’è‹`//
 typedef enum
 {
+    SCENE_TRAINING,
     SCENE_TITLE,
     SCENE_GAME,
     SCENE_GAMEOVER,

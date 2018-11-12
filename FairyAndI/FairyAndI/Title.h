@@ -6,6 +6,7 @@
 #include "BaseScene.h"
 #include "Main.h"
 #include "StartButton.h"
+#include "TrainingButton.h"
 
 //ƒNƒ‰ƒXéŒ¾//
 class TITLE final : public BASE_SCENE
@@ -13,12 +14,13 @@ class TITLE final : public BASE_SCENE
     private:
         BACKGROUND Back;
         STARTBUTTON StartButton;
+        TRAININGBUTTON TrainingButton;
 
     public:
-        void Draw(void) final;
-        void Uninitialize(void) final;
-        HRESULT Initialize(void) final;
-        void Update(void) final;
+        void Draw(void);
+        void Uninitialize(void);
+        HRESULT Initialize(void);
+        void Update(void);
 };
 
 #endif

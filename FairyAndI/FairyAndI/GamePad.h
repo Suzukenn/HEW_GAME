@@ -38,11 +38,11 @@ class GAMEPAD
         void Update(void);
 
         POINTS GetLeftStick(DWORD);
-        BYTE GetLeftTrigger(DWORD);
+        float GetLeftTrigger(DWORD);
         bool GetHold(DWORD, DWORD);
         bool GetRelease(DWORD, DWORD);
         POINTS GetRightStick(DWORD);
-        BYTE GetRightTrigger(DWORD);
+        float GetRightTrigger(DWORD);
         bool GetTrigger(DWORD, DWORD);
 };
 

@@ -8,13 +8,13 @@
 class BACKGROUND
 {
 	private:
-		LPDIRECT3DTEXTURE9 Graphic;           //テクスチャ
+		LPDIRECT3DTEXTURE9 Texture;           //テクスチャ
 		LPDIRECT3DVERTEXBUFFER9 VertexBuffer; //頂点バッファ
 
 	public:
 		void Draw(void);
 		void Uninitialize(void);
-		HRESULT Initialize(LPTSTR);
+		HRESULT Initialize(LPCTSTR);
 		void Update(void);
 };
 

@@ -150,9 +150,9 @@ POINTS INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER number, GAMEPADDIRECTION dire
 //
 //引数：(JOYSTICKNUMBER)ゲームパッド番号,(GAMEPADDIRECTION)取得トリガー
 //
-//戻り値：(BYTE)入力値
+//戻り値：(float)入力率
 /////////////////////////////////////////////
-BYTE INPUTMANAGER::GetGamePadTrigger(GAMEPADNUMBER number, GAMEPADDIRECTION direction)
+float INPUTMANAGER::GetGamePadTrigger(GAMEPADNUMBER number, GAMEPADDIRECTION direction)
 {
     switch (direction)
     {

@@ -53,7 +53,7 @@ HRESULT SOUNDMANAGER::CreateSound(SOUNDPARAMETER data, int nCounter)
     }
 
     //ソースボイスの作成
-    if (SUCCEEDED((*Manager)->CreateSourceVoice(pVoice.get(), WaveSound.at(data.CallKey).GetFormat())))
+    if (SUCCEEDED((*Manager)->CreateSourceVoice(pVoice.get(), &WaveSound.at(data.CallKey).GetFormat())))
     {
         SourceVoice.insert(std::make_pair(data.CallKey, (*pVoice)));
     }
@@ -226,7 +226,7 @@ void SOUNDMANAGER::Play(tstring label)
     //---バッファの値設定---//
     memset(&bBuffer, 0, sizeof(XAUDIO2_BUFFER));
     bBuffer.AudioBytes = (UINT)WaveSound.at(label).GetWaveSize();
-    bBuffer.pAudioData = WaveSound.at(label).GetWaveData();
+    bBuffer.pAudioData = &WaveSound.at(label).GetWaveData();
     bBuffer.Flags = XAUDIO2_END_OF_STREAM;
     bBuffer.LoopCount = XAUDIO2_LOOP_INFINITE * WaveSound.at(label).GetLoop();
 

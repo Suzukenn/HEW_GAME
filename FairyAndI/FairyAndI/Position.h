@@ -2,8 +2,6 @@
 #define _POSITION_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include "BackGround.h"
-#include "Base_Scene.h"
 #include "Main.h"
 
 //＝＝＝クラス宣言＝＝＝//

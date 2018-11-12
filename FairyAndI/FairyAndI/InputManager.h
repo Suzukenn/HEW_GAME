@@ -34,7 +34,7 @@ class INPUTMANAGER
 
         static bool GetGamePadButton(GAMEPADNUMBER, DWORD, PUSHTYPE);
         static POINTS GetGamePadStick(GAMEPADNUMBER, GAMEPADDIRECTION);
-        static BYTE GetGamePadTrigger(GAMEPADNUMBER, GAMEPADDIRECTION);
+        static float GetGamePadTrigger(GAMEPADNUMBER, GAMEPADDIRECTION);
         static bool GetKey(DWORD, PUSHTYPE);
         static bool GetMouseButton(MOUSEBUTTON, PUSHTYPE);
         static POINT GetMousePosition(void);

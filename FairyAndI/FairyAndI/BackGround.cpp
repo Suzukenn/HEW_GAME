@@ -20,9 +20,9 @@ void BACKGROUND::Draw(void)
 	pDevice = GetDevice();
 
 	//---書式設定---//
-    pDevice->SetStreamSource(0, VertexBuffer, 0, sizeof(VERTEX)); //頂点書式設定
-	pDevice->SetFVF(FVF_VERTEX);                                  //フォーマット設定
-	pDevice->SetTexture(0, Graphic);                              //テクスチャ設定
+    pDevice->SetStreamSource(0, VertexBuffer, 0, sizeof(VERTEX_2D)); //頂点書式設定
+	pDevice->SetFVF(FVF_VERTEX_2D);                                  //フォーマット設定
+	pDevice->SetTexture(0, Texture);                              //テクスチャ設定
 
 	//---頂点バッファによる背景描画---//
     pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
@@ -37,40 +37,44 @@ void BACKGROUND::Draw(void)
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT BACKGROUND::Initialize(LPTSTR filepath)
+HRESULT BACKGROUND::Initialize(LPCTSTR filepath)
 {
 	//---各種宣言---//
 	int nCounter;
 	HRESULT hResult;
 	LPDIRECT3DDEVICE9 pDevice;
 
-	VERTEX* pVertex;
+	VERTEX_2D* pVertex;
 
 	//---初期化処理---//
 	pDevice = GetDevice();
 
 	//---テクスチャの読み込み---//
-	hResult = D3DXCreateTextureFromFile(pDevice, filepath, &Graphic);
+	hResult = D3DXCreateTextureFromFile(pDevice, filepath, &Texture);
 	if (FAILED(hResult))
 	{
-		MessageBox(nullptr, TEXT("背景の初期化に失敗しました"), filepath, MB_OK);
-		Graphic = nullptr;
+		MessageBox(nullptr, TEXT("背景の読み込みに失敗しました"), filepath, MB_OK);
+        Texture = nullptr;
 		return hResult;
 	}
 
 	//---頂点バッファの生成---//
-	hResult = pDevice->CreateVertexBuffer(sizeof(VERTEX) * 4, 0, FVF_VERTEX, D3DPOOL_MANAGED, &VertexBuffer, nullptr);
-
+	hResult = pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4, 0, FVF_VERTEX_2D, D3DPOOL_MANAGED, &VertexBuffer, nullptr);
 	if (FAILED(hResult))
 	{
+        MessageBox(nullptr, TEXT("背景の頂点バッファの生成に失敗しました"), filepath, MB_OK);
 		return hResult;
 	}
 
 	//---頂点バッファへの値の設定---//
 	//バッファのポインタを取得
-	VertexBuffer->Lock(0, 0, (void**)&pVertex, 0);
-
-	//値の設定
+    hResult = VertexBuffer->Lock(0, 0, (void**)&pVertex, 0);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("背景の頂点バッファのポインタの取得に失敗しました"), filepath, MB_OK);
+        return hResult;
+    }
+    //値の設定
 	for (nCounter = 0; nCounter < 4; nCounter++)
 	{
 		pVertex[nCounter].U = (float)(nCounter & 1);
@@ -83,7 +87,12 @@ HRESULT BACKGROUND::Initialize(LPTSTR filepath)
 	}
 
 	//バッファのポインタの解放
-	VertexBuffer->Unlock();
+    hResult = VertexBuffer->Unlock();
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("背景の頂点バッファのポインタの開放に失敗しました"), filepath, MB_OK);
+        return hResult;
+    }
 
 	return hResult;
 }
@@ -101,7 +110,7 @@ void BACKGROUND::Uninitialize(void)
 {
 	//---開放---//
 	SAFE_RELEASE(VertexBuffer);
-	SAFE_RELEASE(Graphic)
+	SAFE_RELEASE(Texture)
 }
 
 /////////////////////////////////////////////
