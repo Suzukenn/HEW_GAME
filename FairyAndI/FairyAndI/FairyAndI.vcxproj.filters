@@ -33,6 +33,9 @@
     <Filter Include="ソース ファイル\Object">
       <UniqueIdentifier>{4ac2e438-95ec-4d96-aee4-d19eba3ce953}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\System\Texture">
+      <UniqueIdentifier>{0f44c79e-0f0b-4245-9571-edbc73b2f7ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -77,11 +80,38 @@
     <ClCompile Include="StartButton.cpp">
       <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Title.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="TrainingScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationSprite.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
     <ClCompile Include="Sprite.cpp">
       <Filter>ソース ファイル\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
+    <ClCompile Include="Field.cpp">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="FlexibleCamera.cpp">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="TrainingButton.cpp">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemMenu.cpp">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>ソース ファイル\System\Manager</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -133,14 +163,47 @@
     <ClInclude Include="StartButton.h">
       <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>ソース ファイル\Object</Filter>
-    </ClInclude>
     <ClInclude Include="Title.h">
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="Resource.h">
       <Filter>リソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="TrainingScene.h">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationSprite.h">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Field.h">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="FlexibleCamera.h">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="TrainingButton.h">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemMenu.h">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>ソース ファイル\System\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureParameter.h">
+      <Filter>ソース ファイル\System\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Base2DObjeck.h">
+      <Filter>ソース ファイル\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

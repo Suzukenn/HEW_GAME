@@ -13,10 +13,10 @@ class GAME final : public BASE_SCENE
         BACKGROUND Back;
 
     public:
-        void Draw(void) final;
-        void Uninitialize(void) final;
-        HRESULT Initialize(void) final;
-        void Update(void) final;
+        void Draw(void);
+        void Uninitialize(void);
+        HRESULT Initialize(void);
+        void Update(void);
 };
 
 #endif

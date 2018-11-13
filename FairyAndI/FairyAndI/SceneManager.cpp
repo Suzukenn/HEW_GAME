@@ -3,11 +3,12 @@
 #include "GameScene.h"
 #include "SceneManager.h"
 #include "Title.h"
+#include "TrainingScene.h"
 
 //＝＝＝グローバル変数＝＝＝//
 std::unique_ptr<BASE_SCENE> SCENEMANAGER::Scene(new TITLE());
-SCENE SCENEMANAGER::CurrentScene;
-SCENE SCENEMANAGER::NextScene;
+SCENE SCENEMANAGER::CurrentScene = SCENE_TITLE;
+SCENE SCENEMANAGER::NextScene = CurrentScene;
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -97,6 +98,10 @@ void SCENEMANAGER::Update(void)
         Scene->Uninitialize();
         switch (NextScene)
         {
+            case SCENE_TRAINING:
+                Scene.reset(new TRAINING());
+                break;
+
             case SCENE_TITLE:
                 Scene.reset(new TITLE());
                 break;

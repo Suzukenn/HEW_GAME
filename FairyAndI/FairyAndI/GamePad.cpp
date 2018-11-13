@@ -23,7 +23,7 @@ HRESULT GAMEPAD::Initialize(void)
     Current.resize(GAMEPADNUMBER_MAX);
 
     //---デバイスの列挙---//
-    for (nCounter = 0; nCounter < GAMEPADNUMBER_MAX; nCounter++)
+    for (nCounter = 0; nCounter < GAMEPADNUMBER_MAX; ++nCounter)
     {
         memset(&Current.at(nCounter), 0, sizeof(XINPUT_STATE));
         if (XInputGetState(nCounter, &Current.at(nCounter)) != ERROR_SUCCESS)
@@ -74,7 +74,7 @@ void GAMEPAD::Update(void)
     int nCounter;
 
     //---データの更新---//
-    for (nCounter = 0; nCounter < Current.size(); nCounter++)
+    for (nCounter = 0; nCounter < Current.size(); ++nCounter)
     {
         //直前のデータの取得
         Preview.at(nCounter) = Current.at(nCounter).Gamepad.wButtons;
@@ -138,7 +138,7 @@ bool GAMEPAD::GetHold(DWORD number, DWORD button)
 //
 //引数：(DWORD)ゲームパッド番号
 //
-//戻り値：(POINTS)入力値
+//戻り値：(float)入力値
 /////////////////////////////////////////////
 POINTS GAMEPAD::GetLeftStick(DWORD number)
 {
@@ -158,9 +158,9 @@ POINTS GAMEPAD::GetLeftStick(DWORD number)
 //
 //引数：(DWORD)ゲームパッド番号
 //
-//戻り値：(POINTS)入力値
+//戻り値：(float)入力率
 /////////////////////////////////////////////
-BYTE GAMEPAD::GetLeftTrigger(DWORD number)
+float GAMEPAD::GetLeftTrigger(DWORD number)
 {
     //---接続チェック---//
     if (number >= Current.size())
@@ -168,7 +168,7 @@ BYTE GAMEPAD::GetLeftTrigger(DWORD number)
         return 0;
     }
 
-    return Current.at(number).Gamepad.bLeftTrigger;
+    return (float)(Current.at(number).Gamepad.bLeftTrigger >> 7);
 }
 
 /////////////////////////////////////////////
@@ -219,9 +219,9 @@ POINTS GAMEPAD::GetRightStick(DWORD number)
 //
 //引数：(DWORD)ゲームパッド番号
 //
-//戻り値：(POINTS)入力値
+//戻り値：(float)入力率
 /////////////////////////////////////////////
-BYTE GAMEPAD::GetRightTrigger(DWORD number)
+float GAMEPAD::GetRightTrigger(DWORD number)
 {
     //---接続チェック---//
     if (number >= Current.size())
@@ -229,7 +229,7 @@ BYTE GAMEPAD::GetRightTrigger(DWORD number)
         return 0;
     }
 
-    return Current.at(number).Gamepad.bRightTrigger;
+    return (float)(Current.at(number).Gamepad.bRightTrigger >> 7);
 }
 
 /////////////////////////////////////////////

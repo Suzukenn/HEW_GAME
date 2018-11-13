@@ -2,20 +2,18 @@
 #define _BACKGROUND_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
+#include <memory>
 #include "Main.h"
+#include "Sprite.h"
 
 //＝＝＝クラス宣言＝＝＝//
-class BACKGROUND
+class BACKGROUND final : private SPRITE
 {
-	private:
-		LPDIRECT3DTEXTURE9 Graphic;           //テクスチャ
-		LPDIRECT3DVERTEXBUFFER9 VertexBuffer; //頂点バッファ
-
 	public:
-		void Draw(void);
-		void Uninitialize(void);
-		HRESULT Initialize(LPTSTR);
-		void Update(void);
+		virtual void Draw(void);
+        virtual void Uninitialize(void);
+        virtual HRESULT Initialize(LPCTSTR, D3DXVECTOR2 position = D3DXVECTOR2(0.0F, 0.0F), D3DXVECTOR2 size = D3DXVECTOR2(SCREEN_WIDTH, SCREEN_HEIGHT));
+        virtual void Update(void);
 };
 
 #endif

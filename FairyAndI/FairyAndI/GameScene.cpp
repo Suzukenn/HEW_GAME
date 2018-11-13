@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "SoundManager.h"
+#include "TextureManager.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -31,8 +32,13 @@ void GAME::Draw(void)
 /////////////////////////////////////////////
 HRESULT GAME::Initialize(void)
 {
+    if (FAILED(TEXTUREMANAGER::Initialize(TEXT("Data/GameScene/TextureList.txt"))))
+    {
+        return E_FAIL;
+    }
+
     //---オブジェクトの初期化処理---//
-    if (FAILED(Back.Initialize(TEXT("Data/Game/BackGround.tga"))))
+    if (FAILED(Back.Initialize(TEXT("BACKGROUND"))))
     {
         return E_FAIL;
     }
@@ -82,11 +88,6 @@ void GAME::Update(void)
     }
 
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
-    {
-        SCENEMANAGER::SetScene(SCENE_GAMEOVER);
-    }
-
-    if (INPUTMANAGER::GetGamePadTrigger(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT))
     {
         SCENEMANAGER::SetScene(SCENE_GAMEOVER);
     }

@@ -1,5 +1,5 @@
-#ifndef _SCENE_H_
-#define _SCENE_H_
+#ifndef _SCENE_MANAGER_H_
+#define _SCENE_MANAGER_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <memory>
@@ -9,6 +9,7 @@
 //＝＝＝列挙型定義＝＝＝//
 typedef enum
 {
+    SCENE_TRAINING,
     SCENE_TITLE,
     SCENE_GAME,
     SCENE_GAMEOVER,
@@ -30,7 +31,6 @@ class SCENEMANAGER
         static void Update(void);
     
         static void SetScene(SCENE);
-
 };
 
 #endif

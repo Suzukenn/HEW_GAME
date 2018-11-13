@@ -41,14 +41,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -119,6 +119,15 @@
   <ItemGroup>
     <ClCompile Include="BackGround.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="FlexibleCamera.cpp" />
+    <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="Field.cpp" />
+    <ClCompile Include="ItemMenu.cpp" />
+    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="TrainingButton.cpp" />
+    <ClCompile Include="TrainingScene.cpp" />
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GamePad.cpp" />
     <ClCompile Include="GameScene.cpp" />
@@ -129,15 +138,26 @@
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SoundManager.cpp" />
-    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="AnimationSprite.cpp" />
     <ClCompile Include="StartButton.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="WavController.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="Base2DObjeck.h" />
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="FlexibleCamera.h" />
+    <ClInclude Include="Debug.h" />
+    <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="Field.h" />
+    <ClInclude Include="ItemMenu.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="TextureParameter.h" />
+    <ClInclude Include="TrainingButton.h" />
+    <ClInclude Include="TrainingScene.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="GamePad.h" />
     <ClInclude Include="GameScene.h" />
@@ -150,7 +170,7 @@
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SoundManager.h" />
     <ClInclude Include="SoundParameter.h" />
-    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="AnimationSprite.h" />
     <ClInclude Include="StartButton.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="WavController.h" />

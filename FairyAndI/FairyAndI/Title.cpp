@@ -2,6 +2,8 @@
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "SoundManager.h"
+#include "TextureManager.h"
+#include "TrainingButton.h"
 #include "Title.h"
 
 //＝＝＝関数定義＝＝＝//
@@ -19,6 +21,7 @@ void TITLE::Draw(void)
     //---オブジェクトの描画処理---//
     Back.Draw();
     StartButton.Draw();
+    TrainingButton.Draw();
 }
 
 /////////////////////////////////////////////
@@ -32,13 +35,34 @@ void TITLE::Draw(void)
 /////////////////////////////////////////////
 HRESULT TITLE::Initialize(void)
 {
-    //---オブジェクトの初期化処理---//
-    if (FAILED(Back.Initialize(TEXT("Data/Game/Title.png"))))
+    //---各種宣言---//
+    HRESULT hResult;
+
+    //---テクスチャの読み込み---//
+    hResult = TEXTUREMANAGER::Initialize(TEXT("Data/Title/TextureList.txt"));
+    if (FAILED(hResult))
     {
         return E_FAIL;
     }
 
-    if (FAILED(StartButton.Initialize(TEXT("Data/UI/GameStartButton.png"), { 300.0F, 400.0F }, { 200.0F, 50.0F })))
+    //---オブジェクトの初期化処理---//
+    //背景
+    hResult = Back.Initialize((TEXT("BACKGROUND")));
+    if (FAILED(hResult))
+    {
+        return E_FAIL;
+    }
+
+    //スタートボタン
+    hResult = StartButton.Initialize(TEXT("START_BUTTON"), D3DXVECTOR2(500.0F, 500.0F), D3DXVECTOR2(200.0F, 50.0F));
+    if (FAILED(hResult))
+    {
+        return E_FAIL;
+    }
+
+    //トレーニングボタン
+    hResult = FAILED(TrainingButton.Initialize(TEXT("TRAINING_BUTTON"), D3DXVECTOR2(800.0F, 500.0F), D3DXVECTOR2(200.0F, 50.0F)));
+    if (FAILED(hResult))
     {
         return E_FAIL;
     }
@@ -63,6 +87,10 @@ void TITLE::Uninitialize(void)
     //---オブジェクトの終了処理---//
     Back.Uninitialize();
     StartButton.Uninitialize();
+    TrainingButton.Uninitialize();
+
+    //---テクスチャの削除---//
+    TEXTUREMANAGER::Uninitialize();
 
     //---BGM停止---//
     SOUNDMANAGER::Stop(TEXT("BGM_OPENING"));
@@ -82,4 +110,5 @@ void TITLE::Update(void)
     //---オブジェクトの更新処理---//
     Back.Update();
     StartButton.Update();
+    TrainingButton.Update();
 }

@@ -21,10 +21,10 @@ class WAVCONTROLLER
 	public:
 		bool Load(LPCTSTR);
 
-		const WAVEFORMATEX* GetFormat(void);
-        const UINT32 GetLoop(void);
-		const BYTE* GetWaveData(void);
-		const std::size_t GetWaveSize(void);
+		const WAVEFORMATEX& GetFormat(void);
+        UINT32 GetLoop(void);
+		const BYTE& GetWaveData(void);
+		std::size_t GetWaveSize(void);
 };
 
 #endif
