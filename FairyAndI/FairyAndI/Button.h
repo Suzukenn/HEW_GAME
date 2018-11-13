@@ -2,22 +2,19 @@
 #define _BUTTON_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
+#include <memory>
 #include "Main.h"
+#include "Sprite.h"
 
 //＝＝＝クラス宣言＝＝＝//
-class BUTTON
+class BUTTON : protected SPRITE
 {
 	protected:
-        D3DXVECTOR2 Position;				    //ボタンの位置
-        D3DXVECTOR2 Size;				        //ボタンの大きさ
-        LPDIRECT3DTEXTURE9 Graphic;				//テクスチャ
-		LPDIRECT3DVERTEXBUFFER9 VertexBuffer;	//頂点バッファ
-
         virtual void Behavior(void) = 0;
 
 	public:
         void Draw(void);
-		HRESULT Initialize(LPTSTR, D3DXVECTOR2, D3DXVECTOR2);
+		HRESULT Initialize(LPCTSTR, D3DXVECTOR2, D3DXVECTOR2);
 		void Uninitialize(void);
 		void Update(void);
 };

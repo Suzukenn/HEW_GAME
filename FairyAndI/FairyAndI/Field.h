@@ -17,7 +17,7 @@ class FIELD
         int PolygonValue;
         int VertexValue;
 
-        HRESULT MakeVertex(LPDIRECT3DDEVICE9, int, int, float, float);
+        HRESULT MakeVertex(const LPDIRECT3DDEVICE9&, const int&, const int&, const float&, const float&);
 
     public:
         void Draw(void);

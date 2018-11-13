@@ -155,7 +155,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				Draw();
 
                 //フレームカウントアップ
-				dwFrameCount++;
+				++dwFrameCount;
 			}
 		}
 	}

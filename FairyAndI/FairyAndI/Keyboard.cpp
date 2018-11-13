@@ -95,7 +95,7 @@ void KEYBOARD::Update(void)
         }
         else
         {
-            for (nCounter = 0; nCounter < 256; nCounter++)
+            for (nCounter = 0; nCounter < 256; ++nCounter)
             {
                 Trigger.at(nCounter) = Current.at(nCounter) & ~Preview.at(nCounter);
                 Release.at(nCounter) = ~Current.at(nCounter) & Preview.at(nCounter);

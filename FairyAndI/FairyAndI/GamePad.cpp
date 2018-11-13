@@ -23,7 +23,7 @@ HRESULT GAMEPAD::Initialize(void)
     Current.resize(GAMEPADNUMBER_MAX);
 
     //---デバイスの列挙---//
-    for (nCounter = 0; nCounter < GAMEPADNUMBER_MAX; nCounter++)
+    for (nCounter = 0; nCounter < GAMEPADNUMBER_MAX; ++nCounter)
     {
         memset(&Current.at(nCounter), 0, sizeof(XINPUT_STATE));
         if (XInputGetState(nCounter, &Current.at(nCounter)) != ERROR_SUCCESS)
@@ -74,7 +74,7 @@ void GAMEPAD::Update(void)
     int nCounter;
 
     //---データの更新---//
-    for (nCounter = 0; nCounter < Current.size(); nCounter++)
+    for (nCounter = 0; nCounter < Current.size(); ++nCounter)
     {
         //直前のデータの取得
         Preview.at(nCounter) = Current.at(nCounter).Gamepad.wButtons;
