@@ -59,11 +59,11 @@ void FIELD::Draw(void)
 //
 //機能：地形の初期化
 //
-//引数：(const LPCTSTR&)画像のファイル名,(const int&)Xポリゴン数,(const int&)Zポリゴン数,(const float&)Xサイズ,(const float&)Zサイズ
+//引数：(LPCTSTR)テクスチャ名,(const int&)Xポリゴン数,(const int&)Zポリゴン数,(const float&)Xサイズ,(const float&)Zサイズ
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT FIELD::Initialize(const LPCTSTR& texturename, const int& valueX, const int& valueZ, const float& sizeX, const float& sizeZ)
+HRESULT FIELD::Initialize(LPCTSTR texturename, const int& valueX, const int& valueZ, const float& sizeX, const float& sizeZ)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -74,7 +74,13 @@ HRESULT FIELD::Initialize(const LPCTSTR& texturename, const int& valueX, const i
     Texture.reset(new LPDIRECT3DTEXTURE9());
 
     //---テクスチャの読み込み---//
-    *Texture = TEXTUREMANAGER::GetTexture(texturename);
+    hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("地形のテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
+        return hResult;
+    }
 
     //---頂点情報の作成---//
     hResult = MakeVertex(GetDevice(), valueX, valueZ, sizeX, sizeZ);

@@ -26,7 +26,6 @@ void TRAINING::Draw(void)
     //Back.Draw();
     //Debugger.Draw();
     Field.Draw();
-    //Sprite.Draw();
 }
 
 /////////////////////////////////////////////
@@ -84,13 +83,6 @@ HRESULT TRAINING::Initialize(void)
         return E_FAIL;
     }
 
-    //スプライト
-    hResult = Sprite.Initialize(TEXT("Data/GameScene/BackGround.tga"), D3DXVECTOR2(0.0F, 0.0F), D3DXVECTOR2(SCREEN_WIDTH, SCREEN_HEIGHT));
-    if (FAILED(hResult))
-    {
-        return E_FAIL;
-    }
-
     //---BGM再生---//
     SOUNDMANAGER::Play(TEXT("BGM_TRAINING"));
 
@@ -114,7 +106,6 @@ void TRAINING::Uninitialize(void)
     //Debugger.Uninitialize();
     DIRECTIONALLIGHT::Uninitialize();
     Field.Uninitialize();
-    Sprite.Uninitialize();
 
     //---テクスチャの削除---//
     TEXTUREMANAGER::Uninitialize();
@@ -140,7 +131,6 @@ void TRAINING::Update(void)
     //Debugger.Update();
     DIRECTIONALLIGHT::Update();
     Field.Update();
-    Sprite.Update();
 
     //---画面遷移---//
     if (INPUTMANAGER::GetKey(DIK_SPACE, TRIGGER))

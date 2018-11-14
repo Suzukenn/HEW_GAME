@@ -123,7 +123,8 @@
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Field.cpp" />
-    <ClCompile Include="ItemMenu.cpp" />
+    <ClCompile Include="WordList.cpp" />
+    <ClCompile Include="WordMenu.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="TextureManager.cpp" />
     <ClCompile Include="TrainingButton.cpp" />
@@ -142,6 +143,7 @@
     <ClCompile Include="StartButton.cpp" />
     <ClCompile Include="Title.cpp" />
     <ClCompile Include="WavController.cpp" />
+    <ClCompile Include="WordPlate.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BackGround.h" />
@@ -152,7 +154,8 @@
     <ClInclude Include="Debug.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Field.h" />
-    <ClInclude Include="ItemMenu.h" />
+    <ClInclude Include="WordList.h" />
+    <ClInclude Include="WordMenu.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="TextureManager.h" />
     <ClInclude Include="TextureParameter.h" />
@@ -174,6 +177,7 @@
     <ClInclude Include="StartButton.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="WavController.h" />
+    <ClInclude Include="WordPlate.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="FairyAndI.APS" />
