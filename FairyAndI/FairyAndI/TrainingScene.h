@@ -18,7 +18,6 @@ class TRAINING final : public BASE_SCENE
         FLEXIBLECAMERA FlexibleCamera;
         DEBUG Debugger;
         FIELD Field;
-        SPRITE Sprite;
 
     public:
         void Draw(void);

@@ -15,15 +15,15 @@ std::unordered_map<tstring, WAVCONTROLLER> SOUNDMANAGER::WaveSound;           //
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
-//関数名：CreateSound
+//関数名：Create
 //
 //機能：ソースボイスの作成
 //
-//引数：(SOUNDPARAM)元データ,(int)格納配列番号
+//引数：(SOUNDPARAMETER)参照データ
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT SOUNDMANAGER::CreateSound(SOUNDPARAMETER data, int nCounter)
+HRESULT SOUNDMANAGER::Create(const SOUNDPARAMETER& data)
 {
     //---各種宣言---//
     WAVCONTROLLER wavBuffer;
@@ -42,7 +42,7 @@ HRESULT SOUNDMANAGER::CreateSound(SOUNDPARAMETER data, int nCounter)
     }
 
     //データのロード
-    if (wavBuffer.Load(data.FileName.c_str()))
+    if (wavBuffer.Load(data.FileName.data()))
     {
         WaveSound.insert(std::make_pair(data.CallKey, wavBuffer));
     }
@@ -100,7 +100,7 @@ HRESULT SOUNDMANAGER::Initialize(void)
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("マスターボイスの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
-        SAFE_RELEASE((*Manager));
+        Uninitialize();
         return hResult;
     }
 
@@ -109,17 +109,17 @@ HRESULT SOUNDMANAGER::Initialize(void)
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("トラックリストの読み込みに失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
-        SAFE_RELEASE((*Manager));
+        Uninitialize();
         return hResult;
     }
 
     //サウンドデータの作成
     for (auto& data : conList)
     {
-        if (FAILED(CreateSound(data, 0)))
+        if (FAILED(Create(data)))
         {
             MessageBox(nullptr, TEXT("サウンドデータの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
-            SAFE_RELEASE((*Manager));
+            Uninitialize();
             return hResult;
         }
     }
@@ -173,7 +173,7 @@ HRESULT SOUNDMANAGER::Load(std::vector<SOUNDPARAMETER>& list)
         list.at(nCounter).CallKey = szKeyName.c_str();
 #endif
 
-        nCounter++;
+        ++nCounter;
     }
     list.resize(nCounter);
 

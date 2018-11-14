@@ -1,0 +1,3 @@
+Data/Training/Texture/Field.jpg FIELD
+Data/Training/UI/AdjectiveList.png ADJECTIVELIST
+Data/Training/UI/NounList.png NOUNLIST

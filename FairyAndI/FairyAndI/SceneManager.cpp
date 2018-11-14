@@ -60,7 +60,7 @@ HRESULT SCENEMANAGER::Initialize(void)
     hResult = Scene->Initialize();
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("シーンの初期化に失敗しました失敗"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("シーンの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
         return hResult;
     }
 
@@ -114,7 +114,11 @@ void SCENEMANAGER::Update(void)
                 Scene.reset(new GAMEOVER());
                 break;
         }
-        Scene->Initialize();
+        if (FAILED(Scene->Initialize()))
+        {
+            MessageBox(nullptr, TEXT("シーンの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
+            exit(EXIT_FAILURE);
+        }
         CurrentScene = NextScene;
     }
     else

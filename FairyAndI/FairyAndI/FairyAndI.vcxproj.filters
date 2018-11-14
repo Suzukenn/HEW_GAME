@@ -33,6 +33,9 @@
     <Filter Include="ソース ファイル\Object">
       <UniqueIdentifier>{4ac2e438-95ec-4d96-aee4-d19eba3ce953}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\System\Texture">
+      <UniqueIdentifier>{0f44c79e-0f0b-4245-9571-edbc73b2f7ce}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -102,6 +105,18 @@
       <Filter>ソース ファイル\Actor</Filter>
     </ClCompile>
     <ClCompile Include="TrainingButton.cpp">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureManager.cpp">
+      <Filter>ソース ファイル\System\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="WordList.cpp">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="WordMenu.cpp">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="WordPlate.cpp">
       <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -182,6 +197,24 @@
       <Filter>ソース ファイル\Actor</Filter>
     </ClInclude>
     <ClInclude Include="TrainingButton.h">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureManager.h">
+      <Filter>ソース ファイル\System\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureParameter.h">
+      <Filter>ソース ファイル\System\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Base2DObjeck.h">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="WordList.h">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="WordMenu.h">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="WordPlate.h">
       <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
   </ItemGroup>

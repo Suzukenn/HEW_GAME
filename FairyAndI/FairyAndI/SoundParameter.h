@@ -10,6 +10,6 @@ typedef struct
     tstring FileName;	//ファイル名
     UINT32 LoopCount;	//ループカウント
     tstring CallKey;    //呼び出しキー
-}SOUNDPARAMETER;
+} SOUNDPARAMETER;
 
 #endif

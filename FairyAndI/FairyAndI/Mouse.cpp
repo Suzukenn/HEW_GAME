@@ -132,7 +132,7 @@ void MOUSE::Update(void)
         {
             GetCursorPos(&Position);
             ScreenToClient(Handle, &Position);
-            for (nCounter = 0; nCounter < 4; nCounter++)
+            for (nCounter = 0; nCounter < 4; ++nCounter)
             {
                 Trigger.rgbButtons[nCounter] = Current.rgbButtons[nCounter] & ~Preview.rgbButtons[nCounter];
                 Release.rgbButtons[nCounter] = ~Current.rgbButtons[nCounter] & Preview.rgbButtons[nCounter];

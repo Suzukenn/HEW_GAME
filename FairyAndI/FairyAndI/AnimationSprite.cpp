@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "AnimationSprite.h"
+#include "TextureManager.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -21,10 +22,10 @@ void ANIMATIONSPRITE::Draw(void)
 
     //---書式設定---//
     pDevice->SetFVF(FVF_VERTEX_2D);     //フォーマット設定
-    pDevice->SetTexture(0, Texture);    //テクスチャ設定
+    pDevice->SetTexture(0, *Texture);    //テクスチャ設定
 
     //---頂点バッファによる背景描画---//
-    pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &Vertex, sizeof(VERTEX_2D));
+    pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &Vertex.begin(), sizeof(VERTEX_2D));
 }
 
 /////////////////////////////////////////////
@@ -32,35 +33,33 @@ void ANIMATIONSPRITE::Draw(void)
 //
 //機能：スプライトの初期化
 //
-//引数：(LPTSTR)画像のファイル名
+//引数：(LPCTSTR)テクスチャ名,(D3DXVECTOR2)位置,(D3DXVECTOR2)大きさ,(POINT)UV分割値
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT ANIMATIONSPRITE::Initialize(D3DXVECTOR2 position, D3DXVECTOR2 size, POINT uv, LPCTSTR filepath)
+HRESULT ANIMATIONSPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTOR2 size, POINT uv)
 {
     //---各種宣言---//
     int nCounter;
     HRESULT hResult;
-    LPDIRECT3DDEVICE9 pDevice;
 
     //---初期化処理---//
     Position = position;
     Size = size;
     UV = uv;
-
-    pDevice = GetDevice();
+    Texture.reset(new LPDIRECT3DTEXTURE9());
 
     //---テクスチャの読み込み---//
-    hResult = D3DXCreateTextureFromFile(pDevice, filepath, &Texture);
+    hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("テクスチャの初期化に失敗しました"), filepath, MB_OK);
-        Texture = nullptr;
+        MessageBox(nullptr, TEXT("背景のテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
         return hResult;
     }
 
     //---初期値の設定---//
-    for (nCounter = 0; nCounter < 4; nCounter++)
+    for (nCounter = 0; nCounter < 4; ++nCounter)
     {
         SetSpriteUV(1);
         Vertex.at(nCounter).Position.x = Position.x + Size.x * (nCounter & 1);
@@ -113,7 +112,7 @@ void ANIMATIONSPRITE::SetSpriteUV(int number)
 void ANIMATIONSPRITE::Uninitialize(void)
 {
     //---開放---//
-    SAFE_RELEASE(Texture);
+    SAFE_RELEASE((*Texture));
 }
 
 /////////////////////////////////////////////

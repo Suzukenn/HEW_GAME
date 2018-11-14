@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "SoundManager.h"
+#include "TextureManager.h"
 #include "TrainingScene.h"
 
 //＝＝＝関数定義＝＝＝//
@@ -25,7 +26,6 @@ void TRAINING::Draw(void)
     //Back.Draw();
     //Debugger.Draw();
     Field.Draw();
-    //Sprite.Draw();
 }
 
 /////////////////////////////////////////////
@@ -39,15 +39,26 @@ void TRAINING::Draw(void)
 /////////////////////////////////////////////
 HRESULT TRAINING::Initialize(void)
 {
+    //---各種宣言---//
+    HRESULT hResult;
+
+    hResult = TEXTUREMANAGER::Initialize(TEXT("Data/Training/TextureList.txt"));
+    if (FAILED(hResult))
+    {
+        return E_FAIL;
+    }
+
     //---オブジェクトの初期化処理---//
     //背景
-    if (FAILED(Back.Initialize(TEXT("Data/GameScene/BackGround.tga"))))
+    hResult = Back.Initialize(TEXT("BACKGROUND"));
+    if (FAILED(hResult))
     {
         return E_FAIL;
     }
 
     //カメラ
-    if (FAILED(FlexibleCamera.Initialize(D3DXVECTOR3(0.0F, 100.0F, -200.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F))))
+    hResult = FlexibleCamera.Initialize(D3DXVECTOR3(0.0F, 100.0F, -200.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
+    if (FAILED(hResult))
     {
         return E_FAIL;
     }
@@ -59,19 +70,15 @@ HRESULT TRAINING::Initialize(void)
     //}
 
     //地形
-    if (FAILED(Field.Initialize(TEXT("Data/Training/Texture/Field.jpg"), 40, 40, 8.0F, 8.0F)))
+    hResult = Field.Initialize(TEXT("FIELD"), 40, 40, 8.0F, 8.0F);
+    if (FAILED(hResult))
     {
         return E_FAIL;
     }
 
     //ディレクショナルライト
-    if (FAILED(DIRECTIONALLIGHT::Initialize()))
-    {
-        return E_FAIL;
-    }
-
-    //スプライト
-    if (FAILED(Sprite.Initialize({ 0.0F,0.0F }, { SCREEN_WIDTH,SCREEN_HEIGHT }, TEXT("Data/GameScene/BackGround.tga"))))
+    hResult = DIRECTIONALLIGHT::Initialize();
+    if (FAILED(hResult))
     {
         return E_FAIL;
     }
@@ -99,7 +106,9 @@ void TRAINING::Uninitialize(void)
     //Debugger.Uninitialize();
     DIRECTIONALLIGHT::Uninitialize();
     Field.Uninitialize();
-    Sprite.Uninitialize();
+
+    //---テクスチャの削除---//
+    TEXTUREMANAGER::Uninitialize();
 
     //---BGM停止---//
     SOUNDMANAGER::Stop(TEXT("BGM_TRAINING"));
@@ -122,7 +131,6 @@ void TRAINING::Update(void)
     //Debugger.Update();
     DIRECTIONALLIGHT::Update();
     Field.Update();
-    Sprite.Update();
 
     //---画面遷移---//
     if (INPUTMANAGER::GetKey(DIK_SPACE, TRIGGER))

@@ -1,11 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "Field.h"
-#include "InputManager.h"
-
-//＝＝＝定数・マクロ定義＝＝＝//
-#define	TEXTURE_FILENAME	"data/TEXTURE/field000.jpg"		// 読み込むテクスチャファイル名
-//#define	VALUE_MOVE_FIELD	(5.0f)							// 移動速度
-//#define	VALUE_ROTATE_FIELD	(D3DX_PI * 0.001f)				// 回転速度
+#include "TextureManager.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -64,36 +59,34 @@ void FIELD::Draw(void)
 //
 //機能：地形の初期化
 //
-//引数：(LPTSTR)画像のファイル名, 
+//引数：(LPCTSTR)テクスチャ名,(const int&)Xポリゴン数,(const int&)Zポリゴン数,(const float&)Xサイズ,(const float&)Zサイズ
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT FIELD::Initialize(const LPCTSTR& filepath, const int& valueX, const int& valueZ, const float& sizeX, const float& sizeZ)
+HRESULT FIELD::Initialize(LPCTSTR texturename, const int& valueX, const int& valueZ, const float& sizeX, const float& sizeZ)
 {
     //---各種宣言---//
-    LPDIRECT3DDEVICE9 pDevice;
     HRESULT hResult;
 
     //---初期化処理---//
     Position = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
     Rotation = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
-    pDevice = GetDevice();
     Texture.reset(new LPDIRECT3DTEXTURE9());
 
     //---テクスチャの読み込み---//
-    hResult = D3DXCreateTextureFromFile(pDevice, filepath, Texture.get());
+    hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("地形テクスチャの読み込みに失敗しました"), filepath, MB_OK);
+        MessageBox(nullptr, TEXT("地形のテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
         return hResult;
     }
 
     //---頂点情報の作成---//
-    hResult = MakeVertex(pDevice, valueX, valueZ, sizeX, sizeZ);
+    hResult = MakeVertex(GetDevice(), valueX, valueZ, sizeX, sizeZ);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("地形の頂点情報の作成に失敗しました"), filepath, MB_OK);
+        MessageBox(nullptr, TEXT("地形の頂点情報の作成に失敗しました"), texturename, MB_OK);
         Uninitialize();
         return hResult;
     }
@@ -132,17 +125,16 @@ void FIELD::Update(void)
 
 }
 
-
 /////////////////////////////////////////////
 //関数名：MakeVertex
 //
 //機能：地形の頂点データの作成
 //
-//引数：(LPDIRECT3DDEVICE9 device, int valueX, int valueZ, float sizeX, float sizeZ
+//引数：(const LPDIRECT3DDEVICE9&)デバイス,(const int&)Xポリゴン数,(const int&)Zポリゴン数,(const float&)Xサイズ,(const float&)Zサイズ
 //
 //戻り値：なし
 /////////////////////////////////////////////
-HRESULT FIELD::MakeVertex(LPDIRECT3DDEVICE9 device, int valueX, int valueZ, float sizeX, float sizeZ)
+HRESULT FIELD::MakeVertex(const LPDIRECT3DDEVICE9& device, const int& valueX, const int& valueZ, const float& sizeX, const float& sizeZ)
 {
     //---各種宣言---//
     int nCounterX;
@@ -191,9 +183,9 @@ HRESULT FIELD::MakeVertex(LPDIRECT3DDEVICE9 device, int valueX, int valueZ, floa
     }
 
     //値の設定
-    for (nCounterZ = 0; nCounterZ < (valueZ + 1); nCounterZ++)
+    for (nCounterZ = 0; nCounterZ < (valueZ + 1); ++nCounterZ)
     {
-        for (nCounterX = 0; nCounterX < (valueX + 1); nCounterX++)
+        for (nCounterX = 0; nCounterX < (valueX + 1); ++nCounterX)
         {
             nVertexNumber = nCounterZ * (valueX + 1) + nCounterX;
             pVertex[nVertexNumber].Vertex.x = -(valueX >> 1) * sizeX + nCounterX * sizeX;
@@ -224,7 +216,7 @@ HRESULT FIELD::MakeVertex(LPDIRECT3DDEVICE9 device, int valueX, int valueZ, floa
     }
 
     nIndexNumber = 0;
-    for (nCounterZ = 0; nCounterZ < valueZ; nCounterZ++)
+    for (nCounterZ = 0; nCounterZ < valueZ; ++nCounterZ)
     {
         //縮退ポリゴンの重複を設定
         if (nCounterZ > 0)
@@ -232,7 +224,7 @@ HRESULT FIELD::MakeVertex(LPDIRECT3DDEVICE9 device, int valueX, int valueZ, floa
             pIndex[nIndexNumber] = (nCounterZ + 1) * (valueX + 1);
             nIndexNumber++;
         }
-        for (int nCounterX = 0; nCounterX < (valueX + 1); nCounterX++)
+        for (int nCounterX = 0; nCounterX < (valueX + 1); ++nCounterX)
         {
             pIndex[nIndexNumber] = (nCounterZ + 1) * (valueX + 1) + nCounterX;
             nIndexNumber++;

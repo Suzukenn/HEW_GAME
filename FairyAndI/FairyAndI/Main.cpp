@@ -56,6 +56,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     MSG msgMsg;
 
     //---初期化処理---//
+    setlocale(LC_ALL, "Japanese");
     g_pD3D.reset(new LPDIRECT3D9());
     g_pD3DDevice.reset(new LPDIRECT3DDEVICE9());
 
@@ -155,7 +156,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 				Draw();
 
                 //フレームカウントアップ
-				dwFrameCount++;
+				++dwFrameCount;
 			}
 		}
 	}

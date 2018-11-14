@@ -1,5 +1,5 @@
-#ifndef _SCENE_H_
-#define _SCENE_H_
+#ifndef _SCENE_MANAGER_H_
+#define _SCENE_MANAGER_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <memory>
@@ -31,7 +31,6 @@ class SCENEMANAGER
         static void Update(void);
     
         static void SetScene(SCENE);
-
 };
 
 #endif

@@ -3,6 +3,7 @@
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "SoundManager.h"
+#include "TextureManager.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -31,8 +32,13 @@ void GAMEOVER::Draw(void)
 /////////////////////////////////////////////
 HRESULT GAMEOVER::Initialize(void)
 {
+    if (FAILED(TEXTUREMANAGER::Initialize(TEXT("Data/GameOver/TextureList.txt"))))
+    {
+        return E_FAIL;
+    }
+
     //---オブジェクトの初期化処理---//
-    if (FAILED(Back.Initialize(TEXT("Data/GameOver/GameOver.png"))))
+    if (FAILED(Back.Initialize(TEXT("BACKGROUND"))))
     {
         return E_FAIL;
     }
@@ -56,6 +62,9 @@ void GAMEOVER::Uninitialize(void)
 {
     //---オブジェクトの終了処理---//
     Back.Uninitialize();
+
+    //---テクスチャの削除---//
+    TEXTUREMANAGER::Uninitialize();
 
     //---BGM停止---//
     SOUNDMANAGER::Stop(TEXT("BGM_GAMEOVER"));
