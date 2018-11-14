@@ -13,7 +13,6 @@ class FLEXIBLECAMERA
         D3DXVECTOR3	ReversoPoint;				// カメラの注視点
         D3DXVECTOR3 UpVector;				    // カメラの上方向
         float Interval;                         //視点と注視点の距離
-        D3DXMATRIX m_mtxWorldField;				//ワールドマトリックス
 
     public:
         HRESULT Initialize(D3DXVECTOR3, D3DXVECTOR3);

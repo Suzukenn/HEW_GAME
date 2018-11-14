@@ -16,17 +16,17 @@ std::unordered_map<tstring, LPDIRECT3DTEXTURE9> TEXTUREMANAGER::Texture;        
 //
 //機能：ソースボイスの作成
 //
-//引数：(TEXTUREPARAMETER)元データ
+//引数：(TEXTUREPARAMETER)参照データ
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT TEXTUREMANAGER::Create(TEXTUREPARAMETER data)
+HRESULT TEXTUREMANAGER::Create(const TEXTUREPARAMETER& data)
 {
     //---各種宣言---//
     std::unique_ptr<LPDIRECT3DTEXTURE9> pTexture;
 
     //---初期化処理---//
-    pTexture.reset(new LPDIRECT3DTEXTURE9);
+    pTexture.reset(new LPDIRECT3DTEXTURE9());
 
     //---データの展開---//
     //ファイルの指定確認
@@ -83,7 +83,7 @@ HRESULT TEXTUREMANAGER::Initialize(LPCTSTR filename)
     {
         if (FAILED(Create(data)))
         {
-            MessageBox(nullptr, TEXT("サウンドデータの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
+            MessageBox(nullptr, TEXT("テクスチャデータの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
             Uninitialize();
             return hResult;
         }
@@ -97,7 +97,7 @@ HRESULT TEXTUREMANAGER::Initialize(LPCTSTR filename)
 //
 //機能：読み込みデータの格納
 //
-//引数：(TEXTUREPARAMETER)楽曲リスト,(LPCTSTR)ファイル名
+//引数：(TEXTUREPARAMETER)テクスチャリスト,(LPCTSTR)ファイル名
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
@@ -114,7 +114,7 @@ HRESULT TEXTUREMANAGER::Load(std::vector<TEXTUREPARAMETER>& list, LPCTSTR filena
     list.resize(999);
 
     //---ファイルの読み込み---//
-    if (file.fail())
+    if (!file.is_open())
     {
         MessageBox(nullptr, TEXT("テクスチャリストを開けませんでした"), filename, MB_ICONSTOP | MB_OK);
         Uninitialize();
@@ -161,6 +161,7 @@ void TEXTUREMANAGER::Uninitialize(void)
     {
         SAFE_RELEASE(data.second);
     }
+    Texture.clear();
 }
 
 /////////////////////////////////////////////
@@ -168,11 +169,25 @@ void TEXTUREMANAGER::Uninitialize(void)
 //
 //機能：テクスチャの取得
 //
-//引数：(LPCTSTR)テクスチャ名
+//引数：(LPCTSTR)テクスチャ名,(LPDIRECT3DTEXTURE9)格納アドレス
 //
-//戻り値：(LPDIRECT3DTEXTURE9)テクスチャへのアドレス
+//戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-LPDIRECT3DTEXTURE9 TEXTUREMANAGER::GetTexture(LPCTSTR texturename)
+HRESULT TEXTUREMANAGER::GetTexture(LPCTSTR texturename, LPDIRECT3DTEXTURE9& address)
 {
-    return Texture.at(texturename);
+    try
+    {
+        address = Texture.at(texturename);
+        if (!address)
+        {
+            MessageBox(nullptr, TEXT("テクスチャが存在しません"), texturename, MB_ICONSTOP | MB_OK);
+            return E_FAIL;
+        }
+    }
+    catch (const std::out_of_range&)
+    {
+        MessageBox(nullptr, TEXT("テクスチャが存在しません"), texturename, MB_ICONSTOP | MB_OK);
+        return E_FAIL;
+    }
+    return S_OK;
 }

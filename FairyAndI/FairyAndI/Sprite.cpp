@@ -34,7 +34,7 @@ void SPRITE::Draw(void)
 //
 //機能：スプライトの初期化
 //
-//引数：(LPCTSTR)画像のファイル名,(D3DXVECTOR2)位置,(D3DXVECTOR2)大きさ
+//引数：(LPCTSTR)テクスチャ名,(D3DXVECTOR2)位置,(D3DXVECTOR2)大きさ
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
@@ -50,10 +50,16 @@ HRESULT SPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTOR
     Position = position;
     Size = size;
     Texture.reset(new LPDIRECT3DTEXTURE9());
-    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9);
+    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9());
 
     //---テクスチャの読み込み---//
-    *Texture = TEXTUREMANAGER::GetTexture(texturename);
+    hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("スプライトのテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
+        return hResult;
+    }
 
     //---頂点バッファの生成---//
     hResult = GetDevice()->CreateVertexBuffer(sizeof(VERTEX_2D) * 4, 0, FVF_VERTEX_2D, D3DPOOL_MANAGED, VertexBuffer.get(), nullptr);

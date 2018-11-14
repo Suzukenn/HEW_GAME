@@ -51,10 +51,16 @@ HRESULT BUTTON::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTOR
     Position = position;
     Size = size;
     Texture.reset(new LPDIRECT3DTEXTURE9());
-    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9);
+    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9());
 
 	//---テクスチャの読み込み---//
-    *Texture = TEXTUREMANAGER::GetTexture(texturename);
+    hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("ボタンのテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
+        return hResult;
+    }
 
 	//---頂点バッファの生成---//
 	hResult = GetDevice()->CreateVertexBuffer(sizeof(VERTEX_2D) * 4, 0, FVF_VERTEX_2D, D3DPOOL_MANAGED, VertexBuffer.get(), nullptr);
@@ -68,7 +74,7 @@ HRESULT BUTTON::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTOR
     hResult = (*VertexBuffer)->Lock(0, 0, (void**)&pVertex, 0);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("背景の頂点バッファのポインタの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("ボタンの頂点バッファのポインタの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         return hResult;
     }
 
@@ -88,7 +94,7 @@ HRESULT BUTTON::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTOR
     hResult = (*VertexBuffer)->Unlock();
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("背景の頂点バッファのポインタの開放に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("ボタンの頂点バッファのポインタの開放に失敗しました"), TEXT("初期化エラー"), MB_OK);
         return hResult;
     }
 

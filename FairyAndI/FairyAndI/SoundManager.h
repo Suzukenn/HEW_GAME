@@ -18,7 +18,7 @@ class SOUNDMANAGER
         static std::unordered_map<tstring, IXAudio2SourceVoice*> SourceVoice;  //ソースボイス
         static std::unordered_map<tstring, WAVCONTROLLER> WaveSound;          	// WAVE 音楽データ
 
-        static HRESULT Create(SOUNDPARAMETER);
+        static HRESULT Create(const SOUNDPARAMETER&);
         static HRESULT Load(std::vector<SOUNDPARAMETER>&);
 
     public:

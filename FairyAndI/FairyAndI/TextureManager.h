@@ -11,16 +11,16 @@
 class TEXTUREMANAGER
 {
     private:
-        static std::unordered_map<tstring, LPDIRECT3DTEXTURE9> Texture;          	// WAVE 音楽データ
+        static std::unordered_map<tstring, LPDIRECT3DTEXTURE9> Texture;
 
-        static HRESULT Create(TEXTUREPARAMETER);
+        static HRESULT Create(const TEXTUREPARAMETER&);
         static HRESULT Load(std::vector<TEXTUREPARAMETER>&, LPCTSTR);
 
     public:
         static HRESULT Initialize(LPCTSTR);
         static void Uninitialize(void);
 
-        static LPDIRECT3DTEXTURE9 GetTexture(LPCTSTR);
+        static HRESULT GetTexture(LPCTSTR, LPDIRECT3DTEXTURE9&);
 };
 
 #endif

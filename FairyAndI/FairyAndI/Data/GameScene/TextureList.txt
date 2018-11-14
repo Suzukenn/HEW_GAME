@@ -1,1 +1,3 @@
 Data/GameScene/BackGround/BackGround.tga BACKGROUND
+Data/GameScene/UI/AdjectiveList.png ADJECTIVELIST
+Data/GameScene/UI/NounList.png NOUNLIST

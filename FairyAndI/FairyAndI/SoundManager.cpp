@@ -19,11 +19,11 @@ std::unordered_map<tstring, WAVCONTROLLER> SOUNDMANAGER::WaveSound;           //
 //
 //機能：ソースボイスの作成
 //
-//引数：(SOUNDPARAMETER)元データ
+//引数：(SOUNDPARAMETER)参照データ
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT SOUNDMANAGER::Create(SOUNDPARAMETER data)
+HRESULT SOUNDMANAGER::Create(const SOUNDPARAMETER& data)
 {
     //---各種宣言---//
     WAVCONTROLLER wavBuffer;

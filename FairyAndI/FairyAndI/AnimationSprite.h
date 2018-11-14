@@ -3,6 +3,7 @@
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <array>
+#include <memory>
 #include "Base2DObjeck.h"
 #include "Main.h"
 

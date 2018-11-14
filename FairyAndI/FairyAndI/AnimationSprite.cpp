@@ -33,7 +33,7 @@ void ANIMATIONSPRITE::Draw(void)
 //
 //機能：スプライトの初期化
 //
-//引数：(LPCTSTR)画像のファイル名
+//引数：(LPCTSTR)テクスチャ名,(D3DXVECTOR2)位置,(D3DXVECTOR2)大きさ,(POINT)UV分割値
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
@@ -41,6 +41,7 @@ HRESULT ANIMATIONSPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D
 {
     //---各種宣言---//
     int nCounter;
+    HRESULT hResult;
 
     //---初期化処理---//
     Position = position;
@@ -49,7 +50,13 @@ HRESULT ANIMATIONSPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D
     Texture.reset(new LPDIRECT3DTEXTURE9());
 
     //---テクスチャの読み込み---//
-    *Texture = TEXTUREMANAGER::GetTexture(texturename);
+    hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("背景のテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
+        return hResult;
+    }
 
     //---初期値の設定---//
     for (nCounter = 0; nCounter < 4; ++nCounter)
@@ -62,7 +69,7 @@ HRESULT ANIMATIONSPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D
         Vertex.at(nCounter).Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);
     }
 
-    return S_OK;
+    return hResult;
 }
 
 /////////////////////////////////////////////

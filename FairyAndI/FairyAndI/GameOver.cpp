@@ -63,6 +63,9 @@ void GAMEOVER::Uninitialize(void)
     //---オブジェクトの終了処理---//
     Back.Uninitialize();
 
+    //---テクスチャの削除---//
+    TEXTUREMANAGER::Uninitialize();
+
     //---BGM停止---//
     SOUNDMANAGER::Stop(TEXT("BGM_GAMEOVER"));
 }
