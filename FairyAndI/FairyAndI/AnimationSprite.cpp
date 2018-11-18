@@ -62,8 +62,8 @@ HRESULT ANIMATIONSPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D
     for (nCounter = 0; nCounter < 4; ++nCounter)
     {
         SetSpriteUV(1);
-        Vertex.at(nCounter).Position.x = Position.x + Size.x * (nCounter & 1);
-        Vertex.at(nCounter).Position.y = Position.y + Size.y * ((nCounter >> 1) & 1);
+        Vertex.at(nCounter).Position.x = position.x + Vertex.at(nCounter).U * Size.x;
+        Vertex.at(nCounter).Position.y = position.y + Vertex.at(nCounter).V * Size.y;
         Vertex.at(nCounter).Position.z = 0.0F;
         Vertex.at(nCounter).RHW = 1.0F;
         Vertex.at(nCounter).Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);

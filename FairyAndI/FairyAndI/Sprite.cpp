@@ -85,8 +85,8 @@ HRESULT SPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTOR
     {
         pVertex[nCounter].U = (float)(nCounter & 1);
         pVertex[nCounter].V = (float)((nCounter >> 1) & 1);
-        pVertex[nCounter].Position.x = pVertex[nCounter].U * SCREEN_WIDTH;
-        pVertex[nCounter].Position.y = pVertex[nCounter].V * SCREEN_HEIGHT;
+        pVertex[nCounter].Position.x = position.x + pVertex[nCounter].U * Size.x;
+        pVertex[nCounter].Position.y = position.y + pVertex[nCounter].V * Size.y;
         pVertex[nCounter].Position.z = 0.0F;
         pVertex[nCounter].RHW = 1.0F;
         pVertex[nCounter].Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);

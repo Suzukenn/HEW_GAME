@@ -7,6 +7,7 @@
 #include "SoundManager.h"
 #include "TextureManager.h"
 #include "TrainingScene.h"
+#include "WordMenu.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -23,9 +24,12 @@ void TRAINING::Draw(void)
     //---カメラのセット---//
 
     //---オブジェクトの描画処理---//
-    //Back.Draw();
     //Debugger.Draw();
     Field.Draw();
+    if (!Mode)
+    {
+        Menu.Draw();
+    }
 }
 
 /////////////////////////////////////////////
@@ -42,6 +46,8 @@ HRESULT TRAINING::Initialize(void)
     //---各種宣言---//
     HRESULT hResult;
 
+    Mode = true;
+
     hResult = TEXTUREMANAGER::Initialize(TEXT("Data/Training/TextureList.txt"));
     if (FAILED(hResult))
     {
@@ -49,12 +55,6 @@ HRESULT TRAINING::Initialize(void)
     }
 
     //---オブジェクトの初期化処理---//
-    //背景
-    hResult = Back.Initialize(TEXT("BACKGROUND"));
-    if (FAILED(hResult))
-    {
-        return E_FAIL;
-    }
 
     //カメラ
     hResult = FlexibleCamera.Initialize(D3DXVECTOR3(0.0F, 100.0F, -200.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
@@ -83,6 +83,13 @@ HRESULT TRAINING::Initialize(void)
         return E_FAIL;
     }
 
+    //フェアリータイムメニュー
+    hResult = Menu.Initialize();
+    if (FAILED(hResult))
+    {
+        return E_FAIL;
+    }
+
     //---BGM再生---//
     SOUNDMANAGER::Play(TEXT("BGM_TRAINING"));
 
@@ -101,11 +108,11 @@ HRESULT TRAINING::Initialize(void)
 void TRAINING::Uninitialize(void)
 {
     //---オブジェクトの終了処理---//
-    Back.Uninitialize();
     FlexibleCamera.Uninitialize();
     //Debugger.Uninitialize();
     DIRECTIONALLIGHT::Uninitialize();
     Field.Uninitialize();
+    Menu.Uninitialize();
 
     //---テクスチャの削除---//
     TEXTUREMANAGER::Uninitialize();
@@ -125,16 +132,29 @@ void TRAINING::Uninitialize(void)
 /////////////////////////////////////////////
 void TRAINING::Update(void)
 {
-    //---オブジェクトの更新処理---//
-    Back.Update();
-    FlexibleCamera.Update();
-    //Debugger.Update();
-    DIRECTIONALLIGHT::Update();
-    Field.Update();
+    //---各種宣言---//
 
-    //---画面遷移---//
-    if (INPUTMANAGER::GetKey(DIK_SPACE, TRIGGER))
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
-        SCENEMANAGER::SetScene(SCENE_TITLE);
+        Mode = !Mode;
+    }
+
+    //---オブジェクトの更新処理---//
+    if (Mode)
+    {
+        FlexibleCamera.Update();
+        //Debugger.Update();
+        DIRECTIONALLIGHT::Update();
+        Field.Update();
+
+        //---画面遷移---//
+        if (INPUTMANAGER::GetKey(DIK_SPACE, TRIGGER))
+        {
+            SCENEMANAGER::SetScene(SCENE_TITLE);
+        }
+    }
+    else
+    {
+        Menu.Update();
     }
 }

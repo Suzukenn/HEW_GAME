@@ -8,16 +8,18 @@
 #include "Field.h"
 #include "FlexibleCamera.h"
 #include "Main.h"
-#include "Sprite.h"
+#include "WordMenu.h"
 
 //ƒNƒ‰ƒXéŒ¾//
 class TRAINING final : public BASE_SCENE
 {
     private:
-        BACKGROUND Back;
         FLEXIBLECAMERA FlexibleCamera;
         DEBUG Debugger;
         FIELD Field;
+        WORDMENU Menu;
+
+        bool Mode;
 
     public:
         void Draw(void);
