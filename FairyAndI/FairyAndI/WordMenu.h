@@ -2,18 +2,32 @@
 #define _WORDMENU_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
+#include <array>
 #include <vector>
 #include "BackGround.h"
 #include "Main.h"
-#include "Sprite.h"
+#include "SelectMarker.h"
+#include "WordList.h"
+#include "WordPlate.h"
+
+//＝＝＝列挙型定義＝＝＝//
+enum
+{
+    SETTING_STATE_ADJECTIVELIST,
+    SETTING_STATE_NOUN,
+    SETTING_STATE_SELECT,
+    SETTING_STATE_MAX
+};
 
 //＝＝＝クラス宣言＝＝＝//
 class WORDMENU
 {
     private:
-        SPRITE Back;
-        std::vector<SPRITE> Item;
-        std::vector<bool> Unlockcheck;
+        int State;
+        BACKGROUND Back;
+        SELECTMARKER SelectMarker;
+        std::array<WORDPLATE, 2> SelectWord;
+        std::array<WORDLIST, 2> List;
 
     public:
         void Draw(void);

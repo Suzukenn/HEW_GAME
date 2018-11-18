@@ -8,13 +8,13 @@
 //ƒNƒ‰ƒXéŒ¾//
 class WORDPLATE final : protected SPRITE
 {
-    private:
-
     public:
         void Draw(void);
         void Uninitialize(void);
         HRESULT Initialize(LPCTSTR, D3DXVECTOR2, D3DXVECTOR2);
         void Update(void);
+
+        HRESULT SetTexture(LPCTSTR&);
 };
 
 #endif

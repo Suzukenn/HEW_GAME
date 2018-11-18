@@ -62,9 +62,6 @@
     <ClCompile Include="Mouse.cpp">
       <Filter>ソース ファイル\System\Input</Filter>
     </ClCompile>
-    <ClCompile Include="Position.cpp">
-      <Filter>ソース ファイル\Object</Filter>
-    </ClCompile>
     <ClCompile Include="BackGround.cpp">
       <Filter>ソース ファイル\Actor</Filter>
     </ClCompile>
@@ -119,6 +116,9 @@
     <ClCompile Include="WordPlate.cpp">
       <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
+    <ClCompile Include="SelectMarker.cpp">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -147,9 +147,6 @@
     </ClInclude>
     <ClInclude Include="Mouse.h">
       <Filter>ソース ファイル\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Position.h">
-      <Filter>ソース ファイル\Object</Filter>
     </ClInclude>
     <ClInclude Include="BackGround.h">
       <Filter>ソース ファイル\Actor</Filter>
@@ -215,6 +212,9 @@
       <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
     <ClInclude Include="WordPlate.h">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectMarker.h">
       <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
   </ItemGroup>

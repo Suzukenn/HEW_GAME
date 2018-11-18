@@ -27,6 +27,7 @@ void WORDPLATE::Draw(void)
 
     //---頂点バッファによる背景描画---//
     pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
+    Size;
 }
 
 /////////////////////////////////////////////
@@ -50,10 +51,10 @@ HRESULT WORDPLATE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVEC
     Position = position;
     Size = size;
     Texture.reset(new LPDIRECT3DTEXTURE9());
-    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9);
+    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9());
 
     //---テクスチャの読み込み---//
-    hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
+    hResult = SetTexture(texturename);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("ワードプレートのテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -85,8 +86,8 @@ HRESULT WORDPLATE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVEC
     {
         pVertex[nCounter].U = (float)(nCounter & 1);
         pVertex[nCounter].V = (float)((nCounter >> 1) & 1);
-        pVertex[nCounter].Position.x = pVertex[nCounter].U * SCREEN_WIDTH;
-        pVertex[nCounter].Position.y = pVertex[nCounter].V * SCREEN_HEIGHT;
+        pVertex[nCounter].Position.x = position.x + pVertex[nCounter].U * Size.x;
+        pVertex[nCounter].Position.y = position.y + pVertex[nCounter].V * Size.y;
         pVertex[nCounter].Position.z = 0.0F;
         pVertex[nCounter].RHW = 1.0F;
         pVertex[nCounter].Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);
@@ -132,4 +133,24 @@ void WORDPLATE::Uninitialize(void)
 void WORDPLATE::Update(void)
 {
 
+}
+
+/////////////////////////////////////////////
+//関数名：SetTexture
+//
+//機能：ワードプレートの適用テクスチャの設定
+//
+//引数：(LPCTSTR&)テクスチャ名
+//
+//戻り値：(HRESULT)処理の成否
+/////////////////////////////////////////////
+HRESULT WORDPLATE::SetTexture(LPCTSTR& texturename)
+{
+    if (FAILED(TEXTUREMANAGER::GetTexture(texturename, *Texture)))
+    {
+        MessageBox(nullptr, TEXT("ワードプレートのテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
+        return E_FAIL;
+    }
+    return S_OK;
 }

@@ -168,7 +168,7 @@ float GAMEPAD::GetLeftTrigger(DWORD number)
         return 0;
     }
 
-    return (float)(Current.at(number).Gamepad.bLeftTrigger >> 7);
+    return (float)(Current.at(number).Gamepad.bLeftTrigger / 256);
 }
 
 /////////////////////////////////////////////
@@ -229,7 +229,7 @@ float GAMEPAD::GetRightTrigger(DWORD number)
         return 0;
     }
 
-    return (float)(Current.at(number).Gamepad.bRightTrigger >> 7);
+    return (float)(Current.at(number).Gamepad.bRightTrigger / 256);
 }
 
 /////////////////////////////////////////////
