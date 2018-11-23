@@ -36,7 +36,7 @@ typedef struct
 {
     int Frame; //パターン番号
     int Count; //フレーム数
-}MOTION;
+} MOTION;
 
 typedef struct
 {

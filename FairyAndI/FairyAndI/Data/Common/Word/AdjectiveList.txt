@@ -1,0 +1,5 @@
+Data/Common/Word/Adjective/Hot.png HOT
+Data/Common/Word/Adjective/Cold.png COLD
+Data/Common/Word/Adjective/Hard.png HARD
+Data/Common/Word/Adjective/Soft.png SOFT
+Data/Common/Word/Lock.png LOCK

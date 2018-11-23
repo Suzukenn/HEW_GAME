@@ -93,7 +93,7 @@ void ANIMATIONSPRITE::SetSpriteUV(int number)
     fV = (number / UV.y) * (1.0F / UV.y);
 
     //---ílçXêV---//
-    for (nCounter = 0; nCounter < 4; nCounter++)
+    for (nCounter = 0; nCounter < 4; ++nCounter)
     {
         Vertex.at(nCounter).U = fU + (nCounter % 2) * (1.0F / UV.x);
         Vertex.at(nCounter).V = fV + (nCounter >> 1) * (1.0F / UV.y);

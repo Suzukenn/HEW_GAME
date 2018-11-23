@@ -1,13 +1,16 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include "Debug.h"
+#include "Canvas.h"
 #include "DirectionalLight.h"
 #include "FlexibleCamera.h"
 #include "InputManager.h"
+#include "ModelManager.h"
+#include "Player.h"
 #include "SceneManager.h"
+#include "SideViewCamera.h"
 #include "SoundManager.h"
 #include "TextureManager.h"
 #include "TrainingScene.h"
-#include "WordMenu.h"
+#include "WordManager.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -21,15 +24,19 @@
 /////////////////////////////////////////////
 void TRAINING::Draw(void)
 {
-    //---カメラのセット---//
-
     //---オブジェクトの描画処理---//
-    //Debugger.Draw();
     Field.Draw();
-    if (!Mode)
-    {
-        Menu.Draw();
-    }
+    
+    //for (int i = 0; i < MAX_ITEM; i++)
+    //{
+    //    Item[i].Draw();
+    //}
+
+    Fairy.Draw();
+
+    Player.Draw();
+
+    Canvas.Draw();
 }
 
 /////////////////////////////////////////////
@@ -48,29 +55,67 @@ HRESULT TRAINING::Initialize(void)
 
     Mode = true;
 
+    //---データの読み込み---//
     hResult = TEXTUREMANAGER::Initialize(TEXT("Data/Training/TextureList.txt"));
     if (FAILED(hResult))
     {
         return E_FAIL;
     }
 
-    //---オブジェクトの初期化処理---//
+    //hResult = MODELMANAGER::Initialize(TEXT("Data/Model/ModelList.txt"));
+    //if (FAILED(hResult))
+    //{
+    //    return E_FAIL;
+    //}
 
-    //カメラ
+    hResult = WORDMANAGER::Initialize();
+    if (FAILED(hResult))
+    {
+        return E_FAIL;
+    }
+
+
+    //---オブジェクトの初期化処理---//
+    //地形
+    hResult = Field.Initialize(TEXT("FIELD"), 40, 40, 8.0F, 8.0F);
+    if (FAILED(hResult))
+    {
+        return E_FAIL;
+    }
+
+    //フェアリー
+    if (FAILED(Fairy.Initialize()))
+    {
+        return E_FAIL;
+    }
+
+    //アイテム
+    //for (int i = 0; i < MAX_ITEM; i++)
+    //{
+    //    if (FAILED(Item[i].Initialize()))
+    //    {
+    //        return E_FAIL;
+    //    }
+    //}
+    //Item[0].CreateItem(D3DXVECTOR3(0.0f, 10.0f, 0.0f), ITEM_ICE);
+    //Item[1].CreateItem(D3DXVECTOR3(100.0f, 10.0f, 0.0f), ITEM_FIRE);
+
+    //プレイヤー
+    hResult = Player.Initialize(TEXT("Data/Model/car000.x"));
+    if (FAILED(hResult))
+    {
+        return E_FAIL;
+    }
+
+    //フレキシブルカメラ
     hResult = FlexibleCamera.Initialize(D3DXVECTOR3(0.0F, 100.0F, -200.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
     if (FAILED(hResult))
     {
         return E_FAIL;
     }
 
-    //デバッガー
-    //if (FAILED(Debugger.Initialize()))
-    //{
-    //    return E_FAIL;
-    //}
-
-    //地形
-    hResult = Field.Initialize(TEXT("FIELD"), 40, 40, 8.0F, 8.0F);
+    //サイドビューカメラ
+    hResult = SIDEVIEWCAMERA::Initialize(D3DXVECTOR3(0.0F, 20.0F, -150.0F), Player.GetPlayerPosition());
     if (FAILED(hResult))
     {
         return E_FAIL;
@@ -83,8 +128,8 @@ HRESULT TRAINING::Initialize(void)
         return E_FAIL;
     }
 
-    //フェアリータイムメニュー
-    hResult = Menu.Initialize();
+    //UIキャンバス
+    hResult = Canvas.Initialize();
     if (FAILED(hResult))
     {
         return E_FAIL;
@@ -108,11 +153,14 @@ HRESULT TRAINING::Initialize(void)
 void TRAINING::Uninitialize(void)
 {
     //---オブジェクトの終了処理---//
+    Canvas.Uninitialize();
     FlexibleCamera.Uninitialize();
-    //Debugger.Uninitialize();
-    DIRECTIONALLIGHT::Uninitialize();
     Field.Uninitialize();
-    Menu.Uninitialize();
+    Fairy.Uninitialize();
+    Player.Uninitialize();
+
+    DIRECTIONALLIGHT::Uninitialize();
+    SIDEVIEWCAMERA::Uninitialize();
 
     //---テクスチャの削除---//
     TEXTUREMANAGER::Uninitialize();
@@ -133,6 +181,7 @@ void TRAINING::Uninitialize(void)
 void TRAINING::Update(void)
 {
     //---各種宣言---//
+    static bool bCameraMode = false;
 
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
@@ -142,10 +191,21 @@ void TRAINING::Update(void)
     //---オブジェクトの更新処理---//
     if (Mode)
     {
-        FlexibleCamera.Update();
-        //Debugger.Update();
-        DIRECTIONALLIGHT::Update();
+        if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_START, TRIGGER)) bCameraMode = !bCameraMode;
+        bCameraMode ? FlexibleCamera.Update() : SIDEVIEWCAMERA::Update(Player.GetPlayerPosition());
+
         Field.Update();
+
+        Player.Update();
+        Fairy.Update(SIDEVIEWCAMERA::GetRotation(), Player.GetPlayerPosition(), *Player.GetPlayerRotation(), Item);
+
+        //for (int i = 0; i < MAX_ITEM; i++)
+        //{
+        //    Item[i].Update(Item);
+        //}
+
+
+        DIRECTIONALLIGHT::Update();
 
         //---画面遷移---//
         if (INPUTMANAGER::GetKey(DIK_SPACE, TRIGGER))
@@ -153,8 +213,5 @@ void TRAINING::Update(void)
             SCENEMANAGER::SetScene(SCENE_TITLE);
         }
     }
-    else
-    {
-        Menu.Update();
-    }
+    Canvas.Update();
 }

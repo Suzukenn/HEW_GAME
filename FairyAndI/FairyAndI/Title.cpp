@@ -111,4 +111,13 @@ void TITLE::Update(void)
     Back.Update();
     StartButton.Update();
     TrainingButton.Update();
+
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
+    {
+        SCENEMANAGER::SetScene(SCENE_SELECT);
+    }
+    else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_START, TRIGGER))
+    {
+        SCENEMANAGER::SetScene(SCENE_TRAINING);
+    }
 }

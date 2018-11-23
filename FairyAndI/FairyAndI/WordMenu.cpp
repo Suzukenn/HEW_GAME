@@ -1,6 +1,22 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
+#include <array>
+#include <fstream>
+#include <vector>
+#include "BackGround.h"
+#include "Main.h"
 #include "InputManager.h"
+#include "SelectMarker.h"
+#include "WordList.h"
 #include "WordMenu.h"
+#include "WordPlate.h"
+#include "WordManager.h"
+//＝＝＝グローバル宣言＝＝＝//
+int WORDMENU::State;
+BACKGROUND WORDMENU::Back;
+SELECTMARKER WORDMENU::SelectMarker;
+
+std::array<WORDPLATE, 2> WORDMENU::SelectWord;
+std::array<WORDLIST, 2> WORDMENU::List;
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -49,28 +65,38 @@ HRESULT WORDMENU::Initialize(void)
     const D3DXVECTOR2 vecListPosition[2] = { D3DXVECTOR2(50.0F, 500.0F), D3DXVECTOR2(750.0F, 500.0F) };
     const D3DXVECTOR2 vecPanelPosition[2] = { D3DXVECTOR2(400.0F, 130.0F), D3DXVECTOR2(750.0F, 130.0F) };
     LPCTSTR strWord[2] = { TEXT("ADJECTIVELIST"), TEXT("NOUNLIST") };
-    LPCTSTR strList[2][WORD_VALUE] = {{ TEXT("HOT"), TEXT("COLD"), TEXT("HARD"), TEXT("SOFT") }, { TEXT("FIRE"), TEXT("ICE"), TEXT("ROCK"), TEXT("EARTH") }};
+    std::vector<std::vector<tstring>> conList;
 
     //---初期化処理---//
     State = SETTING_STATE_SELECT;
 
-    //---オブジェクトの初期化---//
-    //吹き出し
-    hResult = Back.Initialize(TEXT("BALLON"), D3DXVECTOR2(350.0F, 100.0F), D3DXVECTOR2(600.0F, 250.0F));
+    //データのロード
+    hResult = Load(conList);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("ワードリストの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("ワードペアの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
         Uninitialize();
         return hResult;
     }
 
-    //吹き出しの中
+
+    //---オブジェクトの初期化---//
+    //吹き出し
+    hResult = Back.Initialize(TEXT("BALLOON"), D3DXVECTOR2(350.0F, 100.0F), D3DXVECTOR2(600.0F, 250.0F));
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("吹き出しの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
+        return hResult;
+    }
+
+    //選択中の言葉の初期化
     for (nCounter = 0; nCounter < 2; ++nCounter)
     {
-        hResult = SelectWord.at(nCounter).Initialize(TEXT("LOCK"), vecPanelPosition[nCounter], D3DXVECTOR2(130.0F, 130.0F));
+        hResult = SelectWord.at(nCounter).Initialize(TEXT("LOCK"), vecPanelPosition[nCounter]);
         if (FAILED(hResult))
         {
-            MessageBox(nullptr, TEXT("ワードリストの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
+            MessageBox(nullptr, TEXT("掛け合わせパネルの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
             Uninitialize();
             return hResult;
         }
@@ -80,7 +106,7 @@ HRESULT WORDMENU::Initialize(void)
     hResult = SelectMarker.Initialize(TEXT("MARKER"), D3DXVECTOR2(390.0F, 120.0F), D3DXVECTOR2(150.0F, 150.0F));
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("ワードリストの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("選択マーカーの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
         return hResult;
     }
@@ -88,7 +114,7 @@ HRESULT WORDMENU::Initialize(void)
     //ワードリスト
     for (nCounter = 0; nCounter < 2; ++nCounter)
     {
-        hResult = List.at(nCounter).Initialize(strWord[nCounter], strList[nCounter], vecListPosition[nCounter], D3DXVECTOR2(500.0F, 200.0F));
+        hResult = List.at(nCounter).Initialize(strWord[nCounter], conList.at(nCounter), vecListPosition[nCounter], D3DXVECTOR2(500.0F, 200.0F));
         if (FAILED(hResult))
         {
             MessageBox(nullptr, TEXT("ワードリストの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -98,6 +124,56 @@ HRESULT WORDMENU::Initialize(void)
     }
 
     return hResult;
+}
+
+/////////////////////////////////////////////
+//関数名：Load
+//
+//機能：ペアの作成
+//
+//引数：(std::vector<std::vector<tstring>>&)格納リスト
+//
+//戻り値：(HRESULT)処理の成否
+/////////////////////////////////////////////
+HRESULT WORDMENU::Load(std::vector<std::vector<tstring>>& list)
+{
+    //---各種宣言---//
+    std::string szAdjective;
+    std::string szNoun;
+    std::wstring wszAdjective;
+    std::wstring wszNoun;
+    std::ifstream file(TEXT("Data/Common/Word/WordPair.txt"));
+
+    //---初期化処理---//
+    list.resize(2);
+
+    //---ファイルの読み込み---//
+    if (!file.is_open())
+    {
+        MessageBox(nullptr, TEXT("ワードペアリストを開けませんでした"), TEXT("Data/Common/Word/WordPair.txt"), MB_ICONSTOP | MB_OK);
+        Uninitialize();
+        return E_FAIL;
+    }
+
+    //---データの抽出---//
+    while (!file.eof())
+    {
+        file >> szNoun >> szAdjective;
+
+#ifdef _UNICODE
+        wszNoun = std::wstring(szNoun.begin(), szNoun.end());
+        wszNoun.shrink_to_fit();
+        wszAdjective = std::wstring(szAdjective.begin(), szAdjective.end());
+        wszAdjective.shrink_to_fit();
+        list.at(0).emplace_back(wszAdjective);
+        list.at(1).emplace_back(wszNoun);
+#else
+        list.at(0).emplace_back(szNoun);
+        list.at(1).emplace_back(szAdjective);
+#endif
+    }
+
+    return S_OK;
 }
 
 /////////////////////////////////////////////
@@ -184,6 +260,23 @@ void WORDMENU::Update(void)
             List.at(1).Update();
             SelectWord.at(1).SetTexture(List.at(1).GetSelectItem());
             break;
+    }
+
+    if (INPUTMANAGER::GetKey(DIK_Z, TRIGGER))
+    {
+        WORDMANAGER::UnLockWord(TEXT("FIRE"));
+    }
+    if (INPUTMANAGER::GetKey(DIK_X, TRIGGER))
+    {
+        WORDMANAGER::UnLockWord(TEXT("ICE"));
+    }
+    if (INPUTMANAGER::GetKey(DIK_C, TRIGGER))
+    {
+        WORDMANAGER::UnLockWord(TEXT("ROCK"));
+    }
+    if (INPUTMANAGER::GetKey(DIK_V, TRIGGER))
+    {
+        WORDMANAGER::UnLockWord(TEXT("EARTH"));
     }
 
     Back.Update();

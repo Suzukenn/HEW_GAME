@@ -13,8 +13,8 @@
 
 //＝＝＝定数・マクロ定義＝＝＝//
 #define FPS 1000 / 60
-#define WINDOW_CAPTION "スケータガール RESTART"	//ウインドウのキャプション名
-#define WINDOW_CLASS_NAME "SkaterGirl"			//ウインドウのクラス名
+#define WINDOW_CAPTION "妖精×私"	    //ウインドウのキャプション名
+#define WINDOW_CLASS_NAME "FairyAndI"	//ウインドウのクラス名
 
 //＝＝＝プロトタイプ宣言＝＝＝//
 void Draw(void);

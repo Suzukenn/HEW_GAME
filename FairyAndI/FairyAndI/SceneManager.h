@@ -11,6 +11,7 @@ typedef enum
 {
     SCENE_TRAINING,
     SCENE_TITLE,
+    SCENE_SELECT,
     SCENE_GAME,
     SCENE_GAMEOVER,
     MAX_SCENE

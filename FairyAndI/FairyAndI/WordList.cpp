@@ -29,11 +29,11 @@ void WORDLIST::Draw(void)
 //
 //機能：ワードリストの初期化
 //
-//引数：(LPCTSTR)背景テクスチャ,(LPCTSTR*)文字リスト,(D3DXVECTOR2)位置,(D3DXVECTOR2)大きさ
+//引数：(LPCTSTR)背景テクスチャ,(std::vector<tstring>&*)文字リスト,(D3DXVECTOR2)位置,(D3DXVECTOR2)大きさ
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT WORDLIST::Initialize(LPCTSTR texturename, LPCTSTR* list, D3DXVECTOR2 position, D3DXVECTOR2 size)
+HRESULT WORDLIST::Initialize(LPCTSTR texturename, std::vector<tstring>& list, D3DXVECTOR2 position, D3DXVECTOR2 size)
 {
     //---各種宣言---//
     int nCounter;
@@ -43,34 +43,34 @@ HRESULT WORDLIST::Initialize(LPCTSTR texturename, LPCTSTR* list, D3DXVECTOR2 pos
     //---初期化処理---//
     SelectNumber = 1;
     vecPanelPosition = D3DXVECTOR2(position.x + 20.0F, position.y + 30.0F);
+    WordList.clear();
 
-    for (nCounter = 0; nCounter < WORD_VALUE; ++nCounter)
+    for (auto& data : list)
     {
-        WordList.at(nCounter) = (*(list + nCounter));
+        WordList.emplace_back(data);
     }
+
 
     //---オブジェクトの初期化---//
     //背景
     hResult = Back.Initialize(texturename, position, size);
     if (FAILED(hResult))
     {
+        MessageBox(nullptr, TEXT("ワードリストの背景の作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
+        Uninitialize();
         return hResult;
     }
 
     //ワードパネル
     for (nCounter = 0; nCounter < DISPLAY_VALUE; ++nCounter)
     {
-        hResult = WordPlate.at(nCounter).Initialize(WordList.at(nCounter), D3DXVECTOR2(vecPanelPosition.x + 160.0F * nCounter, vecPanelPosition.y + 30.0F), D3DXVECTOR2(130.0F, 130.0F));
+        hResult = WordPlate.at(nCounter).Initialize(WordList.at(nCounter).data(), D3DXVECTOR2(vecPanelPosition.x + 160.0F * nCounter, vecPanelPosition.y + 30.0F));
         if (FAILED(hResult))
         {
+            MessageBox(nullptr, TEXT("ワードリスト内のワードパネルの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
+            Uninitialize();
             return hResult;
         }
-    }
-
-    //ロックチェック
-    for (nCounter = 0; nCounter < WORD_VALUE; ++nCounter)
-    {
-        UnlockCheck.at(nCounter) = false;
     }
 
     return hResult;
@@ -87,9 +87,15 @@ HRESULT WORDLIST::Initialize(LPCTSTR texturename, LPCTSTR* list, D3DXVECTOR2 pos
 /////////////////////////////////////////////
 void WORDLIST::ResetTexture(void)
 {
-    WordPlate.at(0).SetTexture(WordList.at((SelectNumber + WORD_VALUE - 1) % WORD_VALUE));
-    WordPlate.at(1).SetTexture(WordList.at(SelectNumber % WORD_VALUE));
-    WordPlate.at(2).SetTexture(WordList.at((SelectNumber + 1) % WORD_VALUE));
+#ifdef _UNICODE
+    WordPlate.at(0).SetTexture(WordList.at((SelectNumber + (int)WordList.size() - 1) % (int)WordList.size()).data());
+    WordPlate.at(1).SetTexture(WordList.at(SelectNumber % (int)WordList.size()).data());
+    WordPlate.at(2).SetTexture(WordList.at((SelectNumber + 1) % (int)WordList.size()).data());
+#else
+    WordPlate.at(0).SetTexture(WordList.at((SelectNumber + (int)WordList.size() - 1) % (int)WordList.size()).c_str());
+    WordPlate.at(1).SetTexture(WordList.at(SelectNumber % (int)WordList.size()).c_str());
+    WordPlate.at(2).SetTexture(WordList.at((SelectNumber + 1) % (int)WordList.size()).c_str());
+#endif
 }
 
 /////////////////////////////////////////////
@@ -103,7 +109,15 @@ void WORDLIST::ResetTexture(void)
 /////////////////////////////////////////////
 void WORDLIST::Uninitialize(void)
 {
+    //---各種宣言---//
+    int nCounter;
+
+    //---開放---//
     Back.Uninitialize();
+    for (nCounter = 0; nCounter < DISPLAY_VALUE; ++nCounter)
+    {
+        WordPlate.at(nCounter).Uninitialize();
+    }
 }
 
 /////////////////////////////////////////////
@@ -117,21 +131,15 @@ void WORDLIST::Uninitialize(void)
 /////////////////////////////////////////////
 void WORDLIST::Update(void)
 {
+    //---カーソル移動---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_LEFT_SHOULDER, TRIGGER))
     {
-        SelectNumber = (SelectNumber + WORD_VALUE + 1) % WORD_VALUE;
+        SelectNumber = (SelectNumber + (int)WordList.size() - 1) % (int)WordList.size();
         ResetTexture();
     }
     else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_RIGHT_SHOULDER, TRIGGER))
     {
-        SelectNumber = (SelectNumber + 1) % WORD_VALUE;
-        ResetTexture();
-    }
-
-    //------//
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_LEFT_SHOULDER, TRIGGER))
-    {
-        SelectNumber = (SelectNumber + WORD_VALUE + 1) % WORD_VALUE;
+        SelectNumber = (SelectNumber + 1) % (int)WordList.size();
         ResetTexture();
     }
 }

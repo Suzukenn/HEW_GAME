@@ -36,13 +36,16 @@
     <Filter Include="ソース ファイル\System\Texture">
       <UniqueIdentifier>{0f44c79e-0f0b-4245-9571-edbc73b2f7ce}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\UI\Button">
+      <UniqueIdentifier>{150b6293-5c74-4f52-b6d4-0f0aaedd2484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\UI\WordMenu">
+      <UniqueIdentifier>{c6244d99-b959-48a5-9d15-23b284da9450}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
       <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
     <ClCompile Include="GameOver.cpp">
       <Filter>ソース ファイル\Scene</Filter>
@@ -74,9 +77,6 @@
     <ClCompile Include="WavController.cpp">
       <Filter>ソース ファイル\System\Sound</Filter>
     </ClCompile>
-    <ClCompile Include="StartButton.cpp">
-      <Filter>ソース ファイル\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Title.cpp">
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
@@ -101,23 +101,56 @@
     <ClCompile Include="FlexibleCamera.cpp">
       <Filter>ソース ファイル\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="TrainingButton.cpp">
-      <Filter>ソース ファイル\UI</Filter>
-    </ClCompile>
     <ClCompile Include="TextureManager.cpp">
       <Filter>ソース ファイル\System\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="WordList.cpp">
-      <Filter>ソース ファイル\UI</Filter>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="WordMenu.cpp">
-      <Filter>ソース ファイル\UI</Filter>
+    <ClCompile Include="Fairy.cpp">
+      <Filter>ソース ファイル\Actor</Filter>
     </ClCompile>
-    <ClCompile Include="WordPlate.cpp">
-      <Filter>ソース ファイル\UI</Filter>
+    <ClCompile Include="SideViewCamera.cpp">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Canvas.cpp">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClCompile>
+    <ClCompile Include="WordManager.cpp">
+      <Filter>ソース ファイル\System\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectScene.cpp">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="ModelManager.cpp">
+      <Filter>ソース ファイル\System\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Button.cpp">
+      <Filter>ソース ファイル\UI\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="StartButton.cpp">
+      <Filter>ソース ファイル\UI\Button</Filter>
+    </ClCompile>
+    <ClCompile Include="TrainingButton.cpp">
+      <Filter>ソース ファイル\UI\Button</Filter>
     </ClCompile>
     <ClCompile Include="SelectMarker.cpp">
-      <Filter>ソース ファイル\UI</Filter>
+      <Filter>ソース ファイル\UI\WordMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="WordList.cpp">
+      <Filter>ソース ファイル\UI\WordMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="WordMenu.cpp">
+      <Filter>ソース ファイル\UI\WordMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="WordPlate.cpp">
+      <Filter>ソース ファイル\UI\WordMenu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -126,9 +159,6 @@
     </ClInclude>
     <ClInclude Include="BaseScene.h">
       <Filter>ソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
     <ClInclude Include="GameScene.h">
       <Filter>ソース ファイル\Scene</Filter>
@@ -163,9 +193,6 @@
     <ClInclude Include="WavController.h">
       <Filter>ソース ファイル\System\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="StartButton.h">
-      <Filter>ソース ファイル\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Title.h">
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
@@ -193,29 +220,68 @@
     <ClInclude Include="FlexibleCamera.h">
       <Filter>ソース ファイル\Actor</Filter>
     </ClInclude>
-    <ClInclude Include="TrainingButton.h">
-      <Filter>ソース ファイル\UI</Filter>
-    </ClInclude>
     <ClInclude Include="TextureManager.h">
       <Filter>ソース ファイル\System\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureParameter.h">
-      <Filter>ソース ファイル\System\Texture</Filter>
     </ClInclude>
     <ClInclude Include="Base2DObjeck.h">
       <Filter>ソース ファイル\Object</Filter>
     </ClInclude>
-    <ClInclude Include="WordList.h">
-      <Filter>ソース ファイル\UI</Filter>
+    <ClInclude Include="Player.h">
+      <Filter>ソース ファイル\Actor</Filter>
     </ClInclude>
-    <ClInclude Include="WordMenu.h">
-      <Filter>ソース ファイル\UI</Filter>
+    <ClInclude Include="Fairy.h">
+      <Filter>ソース ファイル\Actor</Filter>
     </ClInclude>
-    <ClInclude Include="WordPlate.h">
-      <Filter>ソース ファイル\UI</Filter>
+    <ClInclude Include="SideViewCamera.h">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Base3Dobject.h">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Canvas.h">
+      <Filter>ソース ファイル\Actor</Filter>
+    </ClInclude>
+    <ClInclude Include="WordManager.h">
+      <Filter>ソース ファイル\System\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectScene.h">
+      <Filter>ソース ファイル\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="ModelManager.h">
+      <Filter>ソース ファイル\System\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>ソース ファイル\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="FileParameter.h">
+      <Filter>ソース ファイル\System\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Button.h">
+      <Filter>ソース ファイル\UI\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="StartButton.h">
+      <Filter>ソース ファイル\UI\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="TrainingButton.h">
+      <Filter>ソース ファイル\UI\Button</Filter>
     </ClInclude>
     <ClInclude Include="SelectMarker.h">
-      <Filter>ソース ファイル\UI</Filter>
+      <Filter>ソース ファイル\UI\WordMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="WordList.h">
+      <Filter>ソース ファイル\UI\WordMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="WordMenu.h">
+      <Filter>ソース ファイル\UI\WordMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="WordPlate.h">
+      <Filter>ソース ファイル\UI\WordMenu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

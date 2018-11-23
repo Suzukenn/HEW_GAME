@@ -2,6 +2,7 @@
 #include "GameOver.h"
 #include "GameScene.h"
 #include "SceneManager.h"
+#include "SelectScene.h"
 #include "Title.h"
 #include "TrainingScene.h"
 
@@ -104,6 +105,10 @@ void SCENEMANAGER::Update(void)
 
             case SCENE_TITLE:
                 Scene.reset(new TITLE());
+                break;
+
+            case SCENE_SELECT:
+                Scene.reset(new SELECTSCENE());
                 break;
 
             case SCENE_GAME:

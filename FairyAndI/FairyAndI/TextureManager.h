@@ -4,8 +4,8 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <memory>
 #include <unordered_map>
+#include "FileParameter.h"
 #include "Main.h"
-#include "TextureParameter.h"
 
 //＝＝＝クラス宣言＝＝＝//
 class TEXTUREMANAGER
@@ -13,8 +13,8 @@ class TEXTUREMANAGER
     private:
         static std::unordered_map<tstring, LPDIRECT3DTEXTURE9> Texture;
 
-        static HRESULT Create(const TEXTUREPARAMETER&);
-        static HRESULT Load(std::vector<TEXTUREPARAMETER>&, LPCTSTR);
+        static HRESULT Create(const FILEPARAMETER&);
+        static HRESULT Load(std::vector<FILEPARAMETER>&, LPCTSTR);
 
     public:
         static HRESULT Initialize(LPCTSTR);

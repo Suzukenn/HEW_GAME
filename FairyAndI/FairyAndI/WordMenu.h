@@ -5,6 +5,7 @@
 #include <array>
 #include <vector>
 #include "BackGround.h"
+#include "FileParameter.h"
 #include "Main.h"
 #include "SelectMarker.h"
 #include "WordList.h"
@@ -23,17 +24,19 @@ enum
 class WORDMENU
 {
     private:
-        int State;
-        BACKGROUND Back;
-        SELECTMARKER SelectMarker;
-        std::array<WORDPLATE, 2> SelectWord;
-        std::array<WORDLIST, 2> List;
+        static int State;
+        static BACKGROUND Back;
+        static SELECTMARKER SelectMarker;
+        static std::array<WORDPLATE, 2> SelectWord;
+        static std::array<WORDLIST, 2> List;
+
+        static HRESULT Load(std::vector<std::vector<tstring>>&);
 
     public:
-        void Draw(void);
-        void Uninitialize(void);
-        HRESULT Initialize(void);
-        void Update(void);
+        static void Draw(void);
+        static void Uninitialize(void);
+        static HRESULT Initialize(void);
+        static void Update(void);
 };
 
 #endif
