@@ -4,22 +4,31 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "BackGround.h"
 #include "BaseScene.h"
-#include "Debug.h"
+#include "Canvas.h"
+#include "Fairy.h"
 #include "Field.h"
 #include "FlexibleCamera.h"
+#include "Item.h"
 #include "Main.h"
-#include "WordMenu.h"
+#include "Player.h"
 
 //＝＝＝クラス宣言＝＝＝//
 class TRAINING final : public BASE_SCENE
 {
     private:
-        FLEXIBLECAMERA FlexibleCamera;
-        DEBUG Debugger;
+        CANVAS Canvas;
+        FAIRY Fairy;
         FIELD Field;
-        WORDMENU Menu;
+        FLEXIBLECAMERA FlexibleCamera;
+        PLAYER Player;
+
+        int					m_num;		//アイテムの添え字用
+        LPD3DXVECTOR3		m_itemPos;
+        LPD3DXVECTOR3		m_itemDistance;
 
         bool Mode;
+
+        ITEM Item[MAX_ITEM];
 
     public:
         void Draw(void);

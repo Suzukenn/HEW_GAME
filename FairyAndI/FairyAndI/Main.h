@@ -4,6 +4,7 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <d3d9.h>
 #include <d3dx9.h>
+#include <iosfwd>
 #include <string>
 #include <Windows.h>
 
@@ -36,7 +37,7 @@ typedef struct
 {
     int Frame; //パターン番号
     int Count; //フレーム数
-}MOTION;
+} MOTION;
 
 typedef struct
 {

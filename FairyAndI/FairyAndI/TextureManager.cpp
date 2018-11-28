@@ -14,13 +14,13 @@ std::unordered_map<tstring, LPDIRECT3DTEXTURE9> TEXTUREMANAGER::Texture;        
 /////////////////////////////////////////////
 //関数名：Create
 //
-//機能：ソースボイスの作成
+//機能：テクスチャの作成
 //
-//引数：(TEXTUREPARAMETER)参照データ
+//引数：(FILEPARAMETER)参照データ
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT TEXTUREMANAGER::Create(const TEXTUREPARAMETER& data)
+HRESULT TEXTUREMANAGER::Create(const FILEPARAMETER& data)
 {
     //---各種宣言---//
     std::unique_ptr<LPDIRECT3DTEXTURE9> pTexture;
@@ -64,7 +64,7 @@ HRESULT TEXTUREMANAGER::Initialize(LPCTSTR filename)
     //---各種宣言---//
     HRESULT hResult;
 
-    std::vector<TEXTUREPARAMETER> conList;
+    std::vector<FILEPARAMETER> conList;
 
     //---初期化処理---//
 
@@ -97,11 +97,11 @@ HRESULT TEXTUREMANAGER::Initialize(LPCTSTR filename)
 //
 //機能：読み込みデータの格納
 //
-//引数：(TEXTUREPARAMETER)テクスチャリスト,(LPCTSTR)ファイル名
+//引数：(std::vector<FILEPARAMETER>&)テクスチャリスト,(LPCTSTR)ファイル名
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT TEXTUREMANAGER::Load(std::vector<TEXTUREPARAMETER>& list, LPCTSTR filename)
+HRESULT TEXTUREMANAGER::Load(std::vector<FILEPARAMETER>& list, LPCTSTR filename)
 {
     //---各種宣言---//
     int nCounter;
@@ -132,14 +132,15 @@ HRESULT TEXTUREMANAGER::Load(std::vector<TEXTUREPARAMETER>& list, LPCTSTR filena
         list.at(nCounter).CallKey.resize(szKeyName.size());
         list.at(nCounter).CallKey = std::wstring(szKeyName.begin(), szKeyName.end());
 #else
-        list.at(nCounter).FileName = szFileName.c_str();;
-        list.at(nCounter).CallKey = szKeyName.c_str();
+        list.at(nCounter).FileName = szFileName;
+        list.at(nCounter).CallKey = szKeyName;
 #endif
 
         ++nCounter;
     }
 
     list.resize(nCounter);
+    list.shrink_to_fit();
 
     return S_OK;
 }
@@ -155,7 +156,7 @@ HRESULT TEXTUREMANAGER::Load(std::vector<TEXTUREPARAMETER>& list, LPCTSTR filena
 /////////////////////////////////////////////
 void TEXTUREMANAGER::Uninitialize(void)
 {
-    //---解放---//
+    //---開放---//
     //テクスチャの破棄
     for (auto& data : Texture)
     {

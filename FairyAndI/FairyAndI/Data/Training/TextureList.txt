@@ -1,14 +1,6 @@
 Data/Training/Texture/Field.jpg FIELD
 Data/Training/UI/AdjectiveList.png ADJECTIVELIST
 Data/Training/UI/NounList.png NOUNLIST
-Data/Training/UI/Hot.png HOT
-Data/Training/UI/Fire.png FIRE
-Data/Training/UI/Cold.png COLD
-Data/Training/UI/Ice.png ICE
-Data/Training/UI/Hard.png HARD
-Data/Training/UI/Rock.png ROCK
-Data/Training/UI/Soft.png SOFT
-Data/Training/UI/Earth.png EARTH
-Data/Training/UI/Balloon.png BALLON
-Data/Training/UI/Lock.png LOCK
+Data/Training/UI/Balloon.png BALLOON
 Data/Training/UI/Select.png MARKER
+Data/Training/UI/ItemBox.png ITEMBOX

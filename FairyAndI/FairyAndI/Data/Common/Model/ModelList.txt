@@ -1,0 +1,5 @@
+Data/Common/Model/Character/car000.x PLAYER
+Data/Common/Model/Character/car001.x FAIRY
+Data/Common/Model/Character/car001.x FIRE
+Data/Common/Model/Character/car001.x TREE
+Data/Common/Model/Character/car001.x ICE

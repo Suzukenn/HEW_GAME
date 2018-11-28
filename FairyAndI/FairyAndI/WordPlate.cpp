@@ -1,6 +1,7 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "TextureManager.h"
 #include "WordPlate.h"
+#include "WordManager.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -27,7 +28,6 @@ void WORDPLATE::Draw(void)
 
     //---頂点バッファによる背景描画---//
     pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
-    Size;
 }
 
 /////////////////////////////////////////////
@@ -140,13 +140,13 @@ void WORDPLATE::Update(void)
 //
 //機能：ワードプレートの適用テクスチャの設定
 //
-//引数：(LPCTSTR&)テクスチャ名
+//引数：(tstring)テクスチャ名
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT WORDPLATE::SetTexture(LPCTSTR& texturename)
+HRESULT WORDPLATE::SetTexture(tstring texturename)
 {
-    if (FAILED(TEXTUREMANAGER::GetTexture(texturename, *Texture)))
+    if (FAILED(WORDMANAGER::GetWordTexture(texturename, *Texture)))
     {
         MessageBox(nullptr, TEXT("ワードプレートのテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
