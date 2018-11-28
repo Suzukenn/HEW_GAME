@@ -1,0 +1,17 @@
+Data/Common/Word/Item/Other.png HOTFIRE
+Data/Common/Word/Item/HotIce.png HOTICE
+Data/Common/Word/Item/Other.png HOTROCK
+Data/Common/Word/Item/Other.png HOTEARTH
+Data/Common/Word/Item/ColdFire.png COLDFIRE
+Data/Common/Word/Item/Other.png COLDICE
+Data/Common/Word/Item/Other.png COLDROCK
+Data/Common/Word/Item/Other.png COLDEARTH
+Data/Common/Word/Item/Other.png HARDFIRE
+Data/Common/Word/Item/Other.png HARDICE
+Data/Common/Word/Item/Other.png HARDROCK
+Data/Common/Word/Item/Other.png HARDEARTH
+Data/Common/Word/Item/Other.png SOFTFIRE
+Data/Common/Word/Item/Other.png SOFTICE
+Data/Common/Word/Item/Other.png SOFTROCK
+Data/Common/Word/Item/Other.png SOFTEARTH
+Data/Common/Word/Item/UnKnown.png UNKNOWN

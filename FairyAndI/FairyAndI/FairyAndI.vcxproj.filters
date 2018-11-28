@@ -30,17 +30,29 @@
     <Filter Include="ソース ファイル\UI">
       <UniqueIdentifier>{7389ed9a-ab2e-4db2-8f4c-0afafdb10f47}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\Object">
-      <UniqueIdentifier>{4ac2e438-95ec-4d96-aee4-d19eba3ce953}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\System\Texture">
-      <UniqueIdentifier>{0f44c79e-0f0b-4245-9571-edbc73b2f7ce}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\UI\Button">
       <UniqueIdentifier>{150b6293-5c74-4f52-b6d4-0f0aaedd2484}</UniqueIdentifier>
     </Filter>
     <Filter Include="ソース ファイル\UI\WordMenu">
       <UniqueIdentifier>{c6244d99-b959-48a5-9d15-23b284da9450}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Actor\Character">
+      <UniqueIdentifier>{a8fd700d-2db0-4abc-bd3e-1ca77798d838}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Actor\Staff">
+      <UniqueIdentifier>{69beaa8f-7ad9-461c-835c-b11334c46871}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Actor\Object">
+      <UniqueIdentifier>{82f89c94-7aea-4814-8543-da9a2d11428f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Parts">
+      <UniqueIdentifier>{4ac2e438-95ec-4d96-aee4-d19eba3ce953}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\System\Parameter">
+      <UniqueIdentifier>{0f44c79e-0f0b-4245-9571-edbc73b2f7ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\System\Collision">
+      <UniqueIdentifier>{13c74ef5-8644-4472-98e9-bbe5d48e766d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -65,9 +77,6 @@
     <ClCompile Include="Mouse.cpp">
       <Filter>ソース ファイル\System\Input</Filter>
     </ClCompile>
-    <ClCompile Include="BackGround.cpp">
-      <Filter>ソース ファイル\Actor</Filter>
-    </ClCompile>
     <ClCompile Include="SceneManager.cpp">
       <Filter>ソース ファイル\System\Manager</Filter>
     </ClCompile>
@@ -84,43 +93,16 @@
       <Filter>ソース ファイル\Scene</Filter>
     </ClCompile>
     <ClCompile Include="AnimationSprite.cpp">
-      <Filter>ソース ファイル\Object</Filter>
+      <Filter>ソース ファイル\Parts</Filter>
     </ClCompile>
     <ClCompile Include="Sprite.cpp">
-      <Filter>ソース ファイル\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Field.cpp">
-      <Filter>ソース ファイル\Actor</Filter>
+      <Filter>ソース ファイル\Parts</Filter>
     </ClCompile>
     <ClCompile Include="Debug.cpp">
-      <Filter>ソース ファイル\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectionalLight.cpp">
-      <Filter>ソース ファイル\Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="FlexibleCamera.cpp">
-      <Filter>ソース ファイル\Actor</Filter>
+      <Filter>ソース ファイル\Parts</Filter>
     </ClCompile>
     <ClCompile Include="TextureManager.cpp">
       <Filter>ソース ファイル\System\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル\Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Fairy.cpp">
-      <Filter>ソース ファイル\Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="SideViewCamera.cpp">
-      <Filter>ソース ファイル\Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>ソース ファイル\Actor</Filter>
-    </ClCompile>
-    <ClCompile Include="Collision.cpp">
-      <Filter>ソース ファイル\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Canvas.cpp">
-      <Filter>ソース ファイル\Actor</Filter>
     </ClCompile>
     <ClCompile Include="WordManager.cpp">
       <Filter>ソース ファイル\System\Manager</Filter>
@@ -152,6 +134,57 @@
     <ClCompile Include="WordPlate.cpp">
       <Filter>ソース ファイル\UI\WordMenu</Filter>
     </ClCompile>
+    <ClCompile Include="Fairy.cpp">
+      <Filter>ソース ファイル\Actor\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>ソース ファイル\Actor\Character</Filter>
+    </ClCompile>
+    <ClCompile Include="DirectionalLight.cpp">
+      <Filter>ソース ファイル\Actor\Staff</Filter>
+    </ClCompile>
+    <ClCompile Include="FlexibleCamera.cpp">
+      <Filter>ソース ファイル\Actor\Staff</Filter>
+    </ClCompile>
+    <ClCompile Include="SideViewCamera.cpp">
+      <Filter>ソース ファイル\Actor\Staff</Filter>
+    </ClCompile>
+    <ClCompile Include="Canvas.cpp">
+      <Filter>ソース ファイル\Actor\Staff</Filter>
+    </ClCompile>
+    <ClCompile Include="BackGround.cpp">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Field.cpp">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemManager.cpp">
+      <Filter>ソース ファイル\System\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemBox.cpp">
+      <Filter>ソース ファイル\UI\WordMenu</Filter>
+    </ClCompile>
+    <ClCompile Include="ActorManager.cpp">
+      <Filter>ソース ファイル\System\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="CollisionManager.cpp">
+      <Filter>ソース ファイル\System\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>ソース ファイル\System\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Sphere.cpp">
+      <Filter>ソース ファイル\System\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="OBB.cpp">
+      <Filter>ソース ファイル\System\Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -178,17 +211,11 @@
     <ClInclude Include="Mouse.h">
       <Filter>ソース ファイル\System\Input</Filter>
     </ClInclude>
-    <ClInclude Include="BackGround.h">
-      <Filter>ソース ファイル\Actor</Filter>
-    </ClInclude>
     <ClInclude Include="SceneManager.h">
       <Filter>ソース ファイル\System\Manager</Filter>
     </ClInclude>
     <ClInclude Include="SoundManager.h">
       <Filter>ソース ファイル\System\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundParameter.h">
-      <Filter>ソース ファイル\System\Sound</Filter>
     </ClInclude>
     <ClInclude Include="WavController.h">
       <Filter>ソース ファイル\System\Sound</Filter>
@@ -203,49 +230,16 @@
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
     <ClInclude Include="AnimationSprite.h">
-      <Filter>ソース ファイル\Object</Filter>
+      <Filter>ソース ファイル\Parts</Filter>
     </ClInclude>
     <ClInclude Include="Sprite.h">
-      <Filter>ソース ファイル\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Field.h">
-      <Filter>ソース ファイル\Actor</Filter>
+      <Filter>ソース ファイル\Parts</Filter>
     </ClInclude>
     <ClInclude Include="Debug.h">
-      <Filter>ソース ファイル\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectionalLight.h">
-      <Filter>ソース ファイル\Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="FlexibleCamera.h">
-      <Filter>ソース ファイル\Actor</Filter>
+      <Filter>ソース ファイル\Parts</Filter>
     </ClInclude>
     <ClInclude Include="TextureManager.h">
       <Filter>ソース ファイル\System\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Base2DObjeck.h">
-      <Filter>ソース ファイル\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ソース ファイル\Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="Fairy.h">
-      <Filter>ソース ファイル\Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="SideViewCamera.h">
-      <Filter>ソース ファイル\Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="Base3Dobject.h">
-      <Filter>ソース ファイル\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>ソース ファイル\Actor</Filter>
-    </ClInclude>
-    <ClInclude Include="Collision.h">
-      <Filter>ソース ファイル\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Canvas.h">
-      <Filter>ソース ファイル\Actor</Filter>
     </ClInclude>
     <ClInclude Include="WordManager.h">
       <Filter>ソース ファイル\System\Manager</Filter>
@@ -257,10 +251,10 @@
       <Filter>ソース ファイル\System\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Model.h">
-      <Filter>ソース ファイル\Object</Filter>
+      <Filter>ソース ファイル\Parts</Filter>
     </ClInclude>
     <ClInclude Include="FileParameter.h">
-      <Filter>ソース ファイル\System\Texture</Filter>
+      <Filter>ソース ファイル\System\Parameter</Filter>
     </ClInclude>
     <ClInclude Include="Button.h">
       <Filter>ソース ファイル\UI\Button</Filter>
@@ -282,6 +276,69 @@
     </ClInclude>
     <ClInclude Include="WordPlate.h">
       <Filter>ソース ファイル\UI\WordMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Fairy.h">
+      <Filter>ソース ファイル\Actor\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="DirectionalLight.h">
+      <Filter>ソース ファイル\Actor\Staff</Filter>
+    </ClInclude>
+    <ClInclude Include="FlexibleCamera.h">
+      <Filter>ソース ファイル\Actor\Staff</Filter>
+    </ClInclude>
+    <ClInclude Include="SideViewCamera.h">
+      <Filter>ソース ファイル\Actor\Staff</Filter>
+    </ClInclude>
+    <ClInclude Include="Canvas.h">
+      <Filter>ソース ファイル\Actor\Staff</Filter>
+    </ClInclude>
+    <ClInclude Include="BackGround.h">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Field.h">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="SoundParameter.h">
+      <Filter>ソース ファイル\System\Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemManager.h">
+      <Filter>ソース ファイル\System\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemBox.h">
+      <Filter>ソース ファイル\UI\WordMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="ActorManager.h">
+      <Filter>ソース ファイル\System\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Base3DObject.h">
+      <Filter>ソース ファイル\Parts</Filter>
+    </ClInclude>
+    <ClInclude Include="Base2DObject.h">
+      <Filter>ソース ファイル\Parts</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>ソース ファイル\Actor\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>ソース ファイル\Parts</Filter>
+    </ClInclude>
+    <ClInclude Include="CollisionManager.h">
+      <Filter>ソース ファイル\System\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="OBB.h">
+      <Filter>ソース ファイル\System\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Sphere.h">
+      <Filter>ソース ファイル\System\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>ソース ファイル\System\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>ソース ファイル\Actor\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

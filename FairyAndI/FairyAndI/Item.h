@@ -1,5 +1,5 @@
-#ifndef __ITEM_H_
-#define __ITEM_H_
+#ifndef _ITEM_H_
+#define _ITEM_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <memory>
@@ -21,7 +21,7 @@ typedef enum {
 class ITEM final : private BASE3DOBJECT
 {
 	private:
-        std::unique_ptr<MODEL> Model;
+        std::shared_ptr<MODEL> Model;
         LPCTSTR Name;
 
 	public:

@@ -1,5 +1,5 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include "Collision.h"
+//#include "Collision.h"
 #include "Fairy.h"
 #include "InputManager.h"
 #include "Item.h"
@@ -139,6 +139,13 @@ void FAIRY::Update(D3DXVECTOR3 rotCamera, D3DXVECTOR3 playerPos, D3DXVECTOR3 pla
 	Item = item;
 	int num = 0;
 
+    static int cnt;
+
+    if (++cnt > 120)
+    {
+        cnt = 0;
+    }
+
 	//ボタンを押したらアイテムを取りに行く
 	if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P,XINPUT_GAMEPAD_X, TRIGGER))
 	{
@@ -151,7 +158,7 @@ void FAIRY::Update(D3DXVECTOR3 rotCamera, D3DXVECTOR3 playerPos, D3DXVECTOR3 pla
 		//妖精までの距離
 		D3DXVECTOR3 DisFairy;
 		DisFairy.x = playerPos.x - Position.x;
-		DisFairy.y = playerPos.y - Position.y;
+		DisFairy.y = playerPos.y  + 20.0F - Position.y;
 
 		//弾の発射角度取得し移動量設定
 		if (DisFairy.x <= 0.1F && DisFairy.y <= 0.1F) DisFairy.x += 0.00001F; //atan2エラー防止
@@ -159,25 +166,45 @@ void FAIRY::Update(D3DXVECTOR3 rotCamera, D3DXVECTOR3 playerPos, D3DXVECTOR3 pla
 
 		//移動量格納
 		Move.x = cosf(m_tar) * VALUE_MOVE_FAIRY;
-        Move.y = sinf(m_tar) * VALUE_MOVE_FAIRY;
+        Move.y = sinf(m_tar) * VALUE_MOVE_FAIRY + (sinf(-D3DX_PI * 0.5F + D3DX_PI / 60.0F * cnt) + 1.0F) * 0.5F;
+        if (Rotation.y == rotCamera.y - D3DX_PI * 0.5F && Position.x > playerPos.x - 20.0F && Position.x < playerPos.x + 20.0F)
+        {
+            Move.x = 0.0F;
+        }
+        else if (Rotation.y == rotCamera.y + D3DX_PI * 0.5F && Position.x < playerPos.x + 20.0F &&  Position.x > playerPos.x - 20.0F)
+        {
+            Move.x = 0.0F;
+        }
+
 
 		//プレイヤーとの当たり判定
-		if (CollisionBall(&Position, &playerPos, 10.0F, 10.0F))
-		{
-			if (Rotation.y == rotCamera.y - D3DX_PI * 0.5F)
-			{
-                Position.x = playerPos.x - 10.0f;
-                Position.y = playerPos.y + 10.0f;
-				
-			}
-			else if (Rotation.y == rotCamera.y + D3DX_PI * 0.5F)
-			{
-                Position.x = playerPos.x + 10.0f;
-                Position.y = playerPos.y + 10.0f;
-				
-			}
-			return;
-		}
+		//if (CollisionBall(&Position, &playerPos, 15.0F, 15.0F))
+		//{
+  //          //右向き
+		//	if (Rotation.y == rotCamera.y - D3DX_PI * 0.5F)
+		//	{
+  //              if (Position.x > playerPos.x - 15.0F)
+  //              {
+  //                  Move.x = -(VALUE_MOVE_FAIRY) / 3.0F;
+  //              }
+  //              else
+  //              {
+  //                  Move.x = 0.0F;
+  //              }
+		//	}
+		//	else if (Rotation.y == rotCamera.y + D3DX_PI * 0.5F)
+		//	{
+  //              if (Position.x < playerPos.x + 15.0F)
+  //              {
+  //                  Move.x = VALUE_MOVE_FAIRY / 3.0F;
+  //              }
+  //              else
+  //              {
+  //                  Move.x = 0.0F;
+  //              }
+  //          }
+		//	return;
+		//}
         Position += Move;
 	}
 	//else //(アイテムを取りに行っている)
@@ -235,12 +262,12 @@ void FAIRY::TakeUpItem(LPD3DXVECTOR3 pos)
 	Move = D3DXVECTOR3(cosf(m_tar) * VALUE_MOVE_FAIRY, sinf(m_tar) * VALUE_MOVE_FAIRY, 0.0F);
 
 	//アイテムとの当たり判定
-	if (CollisionBall(&Position, pos, 10.0F, 10.0F))
-	{
-		Move.x = 0.0f;
-		m_stat = false;
-		//Item[m_num].SetStat(0);
-	}
+	//if (CollisionBall(&Position, pos, 10.0F, 10.0F))
+	//{
+	//	Move.x = 0.0f;
+	//	m_stat = false;
+	//	//Item[m_num].SetStat(0);
+	//}
 }
 
 D3DXVECTOR3 FAIRY::GetPos(void)

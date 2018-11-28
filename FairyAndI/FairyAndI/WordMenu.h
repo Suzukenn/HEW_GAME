@@ -37,6 +37,7 @@ class WORDMENU
         static void Uninitialize(void);
         static HRESULT Initialize(void);
         static void Update(void);
+        static tstring NotificationItem(void) {return List.at(0).GetSelectWord() + List.at(1).GetSelectWord(); }
 };
 
 #endif

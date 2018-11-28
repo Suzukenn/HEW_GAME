@@ -14,6 +14,8 @@
 /////////////////////////////////////////////
 void CANVAS::Draw(void)
 {
+    ItemBox.Draw();
+    Item.Draw();
     if (Mode)
     {
         Menu.Draw();
@@ -41,6 +43,24 @@ HRESULT CANVAS::Initialize(void)
         return hResult;
     }
 
+    //アイテムボックス
+    hResult = ItemBox.Initialize(TEXT("ITEMBOX"), D3DXVECTOR2(1050.0F, 10.0F), D3DXVECTOR2(150.0F, 150.0F), { 2, 1 });
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("アイテムボックスの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
+        return hResult;
+    }
+    //アイテム
+    hResult = Item.Initialize(TEXT("UNKNOWN"), D3DXVECTOR2(1060.0F, 15.0F));
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("アイテムの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
+        return hResult;
+    }
+
+
     Mode = false;
 
     return hResult;
@@ -57,6 +77,8 @@ HRESULT CANVAS::Initialize(void)
 /////////////////////////////////////////////
 void CANVAS::Uninitialize(void)
 {
+    ItemBox.Uninitialize();
+    Item.Uninitialize();
     Menu.Uninitialize();
 }
 
@@ -71,13 +93,21 @@ void CANVAS::Uninitialize(void)
 /////////////////////////////////////////////
 void CANVAS::Update(void)
 {
+    //---表示モード切り替え---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER) || INPUTMANAGER::GetKey(DIK_A, TRIGGER))
     {
         Mode = !Mode;
     }
 
+
     if (Mode)
     {
         Menu.Update();
+        Item.Update();
+        Item.SetTexture(WORDMENU::NotificationItem());
+    }
+    else
+    {
+        ItemBox.Update();
     }
 }

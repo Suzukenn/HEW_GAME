@@ -14,7 +14,7 @@ class WORDPLATE final : protected SPRITE
         HRESULT Initialize(LPCTSTR, D3DXVECTOR2, D3DXVECTOR2 size = D3DXVECTOR2(130.0F, 130.0F));
         void Update(void);
 
-        HRESULT SetTexture(LPCTSTR);
+        HRESULT SetTexture(tstring);
 };
 
 #endif

@@ -3,7 +3,7 @@
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <list>
-#include "Base2DObjeck.h"
+#include "ItemBox.h"
 #include "Main.h"
 #include "Sprite.h"
 #include "WordMenu.h"
@@ -11,6 +11,8 @@
 class CANVAS
 {
     private:
+        ITEMBOX ItemBox;
+        WORDPLATE Item;
         WORDMENU Menu;
 
         bool Mode;

@@ -41,7 +41,7 @@ HRESULT WORDLIST::Initialize(LPCTSTR texturename, std::vector<tstring>& list, D3
     D3DXVECTOR2 vecPanelPosition;
 
     //---初期化処理---//
-    SelectNumber = 1;
+    SelectNumber = 0;
     vecPanelPosition = D3DXVECTOR2(position.x + 20.0F, position.y + 30.0F);
     WordList.clear();
 
@@ -49,7 +49,6 @@ HRESULT WORDLIST::Initialize(LPCTSTR texturename, std::vector<tstring>& list, D3
     {
         WordList.emplace_back(data);
     }
-
 
     //---オブジェクトの初期化---//
     //背景
@@ -72,6 +71,9 @@ HRESULT WORDLIST::Initialize(LPCTSTR texturename, std::vector<tstring>& list, D3
             return hResult;
         }
     }
+
+    //初期テクスチャの設定
+    ResetTexture();
 
     return hResult;
 }
@@ -97,6 +99,33 @@ void WORDLIST::ResetTexture(void)
     WordPlate.at(2).SetTexture(WordList.at((SelectNumber + 1) % (int)WordList.size()).c_str());
 #endif
 }
+
+/////////////////////////////////////////////
+//関数名：ResetWordNumber
+//
+//機能：選択中の言葉の番号の変更
+//
+//引数：(tstring)言葉
+//
+//戻り値：(HRESULT)処理の成否
+/////////////////////////////////////////////
+HRESULT WORDLIST::ResetWordNumber(tstring word)
+{
+    //---各種宣言---//
+    int nCounter;
+
+    //---選択中の言葉の探索---//
+    for (nCounter=0;nCounter<WordList.size();++nCounter)
+    {
+        if (WordList.at(nCounter) == word)
+        {
+            SelectNumber = nCounter;
+            return S_OK;
+        }
+    }
+    return E_NOTIMPL;
+}
+
 
 /////////////////////////////////////////////
 //関数名：Uninitialize

@@ -1,15 +1,17 @@
+//＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "Collision.h"
 
-//球との当たり判定
-bool CollisionBall(LPD3DXVECTOR3 pos1, LPD3DXVECTOR3 pos2, float radius1, float radius2)
+/////////////////////////////////////////////
+//関数名：Initialize
+//
+//機能：マネージャーの初期化
+//
+//引数：なし
+//
+//戻り値：(HRESULT)処理の成否
+/////////////////////////////////////////////
+COLLISION::COLLISION(tstring tag, GAMEOBJECT* parent)
 {
-	float r = radius1 + radius2;
-	r *= r;
-	D3DXVECTOR3 v = *pos1 - *pos2;
-	float d = D3DXVec3LengthSq(&v);
-	if (d <= r)
-	{
-		return true;
-	}
-	return false;
+    Tag = tag;
+    Parent = parent;
 }

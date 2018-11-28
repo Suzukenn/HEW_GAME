@@ -6,6 +6,7 @@
 #include "Main.h"
 #include "InputManager.h"
 #include "SelectMarker.h"
+#include "SoundManager.h"
 #include "WordList.h"
 #include "WordMenu.h"
 #include "WordPlate.h"
@@ -78,7 +79,6 @@ HRESULT WORDMENU::Initialize(void)
         Uninitialize();
         return hResult;
     }
-
 
     //---オブジェクトの初期化---//
     //吹き出し
@@ -190,6 +190,7 @@ void WORDMENU::Uninitialize(void)
     //---各種宣言---//
     int nCounter;
 
+    //---開放---//
     Back.Uninitialize();
     SelectMarker.Uninitialize();
     for (nCounter = 0; nCounter < 2; ++nCounter)
@@ -215,8 +216,13 @@ void WORDMENU::Uninitialize(void)
 void WORDMENU::Update(void)
 {
     //---各種宣言---//
+    bool bCheck;
+
     static int nNextState = SETTING_STATE_ADJECTIVELIST;
 
+    static tstring strCurrentWord;
+
+    //---各種処理---//
     switch (State)
     {
         //入力選択画面
@@ -229,9 +235,9 @@ void WORDMENU::Update(void)
                 nNextState = !nNextState;
             }
 
-            //挙動設定
             if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
             {
+                strCurrentWord = List.at(nNextState).GetSelectWord();
                 State = nNextState;
             }
             else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
@@ -243,41 +249,61 @@ void WORDMENU::Update(void)
 
         //形容詞設定
         case SETTING_STATE_ADJECTIVELIST:
-            if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A | XINPUT_GAMEPAD_B, TRIGGER))
+            if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
             {
+                if (FAILED(WORDMANAGER::GetWordLock(List.at(0).GetSelectWord(), bCheck)))
+                {
+                    MessageBox(nullptr, TEXT("単語が見つかりませんでした"), TEXT("エラー"), MB_ICONSTOP | MB_OK);
+                    Uninitialize();
+                    exit(EXIT_FAILURE);
+                }
+
+                bCheck ? State = SETTING_STATE_SELECT : SOUNDMANAGER::Play(TEXT("SE_SHOT"));
+            }
+            else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
+            {
+                SelectWord.at(0).SetTexture(strCurrentWord);
+                List.at(0).ResetWordNumber(strCurrentWord);
                 State = SETTING_STATE_SELECT;
             }
-            List.at(0).Update();
-            SelectWord.at(0).SetTexture(List.at(0).GetSelectItem());
+            else
+            {
+                SelectWord.at(0).SetTexture(List.at(0).GetSelectWord());
+                List.at(0).Update();
+            }
             break;
 
         //名詞設定
         case SETTING_STATE_NOUN:
-            if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A | XINPUT_GAMEPAD_B, TRIGGER))
+            if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
             {
+                if (FAILED(WORDMANAGER::GetWordLock(List.at(1).GetSelectWord(), bCheck)))
+                {
+                    MessageBox(nullptr, TEXT("単語が見つかりませんでした"), TEXT("エラー"), MB_ICONSTOP | MB_OK);
+                    Uninitialize();
+                    exit(EXIT_FAILURE);
+                }
+
+                bCheck ? State = SETTING_STATE_SELECT : SOUNDMANAGER::Play(TEXT("SE_SHOT"));
+            }
+            else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
+            {
+                SelectWord.at(1).SetTexture(strCurrentWord);
+                List.at(1).ResetWordNumber(strCurrentWord);
                 State = SETTING_STATE_SELECT;
             }
-            List.at(1).Update();
-            SelectWord.at(1).SetTexture(List.at(1).GetSelectItem());
+            else
+            {
+                SelectWord.at(1).SetTexture(List.at(1).GetSelectWord());
+                List.at(1).Update();
+            }
             break;
     }
 
-    if (INPUTMANAGER::GetKey(DIK_Z, TRIGGER))
-    {
-        WORDMANAGER::UnLockWord(TEXT("FIRE"));
-    }
-    if (INPUTMANAGER::GetKey(DIK_X, TRIGGER))
-    {
-        WORDMANAGER::UnLockWord(TEXT("ICE"));
-    }
-    if (INPUTMANAGER::GetKey(DIK_C, TRIGGER))
-    {
-        WORDMANAGER::UnLockWord(TEXT("ROCK"));
-    }
-    if (INPUTMANAGER::GetKey(DIK_V, TRIGGER))
-    {
-        WORDMANAGER::UnLockWord(TEXT("EARTH"));
-    }
+    //各リストの更新
+    List.at(0).ResetTexture();
+    List.at(1).ResetTexture();
 
+    //背景の更新
     Back.Update();
 }

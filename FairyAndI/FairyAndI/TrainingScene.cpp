@@ -62,11 +62,11 @@ HRESULT TRAINING::Initialize(void)
         return E_FAIL;
     }
 
-    //hResult = MODELMANAGER::Initialize(TEXT("Data/Model/ModelList.txt"));
-    //if (FAILED(hResult))
-    //{
-    //    return E_FAIL;
-    //}
+    hResult = MODELMANAGER::Initialize(TEXT("Data/Common/Model/ModelList.txt"));
+    if (FAILED(hResult))
+    {
+        return E_FAIL;
+    }
 
     hResult = WORDMANAGER::Initialize();
     if (FAILED(hResult))
@@ -213,5 +213,22 @@ void TRAINING::Update(void)
             SCENEMANAGER::SetScene(SCENE_TITLE);
         }
     }
+    if (INPUTMANAGER::GetKey(DIK_Z, TRIGGER))
+    {
+        WORDMANAGER::UnLockWord(TEXT("FIRE"));
+    }
+    if (INPUTMANAGER::GetKey(DIK_X, TRIGGER))
+    {
+        WORDMANAGER::UnLockWord(TEXT("ICE"));
+    }
+    if (INPUTMANAGER::GetKey(DIK_C, TRIGGER))
+    {
+        WORDMANAGER::UnLockWord(TEXT("ROCK"));
+    }
+    if (INPUTMANAGER::GetKey(DIK_V, TRIGGER))
+    {
+        WORDMANAGER::UnLockWord(TEXT("EARTH"));
+    }
+
     Canvas.Update();
 }

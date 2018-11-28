@@ -102,7 +102,7 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
 
     SAFE_RELEASE(pMaterialBuffer);
 
-    // カレントディレクトリを元に戻す
+    //カレントディレクトリを元に戻す
     if (szDirectory[0])
     {
         SetCurrentDirectory(szCurrentDirectory);
@@ -196,8 +196,8 @@ HRESULT MODELMANAGER::Load(std::vector<FILEPARAMETER>& list, LPCTSTR filename)
         list.at(nCounter).CallKey.resize(szKeyName.size());
         list.at(nCounter).CallKey = std::wstring(szKeyName.begin(), szKeyName.end());
 #else
-        list.at(nCounter).FileName = szFileName.c_str();;
-        list.at(nCounter).CallKey = szKeyName.c_str();
+        list.at(nCounter).FileName = szFileName;
+        list.at(nCounter).CallKey = szKeyName;
 #endif
 
         ++nCounter;

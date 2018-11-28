@@ -1,5 +1,5 @@
-Data/Model/Character/car000.x PLAYER
-Data/Model/Character/car001.x FAIRY
-Data/Model/Item/Item01.x FIRE
-Data/Model/Item/Item02.x TREE
-Data/Model/Item/Item03.x ICE
+Data/Common/Model/Character/car000.x PLAYER
+Data/Common/Model/Character/car001.x FAIRY
+Data/Common/Model/Character/car001.x FIRE
+Data/Common/Model/Character/car001.x TREE
+Data/Common/Model/Character/car001.x ICE

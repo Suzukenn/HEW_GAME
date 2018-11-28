@@ -117,13 +117,20 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ActorManager.cpp" />
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Item.cpp" />
+    <ClCompile Include="ItemBox.cpp" />
+    <ClCompile Include="ItemManager.cpp" />
     <ClCompile Include="ModelManager.cpp" />
+    <ClCompile Include="OBB.cpp" />
     <ClCompile Include="SelectScene.cpp" />
+    <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="WordManager.cpp" />
     <ClCompile Include="SideViewCamera.cpp" />
     <ClCompile Include="Fairy.cpp" />
@@ -155,17 +162,25 @@
     <ClCompile Include="WordPlate.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ActorManager.h" />
     <ClInclude Include="BackGround.h" />
-    <ClInclude Include="Base2DObjeck.h" />
-    <ClInclude Include="Base3Dobject.h" />
+    <ClInclude Include="Base2DObject.h" />
+    <ClInclude Include="Base3DObject.h" />
+    <ClInclude Include="ItemBox.h" />
+    <ClInclude Include="ItemManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Canvas.h" />
-    <ClInclude Include="Collision.h" />
+    <ClInclude Include="OBB.h" />
     <ClInclude Include="Item.h" />
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="SelectScene.h" />
+    <ClInclude Include="Sphere.h" />
     <ClInclude Include="WordManager.h" />
     <ClInclude Include="SideViewCamera.h" />
     <ClInclude Include="Fairy.h" />

@@ -16,6 +16,8 @@ class WORDMANAGER
         static std::unordered_map<tstring, bool> NounLock;
         static std::unordered_map<tstring, bool> AdjectiveLock;
         static std::unordered_map<tstring, tstring> NounToAdjective;
+        static std::unordered_map<tstring, LPDIRECT3DTEXTURE9> ItemTexture;
+        static std::unordered_map<tstring, bool> ItemLock;
 
         static HRESULT CreatePair(void);
         static HRESULT CreateTexture(std::unordered_map<tstring, LPDIRECT3DTEXTURE9>&, const FILEPARAMETER&);
@@ -27,7 +29,8 @@ class WORDMANAGER
         static HRESULT UnLockWord(LPCTSTR);
         static void Update(void);
 
-        static HRESULT GetWordTexture(LPCTSTR, LPDIRECT3DTEXTURE9&);
+        static HRESULT GetWordLock(tstring, bool&);
+        static HRESULT GetWordTexture(tstring, LPDIRECT3DTEXTURE9&);
 };
 
 #endif

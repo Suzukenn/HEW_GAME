@@ -21,15 +21,16 @@ class WORDLIST
         std::array<WORDPLATE, DISPLAY_VALUE> WordPlate;
         std::vector<tstring> WordList;
 
-        void ResetTexture(void);
 
     public:
         void Draw(void);
         void Uninitialize(void);
         HRESULT Initialize(LPCTSTR, std::vector<tstring>&, D3DXVECTOR2, D3DXVECTOR2);
+        void ResetTexture(void);
         void Update(void);
 
-        LPCTSTR GetSelectItem(void) { return WordList.at(SelectNumber).data(); }
+        tstring GetSelectWord(void) { return WordList.at(SelectNumber); }
+        HRESULT ResetWordNumber(tstring);
 };
 
 #endif

@@ -1,11 +1,27 @@
 #ifndef _COLLISION_H_
 #define _COLLISION_H_
 
-#include "main.h"
+//＝＝＝ヘッダファイル読み込み＝＝＝//
+#include "Base3Dobject.h"
+#include "Main.h"
 
-//*****************************************************************************
-// プロトタイプ宣言
-//*****************************************************************************
-bool CollisionBall(LPD3DXVECTOR3 pos1, LPD3DXVECTOR3 pos2, float radius1, float radius2);
+//＝＝＝前方宣言＝＝＝//
+class GAMEOBJECT;
+class OBB;
+class SPHERE;
+
+//＝＝＝クラス宣言＝＝＝//
+class COLLISION : public BASE3DOBJECT
+{
+    public:
+        tstring Tag;                                //タグ
+
+        GAMEOBJECT* Parent;
+
+        COLLISION(tstring, GAMEOBJECT*);
+
+        virtual bool CollisionToOBB(const OBB&) = 0;
+        virtual bool CollisionToSphere(const SPHERE&) = 0;
+};
 
 #endif

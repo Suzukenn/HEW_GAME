@@ -1,8 +1,10 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
+#include "ActorManager.h"
 #include "InputManager.h"
 #include "ModelManager.h"
 #include "Player.h"
 #include "SideViewCamera.h"
+#include "WordMenu.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
 #define GRAVITY 0.18F
@@ -145,7 +147,7 @@ void PLAYER::Update(void)
 
 	//移動
 	Position.x += sinf(vecCameraRotation.y + D3DX_PI * 0.5F) * VALUE_MOVE_PLAYER * vecStickVector.x;
-    Position.z += cosf(vecCameraRotation.y + D3DX_PI * 0.5F) * VALUE_MOVE_PLAYER * vecStickVector. y;
+    Position.z += cosf(vecCameraRotation.y + D3DX_PI * 0.5F) * VALUE_MOVE_PLAYER * vecStickVector.y;
 
     Rotation.y = vecCameraRotation.y - D3DX_PI * 0.5F * vecStickVector.x;
 
@@ -172,6 +174,12 @@ void PLAYER::Update(void)
 	{
         Position.x = -1500.0F;
 	}
+
+    //---アイテム生成---//
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
+    {
+        ACTORMANAGER::Instantiate(WORDMENU::NotificationItem());
+    }
 }
 
 // モデル位置の取得

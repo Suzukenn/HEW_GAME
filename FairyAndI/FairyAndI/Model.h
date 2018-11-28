@@ -14,6 +14,14 @@ typedef struct
     LPDIRECT3DTEXTURE9*	Texture;	//テクスチャへのポインタ
     LPD3DXATTRIBUTERANGE Attribute;	//属性配列
     DWORD AttributeValue;		    //属性数(サブセット数)
+
+    void Release(void)
+    {
+        SAFE_RELEASE(Mesh);
+        SAFE_RELEASE(MaterialBuffer);
+        SAFE_RELEASE((*Texture));
+    }
+
 } MODEL;
 
 #endif

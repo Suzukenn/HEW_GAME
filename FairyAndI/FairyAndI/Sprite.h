@@ -3,7 +3,7 @@
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <memory>
-#include "Base2DObjeck.h"
+#include "Base2DObject.h"
 #include "Main.h"
 
 //＝＝＝クラス宣言＝＝＝//

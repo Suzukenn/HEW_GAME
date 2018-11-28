@@ -140,11 +140,11 @@ void WORDPLATE::Update(void)
 //
 //機能：ワードプレートの適用テクスチャの設定
 //
-//引数：(LPCTSTR)テクスチャ名
+//引数：(tstring)テクスチャ名
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT WORDPLATE::SetTexture(LPCTSTR texturename)
+HRESULT WORDPLATE::SetTexture(tstring texturename)
 {
     if (FAILED(WORDMANAGER::GetWordTexture(texturename, *Texture)))
     {

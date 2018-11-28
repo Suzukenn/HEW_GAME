@@ -1,20 +1,8 @@
-﻿  Canvas.cpp
-  Item.cpp
-  ItemManager.cpp
-  SideViewCamera.cpp
-  Fairy.cpp
-  Player.cpp
-  WordList.cpp
-  WordMenu.cpp
-  TrainingScene.cpp
-  Main.cpp
-  SceneManager.cpp
-  Title.cpp
-  WordPlate.cpp
+﻿  TrainingScene.cpp
   コード生成しています。
-  83 of 1840 functions ( 4.5%) were compiled, the rest were copied from previous compilation.
-    3 functions were new in current compilation
-    12 functions had inline decision re-evaluated but remain unchanged
+  94 of 2777 functions ( 3.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    10 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)
