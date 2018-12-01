@@ -2,20 +2,21 @@
 #include "Bullet.h"
 #include "ModelManager.h"
 #include "Sphere.h"
-
+#include "InputManager.h"
+#include "ActorManager.h"
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
 //関数名：BULLET
 //
 //機能：コンストラクタ
 //
-//引数：なし
+//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：なし
 /////////////////////////////////////////////
-BULLET::BULLET(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation, D3DXVECTOR3 size)
+BULLET::BULLET(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(modelname, tag, position, rotation, size);
+    Initialize(modelname, tag, position, rotation);
 }
 
 /////////////////////////////////////////////
@@ -23,7 +24,7 @@ BULLET::BULLET(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3
 //
 //機能：弾丸の描画
 //
-//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)回転,(D3DXVECTOR3)大きさ
+//引数：なし
 //
 //戻り値：なし
 /////////////////////////////////////////////
@@ -61,18 +62,18 @@ void BULLET::Draw(void)
 
     //---描画---//
     //ポインタを取得
-    pMatrix = (LPD3DXMATERIAL)(*Model).MaterialBuffer->GetBufferPointer();
+    pMatrix = (LPD3DXMATERIAL)Model->MaterialBuffer->GetBufferPointer();
 
-    for (nCounter = 0; nCounter < (*Model).MaterialValue; ++nCounter)
+    for (nCounter = 0; nCounter < (Model)->MaterialValue; ++nCounter)
     {
         //マテリアルの設定
         pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
 
         //テクスチャの設定
-        pDevice->SetTexture(0, *(*Model).Texture);
+        pDevice->SetTexture(0, *Model->Texture);
 
         //描画
-        (*Model).Mesh->DrawSubset(nCounter);
+        (Model)->Mesh->DrawSubset(nCounter);
     }
 
     //マテリアルをデフォルトに戻す
@@ -84,11 +85,11 @@ void BULLET::Draw(void)
 //
 //機能：弾丸の初期化
 //
-//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)回転,(D3DXVECTOR3)大きさ
+//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation, D3DXVECTOR3 size)
+HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -96,10 +97,11 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position,
     //---初期化処理---//
     Position = position;
     Rotation = rotation;
-    Size = size;
+
+    Model.reset(new MODEL);
 
     //---モデルの読み込み---//
-    hResult = MODELMANAGER::GetModel(modelname, Model.get());
+    hResult = MODELMANAGER::GetModel(modelname, *Model);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("弾丸のモデルの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -107,7 +109,7 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position,
         return hResult;
     }
 
-    Collision = new SPHERE(Position + size * 0.5F, Position.x * 0.5F, tag, this);
+    Collision = new SPHERE(Position + 5, Position.x * 0.5F, tag, this);
 
     return hResult;
 }
@@ -153,4 +155,8 @@ void BULLET::Uninitialize(void)
 void BULLET::Update(void)
 {
     Position.x += 1.0F;
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_X, TRIGGER))
+    {
+        ACTORMANAGER::Destroy(this);
+    }
 }

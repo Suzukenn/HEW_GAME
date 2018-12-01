@@ -131,6 +131,7 @@
     <ClCompile Include="OBB.cpp" />
     <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Wall.cpp" />
     <ClCompile Include="WordManager.cpp" />
     <ClCompile Include="SideViewCamera.cpp" />
     <ClCompile Include="Fairy.cpp" />
@@ -181,6 +182,7 @@
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="SelectScene.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Wall.h" />
     <ClInclude Include="WordManager.h" />
     <ClInclude Include="SideViewCamera.h" />
     <ClInclude Include="Fairy.h" />

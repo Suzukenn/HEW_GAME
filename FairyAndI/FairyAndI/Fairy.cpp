@@ -5,11 +5,26 @@
 #include "Item.h"
 #include "ModelManager.h"
 #include "Player.h"
+#include "SideViewCamera.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
 #define	VALUE_ROTATE_FAIRY	(D3DX_PI * 0.02F)		// 回転速度
 
 //＝＝＝関数定義＝＝＝//
+/////////////////////////////////////////////
+//関数名：FAIRY
+//
+//機能：コンストラクタ
+//
+//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//
+//戻り値：なし
+/////////////////////////////////////////////
+FAIRY::FAIRY(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+{
+    Initialize(modelname, tag, position, rotation);
+}
+
 /////////////////////////////////////////////
 //関数名：Draw
 //
@@ -76,11 +91,11 @@ void FAIRY::Draw(void)
 //
 //機能：フェアリーの初期化
 //
-//引数：なし
+//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT FAIRY::Initialize(void)
+HRESULT FAIRY::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -109,6 +124,21 @@ HRESULT FAIRY::Initialize(void)
 }
 
 /////////////////////////////////////////////
+//関数名：OnCollision
+//
+//機能：当たり判定反応時の挙動
+//
+//引数：(COLLISITON)相手
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void FAIRY::OnCollision(COLLISION* opponent)
+{
+
+}
+
+
+/////////////////////////////////////////////
 //関数名：Uninitialize
 //
 //機能：フェアリーの終了
@@ -133,10 +163,9 @@ void FAIRY::Uninitialize(void)
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void FAIRY::Update(D3DXVECTOR3 rotCamera, D3DXVECTOR3 playerPos, D3DXVECTOR3 playerRot, ITEM* item)
+void FAIRY::Update(void)
 {	
-	Rotation = playerRot; 
-	Item = item;
+	Rotation = PLAYER::GetPlayerRotation(); 
 	int num = 0;
 
     static int cnt;
@@ -157,8 +186,8 @@ void FAIRY::Update(D3DXVECTOR3 rotCamera, D3DXVECTOR3 playerPos, D3DXVECTOR3 pla
 	{
 		//妖精までの距離
 		D3DXVECTOR3 DisFairy;
-		DisFairy.x = playerPos.x - Position.x;
-		DisFairy.y = playerPos.y  + 20.0F - Position.y;
+		DisFairy.x = PLAYER::GetPlayerPosition().x - Position.x;
+		DisFairy.y = PLAYER::GetPlayerPosition().y  + 20.0F - Position.y;
 
 		//弾の発射角度取得し移動量設定
 		if (DisFairy.x <= 0.1F && DisFairy.y <= 0.1F) DisFairy.x += 0.00001F; //atan2エラー防止
@@ -167,11 +196,11 @@ void FAIRY::Update(D3DXVECTOR3 rotCamera, D3DXVECTOR3 playerPos, D3DXVECTOR3 pla
 		//移動量格納
 		Move.x = cosf(m_tar) * VALUE_MOVE_FAIRY;
         Move.y = sinf(m_tar) * VALUE_MOVE_FAIRY + (sinf(-D3DX_PI * 0.5F + D3DX_PI / 60.0F * cnt) + 1.0F) * 0.5F;
-        if (Rotation.y == rotCamera.y - D3DX_PI * 0.5F && Position.x > playerPos.x - 20.0F && Position.x < playerPos.x + 20.0F)
+        if (Rotation.y == SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F && Position.x > PLAYER::GetPlayerPosition().x - 20.0F && Position.x < PLAYER::GetPlayerPosition().x + 20.0F)
         {
             Move.x = 0.0F;
         }
-        else if (Rotation.y == rotCamera.y + D3DX_PI * 0.5F && Position.x < playerPos.x + 20.0F &&  Position.x > playerPos.x - 20.0F)
+        else if (Rotation.y == SIDEVIEWCAMERA::GetRotation().y + D3DX_PI * 0.5F && Position.x < PLAYER::GetPlayerPosition().x + 20.0F &&  Position.x > PLAYER::GetPlayerPosition().x - 20.0F)
         {
             Move.x = 0.0F;
         }
@@ -280,13 +309,13 @@ bool FAIRY::Check(void)
 {
     int nCounter;
 
-    for (nCounter = 0; nCounter < MAX_ITEM; ++nCounter)
-    {
-        //if (Item[nCounter].GetStat())
-        //{
-        //    return false;
-        //}
-    }
+    //for (nCounter = 0; nCounter < MAX_ITEM; ++nCounter)
+    //{
+    //    //if (Item[nCounter].GetStat())
+    //    //{
+    //    //    return false;
+    //    //}
+    //}
 
     return true;
 

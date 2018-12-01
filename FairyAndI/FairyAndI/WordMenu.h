@@ -3,9 +3,7 @@
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <array>
-#include <vector>
 #include "BackGround.h"
-#include "FileParameter.h"
 #include "Main.h"
 #include "SelectMarker.h"
 #include "WordList.h"

@@ -10,6 +10,23 @@
 #define GRAVITY 0.18F
 #define JUMP 5.0F
 
+static D3DXVECTOR3 pos;
+static D3DXVECTOR3 rot;
+
+/////////////////////////////////////////////
+//関数名：PLAYER
+//
+//機能：コンストラクタ
+//
+//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//
+//戻り値：なし
+/////////////////////////////////////////////
+PLAYER::PLAYER(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+{
+    Initialize(modelname, tag, position, rotation);
+}
+
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
 //関数名：Draw
@@ -77,11 +94,11 @@ void PLAYER::Draw(void)
 //
 //機能：プレイヤーの初期化
 //
-//引数：(LPCTSTR)モデルファイル名
+//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT PLAYER::Initialize(LPCTSTR modelfile)
+HRESULT PLAYER::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -90,7 +107,6 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile)
 	//位置・向きの初期設定
 	Position = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
 	Rotation = D3DXVECTOR3(0.0F, SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F, 0.0F);
-    Size = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
 	Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
 
     //Xファイルの読み込み
@@ -103,6 +119,21 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile)
 	}
 	return hResult;
 }
+
+/////////////////////////////////////////////
+//関数名：OnCollision
+//
+//機能：当たり判定反応時の挙動
+//
+//引数：(COLLISITON)相手
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void PLAYER::OnCollision(COLLISION* opponent)
+{
+
+}
+
 
 /////////////////////////////////////////////
 //関数名：Uninitialize
@@ -149,6 +180,7 @@ void PLAYER::Update(void)
 	Position.x += sinf(vecCameraRotation.y + D3DX_PI * 0.5F) * VALUE_MOVE_PLAYER * vecStickVector.x;
     Position.z += cosf(vecCameraRotation.y + D3DX_PI * 0.5F) * VALUE_MOVE_PLAYER * vecStickVector.y;
 
+    //回転
     Rotation.y = vecCameraRotation.y - D3DX_PI * 0.5F * vecStickVector.x;
 
 	//ジャンプ
@@ -178,18 +210,20 @@ void PLAYER::Update(void)
     //---アイテム生成---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
     {
-        ACTORMANAGER::Instantiate(WORDMENU::NotificationItem());
+        ACTORMANAGER::Instantiate(WORDMENU::NotificationItem(), Position, Rotation);
     }
+    pos = Position;
+    rot = Rotation;
 }
 
 // モデル位置の取得
 const D3DXVECTOR3 PLAYER::GetPlayerPosition(void)
 {
-	return Position;
+	return pos;
 }
 
 // モデル向きの取得
-const LPD3DXVECTOR3 PLAYER::GetPlayerRotation(void)
+const D3DXVECTOR3 PLAYER::GetPlayerRotation(void)
 {
-	return &Rotation;
+	return rot;
 }

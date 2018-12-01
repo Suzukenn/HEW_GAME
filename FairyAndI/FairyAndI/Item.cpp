@@ -1,14 +1,10 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "Item.h"
 #include "SideViewCamera.h"
-#include "Fairy.h"
 #include "Collision.h"
 #include "ModelManager.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
-// 状態
-#define ITEM_UNUSED		0
-#define ITEM_USE		1
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -88,15 +84,14 @@ HRESULT ITEM::Initialize(LPCTSTR modelname)
     D3DXVECTOR3 rotCamera;
 
     //---初期化処理---//
-    Model.reset(new MODEL());
+    Model.reset(new MODEL);
 
     // 位置・向きの初期設定
     Position = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
     Rotation = D3DXVECTOR3(0.0F, SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F, 0.0F);
-    Size = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
 
     // Xファイルの読み込み
-    hResult = MODELMANAGER::GetModel(modelname, Model.get());
+    hResult = MODELMANAGER::GetModel(modelname, *Model);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("アイテムのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -110,6 +105,20 @@ HRESULT ITEM::Initialize(LPCTSTR modelname)
 }
 
 /////////////////////////////////////////////
+//関数名：OnCollision
+//
+//機能：当たり判定時の挙動
+//
+//引数：(LPCTSTR)モデルファイル名
+//
+//戻り値：(HRESULT)処理の成否
+/////////////////////////////////////////////
+void ITEM::OnCollision(COLLISION* opponent)
+{
+
+}
+
+/////////////////////////////////////////////
 //関数名：Uninitialize
 //
 //機能：モデルの終了
@@ -120,9 +129,9 @@ HRESULT ITEM::Initialize(LPCTSTR modelname)
 /////////////////////////////////////////////
 void ITEM::Uninitialize(void)
 {
-    SAFE_RELEASE((*Model->Texture));
-    SAFE_RELEASE(Model->Mesh);
-    SAFE_RELEASE(Model->MaterialBuffer);
+    //SAFE_RELEASE((*Model->Texture));
+    //SAFE_RELEASE(Model->Mesh);
+    //SAFE_RELEASE(Model->MaterialBuffer);
 }
 
 /////////////////////////////////////////////

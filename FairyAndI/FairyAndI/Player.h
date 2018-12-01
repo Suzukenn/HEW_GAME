@@ -3,7 +3,7 @@
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <memory>
-#include "Base3Dobject.h"
+#include "GameObject.h"
 #include "Main.h"
 #include "Model.h"
 
@@ -11,7 +11,7 @@
 #define	VALUE_MOVE_PLAYER 5.0F
 
 //＝＝＝クラス定義＝＝＝//
-class PLAYER final : private BASE3DOBJECT
+class PLAYER final : public  GAMEOBJECT
 {
 	private:
         LPDIRECT3DTEXTURE9 Texture;	//テクスチャへのポインタ
@@ -22,11 +22,16 @@ class PLAYER final : private BASE3DOBJECT
         D3DXVECTOR3 Move;
 
 	public:
+        PLAYER(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
+
         void Draw(void);
-		HRESULT Initialize(LPCTSTR);
+		HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
 		void Uninitialize(void);
 		void Update(void);
-		const D3DXVECTOR3 GetPlayerPosition(void);
-		const LPD3DXVECTOR3 GetPlayerRotation(void);
+
+        void OnCollision(COLLISION*);
+
+		static const D3DXVECTOR3 GetPlayerPosition(void);
+		static const D3DXVECTOR3 GetPlayerRotation(void);
 };
 #endif
