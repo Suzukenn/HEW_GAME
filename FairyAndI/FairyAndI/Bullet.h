@@ -7,14 +7,14 @@
 #include "Main.h"
 
 //ÅÅÅÅÅÅÉNÉâÉXêÈåæÅÅÅÅÅÅ//
-class BULLET final : private GAMEOBJECT
+class BULLET final : public  GAMEOBJECT
 {
     public:
-        BULLET(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3, D3DXVECTOR3 size = D3DXVECTOR3(1.0F, 1.0F, 1.0F));
+        BULLET(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
 
         void Draw(void);
         void Uninitialize(void);
-        HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3, D3DXVECTOR3 size = D3DXVECTOR3(1.0F, 1.0F, 1.0F));
+        HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
         void Update(void);
 
         void OnCollision(COLLISION*);

@@ -14,14 +14,15 @@ class ACTORMANAGER
 {
     private:
         static std::list<GAMEOBJECT*> GameObject;
+        static std::list<GAMEOBJECT*> DestroyObject;
 
     public:
+        static void Destroy(GAMEOBJECT*);
         static void Draw(void);
         static HRESULT Initialize(void);
+        static void Instantiate(tstring, D3DXVECTOR3, D3DXVECTOR3);
         static void Uninitialize(void);
         static void Update(void);
-
-        static void Instantiate(tstring);
 };
 
 #endif

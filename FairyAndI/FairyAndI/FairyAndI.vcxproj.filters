@@ -185,6 +185,9 @@
     <ClCompile Include="Bullet.cpp">
       <Filter>ソース ファイル\Actor\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -338,6 +341,9 @@
       <Filter>ソース ファイル\System\Collision</Filter>
     </ClInclude>
     <ClInclude Include="Bullet.h">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Wall.h">
       <Filter>ソース ファイル\Actor\Object</Filter>
     </ClInclude>
   </ItemGroup>

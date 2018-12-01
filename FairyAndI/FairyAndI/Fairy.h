@@ -3,14 +3,14 @@
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <memory>
-#include "Base3Dobject.h"
+#include "GameObject.h"
 #include "Main.h"
 #include "Item.h"
 #include "Model.h"
 
 #define	VALUE_MOVE_FAIRY	(2.0F)					// 移動速度
 
-class FAIRY final : private BASE3DOBJECT 
+class FAIRY final : public  GAMEOBJECT
 {
 	private:
         LPDIRECT3DTEXTURE9 Texture;	//テクスチャへのポインタ
@@ -27,10 +27,14 @@ class FAIRY final : private BASE3DOBJECT
 		LPD3DXVECTOR3		m_itemDistance;
 
 	public:
-		HRESULT Initialize(void);
+        FAIRY(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
+
+		HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
 		void Uninitialize(void);
-		void Update(D3DXVECTOR3, D3DXVECTOR3, D3DXVECTOR3, ITEM*);
+		void Update(void);
 		void Draw(void);
+
+        void OnCollision(COLLISION*);
 
 		void TakeUpItem(LPD3DXVECTOR3);
 		D3DXVECTOR3 GetPos(void);

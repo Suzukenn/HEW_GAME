@@ -21,7 +21,7 @@ class MODELMANAGER
         static HRESULT Initialize(LPCTSTR);
         static void Uninitialize(void);
 
-        static HRESULT GetModel(LPCTSTR, MODEL*);
+        static HRESULT GetModel(tstring, MODEL&);
 };
 
 #endif

@@ -68,5 +68,16 @@ void COLLISIONMANAGER::Uninitialize(void)
 /////////////////////////////////////////////
 void COLLISIONMANAGER::Update(void)
 {
+    //---‰ð•ú---//
+    for (auto& data : GameObject)
+    {
+        data->Uninitialize();
+    }
+    for (auto& data : DestroyObject)
+    {
+        data->Uninitialize();
+    }
 
+    GameObject.clear();
+    DestroyObject.clear();
 }

@@ -32,13 +32,11 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
     TCHAR szCurrentDirectory[_MAX_PATH];
 
     LPDIRECT3DDEVICE9 pDevice;
-    LPD3DXBUFFER pMaterialBuffer;
     LPD3DXMATERIAL pMaterial;
     MODEL* pModel;
 
     //---初期化処理---//
     pDevice = GetDevice();
-    pMaterialBuffer = nullptr;
     pModel = new MODEL();
 
     //---データの展開---//
@@ -56,7 +54,7 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
     }
 
     //Xファイルの読み込み
-    hResult = D3DXLoadMeshFromX(data.FileName.data(), D3DXMESH_SYSTEMMEM, pDevice, nullptr, &pMaterialBuffer, nullptr, &pModel->MaterialValue, &pModel->Mesh);
+    hResult = D3DXLoadMeshFromX(data.FileName.data(), D3DXMESH_SYSTEMMEM, pDevice, nullptr, &pModel->MaterialBuffer, nullptr, &pModel->MaterialValue, &pModel->Mesh);
     if(FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("モデルの作成に失敗しました"), data.FileName.data(), MB_ICONSTOP | MB_OK);
@@ -79,7 +77,7 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
     }
 
     //マテリアル読み込み
-    pMaterial = (LPD3DXMATERIAL)pMaterialBuffer->GetBufferPointer();
+    pMaterial = (LPD3DXMATERIAL)pModel->MaterialBuffer->GetBufferPointer();
     pModel->Material = new D3DMATERIAL9[pModel->MaterialValue];
     pModel->Texture = new LPDIRECT3DTEXTURE9[pModel->MaterialValue];
     for (nCounter = 0; nCounter < pModel->MaterialValue; ++nCounter)
@@ -99,8 +97,6 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
             }
         }
     }
-
-    SAFE_RELEASE(pMaterialBuffer);
 
     //カレントディレクトリを元に戻す
     if (szDirectory[0])
@@ -235,24 +231,24 @@ void MODELMANAGER::Uninitialize(void)
 //
 //機能：テクスチャの取得
 //
-//引数：(LPCTSTR)テクスチャ名,(LPDIRECT3DTEXTURE9)格納アドレス
+//引数：(tstring)テクスチャ名,(MODEL*)格納アドレス
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT MODELMANAGER::GetModel(LPCTSTR modelname, MODEL* address)
+HRESULT MODELMANAGER::GetModel(tstring modelname, MODEL& address)
 {
     try
     {
-        address = Model.at(modelname);
-        if (!address)
-        {
-            MessageBox(nullptr, TEXT("モデルが存在しません"), modelname, MB_ICONSTOP | MB_OK);
-            return E_FAIL;
-        }
+        address = *Model.at(modelname);
+        //if (!address)
+        //{
+        //    MessageBox(nullptr, TEXT("モデルが存在しません"), TEXT("エラー"), MB_ICONSTOP | MB_OK);
+        //    return E_FAIL;
+        //}
     }
     catch (const std::out_of_range&)
     {
-        MessageBox(nullptr, TEXT("モデルが存在しません"), modelname, MB_ICONSTOP | MB_OK);
+        MessageBox(nullptr, TEXT("モデルが存在しません"), TEXT("エラー"), MB_ICONSTOP | MB_OK);
         return E_FAIL;
     }
     return S_OK;
