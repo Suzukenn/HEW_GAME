@@ -14,10 +14,10 @@ class OBB final : public COLLISION
 
         std::array<D3DXVECTOR3, 3> NormalDirection; //‰ñ“]•ûŒüƒxƒNƒgƒ‹
 
-        OBB(D3DXVECTOR3, D3DXVECTOR3, tstring, GAMEOBJECT*const);
+        OBB(D3DXVECTOR3, D3DXVECTOR3, tstring, tstring, GAMEOBJECT*);
 
-        bool CollisionToOBB(const OBB&);
-        bool CollisionToSphere(const SPHERE&);
+        bool CheckCollision(OBB*);
+        bool CheckCollision(SPHERE*);
 };
 
 #endif

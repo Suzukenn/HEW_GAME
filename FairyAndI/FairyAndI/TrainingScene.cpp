@@ -1,11 +1,11 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
 #include "Canvas.h"
+#include "CollisionManager.h"
 #include "DirectionalLight.h"
 #include "FlexibleCamera.h"
 #include "InputManager.h"
 #include "ModelManager.h"
-#include "Player.h"
 #include "SceneManager.h"
 #include "SideViewCamera.h"
 #include "SoundManager.h"
@@ -81,7 +81,11 @@ HRESULT TRAINING::Initialize(void)
         return E_FAIL;
     }
 
-
+    hResult = COLLISIONMANAGER::Initialize();
+    if (FAILED(hResult))
+    {
+        return E_FAIL;
+    }
 
     //---オブジェクトの初期化処理---//
     //地形
@@ -144,6 +148,7 @@ void TRAINING::Uninitialize(void)
     DIRECTIONALLIGHT::Uninitialize();
     SIDEVIEWCAMERA::Uninitialize();
     ACTORMANAGER::Uninitialize();
+    COLLISIONMANAGER::Uninitialize();
 
     //---テクスチャの削除---//
     TEXTUREMANAGER::Uninitialize();
@@ -182,6 +187,8 @@ void TRAINING::Update(void)
         Field.Update();
 
         DIRECTIONALLIGHT::Update();
+
+        COLLISIONMANAGER::Update();
 
         //---画面遷移---//
         if (INPUTMANAGER::GetKey(DIK_SPACE, TRIGGER))

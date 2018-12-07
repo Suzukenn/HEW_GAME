@@ -1,10 +1,10 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "OBB.h"
+#include "Sphere.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
 
 //＝＝＝関数定義＝＝＝//
-
 /////////////////////////////////////////////
 //関数名：CollisionToOBB
 //
@@ -14,14 +14,14 @@
 //
 //戻り値：(bool)判定結果
 /////////////////////////////////////////////
-OBB::OBB(D3DXVECTOR3 position, D3DXVECTOR3 axislength, tstring tag, GAMEOBJECT*const parent) : COLLISION(tag, parent)
+OBB::OBB(D3DXVECTOR3 position, D3DXVECTOR3 axislength, tstring tag, tstring layer, GAMEOBJECT* owner) : COLLISION(tag, layer, owner)
 {
     Position = position;
     AxisLength = axislength;
 }
 
 /////////////////////////////////////////////
-//関数名：CollisionToOBB
+//関数名：CheckCollision
 //
 //機能：OBBとの当たり判定
 //
@@ -29,7 +29,7 @@ OBB::OBB(D3DXVECTOR3 position, D3DXVECTOR3 axislength, tstring tag, GAMEOBJECT*c
 //
 //戻り値：(bool)判定結果
 /////////////////////////////////////////////
-bool OBB::CollisionToOBB(const OBB& opponent)
+bool OBB::CheckCollision(OBB* opponent)
 {
     //// 各方向ベクトルの確保
     //// （N***:標準化方向ベクトル）
@@ -163,7 +163,7 @@ bool OBB::CollisionToOBB(const OBB& opponent)
 }
 
 /////////////////////////////////////////////
-//関数名：CollisionToSphere
+//関数名：CheckCollision
 //
 //機能：球との当たり判定
 //
@@ -171,7 +171,7 @@ bool OBB::CollisionToOBB(const OBB& opponent)
 //
 //戻り値：(bool)判定結果
 /////////////////////////////////////////////
-bool OBB::CollisionToSphere(const SPHERE& opponent)
+bool OBB::CheckCollision(SPHERE* opponent)
 {
     return false;
 }

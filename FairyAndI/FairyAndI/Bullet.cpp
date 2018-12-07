@@ -1,9 +1,10 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include "Bullet.h"
-#include "ModelManager.h"
-#include "Sphere.h"
-#include "InputManager.h"
 #include "ActorManager.h"
+#include "Bullet.h"
+#include "CollisionManager.h"
+#include "InputManager.h"
+#include "ModelManager.h"
+
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
 //関数名：BULLET
@@ -109,7 +110,7 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position,
         return hResult;
     }
 
-    Collision = new SPHERE(Position + 5, Position.x * 0.5F, tag, this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Position + 5, 3.5F, tag, TEXT("BULLET"), this);
 
     return hResult;
 }
@@ -155,6 +156,7 @@ void BULLET::Uninitialize(void)
 void BULLET::Update(void)
 {
     Position.x += 1.0F;
+
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_X, TRIGGER))
     {
         ACTORMANAGER::Destroy(this);

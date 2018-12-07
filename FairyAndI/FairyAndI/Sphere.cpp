@@ -1,4 +1,5 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
+#include "OBB.h"
 #include "Sphere.h"
 
 //＝＝＝関数定義＝＝＝//
@@ -11,14 +12,14 @@
 //
 //戻り値：なし
 /////////////////////////////////////////////
-SPHERE::SPHERE(D3DXVECTOR3 position, float radius, tstring tag, GAMEOBJECT*const parent) : COLLISION(tag, parent)
+SPHERE::SPHERE(D3DXVECTOR3 position, float radius, tstring tag, tstring layer, GAMEOBJECT* owner) : COLLISION(tag, layer, owner)
 {
     Position = position;
     Radius = radius;
 }
 
 /////////////////////////////////////////////
-//関数名：CollisionToOBB
+//関数名：CheckCollision
 //
 //機能：OBBとの当たり判定
 //
@@ -26,13 +27,13 @@ SPHERE::SPHERE(D3DXVECTOR3 position, float radius, tstring tag, GAMEOBJECT*const
 //
 //戻り値：(bool)判定結果
 /////////////////////////////////////////////
-bool SPHERE::CollisionToOBB(const OBB& opponent)
+bool SPHERE::CheckCollision(OBB* opponent)
 {
     return false;
 }
 
 /////////////////////////////////////////////
-//関数名：CollisionToSphere
+//関数名：CheckCollision
 //
 //機能：球との当たり判定
 //
@@ -40,20 +41,20 @@ bool SPHERE::CollisionToOBB(const OBB& opponent)
 //
 //戻り値：(bool)判定結果
 /////////////////////////////////////////////
-bool SPHERE::CollisionToSphere(const SPHERE& opponent)
+bool SPHERE::CheckCollision(SPHERE* opponent)
 {
     //---各種宣言---//
     float fRadiusDifference;
     D3DXVECTOR3 vecPositionDifference;
 
     //---距離の算出---//
-    vecPositionDifference.x = (opponent.Position.x - Position.x) * (opponent.Position.x - Position.x);
-    vecPositionDifference.y = (opponent.Position.y - Position.y) * (opponent.Position.y - Position.y);
-    vecPositionDifference.z = (opponent.Position.z - Position.z) * (opponent.Position.z - Position.z);
+    //vecPositionDifference.x = (opponent.Position.x - Position.x) * (opponent.Position.x - Position.x);
+    //vecPositionDifference.y = (opponent.Position.y - Position.y) * (opponent.Position.y - Position.y);
+    //vecPositionDifference.z = (opponent.Position.z - Position.z) * (opponent.Position.z - Position.z);
 
-    //---限界距離の算出---//
-    fRadiusDifference = (opponent.Radius + Radius) * (opponent.Radius + Radius);
+    ////---限界距離の算出---//
+    //fRadiusDifference = (opponent.Radius + Radius) * (opponent.Radius + Radius);
 
     //---当たり判定---//
-    return vecPositionDifference.x + vecPositionDifference.y + vecPositionDifference.z <= fRadiusDifference ? true : false;
+    return false; vecPositionDifference.x + vecPositionDifference.y + vecPositionDifference.z <= fRadiusDifference ? true : false;
 }

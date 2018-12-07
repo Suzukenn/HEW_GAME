@@ -5,23 +5,34 @@
 #include <memory>
 #include <list>
 #include <vector>
-#include "Collision.h"
-#include "FileParameter.h"
-#include "GameObject.h"
 #include "Main.h"
+
+//＝＝＝前方宣言＝＝＝//
+class COLLISION;
+class GAMEOBJECT;
+
+//＝＝＝列挙型定義＝＝＝//
+typedef enum
+{
+    COLLISIONTYPE_OBB,
+    COLLISIONTYPE_SPHERE,
+    COLLISIONTYPE_MAX
+} COLLISIONTYPE;
 
 //＝＝＝クラス宣言＝＝＝//
 class COLLISIONMANAGER
 {
     private:
         static std::list<COLLISION*> Collision;
+        static std::list<COLLISION*> HitList;
 
     public:
         static HRESULT Initialize(void);
         static void Uninitialize(void);
         static void Update(void);
 
-        static void Instantiate(tstring);
+        static COLLISION* InstantiateToOBB(D3DXVECTOR3, D3DXVECTOR3, tstring, tstring, GAMEOBJECT*);
+        static COLLISION* InstantiateToSphere(D3DXVECTOR3, float, tstring, tstring, GAMEOBJECT*);
 };
 
 #endif
