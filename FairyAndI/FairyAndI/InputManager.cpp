@@ -126,9 +126,9 @@ bool INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER number, DWORD button, PUSHTYPE
 //
 //引数：(JOYSTICKNUMBER)ゲームパッド番号,(GAMEPADDIRECTION)取得スティック
 //
-//戻り値：(POINTS)入力値
+//戻り値：(D3DXVECTOR2)入力値
 /////////////////////////////////////////////
-POINTS INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER number, GAMEPADDIRECTION direction)
+D3DXVECTOR2 INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER number, GAMEPADDIRECTION direction)
 {
     switch (direction)
     {
@@ -139,7 +139,7 @@ POINTS INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER number, GAMEPADDIRECTION dire
             return GamePad.GetRightStick(number);
 
         default:
-            return{ 0, 0 };
+            return { 0, 0 };
     }
 }
 
@@ -163,7 +163,7 @@ float INPUTMANAGER::GetGamePadTrigger(GAMEPADNUMBER number, GAMEPADDIRECTION dir
             return GamePad.GetRightTrigger(number);
 
         default:
-            return 0;
+            return 0.0F;
     }
 }
 

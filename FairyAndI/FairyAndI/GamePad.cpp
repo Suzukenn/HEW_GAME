@@ -138,9 +138,9 @@ bool GAMEPAD::GetHold(DWORD number, DWORD button)
 //
 //引数：(DWORD)ゲームパッド番号
 //
-//戻り値：(float)入力値
+//戻り値：(D3DXVECTOR2)入力値
 /////////////////////////////////////////////
-POINTS GAMEPAD::GetLeftStick(DWORD number)
+D3DXVECTOR2 GAMEPAD::GetLeftStick(DWORD number)
 {
     //---接続チェック---//
     if (number >= Current.size())
@@ -148,7 +148,7 @@ POINTS GAMEPAD::GetLeftStick(DWORD number)
         return { 0, 0 };
     }
 
-    return { Current.at(number).Gamepad.sThumbLX, Current.at(number).Gamepad.sThumbLY };
+    return { Current.at(number).Gamepad.sThumbLX / 32768.0F, Current.at(number).Gamepad.sThumbLY / 32768.0F };
 }
 
 /////////////////////////////////////////////
@@ -199,9 +199,9 @@ bool GAMEPAD::GetRelease(DWORD number, DWORD button)
 //
 //引数：(DWORD)ゲームパッド番号
 //
-//戻り値：(POINTS)入力値
+//戻り値：(D3DXVECTOR2)入力値
 /////////////////////////////////////////////
-POINTS GAMEPAD::GetRightStick(DWORD number)
+D3DXVECTOR2 GAMEPAD::GetRightStick(DWORD number)
 {
     //---接続チェック---//
     if (number >= Current.size())
@@ -209,7 +209,7 @@ POINTS GAMEPAD::GetRightStick(DWORD number)
         return{ 0, 0 };
     }
 
-    return { Current.at(number).Gamepad.sThumbRX, Current.at(number).Gamepad.sThumbRY };
+    return{ Current.at(number).Gamepad.sThumbRX / 32768.0F, Current.at(number).Gamepad.sThumbRY / 32768.0F };
 }
 
 /////////////////////////////////////////////
