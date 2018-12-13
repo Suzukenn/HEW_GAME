@@ -1,6 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
+#include "CollisionManager.h"
 #include "ModelManager.h"
-#include "Sphere.h"
 #include "Wall.h"
 
 //＝＝＝関数定義＝＝＝//
@@ -108,7 +108,7 @@ HRESULT WALL::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D
         return hResult;
     }
 
-    Collision = new SPHERE(Position + 5, Position.x * 0.5F, tag, this);
+    //Collision = COLLISIONMANAGER::InstantiateToSphere(Position + 5, 3.5F, tag, TEXT("BULLET"), this);
 
     return hResult;
 }

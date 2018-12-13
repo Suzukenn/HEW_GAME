@@ -54,6 +54,12 @@
     <Filter Include="ソース ファイル\System\Collision">
       <UniqueIdentifier>{13c74ef5-8644-4472-98e9-bbe5d48e766d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Parts\2D">
+      <UniqueIdentifier>{ab190310-7b15-4c47-b6ba-e91554688f2c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\Parts\3D">
+      <UniqueIdentifier>{e9794838-385c-4301-a8c6-db5af0172d7f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -91,15 +97,6 @@
     </ClCompile>
     <ClCompile Include="TrainingScene.cpp">
       <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationSprite.cpp">
-      <Filter>ソース ファイル\Parts</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprite.cpp">
-      <Filter>ソース ファイル\Parts</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug.cpp">
-      <Filter>ソース ファイル\Parts</Filter>
     </ClCompile>
     <ClCompile Include="TextureManager.cpp">
       <Filter>ソース ファイル\System\Manager</Filter>
@@ -188,6 +185,15 @@
     <ClCompile Include="Wall.cpp">
       <Filter>ソース ファイル\Actor\Object</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationSprite.cpp">
+      <Filter>ソース ファイル\Parts\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>ソース ファイル\Parts\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Debug.cpp">
+      <Filter>ソース ファイル\Parts\2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -232,15 +238,6 @@
     <ClInclude Include="TrainingScene.h">
       <Filter>ソース ファイル\Scene</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationSprite.h">
-      <Filter>ソース ファイル\Parts</Filter>
-    </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>ソース ファイル\Parts</Filter>
-    </ClInclude>
-    <ClInclude Include="Debug.h">
-      <Filter>ソース ファイル\Parts</Filter>
-    </ClInclude>
     <ClInclude Include="TextureManager.h">
       <Filter>ソース ファイル\System\Manager</Filter>
     </ClInclude>
@@ -252,9 +249,6 @@
     </ClInclude>
     <ClInclude Include="ModelManager.h">
       <Filter>ソース ファイル\System\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>ソース ファイル\Parts</Filter>
     </ClInclude>
     <ClInclude Include="FileParameter.h">
       <Filter>ソース ファイル\System\Parameter</Filter>
@@ -316,17 +310,8 @@
     <ClInclude Include="ActorManager.h">
       <Filter>ソース ファイル\System\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Base3DObject.h">
-      <Filter>ソース ファイル\Parts</Filter>
-    </ClInclude>
-    <ClInclude Include="Base2DObject.h">
-      <Filter>ソース ファイル\Parts</Filter>
-    </ClInclude>
     <ClInclude Include="Player.h">
       <Filter>ソース ファイル\Actor\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>ソース ファイル\Parts</Filter>
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
       <Filter>ソース ファイル\System\Manager</Filter>
@@ -345,6 +330,21 @@
     </ClInclude>
     <ClInclude Include="Wall.h">
       <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationSprite.h">
+      <Filter>ソース ファイル\Parts\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Sprite.h">
+      <Filter>ソース ファイル\Parts\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="GameObject.h">
+      <Filter>ソース ファイル\Parts\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Model.h">
+      <Filter>ソース ファイル\Parts\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Debug.h">
+      <Filter>ソース ファイル\Parts\2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

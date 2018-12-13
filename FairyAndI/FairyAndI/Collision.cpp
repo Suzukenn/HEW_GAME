@@ -2,16 +2,16 @@
 #include "Collision.h"
 
 /////////////////////////////////////////////
-//関数名：Initialize
+//関数名：COLLISION
 //
-//機能：マネージャーの初期化
+//機能：コリジョンの初期化
 //
-//引数：なし
+//引数：(tstring)判定タグ,(tstring)所属レイヤー,(GAMEOBJECT*)持ち主
 //
-//戻り値：(HRESULT)処理の成否
+//戻り値：なし
 /////////////////////////////////////////////
-COLLISION::COLLISION(tstring tag, GAMEOBJECT* parent)
+COLLISION::COLLISION(tstring layer, GAMEOBJECT* owner)
 {
-    Tag = tag;
-    Parent = parent;
+    Layer = layer;
+    Owner = owner;
 }

@@ -8,11 +8,11 @@
 //
 //機能：データのロード
 //
-//引数：(LPCTSTR)ファイルパス,(UINT32)ループ
+//引数：(TCHAR)ファイルパス
 //
 //戻り値：(bool)処理の成否
 /////////////////////////////////////////////
-bool WAVCONTROLLER::Load(LPCTSTR filepath, UINT32 loop)
+bool WAVCONTROLLER::Load(LPCTSTR filepath)
 {
     //---各種宣言---//
     LONG lSize;
@@ -99,9 +99,6 @@ bool WAVCONTROLLER::Load(LPCTSTR filepath, UINT32 loop)
 	//ファイルを閉じる
     mmioClose(Mmio, 0);
 
-    //---ループ設定---//
-    LoopCount = loop;
-
     return true;
 }
 
@@ -112,7 +109,7 @@ bool WAVCONTROLLER::Load(LPCTSTR filepath, UINT32 loop)
 //
 //引数：なし
 //
-//戻り値：(WAVEFORMATEX&/)フォーマットのアドレス
+//戻り値：(const WAVEFORMATEX&)フォーマットのアドレス
 /////////////////////////////////////////////
 const WAVEFORMATEX& WAVCONTROLLER::GetFormat(void)
 {
@@ -140,7 +137,7 @@ UINT32 WAVCONTROLLER::GetLoop(void)
 //
 //引数：なし
 //
-//戻り値：(BYTE)Wavデータのアドレス
+//戻り値：(const BYTE)Wavデータのアドレス
 /////////////////////////////////////////////
 const BYTE& WAVCONTROLLER::GetWaveData(void)
 {

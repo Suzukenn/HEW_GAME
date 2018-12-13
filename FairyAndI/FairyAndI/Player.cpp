@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
+#include "CollisionManager.h"
 #include "InputManager.h"
 #include "ModelManager.h"
 #include "Player.h"
@@ -109,6 +110,8 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position,
 	Rotation = D3DXVECTOR3(0.0F, SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F, 0.0F);
 	Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
 
+    Tag = tag;
+
     //Xファイルの読み込み
     hResult = D3DXLoadMeshFromX(TEXT("Data/Common/Model/Character/car000.x"), D3DXMESH_SYSTEMMEM, GetDevice(), nullptr, &MaterialBuffer, nullptr, &MaterialValue, &Mesh);
     if(FAILED(hResult))
@@ -117,6 +120,9 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position,
         Uninitialize();
 		return hResult;
 	}
+
+    //Collision = COLLISIONMANAGER::InstantiateToOBB(D3DXVECTOR3(Position.x + 5.0F, Position.y + 5.0F, Position.z + 5.0F), D3DXVECTOR3(5.0F, 5.0F, 5.0F), tag, TEXT("Character"), this);
+
 	return hResult;
 }
 
@@ -131,7 +137,7 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position,
 /////////////////////////////////////////////
 void PLAYER::OnCollision(COLLISION* opponent)
 {
-
+    Position = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
 }
 
 
@@ -163,23 +169,25 @@ void PLAYER::Uninitialize(void)
 void PLAYER::Update(void)
 {
     //---各種宣言---//
+    D3DXVECTOR2 vecStickVector;
     D3DXVECTOR3 vecCameraRotation;
-    D3DXVECTOR2 StickPoints;
+    POINTS StickPoints;
 
     //---移動処理---//
 	//カメラの向き取得
     vecCameraRotation = SIDEVIEWCAMERA::GetRotation();
     StickPoints = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT);
+    vecStickVector = D3DXVECTOR2((float)((StickPoints.x > 0) - (StickPoints.x < 0)), (float)((StickPoints.y > 0) - (StickPoints.y < 0)));
 
 	//重力加算
 	Move.y -= GRAVITY;
 
 	//移動
-	Position.x += sinf(vecCameraRotation.y + D3DX_PI * 0.5F) * VALUE_MOVE_PLAYER * StickPoints.x;
-    Position.z += cosf(vecCameraRotation.y + D3DX_PI * 0.5F) * VALUE_MOVE_PLAYER * StickPoints.y;
+	Position.x += sinf(vecCameraRotation.y + D3DX_PI * 0.5F) * VALUE_MOVE_PLAYER * vecStickVector.x;
+    Position.z += cosf(vecCameraRotation.y + D3DX_PI * 0.5F) * VALUE_MOVE_PLAYER * vecStickVector.y;
 
     //回転
-    Rotation.y = vecCameraRotation.y - D3DX_PI * 0.5F * StickPoints.x;
+    Rotation.y = vecCameraRotation.y - D3DX_PI * 0.5F * vecStickVector.x;
 
 	//ジャンプ
 	if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))

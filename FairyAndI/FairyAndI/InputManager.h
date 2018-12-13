@@ -33,7 +33,7 @@ class INPUTMANAGER
         static void Update(void);
 
         static bool GetGamePadButton(GAMEPADNUMBER, DWORD, PUSHTYPE);
-        static D3DXVECTOR2 GetGamePadStick(GAMEPADNUMBER, GAMEPADDIRECTION);
+        static POINTS GetGamePadStick(GAMEPADNUMBER, GAMEPADDIRECTION);
         static float GetGamePadTrigger(GAMEPADNUMBER, GAMEPADDIRECTION);
         static bool GetKey(DWORD, PUSHTYPE);
         static bool GetMouseButton(MOUSEBUTTON, PUSHTYPE);

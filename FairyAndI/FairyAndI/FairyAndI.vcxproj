@@ -169,8 +169,6 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ActorManager.h" />
     <ClInclude Include="BackGround.h" />
-    <ClInclude Include="Base2DObject.h" />
-    <ClInclude Include="Base3DObject.h" />
     <ClInclude Include="ItemBox.h" />
     <ClInclude Include="ItemManager.h" />
     <ClInclude Include="Model.h" />

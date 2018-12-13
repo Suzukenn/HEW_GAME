@@ -42,7 +42,7 @@ HRESULT SOUNDMANAGER::Create(const SOUNDPARAMETER& data)
     }
 
     //データのロード
-    if (wavBuffer.Load(data.FileName.data(), data.LoopCount))
+    if (wavBuffer.Load(data.FileName.data()))
     {
         WaveSound.insert(std::make_pair(data.CallKey, wavBuffer));
     }
@@ -55,7 +55,7 @@ HRESULT SOUNDMANAGER::Create(const SOUNDPARAMETER& data)
     //ソースボイスの作成
     if (SUCCEEDED((*Manager)->CreateSourceVoice(pVoice.get(), &WaveSound.at(data.CallKey).GetFormat())))
     {
-        SourceVoice.insert(std::make_pair(data.CallKey, (*pVoice)));
+        SourceVoice.emplace(std::make_pair(data.CallKey, (*pVoice)));
     }
     else
     {

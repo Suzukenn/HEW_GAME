@@ -15,9 +15,9 @@ class GAMEOBJECT
     protected:
         D3DXVECTOR3 Position;
         D3DXVECTOR3 Rotation;
+        tstring Tag;
 
         std::unique_ptr<MODEL> Model;
-        COLLISION* Collision;
 
     public:
         GAMEOBJECT() {}
@@ -28,6 +28,7 @@ class GAMEOBJECT
         virtual void Update(void) = 0;
 
         virtual void OnCollision(COLLISION*) = 0;
+        tstring GetTag(void) { return Tag; }
 };
 
 #endif

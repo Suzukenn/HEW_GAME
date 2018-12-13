@@ -2,7 +2,6 @@
 #define _COLLISION_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include "Base3Dobject.h"
 #include "Main.h"
 
 //＝＝＝前方宣言＝＝＝//
@@ -11,17 +10,19 @@ class OBB;
 class SPHERE;
 
 //＝＝＝クラス宣言＝＝＝//
-class COLLISION : public BASE3DOBJECT
+class COLLISION
 {
     public:
-        tstring Tag;                                //タグ
+        D3DXVECTOR3 Position;               //位置
+        D3DXVECTOR3 Rotation;               //向き
+        tstring Layer;                      //所属レイヤー
 
-        GAMEOBJECT* Parent;
+        GAMEOBJECT* Owner;                  //持ち主
 
         COLLISION(tstring, GAMEOBJECT*);
 
-        virtual bool CollisionToOBB(const OBB&) = 0;
-        virtual bool CollisionToSphere(const SPHERE&) = 0;
+        virtual bool CheckCollisionToOBB(OBB*) = 0;
+        virtual bool CheckCollisionToSphere(SPHERE*) = 0;
 };
 
 #endif

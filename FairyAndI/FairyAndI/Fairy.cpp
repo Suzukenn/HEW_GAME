@@ -105,6 +105,7 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, 
 	Position = D3DXVECTOR3(0.0F, 20.0F, 0.0F);
 	Rotation = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
 	Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
+    Tag = tag;
 	m_stat = false;
 	m_tar = 0;
 	m_num = 0;
