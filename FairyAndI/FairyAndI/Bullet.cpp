@@ -4,6 +4,7 @@
 #include "CollisionManager.h"
 #include "InputManager.h"
 #include "ModelManager.h"
+#include "Sphere.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -21,6 +22,20 @@ BULLET::BULLET(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3
 }
 
 /////////////////////////////////////////////
+//関数名：~BULLET
+//
+//機能：デストラクタ
+//
+//引数：なし
+//
+//戻り値：なし
+/////////////////////////////////////////////
+BULLET::~BULLET()
+{
+    Uninitialize();
+}
+
+/////////////////////////////////////////////
 //関数名：Draw
 //
 //機能：弾丸の描画
@@ -31,6 +46,11 @@ BULLET::BULLET(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3
 /////////////////////////////////////////////
 void BULLET::Draw(void)
 {
+    if (data)
+    {
+        return;
+    }
+
     //---各種宣言---//
     DWORD nCounter;
     LPDIRECT3DDEVICE9 pDevice;
@@ -98,6 +118,7 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position,
     //---初期化処理---//
     Position = position;
     Rotation = rotation;
+    Tag = tag;
 
     Model.reset(new MODEL);
 
@@ -110,8 +131,8 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position,
         return hResult;
     }
 
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Position + 5, 3.5F, tag, TEXT("BULLET"), this);
-
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Position, 3.5F, TEXT("Skill"), this);
+    a = 2.0F;
     return hResult;
 }
 
@@ -126,7 +147,9 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position,
 /////////////////////////////////////////////
 void BULLET::OnCollision(COLLISION* opponent)
 {
-
+    //data = true;
+    ACTORMANAGER::Destroy(this);
+    COLLISIONMANAGER::Destroy((COLLISION*)Collision);
 }
 
 /////////////////////////////////////////////
@@ -141,7 +164,16 @@ void BULLET::OnCollision(COLLISION* opponent)
 void BULLET::Uninitialize(void)
 {
     //---開放---//
-    Model->Release();
+    if (Model)
+    {
+        Model->Release();
+        Model = nullptr;
+    }
+    if (Collision)
+    {
+        COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+        Collision = nullptr;
+    }
 }
 
 /////////////////////////////////////////////
@@ -155,10 +187,8 @@ void BULLET::Uninitialize(void)
 /////////////////////////////////////////////
 void BULLET::Update(void)
 {
-    Position.x += 1.0F;
-
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_X, TRIGGER))
-    {
-        ACTORMANAGER::Destroy(this);
-    }
+    a -= 0.01F;
+    Position.x += a;
+    Collision->Position = Position;
+    data = false;
 }

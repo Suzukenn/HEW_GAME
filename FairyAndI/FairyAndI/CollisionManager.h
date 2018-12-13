@@ -4,12 +4,15 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <memory>
 #include <list>
+#include <unordered_map>
 #include <vector>
 #include "Main.h"
 
 //＝＝＝前方宣言＝＝＝//
 class COLLISION;
 class GAMEOBJECT;
+class OBB;
+class SPHERE;
 
 //＝＝＝列挙型定義＝＝＝//
 typedef enum
@@ -24,15 +27,19 @@ class COLLISIONMANAGER
 {
     private:
         static std::list<COLLISION*> Collision;
-        static std::list<COLLISION*> HitList;
+        static std::list<COLLISION*> DestroyCollision;
+        static std::vector<COLLISION*> HitList;
+        static std::vector<COLLISION*> HitOpponent;
+        static std::unordered_map<tstring, std::unordered_map<tstring, bool>> CollsitionLayer;
 
     public:
+        static void Destroy(COLLISION*);
         static HRESULT Initialize(void);
         static void Uninitialize(void);
         static void Update(void);
 
-        static COLLISION* InstantiateToOBB(D3DXVECTOR3, D3DXVECTOR3, tstring, tstring, GAMEOBJECT*);
-        static COLLISION* InstantiateToSphere(D3DXVECTOR3, float, tstring, tstring, GAMEOBJECT*);
+        static OBB* InstantiateToOBB(D3DXVECTOR3, D3DXVECTOR3, tstring, GAMEOBJECT*);
+        static SPHERE* InstantiateToSphere(D3DXVECTOR3, float, tstring, GAMEOBJECT*);
 };
 
 #endif

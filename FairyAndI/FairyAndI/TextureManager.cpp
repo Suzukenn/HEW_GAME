@@ -39,7 +39,7 @@ HRESULT TEXTUREMANAGER::Create(const FILEPARAMETER& data)
     //テクスチャの作成
     if (SUCCEEDED(D3DXCreateTextureFromFile(GetDevice(), data.FileName.data(), pTexture.get())))
     {
-        Texture.insert(std::make_pair(data.CallKey, *pTexture));
+        Texture.emplace(std::make_pair(data.CallKey, *pTexture));
     }
     else
     {

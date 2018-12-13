@@ -52,7 +52,7 @@ HRESULT WORDMANAGER::CreatePair(void)
         wszAdjective = std::wstring(szAdjective.begin(), szAdjective.end());
         wszAdjective.shrink_to_fit();
 #endif
-        NounToAdjective.insert(std::make_pair(wszNoun, wszAdjective));
+        NounToAdjective.emplace(std::make_pair(wszNoun, wszAdjective));
     }
 
     return S_OK;
@@ -86,7 +86,7 @@ HRESULT WORDMANAGER::CreateTexture(std::unordered_map<tstring, LPDIRECT3DTEXTURE
     //テクスチャの作成
     if (SUCCEEDED(D3DXCreateTextureFromFile(GetDevice(), data.FileName.data(), pTexture.get())))
     {
-        list.insert(std::make_pair(data.CallKey, *pTexture));
+        list.emplace(std::make_pair(data.CallKey, *pTexture));
     }
     else
     {
@@ -290,8 +290,8 @@ HRESULT WORDMANAGER::UnLockWord(LPCTSTR word)
 {
     //---各種宣言---//
     std::vector<tstring> conList;
-    std::string s = ",a,b,,c,";
-    std::string buf;
+
+    //---ロック解除---//
     if (NounToAdjective.find(word) != NounToAdjective.end())
     {
         //名詞と形容詞の解除

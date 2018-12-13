@@ -15,15 +15,14 @@ class COLLISION
     public:
         D3DXVECTOR3 Position;               //位置
         D3DXVECTOR3 Rotation;               //向き
-        tstring Tag;                        //タグ
         tstring Layer;                      //所属レイヤー
 
         GAMEOBJECT* Owner;                  //持ち主
 
-        COLLISION(tstring, tstring, GAMEOBJECT*);
+        COLLISION(tstring, GAMEOBJECT*);
 
-        virtual bool CheckCollision(OBB*) = 0;
-        virtual bool CheckCollision(SPHERE*) = 0;
+        virtual bool CheckCollisionToOBB(OBB*) = 0;
+        virtual bool CheckCollisionToSphere(SPHERE*) = 0;
 };
 
 #endif

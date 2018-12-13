@@ -6,11 +6,16 @@
 #include "GameObject.h"
 #include "Main.h"
 
+class SPHERE;
+
 //ƒNƒ‰ƒXéŒ¾//
 class BULLET final : public  GAMEOBJECT
 {
     public:
+        SPHERE* Collision;
+        bool data;
         BULLET(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
+        ~BULLET();
 
         void Draw(void);
         void Uninitialize(void);
@@ -18,6 +23,7 @@ class BULLET final : public  GAMEOBJECT
         void Update(void);
 
         void OnCollision(COLLISION*);
+        float a;
 };
 
 #endif

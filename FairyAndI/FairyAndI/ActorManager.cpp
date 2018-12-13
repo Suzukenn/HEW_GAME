@@ -1,9 +1,9 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <algorithm>
 #include <list>
-#include "Main.h"
 #include "ActorManager.h"
 #include "Bullet.h"
+#include "Main.h"
 #include "Player.h"
 #include "Fairy.h"
 #include "Wall.h"
@@ -81,25 +81,14 @@ HRESULT ACTORMANAGER::Initialize(void)
 /////////////////////////////////////////////
 void ACTORMANAGER::Instantiate(tstring gameobject, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    tstring strInstance;
-    std::vector<tstring> conObjectName = {TEXT("BULLET"), TEXT("WALL")};
-    
-    //for (auto& data : conObjectName)
-    //{
-    //    if (gameobject.find(data))
-    //    {
-    //        strInstance = data;
-    //        break;
-    //    }
-    //}
-
-    if (gameobject.find(TEXT("ICE")))
+    //---生成---//
+    if (gameobject.find(TEXT("FIRE")) != tstring::npos)
     {
         GameObject.emplace_back(new BULLET(TEXT("ICE"), TEXT("BULLET"), position, rotation));
     }
-    else if (gameobject.find(TEXT("WALL")))
+    if (gameobject.find(TEXT("WALL")) != tstring::npos)
     {
-        GameObject.emplace_back(new WALL(gameobject.data(), TEXT("WALL"), position, rotation));
+        GameObject.emplace_back(new WALL(TEXT("WALL"), TEXT("WALL"), position, rotation));
     }
 }
 
@@ -124,6 +113,7 @@ void ACTORMANAGER::Uninitialize(void)
         data->Uninitialize();
     }
 
+    //---リストのクリア---//
     GameObject.clear();
     DestroyObject.clear();
 }
@@ -139,15 +129,47 @@ void ACTORMANAGER::Uninitialize(void)
 /////////////////////////////////////////////
 void ACTORMANAGER::Update(void)
 {
-    //---現存オブジェクトの更新
+    //---各種宣言---//
+    bool bDestroy;
+
+    std::list<GAMEOBJECT*>::iterator itrObject;
+
+    //---初期化処理---//
+    bDestroy = false;
+    itrObject = GameObject.begin();
+
+    //---現存オブジェクトの更新---//
     for (auto& data : GameObject)
     {
         data->Update();
     }
 
     //---廃棄の実行---//
-    for (auto& data : DestroyObject)
+    while (itrObject != GameObject.end())
     {
-        GameObject.remove(data);
+        for (auto& itrDestroy = DestroyObject.begin(); itrDestroy != DestroyObject.end(); ++itrDestroy)
+        {
+            //廃棄リストと照合
+            if (*itrObject == *itrDestroy)
+            {
+                itrObject = GameObject.erase(itrObject);
+                DestroyObject.remove(*itrDestroy);
+                bDestroy = true;
+                break;
+            }
+        }
+
+        //廃棄しなかったときのみインクリメント
+        if (bDestroy)
+        {
+            bDestroy = false;
+        }
+        else
+        {
+            ++itrObject;
+        }
     }
+
+    //---リストのクリア---//
+    DestroyObject.clear();
 }

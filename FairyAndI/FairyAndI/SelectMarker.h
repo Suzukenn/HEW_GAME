@@ -6,12 +6,8 @@
 #include "AnimationSprite.h"
 
 //＝＝＝クラス宣言＝＝＝//
-class SELECTMARKER final : protected BASE2DOBJECT
+class SELECTMARKER final : protected ANIMATIONSPRITE
 {
-    private:
-        std::unique_ptr<LPDIRECT3DTEXTURE9> Texture;    //テクスチャへのポインタ
-        std::array<VERTEX_2D, 4> Vertex;                //頂点バッファ
-
     public:
         void Draw(void);
         HRESULT Initialize(LPCTSTR, D3DXVECTOR2, D3DXVECTOR2);

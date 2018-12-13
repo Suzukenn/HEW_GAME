@@ -10,9 +10,8 @@
 //
 //ñﬂÇËílÅFÇ»Çµ
 /////////////////////////////////////////////
-COLLISION::COLLISION(tstring tag, tstring layer, GAMEOBJECT* owner)
+COLLISION::COLLISION(tstring layer, GAMEOBJECT* owner)
 {
-    Tag = tag;
     Layer = layer;
     Owner = owner;
 }

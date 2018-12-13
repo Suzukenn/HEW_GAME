@@ -12,11 +12,11 @@ class SPHERE final : public COLLISION
     public:
         float Radius;
 
-        SPHERE(D3DXVECTOR3, float, tstring, tstring, GAMEOBJECT*);
-        //~SPHERE();
+        SPHERE(D3DXVECTOR3, float, tstring, GAMEOBJECT*);
+        ~SPHERE();
 
-        bool CheckCollision(OBB*);
-        bool CheckCollision(SPHERE*);
+        bool CheckCollisionToOBB(OBB*);
+        bool CheckCollisionToSphere(SPHERE*);
 };
 
 #endif

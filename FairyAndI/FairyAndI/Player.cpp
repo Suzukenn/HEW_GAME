@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
+#include "CollisionManager.h"
 #include "InputManager.h"
 #include "ModelManager.h"
 #include "Player.h"
@@ -109,6 +110,8 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position,
 	Rotation = D3DXVECTOR3(0.0F, SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F, 0.0F);
 	Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
 
+    Tag = tag;
+
     //Xファイルの読み込み
     hResult = D3DXLoadMeshFromX(TEXT("Data/Common/Model/Character/car000.x"), D3DXMESH_SYSTEMMEM, GetDevice(), nullptr, &MaterialBuffer, nullptr, &MaterialValue, &Mesh);
     if(FAILED(hResult))
@@ -117,6 +120,9 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position,
         Uninitialize();
 		return hResult;
 	}
+
+    //Collision = COLLISIONMANAGER::InstantiateToOBB(D3DXVECTOR3(Position.x + 5.0F, Position.y + 5.0F, Position.z + 5.0F), D3DXVECTOR3(5.0F, 5.0F, 5.0F), tag, TEXT("Character"), this);
+
 	return hResult;
 }
 
@@ -131,7 +137,7 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position,
 /////////////////////////////////////////////
 void PLAYER::OnCollision(COLLISION* opponent)
 {
-
+    Position = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
 }
 
 

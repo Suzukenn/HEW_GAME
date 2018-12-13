@@ -104,7 +104,7 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
         SetCurrentDirectory(szCurrentDirectory);
     }
 
-    Model.insert(std::make_pair(data.CallKey, pModel));
+    Model.emplace(std::make_pair(data.CallKey, pModel));
 
     return hResult;
 }

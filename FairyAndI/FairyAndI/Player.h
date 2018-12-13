@@ -11,7 +11,7 @@
 #define	VALUE_MOVE_PLAYER 5.0F
 
 //＝＝＝クラス定義＝＝＝//
-class PLAYER final : public  GAMEOBJECT
+class PLAYER final : public GAMEOBJECT
 {
 	private:
         LPDIRECT3DTEXTURE9 Texture;	//テクスチャへのポインタ
