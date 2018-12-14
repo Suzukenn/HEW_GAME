@@ -19,6 +19,7 @@ class ACTORMANAGER
     public:
         static void Destroy(GAMEOBJECT*);
         static void Draw(void);
+        static void FindObject(std::vector<GAMEOBJECT*>&, tstring);
         static HRESULT Initialize(void);
         static void Instantiate(tstring, D3DXVECTOR3, D3DXVECTOR3);
         static void Uninitialize(void);

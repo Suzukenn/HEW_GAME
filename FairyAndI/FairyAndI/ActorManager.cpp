@@ -46,6 +46,26 @@ void ACTORMANAGER::Draw(void)
 }
 
 /////////////////////////////////////////////
+//関数名：FindObject
+//
+//機能：指定オブジェクトの検索・リストの生成
+//
+//引数：(std::vector<GAMEOBJECT*>)格納リスト,(tstring)検索タグ
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void ACTORMANAGER::FindObject(std::vector<GAMEOBJECT*>& list, tstring tag)
+{
+    for (auto& data : GameObject)
+    {
+        if (data->GetTag() == tag)
+        {
+            list.emplace_back(*data);
+        }
+    }
+}
+
+/////////////////////////////////////////////
 //関数名：Initialize
 //
 //機能：マネージャーの初期化
