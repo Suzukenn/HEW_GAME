@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-//#include "Collision.h"
+#include "ActorManager.h"
+#include "Collision.h"
 #include "Fairy.h"
 #include "InputManager.h"
 #include "Item.h"
@@ -106,11 +107,10 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, 
 	Rotation = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
 	Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
     Tag = tag;
-	m_stat = false;
-	m_tar = 0;
+    Collection = false;
+    ToTargetAngle = 0;
 	m_num = 0;
-	m_itemDistance = 0;
-	m_itemPos = 0;
+    ElementPosition;
 
     //Xファイルの読み込み
     hResult = D3DXLoadMeshFromX(TEXT("Data/Common/Model/Character/car001.x"), D3DXMESH_SYSTEMMEM, GetDevice(), nullptr, &MaterialBuffer, nullptr, &MaterialValue, &Mesh);
@@ -120,6 +120,9 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, 
         Uninitialize();
 		return hResult;
 	}
+
+    //---当たり判定の付与---//
+    //Collision = COLLISIONMANAGER::InstantiateToOBB(D3DXVECTOR3(Position.x + 5.0F, Position.y + 5.0F, Position.z + 5.0F), D3DXVECTOR3(5.0F, 5.0F, 5.0F), TEXT("Character"), this);
 
 	return hResult;
 }
@@ -135,9 +138,52 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, 
 /////////////////////////////////////////////
 void FAIRY::OnCollision(COLLISION* opponent)
 {
-
+    if (opponent->Owner->GetTag().find(TEXT("Element")) != tstring::npos)
+    {
+        Collection = true;
+    }
 }
 
+/////////////////////////////////////////////
+//関数名：SearchElement
+//
+//機能：最も近いエレメントの検索
+//
+//引数：なし
+//
+//戻り値：(D3DXVECTOR3)最短位置
+/////////////////////////////////////////////
+D3DXVECTOR3 FAIRY::SearchElement(void)
+{
+    //---各種宣言---//
+    float fCurrentCalcDistance;         //現在算出した距離
+    float fShortestDistance;            //暫定最短距離
+    D3DXVECTOR3 vecShortestItem;        //暫定最短アイテム
+    D3DXVECTOR3 vecDistance;
+
+    //---初期化処理---//
+    Element.clear();
+    fShortestDistance = INFINITY;
+
+    //エレメントを検索
+    ACTORMANAGER::FindObject(Element, TEXT("Element"));
+
+    for (auto& data : Element)
+    {
+        //自身との距離の算出
+        vecDistance = data->GetPosition() - Position;
+        fCurrentCalcDistance = vecDistance.x * vecDistance.x + vecDistance.y * vecDistance.y;
+
+        //最短距離なら回収アイテムを変更
+        if (fShortestDistance > fCurrentCalcDistance)
+        {
+            fShortestDistance = fCurrentCalcDistance;
+            vecShortestItem = data->GetPosition();
+        }
+    }
+
+    return vecShortestItem;
+}
 
 /////////////////////////////////////////////
 //関数名：Uninitialize
@@ -166,6 +212,10 @@ void FAIRY::Uninitialize(void)
 /////////////////////////////////////////////
 void FAIRY::Update(void)
 {	
+    //---各種宣言---//
+    D3DXVECTOR3 vecFairyDistance;
+
+
 	Rotation = PLAYER::GetPlayerRotation(); 
 	int num = 0;
 
@@ -179,35 +229,47 @@ void FAIRY::Update(void)
 	//ボタンを押したらアイテムを取りに行く
 	if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P,XINPUT_GAMEPAD_X, TRIGGER))
 	{
-		m_stat = true;
+        Collection = true;
+        ElementPosition = SearchElement();
 	}
 
-	//未使用なら
-	if(!m_stat)
-	{
-		//妖精までの距離
-		D3DXVECTOR3 DisFairy;
-		DisFairy.x = PLAYER::GetPlayerPosition().x - Position.x;
-		DisFairy.y = PLAYER::GetPlayerPosition().y  + 20.0F - Position.y;
+    if (Collection)
+    {
+        //妖精とエレメントの距離の算出
+        vecFairyDistance.x = ElementPosition.x - Position.x;
+        vecFairyDistance.y = ElementPosition.y - Position.y;
+    }
+    else
+    {
+        //妖精とプレイヤーの距離の算出
+        vecFairyDistance.x = PLAYER::GetPlayerPosition().x - Position.x;
+        vecFairyDistance.y = PLAYER::GetPlayerPosition().y + 20.0F - Position.y;
+    }
 
-		//弾の発射角度取得し移動量設定
-		if (DisFairy.x <= 0.1F && DisFairy.y <= 0.1F) DisFairy.x += 0.00001F; //atan2エラー防止
-		m_tar = atan2f(DisFairy.y, DisFairy.x);
+	//弾の発射角度取得し移動量設定
+    if (vecFairyDistance.x <= 0.1F && vecFairyDistance.y <= 0.1F)
+    {
+        vecFairyDistance.x += 0.00001F; //atan2エラー防止
+    }
+        
+    ToTargetAngle = atan2f(vecFairyDistance.y, vecFairyDistance.x);
 
-		//移動量格納
-		Move.x = cosf(m_tar) * VALUE_MOVE_FAIRY;
-        Move.y = sinf(m_tar) * VALUE_MOVE_FAIRY + (sinf(-D3DX_PI * 0.5F + D3DX_PI / 60.0F * cnt) + 1.0F) * 0.5F;
-        if (Rotation.y == SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F && Position.x > PLAYER::GetPlayerPosition().x - 20.0F && Position.x < PLAYER::GetPlayerPosition().x + 20.0F)
-        {
-            Move.x = 0.0F;
-        }
-        else if (Rotation.y == SIDEVIEWCAMERA::GetRotation().y + D3DX_PI * 0.5F && Position.x < PLAYER::GetPlayerPosition().x + 20.0F &&  Position.x > PLAYER::GetPlayerPosition().x - 20.0F)
-        {
-            Move.x = 0.0F;
-        }
+	//移動量格納
+	Move.x = cosf(ToTargetAngle) * VALUE_MOVE_FAIRY;
+    Move.y = sinf(ToTargetAngle) * VALUE_MOVE_FAIRY + (sinf(-D3DX_PI * 0.5F + D3DX_PI / 60.0F * cnt) + 1.0F) * 0.5F;
+    if (Rotation.y == SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F && Position.x > PLAYER::GetPlayerPosition().x - 20.0F && Position.x < PLAYER::GetPlayerPosition().x + 20.0F)
+    {
+        Move.x = 0.0F;
+    }
+    else if (Rotation.y == SIDEVIEWCAMERA::GetRotation().y + D3DX_PI * 0.5F && Position.x < PLAYER::GetPlayerPosition().x + 20.0F &&  Position.x > PLAYER::GetPlayerPosition().x - 20.0F)
+    {
+        Move.x = 0.0F;
+    }
 
+    //移動
+    Position += Move;
 
-		//プレイヤーとの当たり判定
+    //プレイヤーとの当たり判定
 		//if (CollisionBall(&Position, &playerPos, 15.0F, 15.0F))
 		//{
   //          //右向き
@@ -235,8 +297,6 @@ void FAIRY::Update(void)
   //          }
 		//	return;
 		//}
-        Position += Move;
-	}
 	//else //(アイテムを取りに行っている)
 	//{
 	//	for (int i = 0; i < MAX_ITEM; i++)
@@ -286,10 +346,10 @@ void FAIRY::TakeUpItem(LPD3DXVECTOR3 pos)
 
 	//弾の発射角度取得し移動量設定
 	if (Distance.x == 0 && Distance.y == 0) Distance.x += 0.00001F; //atan2エラー防止
-	m_tar = atan2f(Distance.y, Distance.x);
+    ToTargetAngle = atan2f(Distance.y, Distance.x);
 
 	//移動量格納
-	Move = D3DXVECTOR3(cosf(m_tar) * VALUE_MOVE_FAIRY, sinf(m_tar) * VALUE_MOVE_FAIRY, 0.0F);
+	Move = D3DXVECTOR3(cosf(ToTargetAngle) * VALUE_MOVE_FAIRY, sinf(ToTargetAngle) * VALUE_MOVE_FAIRY, 0.0F);
 
 	//アイテムとの当たり判定
 	//if (CollisionBall(&Position, pos, 10.0F, 10.0F))
@@ -303,29 +363,4 @@ void FAIRY::TakeUpItem(LPD3DXVECTOR3 pos)
 D3DXVECTOR3 FAIRY::GetPos(void)
 {
 	return Position;
-}
-
-//プロトタイプ後に改良する
-bool FAIRY::Check(void)
-{
-    int nCounter;
-
-    //for (nCounter = 0; nCounter < MAX_ITEM; ++nCounter)
-    //{
-    //    //if (Item[nCounter].GetStat())
-    //    //{
-    //    //    return false;
-    //    //}
-    //}
-
-    return true;
-
-	//if (!Item[0].GetStat() && !Item[1].GetStat() && !Item[2].GetStat() && !Item[3].GetStat() &&
-	//	!Item[4].GetStat() && !Item[5].GetStat() && !Item[6].GetStat() && !Item[7].GetStat() &&
-	//	!Item[8].GetStat() && !Item[9].GetStat() && !Item[10].GetStat() && !Item[11].GetStat() &&
-	//	!Item[12].GetStat() && !Item[13].GetStat() && !Item[14].GetStat())
-	//{
-	//	return true;
-	//}
-	//return false;
 }

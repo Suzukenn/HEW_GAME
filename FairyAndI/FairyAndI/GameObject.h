@@ -28,6 +28,8 @@ class GAMEOBJECT
         virtual void Update(void) = 0;
 
         virtual void OnCollision(COLLISION*) = 0;
+
+        D3DXVECTOR3 GetPosition(void) { return Position; }
         tstring GetTag(void) { return Tag; }
 };
 
