@@ -12,8 +12,10 @@ class SPHERE;
 class BULLET final : public  GAMEOBJECT
 {
     public:
+        D3DXVECTOR3 Move;
+
         SPHERE* Collision;
-        bool data;
+
         BULLET(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
         ~BULLET();
 
@@ -23,7 +25,6 @@ class BULLET final : public  GAMEOBJECT
         void Update(void);
 
         void OnCollision(COLLISION*);
-        float a;
 };
 
 #endif

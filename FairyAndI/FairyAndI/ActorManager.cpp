@@ -60,7 +60,7 @@ void ACTORMANAGER::FindObject(std::vector<GAMEOBJECT*>& list, tstring tag)
     {
         if (data->GetTag() == tag)
         {
-            list.emplace_back(*data);
+            list.emplace_back(data);
         }
     }
 }

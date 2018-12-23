@@ -5,6 +5,7 @@
 #include "InputManager.h"
 #include "ModelManager.h"
 #include "Sphere.h"
+#include "Player.h"
 
 //ŠÖ”’è‹`//
 /////////////////////////////////////////////
@@ -46,11 +47,6 @@ BULLET::~BULLET()
 /////////////////////////////////////////////
 void BULLET::Draw(void)
 {
-    if (data)
-    {
-        return;
-    }
-
     //---ŠeŽíéŒ¾---//
     DWORD nCounter;
     LPDIRECT3DDEVICE9 pDevice;
@@ -118,6 +114,7 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position,
     //---‰Šú‰»ˆ—---//
     Position = position;
     Rotation = rotation;
+    Move = D3DXVECTOR3(-sinf(Rotation.y) * 1.5F, 0.0F, -cosf(Rotation.y) * 1.5F);
     Tag = tag;
 
     Model.reset(new MODEL);
@@ -131,8 +128,9 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position,
         return hResult;
     }
 
+    //---“–‚½‚è”»’è‚Ì•t—^---//
     Collision = COLLISIONMANAGER::InstantiateToSphere(Position, 3.5F, TEXT("Skill"), this);
-    a = 2.0F;
+
     return hResult;
 }
 
@@ -147,7 +145,6 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position,
 /////////////////////////////////////////////
 void BULLET::OnCollision(COLLISION* opponent)
 {
-    //data = true;
     ACTORMANAGER::Destroy(this);
     COLLISIONMANAGER::Destroy((COLLISION*)Collision);
 }
@@ -187,8 +184,6 @@ void BULLET::Uninitialize(void)
 /////////////////////////////////////////////
 void BULLET::Update(void)
 {
-    a -= 0.01F;
-    Position.x += a;
+    Position += Move;
     Collision->Position = Position;
-    data = false;
 }
