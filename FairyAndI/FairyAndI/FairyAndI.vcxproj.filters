@@ -194,6 +194,12 @@
     <ClCompile Include="Debug.cpp">
       <Filter>ソース ファイル\Parts\2D</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationModelHierarchy.cpp">
+      <Filter>ソース ファイル\Parts\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationModel.cpp">
+      <Filter>ソース ファイル\Parts\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -345,6 +351,18 @@
     </ClInclude>
     <ClInclude Include="Debug.h">
       <Filter>ソース ファイル\Parts\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationModel.h">
+      <Filter>ソース ファイル\Parts\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationModelHierarchy.h">
+      <Filter>ソース ファイル\Parts\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationModelFrame.h">
+      <Filter>ソース ファイル\Parts\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationModelContainer.h">
+      <Filter>ソース ファイル\Parts\3D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -41,53 +41,31 @@ PLAYER::PLAYER(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3
 void PLAYER::Draw(void)
 {
     //---各種宣言---//
-    DWORD nCounter;
-    LPDIRECT3DDEVICE9 pDevice;
     D3DXMATRIX mtxRotation;
+    D3DXMATRIX mtxScale;
     D3DXMATRIX mtxTranslate;
     D3DXMATRIX mtxWorld;
-    LPD3DXMATERIAL pMatrix;
-    D3DMATERIAL9 matDef;
-
-    //---初期化処理---//
-    pDevice = GetDevice();
 
     //---ワールドマトリクスの設定---//
     //初期化
     D3DXMatrixIdentity(&mtxWorld);
 
     //回転を反映
-    D3DXMatrixRotationYawPitchRoll(&mtxRotation, Rotation.y, Rotation.x, Rotation.z);
+    D3DXMatrixRotationYawPitchRoll(&mtxRotation, D3DXToRadian(Rotation.y), D3DXToRadian(Rotation.x), D3DXToRadian(Rotation.z));
     D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRotation);
 
     //移動を反映
     D3DXMatrixTranslation(&mtxTranslate, Position.x, Position.y, Position.z);
     D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTranslate);
 
+    D3DXMatrixScaling(&mtxScale, 0.1F, 0.1F, 0.1F);
+    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxScale);
+    
     //設定
-    pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
-
-    // 現在のマテリアルを取得
-    pDevice->GetMaterial(&matDef);
+    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---描画---//
-    //ポインタを取得
-    pMatrix = (LPD3DXMATERIAL)MaterialBuffer->GetBufferPointer();
-
-    for (nCounter = 0; nCounter < MaterialValue; ++nCounter)
-    {
-        //マテリアルの設定
-        pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
-
-        //テクスチャの設定
-        pDevice->SetTexture(0, Texture);
-
-        //描画
-        Mesh->DrawSubset(nCounter);
-    }
-
-    //マテリアルをデフォルトに戻す
-    pDevice->SetMaterial(&matDef);
+    Model.Draw(mtxWorld);
 }
 
 /////////////////////////////////////////////
@@ -104,24 +82,28 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position,
     //---各種宣言---//
     HRESULT hResult;
 
-	//---初期化処理---//
-	//位置・向きの初期設定
-	Position = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
-	Rotation = D3DXVECTOR3(0.0F, SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F, 0.0F);
-	Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
-
+    //---初期化処理---//
+    //位置・向きの初期設定
+    Position = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
+    Rotation = D3DXVECTOR3(270.0F, 270.0F, 0.0F);
+    Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
     Tag = tag;
 
-    //Xファイルの読み込み
-    hResult = D3DXLoadMeshFromX(TEXT("Data/Common/Model/Character/car000.x"), D3DXMESH_SYSTEMMEM, GetDevice(), nullptr, &MaterialBuffer, nullptr, &MaterialValue, &Mesh);
+    //---モデルの読み込み---//
+    hResult = Model.Initialize(TEXT("Data/Common/Model/Character/tiny_4anim.x"));
     if(FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("プレイヤーのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
-		return hResult;
-	}
+        return hResult;
+    }
+    else
+    {
+        Model.ChangeAnimation(0);
+    }
 
-    //Collision = COLLISIONMANAGER::InstantiateToOBB(D3DXVECTOR3(Position.x + 5.0F, Position.y + 5.0F, Position.z + 5.0F), D3DXVECTOR3(5.0F, 5.0F, 5.0F), tag, TEXT("Character"), this);
+    //---当たり判定の付与---//
+    //Collision = COLLISIONMANAGER::InstantiateToOBB(D3DXVECTOR3(Position.x + 5.0F, Position.y + 5.0F, Position.z + 5.0F), D3DXVECTOR3(5.0F, 5.0F, 5.0F), TEXT("Character"), this);
 
 	return hResult;
 }
@@ -137,9 +119,8 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position,
 /////////////////////////////////////////////
 void PLAYER::OnCollision(COLLISION* opponent)
 {
-    Position = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
+    //Position = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
 }
-
 
 /////////////////////////////////////////////
 //関数名：Uninitialize
@@ -155,6 +136,11 @@ void PLAYER::Uninitialize(void)
     SAFE_RELEASE(Texture);
     SAFE_RELEASE(Mesh);
     SAFE_RELEASE(MaterialBuffer);
+
+    Model.Uninitialize();
+
+    ACTORMANAGER::Destroy(this);
+    COLLISIONMANAGER::Destroy((COLLISION*)Collision);
 }
 
 /////////////////////////////////////////////
@@ -169,34 +155,40 @@ void PLAYER::Uninitialize(void)
 void PLAYER::Update(void)
 {
     //---各種宣言---//
+    D3DXVECTOR3 vecInstancePosition;
     D3DXVECTOR2 vecStickVector;
     D3DXVECTOR3 vecCameraRotation;
-    POINTS StickPoints;
+
+    //---初期化処理---//
+    Move.x = 0.0F;
 
     //---移動処理---//
 	//カメラの向き取得
     vecCameraRotation = SIDEVIEWCAMERA::GetRotation();
-    StickPoints = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT);
-    vecStickVector = D3DXVECTOR2((float)((StickPoints.x > 0) - (StickPoints.x < 0)), (float)((StickPoints.y > 0) - (StickPoints.y < 0)));
+    vecStickVector = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT);
 
 	//重力加算
 	Move.y -= GRAVITY;
 
-	//移動
-	Position.x += sinf(vecCameraRotation.y + D3DX_PI * 0.5F) * VALUE_MOVE_PLAYER * vecStickVector.x;
-    Position.z += cosf(vecCameraRotation.y + D3DX_PI * 0.5F) * VALUE_MOVE_PLAYER * vecStickVector.y;
+    //モデル操作
+    if (vecStickVector != D3DXVECTOR2(0.0F, 0.0F))
+    {
+        //移動
+        Move.x += VALUE_MOVE_PLAYER * vecStickVector.x;
 
-    //回転
-    Rotation.y = vecCameraRotation.y - D3DX_PI * 0.5F * vecStickVector.x;
+        //回転
+        Rotation.y = 90.0F * ((vecStickVector.x > 0.0F) - (vecStickVector.x < 0.0F));
+    }
 
 	//ジャンプ
 	if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
 	{
+        //ジャンプ力の付与
         Move.y += JUMP;
 	}
 
 	//---位置情報更新---//
-    Position.y += Move.y;
+    Position += Move;
 
 	//移動制限
 	if (Position.y < 0.0F)
@@ -216,10 +208,29 @@ void PLAYER::Update(void)
     //---アイテム生成---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
     {
-        ACTORMANAGER::Instantiate(WORDMENU::NotificationItem(), Position, Rotation);
+        vecInstancePosition.x = Position.x - sinf(Rotation.y) * 10.0F - cosf(Rotation.y) * 8.0F;
+        vecInstancePosition.y = Position.y + 21.0F;
+        vecInstancePosition.z = 0.0F;
+
+        ACTORMANAGER::Instantiate(WORDMENU::NotificationItem(), vecInstancePosition, Rotation);
     }
     pos = Position;
     rot = Rotation;
+
+    if (Move.x)
+    {
+        Model.ChangeAnimation(1);
+    }
+    else
+    {
+        Model.ChangeAnimation(0);
+    }
+
+    if (Move.y != 0.0F)
+    {
+        Model.ChangeAnimation(2);
+    }
+
 }
 
 // モデル位置の取得

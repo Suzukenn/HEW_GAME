@@ -17,9 +17,9 @@ typedef struct
 
     void Release(void)
     {
-        SAFE_RELEASE(Mesh);
-        SAFE_RELEASE(MaterialBuffer);
-        SAFE_RELEASE((*Texture));
+        //SAFE_RELEASE(Mesh);
+        //SAFE_RELEASE(MaterialBuffer);
+        //SAFE_RELEASE((*Texture));
     }
 
 } MODEL;

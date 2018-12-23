@@ -37,11 +37,11 @@ class GAMEPAD
         void Uninitialize(void);
         void Update(void);
 
-        POINTS GetLeftStick(DWORD);
+        D3DXVECTOR2 GetLeftStick(DWORD);
         float GetLeftTrigger(DWORD);
         bool GetHold(DWORD, DWORD);
         bool GetRelease(DWORD, DWORD);
-        POINTS GetRightStick(DWORD);
+        D3DXVECTOR2 GetRightStick(DWORD);
         float GetRightTrigger(DWORD);
         bool GetTrigger(DWORD, DWORD);
 };
