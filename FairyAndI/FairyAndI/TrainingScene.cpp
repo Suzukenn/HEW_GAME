@@ -6,6 +6,7 @@
 #include "FlexibleCamera.h"
 #include "InputManager.h"
 #include "ModelManager.h"
+#include "Player.h"
 #include "SceneManager.h"
 #include "SideViewCamera.h"
 #include "SoundManager.h"

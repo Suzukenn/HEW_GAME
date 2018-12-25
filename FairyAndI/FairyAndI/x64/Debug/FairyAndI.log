@@ -1,4 +1,4 @@
 ﻿  Fairy.cpp
-d:\documents\hal課題\2年\he\hew_game\fairyandi\fairyandi\fairy.cpp(359): warning C4101: 'nCounter': ローカル変数は 1 度も使われていません。
+  LINK : 前回のインクリメンタル リンクで D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.exe
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.pdb (Partial PDB)

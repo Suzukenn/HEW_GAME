@@ -5,7 +5,6 @@
 #include <memory>
 #include "GameObject.h"
 #include "Main.h"
-#include "Item.h"
 #include "Model.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//

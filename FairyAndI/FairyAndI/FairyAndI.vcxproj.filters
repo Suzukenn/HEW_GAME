@@ -155,9 +155,6 @@
     <ClCompile Include="Field.cpp">
       <Filter>ソース ファイル\Actor\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Item.cpp">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClCompile>
     <ClCompile Include="ItemManager.cpp">
       <Filter>ソース ファイル\System\Manager</Filter>
     </ClCompile>
@@ -199,6 +196,9 @@
     </ClCompile>
     <ClCompile Include="AnimationModel.cpp">
       <Filter>ソース ファイル\Parts\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="Element.cpp">
+      <Filter>ソース ファイル\Actor\Object</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -301,9 +301,6 @@
     <ClInclude Include="Field.h">
       <Filter>ソース ファイル\Actor\Object</Filter>
     </ClInclude>
-    <ClInclude Include="Item.h">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClInclude>
     <ClInclude Include="SoundParameter.h">
       <Filter>ソース ファイル\System\Parameter</Filter>
     </ClInclude>
@@ -363,6 +360,9 @@
     </ClInclude>
     <ClInclude Include="AnimationModelContainer.h">
       <Filter>ソース ファイル\Parts\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="Element.h">
+      <Filter>ソース ファイル\Actor\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

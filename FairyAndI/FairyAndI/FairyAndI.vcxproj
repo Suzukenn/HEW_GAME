@@ -126,7 +126,7 @@
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
-    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Element.cpp" />
     <ClCompile Include="ItemBox.cpp" />
     <ClCompile Include="ItemManager.cpp" />
     <ClCompile Include="ModelManager.cpp" />
@@ -172,6 +172,7 @@
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="Element.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ActorManager.h" />
     <ClInclude Include="BackGround.h" />
@@ -182,7 +183,6 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="OBB.h" />
-    <ClInclude Include="Item.h" />
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="SelectScene.h" />
     <ClInclude Include="Sphere.h" />
