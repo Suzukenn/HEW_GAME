@@ -108,9 +108,9 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, 
 	Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
     Tag = tag;
     Collection = false;
-    ToTargetAngle = 0;
-	m_num = 0;
-    ElementPosition;
+    ToTargetAngle = 0.0F;
+    ElementPosition = Position;
+    State = STATE_CHASE;
 
     //Xファイルの読み込み
     hResult = D3DXLoadMeshFromX(TEXT("Data/Common/Model/Character/car001.x"), D3DXMESH_SYSTEMMEM, GetDevice(), nullptr, &MaterialBuffer, nullptr, &MaterialValue, &Mesh);
@@ -138,7 +138,11 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, 
 /////////////////////////////////////////////
 void FAIRY::OnCollision(COLLISION* opponent)
 {
-    if (opponent->Owner->GetTag().find(TEXT("Element")) != tstring::npos)
+    if (opponent->Owner->GetTag().find(TEXT("Player")) != tstring::npos)
+    {
+
+    }
+    else if (opponent->Owner->GetTag().find(TEXT("Element")) != tstring::npos)
     {
         Collection = true;
     }
@@ -153,12 +157,11 @@ void FAIRY::OnCollision(COLLISION* opponent)
 //
 //戻り値：(D3DXVECTOR3)最短位置
 /////////////////////////////////////////////
-D3DXVECTOR3 FAIRY::SearchElement(void)
+bool FAIRY::SearchElement(D3DXVECTOR3& destination)
 {
     //---各種宣言---//
     float fCurrentCalcDistance;         //現在算出した距離
     float fShortestDistance;            //暫定最短距離
-    D3DXVECTOR3 vecShortestItem;        //暫定最短アイテム
     D3DXVECTOR3 vecDistance;
 
     //---初期化処理---//
@@ -168,21 +171,28 @@ D3DXVECTOR3 FAIRY::SearchElement(void)
     //エレメントを検索
     ACTORMANAGER::FindObject(Element, TEXT("Element"));
 
-    for (auto& data : Element)
+    if (Element.empty())
     {
-        //自身との距離の算出
-        vecDistance = data->GetPosition() - Position;
-        fCurrentCalcDistance = vecDistance.x * vecDistance.x + vecDistance.y * vecDistance.y;
-
-        //最短距離なら回収アイテムを変更
-        if (fShortestDistance > fCurrentCalcDistance)
-        {
-            fShortestDistance = fCurrentCalcDistance;
-            vecShortestItem = data->GetPosition();
-        }
+        destination = Position;
+        return false;
     }
+    else
+    {
+        for (auto& data : Element)
+        {
+            //自身との距離の算出
+            vecDistance = data->GetPosition() - Position;
+            fCurrentCalcDistance = vecDistance.x * vecDistance.x + vecDistance.y * vecDistance.y;
 
-    return vecShortestItem;
+            //最短距離なら回収アイテムを変更
+            if (fShortestDistance > fCurrentCalcDistance)
+            {
+                fShortestDistance = fCurrentCalcDistance;
+                destination = data->GetPosition();
+            }
+        }
+        return true;
+    }
 }
 
 /////////////////////////////////////////////
@@ -215,7 +225,7 @@ void FAIRY::Update(void)
     //---各種宣言---//
     D3DXVECTOR3 vecFairyDistance;
 
-
+    //---初期化処理---//
 	Rotation = PLAYER::GetPlayerRotation(); 
 	int num = 0;
 
@@ -226,11 +236,21 @@ void FAIRY::Update(void)
         cnt = 0;
     }
 
+    //ボタンを押したら思考状態へ移行
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    {
+        State = STATE_SYNTHIESIS;
+    }
+
+    if (State == STATE_SYNTHIESIS)
+    {
+        return;
+    }
+
 	//ボタンを押したらアイテムを取りに行く
 	if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P,XINPUT_GAMEPAD_X, TRIGGER))
 	{
-        Collection = true;
-        ElementPosition = SearchElement();
+        Collection = SearchElement(ElementPosition);
 	}
 
     if (Collection)
@@ -238,12 +258,14 @@ void FAIRY::Update(void)
         //妖精とエレメントの距離の算出
         vecFairyDistance.x = ElementPosition.x - Position.x;
         vecFairyDistance.y = ElementPosition.y - Position.y;
+        Rotation.y = 90.0F * ((ElementPosition.x > Position.x) - (ElementPosition.x < Position.x));
     }
     else
     {
         //妖精とプレイヤーの距離の算出
         vecFairyDistance.x = PLAYER::GetPlayerPosition().x - Position.x;
         vecFairyDistance.y = PLAYER::GetPlayerPosition().y + 20.0F - Position.y;
+        Rotation.y = 90.0F * ((PLAYER::GetPlayerPosition().x > Position.x) - (PLAYER::GetPlayerPosition().x < Position.x));
     }
 
 	//弾の発射角度取得し移動量設定
