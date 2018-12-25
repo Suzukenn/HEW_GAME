@@ -1,12 +1,40 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include "Item.h"
-#include "SideViewCamera.h"
+#include "ActorManager.h"
 #include "Collision.h"
+#include "CollisionManager.h"
+#include "Element.h"
 #include "ModelManager.h"
-
-//＝＝＝定数・マクロ定義＝＝＝//
+#include "SideViewCamera.h"
 
 //＝＝＝関数定義＝＝＝//
+/////////////////////////////////////////////
+//関数名：ELEMENT
+//
+//機能：コンストラクタ
+//
+//引数：(LPCTSTR)モデル名,(tstirng)タイプ,(D3DXVECTOR3)位置
+//
+//戻り値：なし
+/////////////////////////////////////////////
+ELEMENT::ELEMENT(LPCTSTR modelname, tstring type, D3DXVECTOR3 position)
+{
+    Initialize(modelname, type, position);
+}
+
+/////////////////////////////////////////////
+//関数名：~ELEMENT
+//
+//機能：デストラクタ
+//
+//引数：なし
+//
+//戻り値：なし
+/////////////////////////////////////////////
+ELEMENT::~ELEMENT(void)
+{
+    Uninitialize();
+}
+
 /////////////////////////////////////////////
 //関数名：Draw
 //
@@ -16,7 +44,7 @@
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void ITEM::Draw(void)
+void ELEMENT::Draw(void)
 {
     //---各種宣言---//
     int nCounter;
@@ -73,11 +101,11 @@ void ITEM::Draw(void)
 //
 //機能：モデルの初期化
 //
-//引数：(LPCTSTR)モデルファイル名
+//引数：(LPCTSTR)モデル名,(tstirng)タイプ,(D3DXVECTOR3)位置
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT ITEM::Initialize(LPCTSTR modelname)
+HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -89,17 +117,21 @@ HRESULT ITEM::Initialize(LPCTSTR modelname)
     // 位置・向きの初期設定
     Position = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
     Rotation = D3DXVECTOR3(0.0F, SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F, 0.0F);
+    Tag = TEXT("Element");
 
     // Xファイルの読み込み
     hResult = MODELMANAGER::GetModel(modelname, *Model);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("アイテムのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("エレメントのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
         return hResult;
     }
 
-	// 初期化
+    //---当たり判定の付与---//
+    Collision = COLLISIONMANAGER::InstantiateToOBB(D3DXVECTOR3(Position.x + 5.0F, Position.y + 5.0F, Position.z + 5.0F), D3DXVECTOR3(5.0F, 5.0F, 5.0F), TEXT("Element"), this);
+
+	//初期化
     Name = modelname;
     return hResult;
 }
@@ -113,9 +145,14 @@ HRESULT ITEM::Initialize(LPCTSTR modelname)
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-void ITEM::OnCollision(COLLISION* opponent)
+void ELEMENT::OnCollision(COLLISION* opponent)
 {
-
+    if (opponent->Owner->GetTag().find(TEXT("Fairy")) != tstring::npos)
+    {
+        ACTORMANAGER::Destroy(this);
+        ACTORMANAGER::Destroy(this);
+        COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+    }
 }
 
 /////////////////////////////////////////////
@@ -127,11 +164,16 @@ void ITEM::OnCollision(COLLISION* opponent)
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-void ITEM::Uninitialize(void)
+void ELEMENT::Uninitialize(void)
 {
     //SAFE_RELEASE((*Model->Texture));
     //SAFE_RELEASE(Model->Mesh);
     //SAFE_RELEASE(Model->MaterialBuffer);
+    if (Collision)
+    {
+        COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+        Collision = nullptr;
+    }
 }
 
 /////////////////////////////////////////////
@@ -143,7 +185,7 @@ void ITEM::Uninitialize(void)
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void ITEM::Update(void)
+void ELEMENT::Update(void)
 {
 
 }

@@ -12,12 +12,14 @@ class SPHERE;
 class BULLET final : public  GAMEOBJECT
 {
     public:
+        std::unique_ptr<MODEL> Model;
+
         D3DXVECTOR3 Move;
 
         SPHERE* Collision;
 
         BULLET(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
-        ~BULLET();
+        ~BULLET(void);
 
         void Draw(void);
         void Uninitialize(void);

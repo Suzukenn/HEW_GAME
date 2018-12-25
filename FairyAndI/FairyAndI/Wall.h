@@ -9,6 +9,9 @@
 //ƒNƒ‰ƒXéŒ¾//
 class WALL final : public GAMEOBJECT
 {
+    private:
+        std::unique_ptr<MODEL> Model;
+
     public:
         WALL(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
 

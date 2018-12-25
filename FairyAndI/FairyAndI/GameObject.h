@@ -17,10 +17,8 @@ class GAMEOBJECT
         D3DXVECTOR3 Rotation;
         tstring Tag;
 
-        std::unique_ptr<MODEL> Model;
-
     public:
-        GAMEOBJECT() {}
+         GAMEOBJECT() {}
         ~GAMEOBJECT() {}
         virtual void Draw(void) = 0;
         virtual HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3) = 0;

@@ -126,7 +126,7 @@
     <ClCompile Include="Canvas.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
-    <ClCompile Include="Item.cpp" />
+    <ClCompile Include="Element.cpp" />
     <ClCompile Include="ItemBox.cpp" />
     <ClCompile Include="ItemManager.cpp" />
     <ClCompile Include="ModelManager.cpp" />
@@ -182,7 +182,7 @@
     <ClInclude Include="Button.h" />
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="OBB.h" />
-    <ClInclude Include="Item.h" />
+    <ClInclude Include="Element.h" />
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="SelectScene.h" />
     <ClInclude Include="Sphere.h" />

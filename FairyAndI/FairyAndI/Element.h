@@ -1,5 +1,5 @@
-#ifndef _ITEM_H_
-#define _ITEM_H_
+#ifndef _ELEMENT_H_
+#define _ELEMENT_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "GameObject.h"
@@ -7,14 +7,22 @@
 #include "Model.h"
 
 //＝＝＝クラス宣言＝＝＝//
-class ITEM final : private GAMEOBJECT
+class ELEMENT final : private GAMEOBJECT
 {
 	private:
+        tstring Type;
+
+        std::unique_ptr<MODEL> Model;
+
+        OBB* Collision;
         LPCTSTR Name;
 
 	public:
+        ELEMENT(LPCTSTR, tstring, D3DXVECTOR3);
+        ~ELEMENT(void);
+
         void Draw(void);
-		HRESULT Initialize(LPCTSTR);
+		HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3);
 		void Uninitialize(void);
 		void Update(void);
 
