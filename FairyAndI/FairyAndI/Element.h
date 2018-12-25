@@ -6,6 +6,9 @@
 #include "Main.h"
 #include "Model.h"
 
+//‘O•ûéŒ¾//
+class OBB;
+
 //ƒNƒ‰ƒXéŒ¾//
 class ELEMENT final : private GAMEOBJECT
 {

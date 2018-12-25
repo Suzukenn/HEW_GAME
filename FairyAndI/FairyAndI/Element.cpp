@@ -150,8 +150,6 @@ void ELEMENT::OnCollision(COLLISION* opponent)
     if (opponent->Owner->GetTag().find(TEXT("Fairy")) != tstring::npos)
     {
         ACTORMANAGER::Destroy(this);
-        ACTORMANAGER::Destroy(this);
-        COLLISIONMANAGER::Destroy((COLLISION*)Collision);
     }
 }
 

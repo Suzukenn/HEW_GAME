@@ -5,7 +5,7 @@
 #include <memory>
 #include "GameObject.h"
 #include "Main.h"
-#include "Item.h"
+#include "Element.h"
 #include "Model.h"
 
 #define	VALUE_MOVE_FAIRY	(2.0F)					// 移動速度
@@ -21,7 +21,7 @@ class FAIRY final : public  GAMEOBJECT
 		bool				m_stat;	// 状態
 		int					m_shadow;
 		float				m_tar;
-		ITEM*				Item;
+		ELEMENT*				Item;
 		int					m_num;		//アイテムの添え字用
 		LPD3DXVECTOR3		m_itemPos;
 		LPD3DXVECTOR3		m_itemDistance;

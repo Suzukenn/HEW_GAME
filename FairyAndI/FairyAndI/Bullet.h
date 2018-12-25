@@ -6,6 +6,7 @@
 #include "GameObject.h"
 #include "Main.h"
 
+//‘O•ûéŒ¾//
 class SPHERE;
 
 //ƒNƒ‰ƒXéŒ¾//
