@@ -60,6 +60,9 @@
     <Filter Include="ソース ファイル\Parts\3D">
       <UniqueIdentifier>{e9794838-385c-4301-a8c6-db5af0172d7f}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\System\Factory">
+      <UniqueIdentifier>{ac04728f-8076-4be5-b47e-986140a33148}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -199,6 +202,15 @@
     </ClCompile>
     <ClCompile Include="Element.cpp">
       <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterFactory.cpp">
+      <Filter>ソース ファイル\System\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="GimmickFactory.cpp">
+      <Filter>ソース ファイル\System\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillFactory.cpp">
+      <Filter>ソース ファイル\System\Factory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -363,6 +375,15 @@
     </ClInclude>
     <ClInclude Include="Element.h">
       <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterFactory.h">
+      <Filter>ソース ファイル\System\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="GimmickFactory.h">
+      <Filter>ソース ファイル\System\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillFactory.h">
+      <Filter>ソース ファイル\System\Factory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

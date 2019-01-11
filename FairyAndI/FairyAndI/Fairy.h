@@ -18,6 +18,9 @@ typedef enum
     STATE_MAX
 } STATE;
 
+//‘O•ûéŒ¾//
+class OBB;
+
 //ƒNƒ‰ƒXéŒ¾//
 class FAIRY final : public GAMEOBJECT
 {

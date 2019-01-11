@@ -5,6 +5,7 @@
 #include "ModelManager.h"
 #include "Player.h"
 #include "SideViewCamera.h"
+#include "SkillFactory.h"
 #include "WordMenu.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
@@ -212,8 +213,9 @@ void PLAYER::Update(void)
         vecInstancePosition.y = Position.y + 21.0F;
         vecInstancePosition.z = 0.0F;
 
-        ACTORMANAGER::Instantiate(WORDMENU::NotificationItem(), vecInstancePosition, Rotation);
+        SKILLFACTORY::InstantiateSkill(WORDMENU::NotificationItem(), vecInstancePosition, Rotation);
     }
+
     pos = Position;
     rot = Rotation;
 

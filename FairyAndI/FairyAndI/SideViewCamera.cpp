@@ -169,6 +169,7 @@ void SIDEVIEWCAMERA::Update(D3DXVECTOR3 player)
         Position.x += (VALUE_MOVE_PLAYER / 1.5F) * fStickVector;
         ReversoPoint.x += (VALUE_MOVE_PLAYER / 1.5F) * fStickVector;
 	}
+
 	//ƒJƒƒ‰‚ÌˆÚ“®§ŒÀ
 	if (Position.x > CAM_MAX_WID)
 	{
