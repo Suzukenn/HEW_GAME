@@ -75,18 +75,17 @@ HRESULT TRAINING::Initialize(void)
     }
 
 
-
-    hResult = ACTORMANAGER::Initialize();
-    if (FAILED(hResult))
-    {
-        return E_FAIL;
-    }
-
     hResult = COLLISIONMANAGER::Initialize();
     if (FAILED(hResult))
     {
         return E_FAIL;
     }
+
+	hResult = ACTORMANAGER::Initialize();
+	if (FAILED(hResult))
+	{
+		return E_FAIL;
+	}
 
     //---オブジェクトの初期化処理---//
     //地形

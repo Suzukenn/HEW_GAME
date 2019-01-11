@@ -200,6 +200,15 @@
     <ClCompile Include="Element.cpp">
       <Filter>ソース ファイル\Actor\Object</Filter>
     </ClCompile>
+    <ClCompile Include="WoodGimmick.cpp">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="IceGimmick.cpp">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="FireGimmick.cpp">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -362,6 +371,15 @@
       <Filter>ソース ファイル\Parts\3D</Filter>
     </ClInclude>
     <ClInclude Include="Element.h">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="WoodGimmick.h">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="IceGimmick.h">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="FireGimmick.h">
       <Filter>ソース ファイル\Actor\Object</Filter>
     </ClInclude>
   </ItemGroup>

@@ -3,9 +3,12 @@
 #include <list>
 #include "ActorManager.h"
 #include "Bullet.h"
+#include "FireGimmick.h"
+#include "IceGimmick.h"
 #include "Main.h"
 #include "Player.h"
 #include "Fairy.h"
+#include "WoodGimmick.h"
 #include "Wall.h"
 
 //ÅÅÅÅÅÅÉOÉçÅ[ÉoÉãïœêîÅÅÅÅÅÅ//
@@ -84,6 +87,10 @@ HRESULT ACTORMANAGER::Initialize(void)
 
     GameObject.emplace_back(new PLAYER(TEXT("PLAYER"), TEXT("PLAYER"), D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, -D3DX_PI * 0.5F, 0.0F)));
     GameObject.emplace_back(new FAIRY(TEXT("FAIRY"), TEXT("FAIRY"), D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, -D3DX_PI * 0.5F, 0.0F)));
+//	GameObject.emplace_back(new WOODGIMMICK(TEXT("RICECAKE"), TEXT("RICECAKE"), D3DXVECTOR3(100.0F, 20.0F, 0.0F), D3DXVECTOR3(0.0F, -D3DX_PI * 0.5F, 0.0F)));
+//	GameObject.emplace_back(new ICEGIMMICK(TEXT("ICE"), TEXT("ICE"), D3DXVECTOR3(50.0F, 20.0F, 0.0F), D3DXVECTOR3(0.0F, -D3DX_PI * 0.5F, 0.0F)));
+	GameObject.emplace_back(new FIREGIMMICK(TEXT("FIRE"), TEXT("FIRE"), D3DXVECTOR3(100.0F, 20.0F, 0.0F), D3DXVECTOR3(0.0F, -D3DX_PI * 0.5F, 0.0F)));
+
 
     hResult = S_OK;
 
