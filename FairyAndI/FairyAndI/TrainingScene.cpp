@@ -1,6 +1,7 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
 #include "Canvas.h"
+#include "CharacterFactory.h"
 #include "CollisionManager.h"
 #include "DirectionalLight.h"
 #include "FlexibleCamera.h"
@@ -74,8 +75,6 @@ HRESULT TRAINING::Initialize(void)
         return E_FAIL;
     }
 
-
-
     hResult = ACTORMANAGER::Initialize();
     if (FAILED(hResult))
     {
@@ -89,6 +88,11 @@ HRESULT TRAINING::Initialize(void)
     }
 
     //---オブジェクトの初期化処理---//
+
+    //キャラクター
+    CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+    CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+
     //地形
     hResult = Field.Initialize(TEXT("FIELD"), 40, 40, 8.0F, 8.0F);
     if (FAILED(hResult))

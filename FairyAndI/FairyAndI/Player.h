@@ -5,7 +5,6 @@
 #include "AnimationModel.h"
 #include "GameObject.h"
 #include "Main.h"
-#include "Model.h"
 
 //---定数・マクロ定義---//
 #define	VALUE_MOVE_PLAYER 5.0F
@@ -40,4 +39,5 @@ class PLAYER final : public GAMEOBJECT
 		static const D3DXVECTOR3 GetPlayerPosition(void);
 		static const D3DXVECTOR3 GetPlayerRotation(void);
 };
+
 #endif

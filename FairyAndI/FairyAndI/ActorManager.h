@@ -9,6 +9,11 @@
 #include "GameObject.h"
 #include "Main.h"
 
+//‘O•ûéŒ¾//
+class CHARACTERFACTORY;
+class GIMMICKFACTORY;
+class SKILLFACTORY;
+
 //ƒNƒ‰ƒXéŒ¾//
 class ACTORMANAGER
 {
@@ -21,9 +26,12 @@ class ACTORMANAGER
         static void Draw(void);
         static void FindObject(std::vector<GAMEOBJECT*>&, tstring);
         static HRESULT Initialize(void);
-        static void Instantiate(tstring, D3DXVECTOR3, D3DXVECTOR3);
         static void Uninitialize(void);
         static void Update(void);
+
+        friend CHARACTERFACTORY;
+        friend GIMMICKFACTORY;
+        friend SKILLFACTORY;
 };
 
 #endif

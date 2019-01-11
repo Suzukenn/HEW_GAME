@@ -82,34 +82,9 @@ HRESULT ACTORMANAGER::Initialize(void)
     //---初期化処理---//
     GameObject.clear();
 
-    GameObject.emplace_back(new PLAYER(TEXT("PLAYER"), TEXT("PLAYER"), D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, -D3DX_PI * 0.5F, 0.0F)));
-    GameObject.emplace_back(new FAIRY(TEXT("FAIRY"), TEXT("FAIRY"), D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, -D3DX_PI * 0.5F, 0.0F)));
-
     hResult = S_OK;
 
     return hResult;
-}
-
-/////////////////////////////////////////////
-//関数名：Instantiate
-//
-//機能：アイテムの生成
-//
-//引数：(tstring)オブジェクト名,(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
-//
-//戻り値：なし
-/////////////////////////////////////////////
-void ACTORMANAGER::Instantiate(tstring gameobject, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
-{
-    //---生成---//
-    if (gameobject.find(TEXT("FIRE")) != tstring::npos)
-    {
-        GameObject.emplace_back(new BULLET(TEXT("ICE"), TEXT("BULLET"), position, rotation));
-    }
-    if (gameobject.find(TEXT("WALL")) != tstring::npos)
-    {
-        GameObject.emplace_back(new WALL(TEXT("WALL"), TEXT("WALL"), position, rotation));
-    }
 }
 
 /////////////////////////////////////////////
