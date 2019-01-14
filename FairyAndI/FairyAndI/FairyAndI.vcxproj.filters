@@ -63,6 +63,9 @@
     <Filter Include="ソース ファイル\System\Factory">
       <UniqueIdentifier>{ac04728f-8076-4be5-b47e-986140a33148}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Actor\Gimmick">
+      <UniqueIdentifier>{35c43f22-f8d5-4be5-9b51-9cfdb7b4e7f9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -211,6 +214,15 @@
     </ClCompile>
     <ClCompile Include="SkillFactory.cpp">
       <Filter>ソース ファイル\System\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="FireGimmick.cpp">
+      <Filter>ソース ファイル\Actor\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="IceGimmick.cpp">
+      <Filter>ソース ファイル\Actor\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="WoodGimmick.cpp">
+      <Filter>ソース ファイル\Actor\Gimmick</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -384,6 +396,15 @@
     </ClInclude>
     <ClInclude Include="SkillFactory.h">
       <Filter>ソース ファイル\System\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="FireGimmick.h">
+      <Filter>ソース ファイル\Actor\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="IceGimmick.h">
+      <Filter>ソース ファイル\Actor\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="WoodGimmick.h">
+      <Filter>ソース ファイル\Actor\Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -76,15 +76,11 @@ void ACTORMANAGER::FindObject(std::vector<GAMEOBJECT*>& list, tstring tag)
 /////////////////////////////////////////////
 HRESULT ACTORMANAGER::Initialize(void)
 {
-    //---ŠeŽíéŒ¾---//
-    HRESULT hResult;
-
     //---‰Šú‰»ˆ—---//
     GameObject.clear();
+    DestroyObject.clear();
 
-    hResult = S_OK;
-
-    return hResult;
+    return S_OK;
 }
 
 /////////////////////////////////////////////
@@ -100,10 +96,6 @@ void ACTORMANAGER::Uninitialize(void)
 {
     //---‰ð•ú---//
     for (auto& data : GameObject)
-    {
-        data->Uninitialize();
-    }
-    for (auto& data : DestroyObject)
     {
         data->Uninitialize();
     }

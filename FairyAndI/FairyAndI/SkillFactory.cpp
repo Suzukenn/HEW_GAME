@@ -34,7 +34,7 @@ void SKILLFACTORY::InstantiateBullet(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 void SKILLFACTORY::InstantiateSkill(tstring gameobject, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---äeéÌêÈåæ---//
-    std::unordered_map<tstring, std::function< void(D3DXVECTOR3, D3DXVECTOR3) >> Function = { {TEXT("FIRE "), InstantiateBullet }, {TEXT("WALL"), InstantiateWall } };
+    std::unordered_map<tstring, std::function< void(D3DXVECTOR3, D3DXVECTOR3) >> Function = { {TEXT("FIRE"), InstantiateBullet }, {TEXT("WALL"), InstantiateWall } };
 
     //---ê∂ê¨---//
     for (auto& data : Function)

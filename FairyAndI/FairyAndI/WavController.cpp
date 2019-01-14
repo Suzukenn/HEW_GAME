@@ -8,18 +8,18 @@
 //
 //機能：データのロード
 //
-//引数：(TCHAR)ファイルパス
+//引数：(TCHAR)ファイルパス,(UINT32)ループ
 //
 //戻り値：(bool)処理の成否
 /////////////////////////////////////////////
-bool WAVCONTROLLER::Load(LPCTSTR filepath)
+bool WAVCONTROLLER::Load(LPCTSTR filepath, UINT32 loop)
 {
     //---各種宣言---//
     LONG lSize;
     MMRESULT mResult;
 
     //---読み取り作業---//
-	//ファイルオープン
+    //ファイルオープン
     Mmio = mmioOpen((PTCHAR)filepath, &MmioInfo, MMIO_READ);
     if (!Mmio)
     {
@@ -47,30 +47,30 @@ bool WAVCONTROLLER::Load(LPCTSTR filepath)
         return false;
     }
 
-	//WAVEFORMATEX構造体にデータを読み込む
+    //WAVEFORMATEX構造体にデータを読み込む
     lSize = mmioRead(Mmio, (HPSTR)&WaveFormat, FormatChunk.cksize);
 
     switch (lSize)
     {
         //読み込み限界
-        case 0:
-            MessageBox(nullptr, TEXT("これ以上読み込めませんでした"), filepath, MB_ICONSTOP | MB_OK);
-            break;
+    case 0:
+        MessageBox(nullptr, TEXT("これ以上読み込めませんでした"), filepath, MB_ICONSTOP | MB_OK);
+        break;
 
         //読み取り失敗
-        case -1:
-            MessageBox(nullptr, TEXT("読み取りに失敗しました"), filepath, MB_ICONSTOP | MB_OK);
-            break;
+    case -1:
+        MessageBox(nullptr, TEXT("読み取りに失敗しました"), filepath, MB_ICONSTOP | MB_OK);
+        break;
 
         //読み取り成功
-        default:
-            //データサイズの確認
-            if (lSize != FormatChunk.cksize)
-            {
-                MessageBox(nullptr, TEXT("データサイズが一致しませんでした"), filepath, MB_ICONSTOP | MB_OK);
-                mmioClose(Mmio, 0);
-                return false;
-            }
+    default:
+        //データサイズの確認
+        if (lSize != FormatChunk.cksize)
+        {
+            MessageBox(nullptr, TEXT("データサイズが一致しませんでした"), filepath, MB_ICONSTOP | MB_OK);
+            mmioClose(Mmio, 0);
+            return false;
+        }
     }
 
     //読み込み位置を先頭に戻す
@@ -86,7 +86,7 @@ bool WAVCONTROLLER::Load(LPCTSTR filepath)
         return false;
     }
 
-	//音声データを読み込む
+    //音声データを読み込む
     WaveData.resize(DataChunk.cksize);
     if (mmioRead(Mmio, (HPSTR)WaveData.data(), DataChunk.cksize) != DataChunk.cksize)
     {
@@ -96,8 +96,10 @@ bool WAVCONTROLLER::Load(LPCTSTR filepath)
     }
     WaveData.shrink_to_fit();
 
-	//ファイルを閉じる
+    //ファイルを閉じる
     mmioClose(Mmio, 0);
+
+    LoopCount = loop;
 
     return true;
 }
@@ -113,7 +115,7 @@ bool WAVCONTROLLER::Load(LPCTSTR filepath)
 /////////////////////////////////////////////
 const WAVEFORMATEX& WAVCONTROLLER::GetFormat(void)
 {
-	return WaveFormat;
+    return WaveFormat;
 }
 
 /////////////////////////////////////////////
@@ -137,11 +139,11 @@ UINT32 WAVCONTROLLER::GetLoop(void)
 //
 //引数：なし
 //
-//戻り値：(const BYTE)Wavデータのアドレス
+//戻り値：(BYTE)Wavデータのアドレス
 /////////////////////////////////////////////
 const BYTE& WAVCONTROLLER::GetWaveData(void)
 {
-	return WaveData.at(0);
+    return WaveData.at(0);
 }
 
 /////////////////////////////////////////////
@@ -155,5 +157,5 @@ const BYTE& WAVCONTROLLER::GetWaveData(void)
 /////////////////////////////////////////////
 std::size_t WAVCONTROLLER::GetWaveSize(void)
 {
-	return WaveData.size();
+    return WaveData.size();
 }

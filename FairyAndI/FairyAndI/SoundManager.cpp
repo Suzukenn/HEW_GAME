@@ -42,7 +42,7 @@ HRESULT SOUNDMANAGER::Create(const SOUNDPARAMETER& data)
     }
 
     //データのロード
-    if (wavBuffer.Load(data.FileName.data()))
+    if (wavBuffer.Load(data.FileName.data(), data.LoopCount))
     {
         WaveSound.insert(std::make_pair(data.CallKey, wavBuffer));
     }
