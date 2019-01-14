@@ -14,7 +14,7 @@ class OBB;
 class FIREGIMMICK final : public GAMEOBJECT
 {
 	private:
-		std::unique_ptr<MODEL> Model;
+		std::weak_ptr<MODEL> Model;
         OBB* Collision;
 
 	public:

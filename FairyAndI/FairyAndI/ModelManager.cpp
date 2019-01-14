@@ -10,7 +10,7 @@
 #include "ModelManager.h"
 
 //＝＝＝グローバル変数＝＝＝//
-std::unordered_map<tstring, MODEL*> MODELMANAGER::Model;           //テクスチャ
+std::unordered_map<tstring, std::shared_ptr<MODEL>> MODELMANAGER::Model;           //テクスチャ
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -33,11 +33,10 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
 
     LPDIRECT3DDEVICE9 pDevice;
     LPD3DXMATERIAL pMaterial;
-    MODEL* pModel;
+    MODEL mModel;
 
     //---初期化処理---//
     pDevice = GetDevice();
-    pModel = new MODEL();
 
     //---データの展開---//
     //ファイルの指定確認
@@ -49,12 +48,11 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
     else
     {
         MessageBox(nullptr, TEXT("開くモデルファイルが見つかりません"), data.FileName.data(), MB_ICONSTOP | MB_OK);
-        delete pModel;
         return E_FAIL;
     }
 
     //Xファイルの読み込み
-    hResult = D3DXLoadMeshFromX(data.FileName.data(), D3DXMESH_SYSTEMMEM, pDevice, nullptr, &pModel->MaterialBuffer, nullptr, &pModel->MaterialValue, &pModel->Mesh);
+    hResult = D3DXLoadMeshFromX(data.FileName.data(), D3DXMESH_SYSTEMMEM, pDevice, nullptr, &mModel.MaterialBuffer, nullptr, &mModel.MaterialValue, &mModel.Mesh);
     if(FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("モデルの作成に失敗しました"), data.FileName.data(), MB_ICONSTOP | MB_OK);
@@ -63,11 +61,11 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
     }
 
     //属性テーブル取得
-    pModel->Mesh->OptimizeInplace(D3DXMESHOPT_COMPACT | D3DXMESHOPT_ATTRSORT, 0, 0, 0, 0);
-    pModel->AttributeValue = 0;
-    pModel->Mesh->GetAttributeTable(nullptr, &pModel->AttributeValue);
-    pModel->Attribute = new D3DXATTRIBUTERANGE[pModel->AttributeValue];
-    pModel->Mesh->GetAttributeTable(pModel->Attribute, &pModel->AttributeValue);
+    mModel.Mesh->OptimizeInplace(D3DXMESHOPT_COMPACT | D3DXMESHOPT_ATTRSORT, 0, 0, 0, 0);
+    mModel.AttributeValue = 0;
+    mModel.Mesh->GetAttributeTable(nullptr, &mModel.AttributeValue);
+    mModel.Attribute = new D3DXATTRIBUTERANGE[mModel.AttributeValue];
+    mModel.Mesh->GetAttributeTable(mModel.Attribute, &mModel.AttributeValue);
 
     //カレントディレクトリを変更
     if (szDirectory[0])
@@ -77,21 +75,21 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
     }
 
     //マテリアル読み込み
-    pMaterial = (LPD3DXMATERIAL)pModel->MaterialBuffer->GetBufferPointer();
-    pModel->Material = new D3DMATERIAL9[pModel->MaterialValue];
-    pModel->Texture = new LPDIRECT3DTEXTURE9[pModel->MaterialValue];
-    for (nCounter = 0; nCounter < pModel->MaterialValue; ++nCounter)
+    pMaterial = (LPD3DXMATERIAL)mModel.MaterialBuffer->GetBufferPointer();
+    mModel.Material = new D3DMATERIAL9[mModel.MaterialValue];
+    mModel.Texture = new LPDIRECT3DTEXTURE9[mModel.MaterialValue];
+    for (nCounter = 0; nCounter < mModel.MaterialValue; ++nCounter)
     {
-        pModel->Material[nCounter] = pMaterial[nCounter].MatD3D;
-        pModel->Material[nCounter].Ambient = pModel->Material[nCounter].Diffuse;
-        pModel->Texture[nCounter] = nullptr;
+        mModel.Material[nCounter] = pMaterial[nCounter].MatD3D;
+        mModel.Material[nCounter].Ambient = mModel.Material[nCounter].Diffuse;
+        mModel.Texture[nCounter] = nullptr;
         if (pMaterial[nCounter].pTextureFilename && pMaterial[nCounter].pTextureFilename[0])
         {
             // テクスチャファイルを読み込む
-            hResult = D3DXCreateTextureFromFile(pDevice, (LPCWSTR)pMaterial[nCounter].pTextureFilename, &pModel->Texture[nCounter]);
+            hResult = D3DXCreateTextureFromFile(pDevice, (LPCWSTR)pMaterial[nCounter].pTextureFilename, &mModel.Texture[nCounter]);
             if (FAILED(hResult))
             {
-                pModel->Texture[nCounter] = nullptr;
+                mModel.Texture[nCounter] = nullptr;
                 Uninitialize();
                 return hResult;
             }
@@ -104,7 +102,7 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
         SetCurrentDirectory(szCurrentDirectory);
     }
 
-    Model.emplace(std::make_pair(data.CallKey, pModel));
+    Model.emplace(std::make_pair(data.CallKey, std::make_shared<MODEL>(mModel)));
 
     return hResult;
 }
@@ -235,16 +233,11 @@ void MODELMANAGER::Uninitialize(void)
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT MODELMANAGER::GetModel(tstring modelname, MODEL& address)
+HRESULT MODELMANAGER::GetModel(tstring modelname, std::weak_ptr<MODEL>& address)
 {
     try
     {
-        address = *Model.at(modelname);
-        //if (!address)
-        //{
-        //    MessageBox(nullptr, TEXT("モデルが存在しません"), TEXT("エラー"), MB_ICONSTOP | MB_OK);
-        //    return E_FAIL;
-        //}
+        address = Model.at(modelname);
     }
     catch (const std::out_of_range&)
     {

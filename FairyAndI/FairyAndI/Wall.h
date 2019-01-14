@@ -6,9 +6,16 @@
 #include "GameObject.h"
 #include "Main.h"
 
+//‘O•ûéŒ¾//
+class OBB;
+
 //ƒNƒ‰ƒXéŒ¾//
-class WALL final : public GAMEOBJECT
+class WALL final : private GAMEOBJECT
 {
+    private:
+        std::weak_ptr<MODEL> Model;
+        OBB* Collision;
+
     public:
         WALL(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
 

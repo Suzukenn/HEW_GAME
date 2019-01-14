@@ -2,9 +2,7 @@
 #define _GAME_OBJECT_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include <memory>
 #include "Main.h"
-#include "Model.h"
 
 //＝＝＝前方宣言＝＝＝//
 class COLLISION;
@@ -16,8 +14,6 @@ class GAMEOBJECT
         D3DXVECTOR3 Position;
         D3DXVECTOR3 Rotation;
         tstring Tag;
-
-        std::unique_ptr<MODEL> Model;
 
     public:
         GAMEOBJECT() {}

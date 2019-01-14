@@ -2,11 +2,7 @@
 #include <algorithm>
 #include <list>
 #include "ActorManager.h"
-#include "Bullet.h"
 #include "Main.h"
-#include "Player.h"
-#include "Fairy.h"
-#include "Wall.h"
 
 //ƒOƒ[ƒoƒ‹•Ï”//
 std::list<GAMEOBJECT*> ACTORMANAGER::GameObject;

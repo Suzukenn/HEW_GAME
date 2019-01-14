@@ -2,6 +2,7 @@
 #define _ELEMENT_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
+#include <memory>
 #include "GameObject.h"
 #include "Main.h"
 #include "Model.h"
@@ -15,8 +16,7 @@ class ELEMENT final : private GAMEOBJECT
 	private:
         tstring Type;
 
-        std::unique_ptr<MODEL> Model;
-
+        std::weak_ptr<MODEL> Model;
         OBB* Collision;
         LPCTSTR Name;
 
