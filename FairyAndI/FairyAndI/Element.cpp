@@ -4,7 +4,6 @@
 #include "CollisionManager.h"
 #include "Element.h"
 #include "ModelManager.h"
-#include "SideViewCamera.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -47,13 +46,15 @@ ELEMENT::~ELEMENT(void)
 void ELEMENT::Draw(void)
 {
     //---各種宣言---//
-    int nCounter;
+    DWORD nCounter;
     LPDIRECT3DDEVICE9 pDevice;
     D3DXMATRIX mtxRotation;
     D3DXMATRIX mtxTranslate;
     D3DXMATRIX mtxWorld;
     LPD3DXMATERIAL pMatrix;
     D3DMATERIAL9 matDef;
+
+    std::shared_ptr<MODEL> pModel;
 
     //---初期化処理---//
     pDevice = GetDevice();
@@ -73,23 +74,31 @@ void ELEMENT::Draw(void)
     //設定
     pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
 
+    //---描画---//
+    //描画対象チェック
+    pModel = Model.lock();
+    if (!pModel)
+    {
+        MessageBox(nullptr, TEXT("弾丸のモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        return;
+    }
+
     // 現在のマテリアルを取得
     pDevice->GetMaterial(&matDef);
 
-    //---描画---//
     //ポインタを取得
-    pMatrix = (LPD3DXMATERIAL)Model->MaterialBuffer->GetBufferPointer();
+    pMatrix = (LPD3DXMATERIAL)pModel->MaterialBuffer->GetBufferPointer();
 
-    for (nCounter = 0; nCounter < (int)Model->MaterialValue; ++nCounter)
+    for (nCounter = 0; nCounter < pModel->MaterialValue; ++nCounter)
     {
         //マテリアルの設定
         pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
 
         //テクスチャの設定
-        pDevice->SetTexture(0, *Model->Texture);
+        pDevice->SetTexture(0, *pModel->Texture);
 
         //描画
-        Model->Mesh->DrawSubset(nCounter);
+        pModel->Mesh->DrawSubset(nCounter);
     }
 
     //マテリアルをデフォルトに戻す
@@ -112,15 +121,14 @@ HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 positio
     D3DXVECTOR3 rotCamera;
 
     //---初期化処理---//
-    Model.reset(new MODEL);
 
     // 位置・向きの初期設定
     Position = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
-    Rotation = D3DXVECTOR3(0.0F, SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F, 0.0F);
+    Rotation = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
     Tag = TEXT("Element");
 
     // Xファイルの読み込み
-    hResult = MODELMANAGER::GetModel(modelname, *Model);
+    hResult = MODELMANAGER::GetModel(modelname, Model);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("エレメントのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);

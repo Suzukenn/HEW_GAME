@@ -5,13 +5,16 @@
 #include <memory>
 #include "GameObject.h"
 #include "Main.h"
+#include "Model.h"
 
+//‘O•ûéŒ¾//
 class SPHERE;
 
 //ƒNƒ‰ƒXéŒ¾//
 class BULLET final : public  GAMEOBJECT
 {
     public:
+        std::weak_ptr<MODEL> Model;
         D3DXVECTOR3 Move;
 
         SPHERE* Collision;

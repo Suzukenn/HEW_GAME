@@ -3,12 +3,7 @@
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "FireGimmick.h"
-#include "InputManager.h"
 #include "ModelManager.h"
-#include "Player.h"
-#include "SideViewCamera.h"
-
-//＝＝＝定数・マクロ定義＝＝＝//
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -59,6 +54,8 @@ void FIREGIMMICK::Draw(void)
     LPD3DXMATERIAL pMatrix;
     D3DMATERIAL9 matDef;
 
+    std::shared_ptr<MODEL> pModel;
+
     //---初期化処理---//
     pDevice = GetDevice();
 
@@ -77,23 +74,31 @@ void FIREGIMMICK::Draw(void)
     //設定
     pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
 
+    //---描画---//
+    //描画対象チェック
+    pModel = Model.lock();
+    if (!pModel)
+    {
+        MessageBox(nullptr, TEXT("炎の壁ギミックのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        return;
+    }
+
     // 現在のマテリアルを取得
     pDevice->GetMaterial(&matDef);
 
-    //---描画---//
     //ポインタを取得
-    pMatrix = (LPD3DXMATERIAL)Model->MaterialBuffer->GetBufferPointer();
+    pMatrix = (LPD3DXMATERIAL)pModel->MaterialBuffer->GetBufferPointer();
 
-    for (nCounter = 0; nCounter < Model->MaterialValue; ++nCounter)
+    for (nCounter = 0; nCounter < pModel->MaterialValue; ++nCounter)
     {
         //マテリアルの設定
         pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
 
         //テクスチャの設定
-        pDevice->SetTexture(0, *Model->Texture);
+        pDevice->SetTexture(0, *pModel->Texture);
 
         //描画
-		Model->Mesh->DrawSubset(nCounter);
+        pModel->Mesh->DrawSubset(nCounter);
     }
 
     //マテリアルをデフォルトに戻す
@@ -120,10 +125,10 @@ HRESULT FIREGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 posi
 	Rotation = rotation;
 	Tag = tag;
 
-	Model.reset(new MODEL);
+	//Model.reset(new MODEL);
 
     //Xファイルの読み込み
-	hResult = MODELMANAGER::GetModel(modelfile, *Model);
+	hResult = MODELMANAGER::GetModel(modelfile, Model);
     if (FAILED(hResult))
 	{
         MessageBox(nullptr, TEXT("炎の壁ギミックのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -168,10 +173,9 @@ void FIREGIMMICK::OnCollision(COLLISION* opponent)
 void FIREGIMMICK::Uninitialize(void)
 {
 	//---開放---//
-	if (Model)
+	if (Model._Get())
 	{
-		Model->Release();
-		Model = nullptr;
+        Model.reset();
 	}
 	if (Collision)
 	{

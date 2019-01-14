@@ -3,6 +3,7 @@
 #include "Bullet.h"
 #include "CollisionManager.h"
 #include "InputManager.h"
+#include "Model.h"
 #include "ModelManager.h"
 #include "Sphere.h"
 #include "Player.h"
@@ -56,6 +57,8 @@ void BULLET::Draw(void)
     LPD3DXMATERIAL pMatrix;
     D3DMATERIAL9 matDef;
 
+    std::shared_ptr<MODEL> pModel;
+
     //---初期化処理---//
     pDevice = GetDevice();
 
@@ -74,23 +77,31 @@ void BULLET::Draw(void)
     //設定
     pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
 
+    //---描画---//
+    //描画対象チェック
+    pModel = Model.lock();
+    if (!pModel)
+    {
+        MessageBox(nullptr, TEXT("弾丸のモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        return;
+    }
+
     // 現在のマテリアルを取得
     pDevice->GetMaterial(&matDef);
 
-    //---描画---//
     //ポインタを取得
-    pMatrix = (LPD3DXMATERIAL)Model->MaterialBuffer->GetBufferPointer();
+    pMatrix = (LPD3DXMATERIAL)pModel->MaterialBuffer->GetBufferPointer();
 
-    for (nCounter = 0; nCounter < (Model)->MaterialValue; ++nCounter)
+    for (nCounter = 0; nCounter < pModel->MaterialValue; ++nCounter)
     {
         //マテリアルの設定
         pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
 
         //テクスチャの設定
-        pDevice->SetTexture(0, *Model->Texture);
+        pDevice->SetTexture(0, *pModel->Texture);
 
         //描画
-        (Model)->Mesh->DrawSubset(nCounter);
+        pModel->Mesh->DrawSubset(nCounter);
     }
 
     //マテリアルをデフォルトに戻す
@@ -117,10 +128,9 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position,
     Move = D3DXVECTOR3(-sinf(Rotation.y) * 1.5F, 0.0F, -cosf(Rotation.y) * 1.5F);
     Tag = tag;
 
-    Model.reset(new MODEL);
 
     //---モデルの読み込み---//
-    hResult = MODELMANAGER::GetModel(modelname, *Model);
+    hResult = MODELMANAGER::GetModel(modelname, Model);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("弾丸のモデルの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -161,10 +171,9 @@ void BULLET::OnCollision(COLLISION* opponent)
 void BULLET::Uninitialize(void)
 {
     //---開放---//
-    if (Model)
+    if (Model._Get())
     {
-        Model->Release();
-        Model = nullptr;
+        Model.reset();
     }
     if (Collision)
     {

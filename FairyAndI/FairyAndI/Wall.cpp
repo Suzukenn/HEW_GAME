@@ -38,6 +38,8 @@ void WALL::Draw(void)
     LPD3DXMATERIAL pMatrix;
     D3DMATERIAL9 matDef;
 
+    std::shared_ptr<MODEL> pModel;
+
     //---初期化処理---//
     pDevice = GetDevice();
 
@@ -56,23 +58,31 @@ void WALL::Draw(void)
     //設定
     pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
 
+    //---描画---//
+    //描画対象チェック
+    pModel = Model.lock();
+    if (!pModel)
+    {
+        MessageBox(nullptr, TEXT("弾丸のモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        return;
+    }
+
     // 現在のマテリアルを取得
     pDevice->GetMaterial(&matDef);
 
-    //---描画---//
     //ポインタを取得
-    pMatrix = (LPD3DXMATERIAL)(*Model).MaterialBuffer->GetBufferPointer();
+    pMatrix = (LPD3DXMATERIAL)pModel->MaterialBuffer->GetBufferPointer();
 
-    for (nCounter = 0; nCounter < (*Model).MaterialValue; ++nCounter)
+    for (nCounter = 0; nCounter < pModel->MaterialValue; ++nCounter)
     {
         //マテリアルの設定
         pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
 
         //テクスチャの設定
-        pDevice->SetTexture(0, *(*Model).Texture);
+        pDevice->SetTexture(0, *pModel->Texture);
 
         //描画
-        (*Model).Mesh->DrawSubset(nCounter);
+        pModel->Mesh->DrawSubset(nCounter);
     }
 
     //マテリアルをデフォルトに戻す
@@ -97,10 +107,8 @@ HRESULT WALL::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D
     Position = position;
     Rotation = rotation;
 
-    Model.reset(new MODEL);
-
     //---モデルの読み込み---//
-    hResult = MODELMANAGER::GetModel(modelname, *Model);
+    hResult = MODELMANAGER::GetModel(modelname, Model);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("弾丸のモデルの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -108,7 +116,7 @@ HRESULT WALL::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D
         return hResult;
     }
 
-    //Collision = COLLISIONMANAGER::InstantiateToSphere(Position + 5, 3.5F, tag, TEXT("BULLET"), this);
+    Collision = COLLISIONMANAGER::InstantiateToOBB(Position, Rotation, TEXT("Wall"), this);
 
     return hResult;
 }
@@ -139,7 +147,15 @@ void WALL::OnCollision(COLLISION* opponent)
 void WALL::Uninitialize(void)
 {
     //---開放---//
-    Model->Release();
+    if (Model._Get())
+    {
+        Model.reset();
+    }
+    if (Collision)
+    {
+        COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+        Collision = nullptr;
+    }
 }
 
 /////////////////////////////////////////////

@@ -12,7 +12,7 @@
 class MODELMANAGER
 {
     private:
-        static std::unordered_map<tstring, MODEL*> Model;
+        static std::unordered_map<tstring, std::shared_ptr<MODEL>> Model;
 
         static HRESULT Create(const FILEPARAMETER&);
         static HRESULT Load(std::vector<FILEPARAMETER>&, LPCTSTR);
@@ -21,7 +21,7 @@ class MODELMANAGER
         static HRESULT Initialize(LPCTSTR);
         static void Uninitialize(void);
 
-        static HRESULT GetModel(tstring, MODEL&);
+        static HRESULT GetModel(tstring, std::weak_ptr<MODEL>&);
 };
 
 #endif
