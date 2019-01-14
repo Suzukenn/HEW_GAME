@@ -139,12 +139,10 @@ void SIDEVIEWCAMERA::Update(D3DXVECTOR3 player)
 {
     //---各種宣言---//
     float fStickVector;
-    SHORT StickPoints;
 
     //---移動処理---//
     //カメラの向き取得
-    StickPoints = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT).x;
-    fStickVector =(float)((StickPoints > 0) - (StickPoints < 0));
+    fStickVector = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT).x;
 
 	//端にいるかの判定判定
 	if (player.x >= Position.x && Position.x >= CAM_MAX_WID || player.x <= Position.x && Position.x <= CAM_MIN_WID)
@@ -152,7 +150,7 @@ void SIDEVIEWCAMERA::Update(D3DXVECTOR3 player)
         PositionPlace = true;
 	}
 	//原点より右にいてプレイヤーがカメラpos以下になる、または原点より左にいてプレイヤーがカメラpos以上になったら
-	else if(player.x < Position.x && Position.x > 0 || player.x > Position.x && Position.x < 0)
+	else if(player.x < Position.x && Position.x > 0.0F || player.x > Position.x && Position.x < 0.0F)
 	{
         PositionPlace = false;
 	}
@@ -165,9 +163,9 @@ void SIDEVIEWCAMERA::Update(D3DXVECTOR3 player)
 	}
 	else
 	{
-        //微スクロール処理
-        Position.x += (VALUE_MOVE_PLAYER / 1.5F) * fStickVector;
-        ReversoPoint.x += (VALUE_MOVE_PLAYER / 1.5F) * fStickVector;
+        //スクロール処理
+        Position.x += VALUE_MOVE_PLAYER * fStickVector;
+        ReversoPoint.x += VALUE_MOVE_PLAYER * fStickVector;
 	}
 
 	//カメラの移動制限
@@ -185,17 +183,29 @@ void SIDEVIEWCAMERA::Update(D3DXVECTOR3 player)
     SetCamera();
 }
 
-//=============================================================================
-// カメラの向きの取得
-//=============================================================================
-const D3DXVECTOR3& SIDEVIEWCAMERA::GetRotation(void)
+/////////////////////////////////////////////
+//関数名：GetRotation
+//
+//機能：カメラの回転の取得
+//
+//引数：なし
+//
+//戻り値：(D3DXVECTOR3)回転
+/////////////////////////////////////////////
+D3DXVECTOR3 SIDEVIEWCAMERA::GetRotation(void)
 {
 	return Rotation;
 }
 
-//=============================================================================
-// ビューマトリックスの取得
-//=============================================================================
+/////////////////////////////////////////////
+//関数名：GetViewMtx
+//
+//機能：カメラのビューマトリクスの取得
+//
+//引数：(LPD3DXMATRIX)格納マトリクス
+//
+//戻り値：なし
+/////////////////////////////////////////////
 void SIDEVIEWCAMERA::GetViewMtx(LPD3DXMATRIX pMtxView)
 {
     if (pMtxView)

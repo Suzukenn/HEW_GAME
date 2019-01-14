@@ -24,7 +24,7 @@ class SIDEVIEWCAMERA
 
         static HRESULT SetCamera(void);
 
-        static const D3DXVECTOR3& GetRotation(void);
+        static D3DXVECTOR3 GetRotation(void);
         static void GetViewMtx(LPD3DXMATRIX);
 };
 

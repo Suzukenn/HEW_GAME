@@ -338,7 +338,6 @@ void ANIMATIONMODEL::RenderMeshContainer(LPD3DXMESHCONTAINER meshcontainer, LPD3
 {
     //---äeéÌêÈåæ---//
     DWORD dwAttribute;
-    DWORD dwAttributeCounter;
     DWORD dwBoneCounter;
     DWORD dwWeightCounter;
     DWORD dwBlendMatrixNumber;
@@ -347,6 +346,7 @@ void ANIMATIONMODEL::RenderMeshContainer(LPD3DXMESHCONTAINER meshcontainer, LPD3
     DWORD dwMatrixID;
     ANIMATIONMODELCONTAINER* pMeshContainer;
     ANIMATIONMODELFREAM* pFrame;
+    volatile DWORD dwAttributeCounter;
 
     LPDIRECT3DDEVICE9 pDevice;
 

@@ -10,7 +10,7 @@
 class OBB;
 
 //ƒNƒ‰ƒXéŒ¾//
-class WALL final : private GAMEOBJECT
+class WALL final : public GAMEOBJECT
 {
     private:
         std::weak_ptr<MODEL> Model;
@@ -18,6 +18,7 @@ class WALL final : private GAMEOBJECT
 
     public:
         WALL(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
+        ~WALL();
 
         void Draw(void);
         void Uninitialize(void);
