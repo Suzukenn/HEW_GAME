@@ -22,6 +22,20 @@ ANIMATIONMODELHIERARCHY::ANIMATIONMODELHIERARCHY(void)
 }
 
 /////////////////////////////////////////////
+//関数名：~ANIMATIONMODELHIERARCHY
+//
+//機能：デストラクタ
+//
+//引数：なし
+//
+//戻り値：なし
+/////////////////////////////////////////////
+ANIMATIONMODELHIERARCHY::~ANIMATIONMODELHIERARCHY(void)
+{
+
+}
+
+/////////////////////////////////////////////
 //関数名：CreateFrame
 //
 //機能：フレームの作成
@@ -36,7 +50,7 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateFrame(LPCSTR Name, LPD3DXFRAME* ppNewFram
     ANIMATIONMODELFREAM* pFrame;
 
     //---初期化処理---//
-    *ppNewFrame = nullptr;              //新しいフレームアドレス格納用変数を初期化
+    *ppNewFrame = nullptr;            //新しいフレームアドレス格納用変数を初期化
     pFrame = new ANIMATIONMODELFREAM; //フレームの領域確保
 
     //領域確保の失敗時の処理
@@ -79,7 +93,7 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateFrame(LPCSTR Name, LPD3DXFRAME* ppNewFram
     //外部の新規フレームアドレス格納用変数に、作成したフレームのアドレスを格納
     *ppNewFrame = pFrame;
 
-    return S_OK;
+    return D3D_OK;
 }
 
 /////////////////////////////////////////////
@@ -101,7 +115,7 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3
     std::string strTexturePath;
     std::wstring strTexturePathW;
 
-    TCHAR szCurrentDirectory[_MAX_PATH];
+    TCHAR szCurrentDirectory[_MAX_DIR];
     char szTexturePath[_MAX_DIR];
 
     LPDIRECT3DDEVICE9 pDevice;
@@ -222,7 +236,7 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3
         if (FileDirectory.at(0))
         {
             SetCurrentDirectory(szCurrentDirectory);
-        }
+        }   
     }
     else
     {
@@ -295,7 +309,7 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3
     //ローカルに生成したメッシュコンテナーを呼び出し側にコピーする
     *ppMeshContainer = pMeshContainer;
     
-    return S_OK;
+    return D3D_OK;
 }
 
 /////////////////////////////////////////////
@@ -319,7 +333,7 @@ HRESULT ANIMATIONMODELHIERARCHY::DestroyFrame(LPD3DXFRAME pFrameToFree)
     SAFE_DELETE_ARRAY(pFrame->Name);
     SAFE_DELETE(pFrame);
 
-    return S_OK;
+    return D3D_OK;
 }
 
 /////////////////////////////////////////////
@@ -367,7 +381,7 @@ HRESULT ANIMATIONMODELHIERARCHY::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshC
     }
     SAFE_DELETE(pMeshContainer);
     pMeshContainerBase = nullptr;
-    return S_OK;
+    return D3D_OK;
 }
 
 /////////////////////////////////////////////

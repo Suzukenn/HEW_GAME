@@ -16,10 +16,6 @@ class OBB;
 class PLAYER final : public GAMEOBJECT
 {
 	private:
-        LPDIRECT3DTEXTURE9 Texture;	//テクスチャへのポインタ
-        LPD3DXMESH Mesh;		    //メッシュ情報へのポインタ
-        LPD3DXBUFFER MaterialBuffer;//マテリアル情報へのポインタ
-        DWORD MaterialValue;	    //マテリアル情報の数
         D3DXVECTOR3 Move;
 
         ANIMATIONMODEL Model;

@@ -51,6 +51,10 @@ void PLAYER::Draw(void)
     //‰Šú‰»
     D3DXMatrixIdentity(&mtxWorld);
 
+    //‘å‚«‚³‚ðÝ’è
+    D3DXMatrixScaling(&mtxScale, 0.1F, 0.1F, 0.1F);
+    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxScale);
+
     //‰ñ“]‚ð”½‰f
     D3DXMatrixRotationYawPitchRoll(&mtxRotation, D3DXToRadian(Rotation.y), D3DXToRadian(Rotation.x), D3DXToRadian(Rotation.z));
     D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRotation);
@@ -59,9 +63,6 @@ void PLAYER::Draw(void)
     D3DXMatrixTranslation(&mtxTranslate, Position.x, Position.y, Position.z);
     D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTranslate);
 
-    D3DXMatrixScaling(&mtxScale, 0.1F, 0.1F, 0.1F);
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxScale);
-    
     //Ý’è
     GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
@@ -106,7 +107,7 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position,
     //---“–‚½‚è”»’è‚Ì•t—^---//
     //Collision = COLLISIONMANAGER::InstantiateToOBB(D3DXVECTOR3(Position.x + 5.0F, Position.y + 5.0F, Position.z + 5.0F), D3DXVECTOR3(5.0F, 5.0F, 5.0F), TEXT("Character"), this);
 
-	return hResult;
+    return S_OK;// hResult;
 }
 
 /////////////////////////////////////////////
@@ -134,10 +135,6 @@ void PLAYER::OnCollision(COLLISION* opponent)
 /////////////////////////////////////////////
 void PLAYER::Uninitialize(void)
 {
-    SAFE_RELEASE(Texture);
-    SAFE_RELEASE(Mesh);
-    SAFE_RELEASE(MaterialBuffer);
-
     Model.Uninitialize();
 
     ACTORMANAGER::Destroy(this);
@@ -159,9 +156,13 @@ void PLAYER::Update(void)
     D3DXVECTOR3 vecInstancePosition;
     D3DXVECTOR2 vecStickVector;
     D3DXVECTOR3 vecCameraRotation;
+    DWORD dwAnime;
+    bool bMove;
 
     //---‰Šú‰»ˆ—---//
     Move.x = 0.0F;
+    Move.z = 0.0F;
+    bMove = false;
 
     //---ˆÚ“®ˆ—---//
 	//ƒJƒƒ‰‚ÌŒü‚«Žæ“¾
@@ -179,6 +180,8 @@ void PLAYER::Update(void)
 
         //‰ñ“]
         Rotation.y = 90.0F * ((vecStickVector.x > 0.0F) - (vecStickVector.x < 0.0F));
+
+        bMove = true;
     }
 
 	//ƒWƒƒƒ“ƒv
@@ -219,18 +222,42 @@ void PLAYER::Update(void)
     pos = Position;
     rot = Rotation;
 
-    if (Move.x)
+    if (Move.y != 0.0F)
     {
-        Model.ChangeAnimation(1);
+        dwAnime = 2;
+        Model.ChangeAnimation(dwAnime);
+
     }
     else
     {
-        Model.ChangeAnimation(0);
+        if (bMove)
+        {
+            dwAnime = 1;
+            Model.ChangeAnimation(dwAnime);
+
+        }
+        else
+        {
+            dwAnime = 0;
+            Model.ChangeAnimation(dwAnime);
+        }
     }
 
-    if (Move.y != 0.0F)
+    if (INPUTMANAGER::GetKey(DIK_0, TRIGGER))
+    {
+        Model.ChangeAnimation(0);
+    }
+    else if (INPUTMANAGER::GetKey(DIK_1, TRIGGER))
+    {
+        Model.ChangeAnimation(1);
+    }
+    else if (INPUTMANAGER::GetKey(DIK_2, TRIGGER))
     {
         Model.ChangeAnimation(2);
+    }
+    else if (INPUTMANAGER::GetKey(DIK_3, TRIGGER))
+    {
+        Model.ChangeAnimation(3);
     }
 
 }

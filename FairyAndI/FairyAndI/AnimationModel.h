@@ -18,7 +18,6 @@ class ANIMATIONMODEL
         DWORD CurrentTrack;                     //現在のアニメーショントラック
         D3DXTRACK_DESC CurrentTrackDescription; //現在のアニメーションデータトラック
         UINT AnimationSetValue;                 //アニメーションセット
-        D3DXMATRIX World;                       //ワールドマトリクス
         ANIMATIONMODELHIERARCHY Hierarchy;      //ヒエラルキークラス変数
 
         std::vector<LPD3DXANIMATIONSET> AnimationData;
@@ -38,7 +37,7 @@ class ANIMATIONMODEL
         ~ANIMATIONMODEL(void);
 
         void ChangeAnimation(DWORD);
-        void Draw(D3DXMATRIX);
+        void Draw(D3DXMATRIX&);
         HRESULT Initialize(LPCTSTR);
         void Uninitialize(void);
 };

@@ -5,7 +5,6 @@
 #include "AnimationModelContainer.h"
 #include "AnimationModelFrame.h"
 #include "AnimationModelHierarchy.h"
-#include "InputManager.h"
 #include "Main.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
@@ -46,7 +45,7 @@ ANIMATIONMODEL::ANIMATIONMODEL()
 /////////////////////////////////////////////
 ANIMATIONMODEL::~ANIMATIONMODEL()
 {
-    //Uninitialize();
+
 }
 
 /////////////////////////////////////////////
@@ -130,21 +129,15 @@ HRESULT ANIMATIONMODEL::AllocateBoneMatrix(LPD3DXMESHCONTAINER meshcontainer)
         //子フレーム(ボーン)のアドレスを検索して格納
         pFrame = (ANIMATIONMODELFREAM*)D3DXFrameFind(FrameRoot, pMeshContainer->pSkinInfo->GetBoneName(dwCounter));
 
-        if (!pFrame)
+        if (pFrame)
+        {
+            //各ボーンのワールド行列格納用変数に最終行列を格納
+            pMeshContainer->BoneMatrix[dwCounter] = &pFrame->CombinedTransformationMatrix;
+        }
+        else
         {
             return E_FAIL;
         }
-        pMeshContainer->BoneMatrix[dwCounter] = &pFrame->CombinedTransformationMatrix;
-
-        //if (pFrame)
-        //{
-        //    //各ボーンのワールド行列格納用変数に最終行列を格納
-        //    pMeshContainer->BoneMatrix[dwCounter] = &pFrame->CombinedTransformationMatrix;
-        //}
-        //else
-        //{
-        //    return E_FAIL;
-        //}
     }
     return S_OK;
 }
@@ -161,7 +154,7 @@ HRESULT ANIMATIONMODEL::AllocateBoneMatrix(LPD3DXMESHCONTAINER meshcontainer)
 void ANIMATIONMODEL::ChangeAnimation(DWORD animationnumber)
 {
     //指定値の境界チェック
-    if (animationnumber < 0 || animationnumber > AnimationData.size())
+    if (animationnumber >= AnimationData.size())
     {
         return;
     }
@@ -187,7 +180,7 @@ void ANIMATIONMODEL::ChangeAnimation(DWORD animationnumber)
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void ANIMATIONMODEL::Draw(D3DXMATRIX worldmatrix)
+void ANIMATIONMODEL::Draw(D3DXMATRIX& worldmatrix)
 {
     // アニメーション更新
     if (AnimationController)
@@ -265,6 +258,7 @@ HRESULT ANIMATIONMODEL::Initialize(LPCTSTR filename)
     //---各種宣言---//
     DWORD dwCounter;
     HRESULT hResult;
+    D3DXMATRIX matWorld;
 
     TCHAR szDirectory[_MAX_DIR];
     TCHAR szWork[_MAX_DIR];
@@ -319,7 +313,8 @@ HRESULT ANIMATIONMODEL::Initialize(LPCTSTR filename)
     if (FrameRoot)
     {
         SetTime(0.0);
-        UpdateFrameMatrices(FrameRoot, &World);
+        D3DXMatrixIdentity(&matWorld);
+        UpdateFrameMatrices(FrameRoot, &matWorld);
     }
 
     return S_OK;
