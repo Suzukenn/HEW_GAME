@@ -3,7 +3,9 @@
 #include <unordered_map>
 #include "ActorManager.h"
 #include "Bullet.h"
+#include "Grenade.h"
 #include "SkillFactory.h"
+#include "Trap.h"
 #include "Wall.h"
 
 //＝＝＝関数定義＝＝＝//
@@ -18,8 +20,38 @@
 /////////////////////////////////////////////
 void SKILLFACTORY::InstantiateBullet(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    //---生成---//
-    ACTORMANAGER::GameObject.emplace_back(new BULLET(TEXT("ICE"), TEXT("Bullet"), position, rotation));
+	//---生成---//
+	ACTORMANAGER::GameObject.emplace_back(new BULLET(TEXT("ICE"), TEXT("Bullet"), position, rotation));
+}
+
+/////////////////////////////////////////////
+//関数名：InstantiateGrenade
+//
+//機能：榴弾の生成
+//
+//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void SKILLFACTORY::InstantiateGrenade(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+{
+	//---生成---//
+	ACTORMANAGER::GameObject.emplace_back(new GRENADE(TEXT("FIRE"), TEXT("Bullet"), position, rotation));
+}
+
+/////////////////////////////////////////////
+//関数名：InstantiateTrap
+//
+//機能：罠の生成
+//
+//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void SKILLFACTORY::InstantiateTrap(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+{
+	//---生成---//
+	ACTORMANAGER::GameObject.emplace_back(new TRAP(TEXT("RICECAKE"), TEXT("Trap"), position, rotation));
 }
 
 /////////////////////////////////////////////

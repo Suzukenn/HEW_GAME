@@ -131,6 +131,7 @@
     <ClCompile Include="Element.cpp" />
     <ClCompile Include="FireGimmick.cpp" />
     <ClCompile Include="GimmickFactory.cpp" />
+    <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="IceGimmick.cpp" />
     <ClCompile Include="ItemBox.cpp" />
     <ClCompile Include="ModelManager.cpp" />
@@ -139,6 +140,7 @@
     <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="SkillFactory.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Trap.cpp" />
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="WoodGimmick.cpp" />
     <ClCompile Include="WordManager.cpp" />
@@ -187,6 +189,7 @@
     <ClInclude Include="ActorManager.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="GimmickFactory.h" />
+    <ClInclude Include="Grenade.h" />
     <ClInclude Include="IceGimmick.h" />
     <ClInclude Include="ItemBox.h" />
     <ClInclude Include="Model.h" />
@@ -199,6 +202,7 @@
     <ClInclude Include="SelectScene.h" />
     <ClInclude Include="SkillFactory.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Trap.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="WoodGimmick.h" />
     <ClInclude Include="WordManager.h" />
