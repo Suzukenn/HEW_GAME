@@ -224,6 +224,9 @@
     <ClCompile Include="Wall.cpp">
       <Filter>ソース ファイル\Actor\Object</Filter>
     </ClCompile>
+    <ClCompile Include="BatteryGimmick.cpp">
+      <Filter>ソース ファイル\Actor\Gimmick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -405,6 +408,9 @@
     </ClInclude>
     <ClInclude Include="Wall.h">
       <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="BatteryGimmick.h">
+      <Filter>ソース ファイル\Actor\Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

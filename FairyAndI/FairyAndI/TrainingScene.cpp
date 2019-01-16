@@ -5,6 +5,7 @@
 #include "CollisionManager.h"
 #include "DirectionalLight.h"
 #include "FlexibleCamera.h"
+#include "GimmickFactory.h"
 #include "InputManager.h"
 #include "ModelManager.h"
 #include "Player.h"
@@ -92,6 +93,9 @@ HRESULT TRAINING::Initialize(void)
     //キャラクター
     CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
     CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+
+	//ギミック
+	GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(50.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
 
     //地形
     hResult = Field.Initialize(TEXT("FIELD"), 40, 40, 8.0F, 8.0F);
