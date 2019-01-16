@@ -66,6 +66,9 @@
     <Filter Include="ソース ファイル\Actor\Gimmick">
       <UniqueIdentifier>{35c43f22-f8d5-4be5-9b51-9cfdb7b4e7f9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\Actor\Skill">
+      <UniqueIdentifier>{143a0185-73e7-4fc6-bac6-c1b95f5cc2fe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -179,9 +182,6 @@
     <ClCompile Include="OBB.cpp">
       <Filter>ソース ファイル\System\Collision</Filter>
     </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClCompile>
     <ClCompile Include="AnimationSprite.cpp">
       <Filter>ソース ファイル\Parts\2D</Filter>
     </ClCompile>
@@ -218,14 +218,23 @@
     <ClCompile Include="WoodGimmick.cpp">
       <Filter>ソース ファイル\Actor\Gimmick</Filter>
     </ClCompile>
-    <ClCompile Include="Wall.cpp">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClCompile>
     <ClCompile Include="BatteryGimmick.cpp">
       <Filter>ソース ファイル\Actor\Gimmick</Filter>
     </ClCompile>
     <ClCompile Include="ObjectFactory.cpp">
       <Filter>ソース ファイル\System\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Grenade.cpp">
+      <Filter>ソース ファイル\Actor\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Trap.cpp">
+      <Filter>ソース ファイル\Actor\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Bullet.cpp">
+      <Filter>ソース ファイル\Actor\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>ソース ファイル\Actor\Skill</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -352,9 +361,6 @@
     <ClInclude Include="Collision.h">
       <Filter>ソース ファイル\System\Collision</Filter>
     </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClInclude>
     <ClInclude Include="AnimationSprite.h">
       <Filter>ソース ファイル\Parts\2D</Filter>
     </ClInclude>
@@ -403,14 +409,23 @@
     <ClInclude Include="WoodGimmick.h">
       <Filter>ソース ファイル\Actor\Gimmick</Filter>
     </ClInclude>
-    <ClInclude Include="Wall.h">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClInclude>
     <ClInclude Include="BatteryGimmick.h">
       <Filter>ソース ファイル\Actor\Gimmick</Filter>
     </ClInclude>
     <ClInclude Include="ObjectFactory.h">
       <Filter>ソース ファイル\System\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Grenade.h">
+      <Filter>ソース ファイル\Actor\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Trap.h">
+      <Filter>ソース ファイル\Actor\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Bullet.h">
+      <Filter>ソース ファイル\Actor\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>ソース ファイル\Actor\Skill</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

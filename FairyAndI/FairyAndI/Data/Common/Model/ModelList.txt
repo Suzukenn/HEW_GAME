@@ -1,5 +1,6 @@
 Data/Common/Model/Character/car000.x PLAYER
 Data/Common/Model/Character/car001.x FAIRY
 Data/Common/Model/Item/Rock.x FIRE
+Data/Common/Model/Item/Rock.x ROCK
 Data/Common/Model/Item/RiceCake.x RICECAKE
 Data/Common/Model/Item/Ice.x ICE
