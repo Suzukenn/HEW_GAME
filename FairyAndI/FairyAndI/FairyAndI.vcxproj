@@ -202,6 +202,7 @@
     <ClInclude Include="SelectScene.h" />
     <ClInclude Include="SkillFactory.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Transform.h" />
     <ClInclude Include="Trap.h" />
     <ClInclude Include="Wall.h" />
     <ClInclude Include="WoodGimmick.h" />

@@ -37,7 +37,7 @@ void GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3 position, D3DXVECTOR3
 void GIMMICKFACTORY::InstantiateBulletGimmick(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
 	//---ê∂ê¨---//
-	ACTORMANAGER::GameObject.emplace_back(new BULLET(TEXT("ICE"), TEXT("GimmickBullet"), position, rotation));
+	ACTORMANAGER::GameObject.emplace_back(new BULLET(TEXT("ICE"), TEXT("Gimmick"), position, rotation));
 }
 
 /////////////////////////////////////////////

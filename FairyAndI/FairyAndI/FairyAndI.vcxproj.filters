@@ -427,6 +427,9 @@
     <ClInclude Include="Wall.h">
       <Filter>ソース ファイル\Actor\Skill</Filter>
     </ClInclude>
+    <ClInclude Include="Transform.h">
+      <Filter>ソース ファイル\Parts\3D</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="FairyAndI.APS">

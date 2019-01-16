@@ -53,8 +53,6 @@ void BATTERYGIMMICK::Draw(void)
 	//---ŠeŽíéŒ¾---//
 	DWORD nCounter;
 	LPDIRECT3DDEVICE9 pDevice;
-	D3DXMATRIX mtxRotation;
-	D3DXMATRIX mtxTranslate;
 	D3DXMATRIX mtxWorld;
 	LPD3DXMATERIAL pMatrix;
 	D3DMATERIAL9 matDef;
@@ -68,16 +66,8 @@ void BATTERYGIMMICK::Draw(void)
 	//‰Šú‰»
 	D3DXMatrixIdentity(&mtxWorld);
 
-	//‰ñ“]‚ð”½‰f
-	D3DXMatrixRotationYawPitchRoll(&mtxRotation, Rotation.y, Rotation.x, Rotation.z);
-	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRotation);
-
-	//ˆÚ“®‚ð”½‰f
-	D3DXMatrixTranslation(&mtxTranslate, Position.x, Position.y, Position.z);
-	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTranslate);
-
 	//Ý’è
-	pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
+    Transform.MakeWorldMatrix(mtxWorld);
 
 	//---•`‰æ---//
 	//•`‰æ‘ÎÛƒ`ƒFƒbƒN
@@ -126,15 +116,13 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 p
 
     //---‰Šú‰»ˆ—---//
 	//‰ŠúÝ’è
-	Position = position;
-	Rotation = rotation;
+    Transform.Position = position;
+    Transform.Rotation = rotation;
+    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
 	Tag = tag;
-
-	//Model.reset(new MODEL);
 
     //Xƒtƒ@ƒCƒ‹‚Ì“Ç‚Ýž‚Ý
 	hResult = MODELMANAGER::GetModel(modelfile, Model);
-    //hResult = D3DXLoadMeshFromX(TEXT("Data/Common/Model/Character/car001.x"), D3DXMESH_SYSTEMMEM, GetDevice(), nullptr, &MaterialBuffer, nullptr, &MaterialValue, &Mesh);
     if (FAILED(hResult))
 	{
         MessageBox(nullptr, TEXT("–C‘äƒMƒ~ƒbƒN‚Ìƒ‚ƒfƒ‹î•ñ‚ÌŽæ“¾‚ÉŽ¸”s‚µ‚Ü‚µ‚½"), TEXT("‰Šú‰»ƒGƒ‰["), MB_OK);
@@ -144,7 +132,7 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 p
 
     //---“–‚½‚è”»’è‚Ì•t—^---//
 	//Collision = COLLISIONMANAGER::InstantiateToOBB(Position, Rotation, TEXT("Object"), this);
-	Collision = COLLISIONMANAGER::InstantiateToSphere(Position, 5.0F, TEXT("Object"), this);
+	Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Object"), this);
 
 	return hResult;
 }
@@ -207,19 +195,19 @@ void BATTERYGIMMICK::Update(void)
 	//2•bŒo‚Á‚½‚ç
 	if (++Count > 120)
 	{
-		if (PLAYER::GetPlayerPosition().x < Position.x)
+		if (PLAYER::GetPlayerPosition().x < Transform.Position.x)
 		{
-			Rotation.y = D3DX_PI * 0.50F;
-			BulletPosition.x = Position.x - 10.0F;
+            Transform.Rotation.y = D3DX_PI * 0.50F;
+			BulletPosition.x = Transform.Position.x - 10.0F;
 		}
-		else if (PLAYER::GetPlayerPosition().x > Position.x)
+		else if (PLAYER::GetPlayerPosition().x > Transform.Position.x)
 		{
-			Rotation.y = -(D3DX_PI * 0.50f);
-			BulletPosition.x = Position.x + 10.0F;
+            Transform.Rotation.y = -(D3DX_PI * 0.50f);
+			BulletPosition.x = Transform.Position.x + 10.0F;
 		}
 
 		//’e”­ŽË
-		GIMMICKFACTORY::InstantiateGimmick(TEXT("ICE"), BulletPosition, Rotation);
+		GIMMICKFACTORY::InstantiateGimmick(TEXT("ICE"), BulletPosition, Transform.Rotation);
 		//ƒŠƒZƒbƒg
 		Count = 0;
 	}
@@ -236,5 +224,5 @@ void BATTERYGIMMICK::Update(void)
 /////////////////////////////////////////////
 D3DXVECTOR3 BATTERYGIMMICK::GetPos(void)
 {
-	return Position;
+	return Transform.Position;
 }

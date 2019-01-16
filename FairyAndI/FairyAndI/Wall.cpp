@@ -46,8 +46,6 @@ void WALL::Draw(void)
     //---äeéÌêÈåæ---//
     DWORD nCounter;
     LPDIRECT3DDEVICE9 pDevice;
-    D3DXMATRIX mtxRotation;
-    D3DXMATRIX mtxTranslate;
     D3DXMATRIX mtxWorld;
     LPD3DXMATERIAL pMatrix;
     D3DMATERIAL9 matDef;
@@ -61,16 +59,8 @@ void WALL::Draw(void)
     //èâä˙âª
     D3DXMatrixIdentity(&mtxWorld);
 
-    //âÒì]ÇîΩâf
-    D3DXMatrixRotationYawPitchRoll(&mtxRotation, Rotation.y, Rotation.x, Rotation.z);
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRotation);
-
-    //à⁄ìÆÇîΩâf
-    D3DXMatrixTranslation(&mtxTranslate, Position.x, Position.y, Position.z);
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTranslate);
-
     //ê›íË
-    pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
+    Transform.MakeWorldMatrix(mtxWorld);
 
     //---ï`âÊ---//
     //ï`âÊëŒè€É`ÉFÉbÉN
@@ -118,8 +108,10 @@ HRESULT WALL::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D
     HRESULT hResult;
 
     //---èâä˙âªèàóù---//
-    Position = position;
-    Rotation = rotation;
+    Transform.Position = position;
+    Transform.Rotation = rotation;
+    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
+    Tag = tag;
 
     //---ÉÇÉfÉãÇÃì«Ç›çûÇ›---//
     hResult = MODELMANAGER::GetModel(modelname, Model);
@@ -130,7 +122,7 @@ HRESULT WALL::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D
         return hResult;
     }
 
-    Collision = COLLISIONMANAGER::InstantiateToOBB(Position, Rotation, TEXT("Wall"), this);
+    Collision = COLLISIONMANAGER::InstantiateToOBB(Transform.Position, Transform.Rotation, TEXT("Wall"), this);
 
     return hResult;
 }

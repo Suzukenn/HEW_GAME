@@ -3,6 +3,7 @@
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "Main.h"
+#include "Transform.h"
 
 //＝＝＝前方宣言＝＝＝//
 class COLLISION;
@@ -11,8 +12,7 @@ class COLLISION;
 class GAMEOBJECT
 {
     protected:
-        D3DXVECTOR3 Position;
-        D3DXVECTOR3 Rotation;
+        TRANSFORM Transform;
         tstring Tag;
 
     public:
@@ -25,7 +25,7 @@ class GAMEOBJECT
 
         virtual void OnCollision(COLLISION*) = 0;
 
-        D3DXVECTOR3 GetPosition(void) { return Position; }
+        D3DXVECTOR3 GetPosition(void) { return Transform.Position; }
         tstring GetTag(void) { return Tag; }
 };
 

@@ -63,6 +63,7 @@ HRESULT COLLISIONMANAGER::Initialize(void)
 
     conWork.clear();
 
+    conWork.emplace(TEXT("Character"), true);
     conWork.emplace(TEXT("Skill"), true);
     conWork.emplace(TEXT("Field"), true);
     conWork.emplace(TEXT("Object"), true);
@@ -70,12 +71,17 @@ HRESULT COLLISIONMANAGER::Initialize(void)
 
     conWork.clear();
 
+    conWork.emplace(TEXT("Character"), true);
+    conWork.emplace(TEXT("Skill"), true);
     conWork.emplace(TEXT("Field"), true);
     conWork.emplace(TEXT("Object"), true);
     CollsitionLayer.emplace(TEXT("Field"), conWork);
 
     conWork.clear();
 
+    conWork.emplace(TEXT("Character"), true);
+    conWork.emplace(TEXT("Skill"), true);
+    conWork.emplace(TEXT("Field"), true);
     conWork.emplace(TEXT("Object"), true);
     CollsitionLayer.emplace(TEXT("Object"), conWork);
 

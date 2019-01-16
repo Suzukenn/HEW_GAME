@@ -49,8 +49,6 @@ void ELEMENT::Draw(void)
     //---各種宣言---//
     DWORD nCounter;
     LPDIRECT3DDEVICE9 pDevice;
-    D3DXMATRIX mtxRotation;
-    D3DXMATRIX mtxTranslate;
     D3DXMATRIX mtxWorld;
     LPD3DXMATERIAL pMatrix;
     D3DMATERIAL9 matDef;
@@ -64,16 +62,8 @@ void ELEMENT::Draw(void)
     //初期化
     D3DXMatrixIdentity(&mtxWorld);
 
-    //回転を反映
-    D3DXMatrixRotationYawPitchRoll(&mtxRotation, Rotation.y, Rotation.x, Rotation.z);
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRotation);
-
-    //移動を反映
-    D3DXMatrixTranslation(&mtxTranslate, Position.x, Position.y, Position.z);
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTranslate);
-
     //設定
-    pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
+    Transform.MakeWorldMatrix(mtxWorld);
 
     //---描画---//
     //描画対象チェック
@@ -124,8 +114,9 @@ HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 positio
     //---初期化処理---//
 
     // 位置・向きの初期設定
-    Position = position;
-    Rotation = rotation;
+    Transform.Position = position;
+    Transform.Rotation = rotation;
+    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
     Type = type;
     Tag = TEXT("Element");
 
@@ -139,7 +130,7 @@ HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 positio
     }
 
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(D3DXVECTOR3(Position.x + 5.0F, Position.y + 5.0F, Position.z + 5.0F), 5.0F, TEXT("Object"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(D3DXVECTOR3(Transform.Position.x + 0.0F, Transform.Position.y + 0.0F, Transform.Position.z + 0.0F), 20.0F, TEXT("Object"), this);
 
 	//初期化
     Name = modelname;

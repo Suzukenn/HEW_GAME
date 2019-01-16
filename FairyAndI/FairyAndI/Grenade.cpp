@@ -51,8 +51,6 @@ void GRENADE::Draw(void)
 	//---ŠeŽíéŒ¾---//
 	DWORD nCounter;
 	LPDIRECT3DDEVICE9 pDevice;
-	D3DXMATRIX mtxRotation;
-	D3DXMATRIX mtxTranslate;
 	D3DXMATRIX mtxWorld;
 	LPD3DXMATERIAL pMatrix;
 	D3DMATERIAL9 matDef;
@@ -66,16 +64,8 @@ void GRENADE::Draw(void)
 	//‰Šú‰»
 	D3DXMatrixIdentity(&mtxWorld);
 
-	//‰ñ“]‚ð”½‰f
-	D3DXMatrixRotationYawPitchRoll(&mtxRotation, Rotation.y, Rotation.x, Rotation.z);
-	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRotation);
-
-	//ˆÚ“®‚ð”½‰f
-	D3DXMatrixTranslation(&mtxTranslate, Position.x, Position.y, Position.z);
-	D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTranslate);
-
 	//Ý’è
-	pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
+    Transform.MakeWorldMatrix(mtxWorld);
 
 	//---•`‰æ---//
 	//•`‰æ‘ÎÛƒ`ƒFƒbƒN
@@ -123,10 +113,11 @@ HRESULT GRENADE::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position
 	HRESULT hResult;
 
 	//---‰Šú‰»ˆ—---//
-	Position = position;
-	Rotation = rotation;
+    Transform.Position = position;
+    Transform.Rotation = rotation;
+    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
 	BornTime = 0;
-	Move = D3DXVECTOR3(-sinf(Rotation.y) * 1.5F, 3.0F, -cosf(Rotation.y) * 1.5F);
+	Move = D3DXVECTOR3(-sinf(Transform.Rotation.y) * 1.5F, 3.0F, -cosf(Transform.Rotation.y) * 1.5F);
 	Tag = tag;
 
 	//---ƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý---//
@@ -139,7 +130,7 @@ HRESULT GRENADE::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position
 	}
 
 	//---“–‚½‚è”»’è‚Ì•t—^---//
-	Collision = COLLISIONMANAGER::InstantiateToSphere(Position, 3.5F, TEXT("Skill"), this);
+	Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.5F, TEXT("Skill"), this);
 
 	return hResult;
 }
@@ -202,7 +193,7 @@ void GRENADE::Update(void)
 	else
 	{
 		Move.y += 0.5F;
-		Position += Move;
-		Collision->Position = Position;
+        Transform.Position += Move;
+		Collision->Position = Transform.Position;
 	}
 }

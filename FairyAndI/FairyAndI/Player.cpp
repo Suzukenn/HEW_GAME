@@ -42,29 +42,14 @@ PLAYER::PLAYER(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3
 void PLAYER::Draw(void)
 {
     //---各種宣言---//
-    D3DXMATRIX mtxRotation;
-    D3DXMATRIX mtxScale;
-    D3DXMATRIX mtxTranslate;
     D3DXMATRIX mtxWorld;
 
     //---ワールドマトリクスの設定---//
     //初期化
     D3DXMatrixIdentity(&mtxWorld);
 
-    //大きさを反映
-    D3DXMatrixScaling(&mtxScale, 0.1F, 0.1F, 0.1F);
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxScale);
-
-    //回転を反映
-    D3DXMatrixRotationYawPitchRoll(&mtxRotation, D3DXToRadian(Rotation.y), D3DXToRadian(Rotation.x), D3DXToRadian(Rotation.z));
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRotation);
-
-    //移動を反映
-    D3DXMatrixTranslation(&mtxTranslate, Position.x, Position.y, Position.z);
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTranslate);
-
     //設定
-    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
+    Transform.MakeWorldMatrix(mtxWorld);
 
     //---描画---//
     Model.Draw(mtxWorld);
@@ -86,8 +71,9 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position,
 
     //---初期化処理---//
     //位置・向きの初期設定
-    Position = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
-    Rotation = D3DXVECTOR3(270.0F, 270.0F, 0.0F);
+    Transform.Position = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
+    Transform.Rotation = D3DXVECTOR3(270.0F, 270.0F, 0.0F);
+    Transform.Scale = D3DXVECTOR3(0.1F, 0.1F, 0.1F);
     Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
     Tag = tag;
 
@@ -105,7 +91,7 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position,
     }
 
     //---当たり判定の付与---//
-    //Collision = COLLISIONMANAGER::InstantiateToOBB(D3DXVECTOR3(Position.x + 5.0F, Position.y + 5.0F, Position.z + 5.0F), D3DXVECTOR3(5.0F, 5.0F, 5.0F), TEXT("Character"), this);
+    Collision = COLLISIONMANAGER::InstantiateToOBB(D3DXVECTOR3(Transform.Position.x + 5.0F, Transform.Position.y + 5.0F, Transform.Position.z + 5.0F), D3DXVECTOR3(5.0F, 5.0F, 5.0F), TEXT("Character"), this);
 
 	return hResult;
 }
@@ -179,7 +165,7 @@ void PLAYER::Update(void)
         Move.x += VALUE_MOVE_PLAYER * vecStickVector.x;
 
         //回転
-        Rotation.y = 90.0F * ((vecStickVector.x > 0.0F) - (vecStickVector.x < 0.0F));
+        Transform.Rotation.y = 90.0F * ((vecStickVector.x > 0.0F) - (vecStickVector.x < 0.0F));
     }
 
 	//ジャンプ
@@ -190,35 +176,35 @@ void PLAYER::Update(void)
 	}
 
 	//---位置情報更新---//
-    Position += Move;
+    Transform.Position += Move;
 
 	//移動制限
-	if (Position.y < 0.0F)
+	if (Transform.Position.y < 0.0F)
 	{
-        Position.y = 0.0F;
+        Transform.Position.y = 0.0F;
 		Move.y = 0.0F;
 	}
-	if (Position.x > 1500.0F)
+	if (Transform.Position.x > 1500.0F)
 	{
-        Position.x = 1500.0F;
+        Transform.Position.x = 1500.0F;
 	}
-	else if (Position.x < -1500.0F)
+	else if (Transform.Position.x < -1500.0F)
 	{
-        Position.x = -1500.0F;
+        Transform.Position.x = -1500.0F;
 	}
 
     //---アイテム生成---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
     {
-        vecInstancePosition.x = Position.x + sinf(D3DXToRadian(Rotation.y)) * 10.0F + cosf(D3DXToRadian(Rotation.y)) * 8.0F;
-        vecInstancePosition.y = Position.y + 21.0F;
+        vecInstancePosition.x = Transform.Position.x + sinf(D3DXToRadian(Transform.Rotation.y)) * 10.0F + cosf(D3DXToRadian(Transform.Rotation.y)) * 8.0F;
+        vecInstancePosition.y = Transform.Position.y + 21.0F;
         vecInstancePosition.z = 0.0F;
 
-        SKILLFACTORY::InstantiateSkill(WORDMENU::NotificationItem(), vecInstancePosition, Rotation);
+        SKILLFACTORY::InstantiateSkill(WORDMENU::NotificationItem(), vecInstancePosition, Transform.Rotation);
     }
 
-    pos = Position;
-    rot = Rotation;
+    pos = Transform.Position;
+    rot = Transform.Rotation;
 
     if (Move.x)
     {

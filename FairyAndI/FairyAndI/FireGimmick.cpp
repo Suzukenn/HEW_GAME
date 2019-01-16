@@ -48,8 +48,6 @@ void FIREGIMMICK::Draw(void)
     //---äeéÌêÈåæ---//
     DWORD nCounter;
     LPDIRECT3DDEVICE9 pDevice;
-    D3DXMATRIX mtxRotation;
-    D3DXMATRIX mtxTranslate;
     D3DXMATRIX mtxWorld;
     LPD3DXMATERIAL pMatrix;
     D3DMATERIAL9 matDef;
@@ -63,16 +61,8 @@ void FIREGIMMICK::Draw(void)
     //èâä˙âª
     D3DXMatrixIdentity(&mtxWorld);
 
-    //âÒì]ÇîΩâf
-    D3DXMatrixRotationYawPitchRoll(&mtxRotation, Rotation.y, Rotation.x, Rotation.z);
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRotation);
-
-    //à⁄ìÆÇîΩâf
-    D3DXMatrixTranslation(&mtxTranslate, Position.x, Position.y, Position.z);
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTranslate);
-
     //ê›íË
-    pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
+    Transform.MakeWorldMatrix(mtxWorld);
 
     //---ï`âÊ---//
     //ï`âÊëŒè€É`ÉFÉbÉN
@@ -121,8 +111,9 @@ HRESULT FIREGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 posi
 
     //---èâä˙âªèàóù---//
 	//èâä˙ê›íË
-	Position = position;
-	Rotation = rotation;
+    Transform.Position = position;
+    Transform.Rotation = rotation;
+    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
 	Tag = tag;
 
 	//Model.reset(new MODEL);
@@ -137,7 +128,7 @@ HRESULT FIREGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 posi
 	}
 
     //---ìñÇΩÇËîªíËÇÃïtó^---//
-	Collision = COLLISIONMANAGER::InstantiateToOBB(Position, Rotation, TEXT("Object"), this);
+    Collision = COLLISIONMANAGER::InstantiateToOBB(Transform.Position, D3DXVECTOR3(3.0F, 3.0F, 3.0F), TEXT("Object"), this);
 
 	return hResult;
 }
@@ -209,5 +200,5 @@ void FIREGIMMICK::Update(void)
 /////////////////////////////////////////////
 D3DXVECTOR3 FIREGIMMICK::GetPos(void)
 {
-	return Position;
+	return Transform.Position;
 }

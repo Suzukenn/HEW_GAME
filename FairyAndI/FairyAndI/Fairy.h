@@ -5,7 +5,6 @@
 #include <memory>
 #include "GameObject.h"
 #include "Main.h"
-#include "Model.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
 #define	VALUE_MOVE_FAIRY 2.0F   // 移動速度
@@ -51,7 +50,6 @@ class FAIRY final : public GAMEOBJECT
 
         void OnCollision(COLLISION*);
 
-		void TakeUpItem(LPD3DXVECTOR3);
 		D3DXVECTOR3 GetPos(void);
 };
 

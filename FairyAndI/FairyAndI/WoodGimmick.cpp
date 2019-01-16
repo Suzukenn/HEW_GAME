@@ -50,8 +50,6 @@ void WOODGIMMICK::Draw(void)
     //---各種宣言---//
     DWORD nCounter;
     LPDIRECT3DDEVICE9 pDevice;
-    D3DXMATRIX mtxRotation;
-    D3DXMATRIX mtxTranslate;
     D3DXMATRIX mtxWorld;
     LPD3DXMATERIAL pMatrix;
     D3DMATERIAL9 matDef;
@@ -65,16 +63,8 @@ void WOODGIMMICK::Draw(void)
     //初期化
     D3DXMatrixIdentity(&mtxWorld);
 
-    //回転を反映
-    D3DXMatrixRotationYawPitchRoll(&mtxRotation, Rotation.y, Rotation.x, Rotation.z);
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRotation);
-
-    //移動を反映
-    D3DXMatrixTranslation(&mtxTranslate, Position.x, Position.y, Position.z);
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTranslate);
-
     //設定
-    pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
+    Transform.MakeWorldMatrix(mtxWorld);
 
     //---描画---//
     //描画対象チェック
@@ -123,8 +113,9 @@ HRESULT WOODGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 posi
 
     //---初期化処理---//
 	//初期設定
-	Position = position;
-	Rotation = rotation;
+    Transform.Position = position;
+    Transform.Rotation = rotation;
+    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
 	Tag = tag;
 
     //Xファイルの読み込み
@@ -137,7 +128,7 @@ HRESULT WOODGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 posi
 	}
 
     //---当たり判定の付与---//
-	Collision = COLLISIONMANAGER::InstantiateToOBB(Position, Rotation, TEXT("Object"), this);
+    Collision = COLLISIONMANAGER::InstantiateToOBB(Transform.Position, D3DXVECTOR3(3.0F, 3.0F, 3.0F), TEXT("Object"), this);
 
 	return hResult;
 }
@@ -209,5 +200,5 @@ void WOODGIMMICK::Update(void)
 /////////////////////////////////////////////
 D3DXVECTOR3 WOODGIMMICK::GetPos(void)
 {
-	return Position;
+	return Transform.Position;
 }
