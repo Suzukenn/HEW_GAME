@@ -85,7 +85,7 @@ HRESULT ITEMBOX::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTO
 void ITEMBOX::Uninitialize(void)
 {
     //---ŠJ•ú---//
-    SAFE_RELEASE((*Texture));
+
 }
 
 /////////////////////////////////////////////

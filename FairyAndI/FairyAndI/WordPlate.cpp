@@ -117,8 +117,7 @@ HRESULT WORDPLATE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVEC
 void WORDPLATE::Uninitialize(void)
 {
     //---ŠJ•ú---//
-    SAFE_RELEASE((*VertexBuffer));
-    SAFE_RELEASE((*Texture));
+
 }
 
 /////////////////////////////////////////////

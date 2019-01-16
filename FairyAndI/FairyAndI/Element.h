@@ -8,24 +8,24 @@
 #include "Model.h"
 
 //‘O•ûéŒ¾//
-class OBB;
+class SPHERE;
 
 //ƒNƒ‰ƒXéŒ¾//
-class ELEMENT final : private GAMEOBJECT
+class ELEMENT final : public GAMEOBJECT
 {
 	private:
         tstring Type;
 
         std::weak_ptr<MODEL> Model;
-        OBB* Collision;
+        SPHERE* Collision;
         LPCTSTR Name;
 
 	public:
-        ELEMENT(LPCTSTR, tstring, D3DXVECTOR3);
+        ELEMENT(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
         ~ELEMENT(void);
 
         void Draw(void);
-		HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3);
+		HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
 		void Uninitialize(void);
 		void Update(void);
 

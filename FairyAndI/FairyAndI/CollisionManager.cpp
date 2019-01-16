@@ -68,6 +68,17 @@ HRESULT COLLISIONMANAGER::Initialize(void)
     conWork.emplace(TEXT("Object"), true);
     CollsitionLayer.emplace(TEXT("Skill"), conWork);
 
+    conWork.clear();
+
+    conWork.emplace(TEXT("Field"), true);
+    conWork.emplace(TEXT("Object"), true);
+    CollsitionLayer.emplace(TEXT("Field"), conWork);
+
+    conWork.clear();
+
+    conWork.emplace(TEXT("Object"), true);
+    CollsitionLayer.emplace(TEXT("Object"), conWork);
+
     return hResult;
 }
 
@@ -80,9 +91,9 @@ HRESULT COLLISIONMANAGER::Initialize(void)
 //
 //ñﬂÇËílÅFÇ»Çµ
 /////////////////////////////////////////////
-OBB* COLLISIONMANAGER::InstantiateToOBB(D3DXVECTOR3 position, D3DXVECTOR3 rotation, tstring layer, GAMEOBJECT* owner)
+OBB* COLLISIONMANAGER::InstantiateToOBB(D3DXVECTOR3 position, D3DXVECTOR3 axislength, tstring layer, GAMEOBJECT* owner)
 {
-    Collision.emplace_back(new OBB(position, rotation, layer, owner));
+    Collision.emplace_back(new OBB(position, axislength, layer, owner));
     return dynamic_cast<OBB*>(Collision.back());
 }
 

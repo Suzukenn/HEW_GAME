@@ -161,9 +161,6 @@
     <ClCompile Include="Field.cpp">
       <Filter>ソース ファイル\Actor\Object</Filter>
     </ClCompile>
-    <ClCompile Include="ItemManager.cpp">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="ItemBox.cpp">
       <Filter>ソース ファイル\UI\WordMenu</Filter>
     </ClCompile>
@@ -226,6 +223,9 @@
     </ClCompile>
     <ClCompile Include="BatteryGimmick.cpp">
       <Filter>ソース ファイル\Actor\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectFactory.cpp">
+      <Filter>ソース ファイル\System\Factory</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -331,9 +331,6 @@
     <ClInclude Include="SoundParameter.h">
       <Filter>ソース ファイル\System\Parameter</Filter>
     </ClInclude>
-    <ClInclude Include="ItemManager.h">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="ItemBox.h">
       <Filter>ソース ファイル\UI\WordMenu</Filter>
     </ClInclude>
@@ -411,6 +408,9 @@
     </ClInclude>
     <ClInclude Include="BatteryGimmick.h">
       <Filter>ソース ファイル\Actor\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectFactory.h">
+      <Filter>ソース ファイル\System\Factory</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -8,6 +8,7 @@
 #include "GimmickFactory.h"
 #include "InputManager.h"
 #include "ModelManager.h"
+#include "ObjectFactory.h"
 #include "Player.h"
 #include "SceneManager.h"
 #include "SideViewCamera.h"
@@ -93,6 +94,10 @@ HRESULT TRAINING::Initialize(void)
     //キャラクター
     CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
     CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+
+    //エレメント
+    OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3(100.0F, 0.0F, 0.0F));
+    OBJECTFACTORY::InstantiateIceElement(D3DXVECTOR3(-50.0F, 0.0F, 0.0F));
 
 	//ギミック
 	GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(50.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));

@@ -4,6 +4,7 @@
 #include "CollisionManager.h"
 #include "Element.h"
 #include "ModelManager.h"
+#include "WordManager.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -11,13 +12,13 @@
 //
 //機能：コンストラクタ
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タイプ,(D3DXVECTOR3)位置
+//引数：(LPCTSTR)モデル名,(tstirng)タイプ,(D3DXVECTOR3)位置,(D3DXVECTOR3)大きさ
 //
 //戻り値：なし
 /////////////////////////////////////////////
-ELEMENT::ELEMENT(LPCTSTR modelname, tstring type, D3DXVECTOR3 position)
+ELEMENT::ELEMENT(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(modelname, type, position);
+    Initialize(modelname, type, position, rotation);
 }
 
 /////////////////////////////////////////////
@@ -37,7 +38,7 @@ ELEMENT::~ELEMENT(void)
 /////////////////////////////////////////////
 //関数名：Draw
 //
-//機能：アイテムの描画
+//機能：エレメントの描画
 //
 //引数：なし
 //
@@ -108,13 +109,13 @@ void ELEMENT::Draw(void)
 /////////////////////////////////////////////
 //関数名：Initialize
 //
-//機能：モデルの初期化
+//機能：エレメントの初期化
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タイプ,(D3DXVECTOR3)位置
+//引数：(LPCTSTR)モデル名,(tstirng)タイプ,(D3DXVECTOR3)位置,(D3DXVECTOR3)大きさ
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position)
+HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -123,8 +124,9 @@ HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 positio
     //---初期化処理---//
 
     // 位置・向きの初期設定
-    Position = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
-    Rotation = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
+    Position = position;
+    Rotation = rotation;
+    Type = type;
     Tag = TEXT("Element");
 
     // Xファイルの読み込み
@@ -137,7 +139,7 @@ HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 positio
     }
 
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToOBB(D3DXVECTOR3(Position.x + 5.0F, Position.y + 5.0F, Position.z + 5.0F), D3DXVECTOR3(5.0F, 5.0F, 5.0F), TEXT("Element"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(D3DXVECTOR3(Position.x + 5.0F, Position.y + 5.0F, Position.z + 5.0F), 5.0F, TEXT("Object"), this);
 
 	//初期化
     Name = modelname;
@@ -155,16 +157,18 @@ HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 positio
 /////////////////////////////////////////////
 void ELEMENT::OnCollision(COLLISION* opponent)
 {
-    if (opponent->Owner->GetTag().find(TEXT("Fairy")) != tstring::npos)
+    if (opponent->Owner->GetTag() == TEXT("Fairy"))
     {
         ACTORMANAGER::Destroy(this);
+        COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+        WORDMANAGER::UnLockWord(Type.data());
     }
 }
 
 /////////////////////////////////////////////
 //関数名：Uninitialize
 //
-//機能：モデルの終了
+//機能：エレメントの終了
 //
 //引数：(LPCTSTR)モデルファイル名
 //
@@ -172,9 +176,6 @@ void ELEMENT::OnCollision(COLLISION* opponent)
 /////////////////////////////////////////////
 void ELEMENT::Uninitialize(void)
 {
-    //SAFE_RELEASE((*Model->Texture));
-    //SAFE_RELEASE(Model->Mesh);
-    //SAFE_RELEASE(Model->MaterialBuffer);
     if (Collision)
     {
         COLLISIONMANAGER::Destroy((COLLISION*)Collision);
@@ -185,7 +186,7 @@ void ELEMENT::Uninitialize(void)
 /////////////////////////////////////////////
 //関数名：Update
 //
-//機能：モデルの更新
+//機能：エレメントの更新
 //
 //引数：なし
 //

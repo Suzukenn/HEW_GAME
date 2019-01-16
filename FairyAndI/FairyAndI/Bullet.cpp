@@ -125,6 +125,7 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position,
     //---‰Šú‰»ˆ—---//
     Position = position;
     Rotation = rotation;
+    BornTime = 0;
     Move = D3DXVECTOR3(-sinf(Rotation.y) * 1.5F, 0.0F, -cosf(Rotation.y) * 1.5F);
     Tag = tag;
 
@@ -192,6 +193,15 @@ void BULLET::Uninitialize(void)
 /////////////////////////////////////////////
 void BULLET::Update(void)
 {
-    Position += Move;
-    Collision->Position = Position;
+    ++BornTime;
+    if (BornTime > 120)
+    {
+        ACTORMANAGER::Destroy(this);
+        COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+    }
+    else
+    {
+        Position += Move;
+        Collision->Position = Position;
+    }
 }

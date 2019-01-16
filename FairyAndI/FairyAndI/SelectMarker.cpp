@@ -85,7 +85,7 @@ HRESULT SELECTMARKER::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DX
 void SELECTMARKER::Uninitialize(void)
 {
     //---ŠJ•ú---//
-    SAFE_RELEASE((*Texture));
+
 }
 
 /////////////////////////////////////////////

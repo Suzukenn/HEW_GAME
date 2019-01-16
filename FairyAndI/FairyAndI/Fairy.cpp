@@ -1,6 +1,7 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
 #include "Collision.h"
+#include "CollisionManager.h"
 #include "Fairy.h"
 #include "InputManager.h"
 #include "ModelManager.h"
@@ -121,7 +122,7 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, 
 	}
 
     //---当たり判定の付与---//
-    //Collision = COLLISIONMANAGER::InstantiateToOBB(D3DXVECTOR3(Position.x + 5.0F, Position.y + 5.0F, Position.z + 5.0F), D3DXVECTOR3(5.0F, 5.0F, 5.0F), TEXT("Character"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(D3DXVECTOR3(Position.x + 5.0F, Position.y + 5.0F, Position.z + 5.0F), 5.0F, TEXT("Character"), this);
 
 	return hResult;
 }
@@ -238,12 +239,14 @@ void FAIRY::Update(void)
     //ボタンを押したら思考状態へ移行
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
-        State = STATE_SYNTHIESIS;
-    }
-
-    if (State == STATE_SYNTHIESIS)
-    {
-        return;
+        if (State == STATE_SYNTHIESIS)
+        {
+            State = STATE_CHASE;
+        }
+        else
+        {
+            State = STATE_SYNTHIESIS;
+        }
     }
 
 	//ボタンを押したらアイテムを取りに行く
@@ -318,45 +321,6 @@ void FAIRY::Update(void)
   //          }
 		//	return;
 		//}
-	//else //(アイテムを取りに行っている)
-	//{
-	//	for (int i = 0; i < MAX_ITEM; i++)
-	//	{
-	//		if (Item[i].GetStat() == 1)
-	//		{
-	//			num = -1;
-	//			if (CollisionBall(&Position, Item[i].GetPos(), 100.0f, 10.0f))
-	//			{
-	//				Item[i].SetItemDistance(&(Position - *Item[i].GetPos()));
-	//				m_itemDistance = Item[i].GetItemDistance();
-	//				if (m_itemDistance->x < 0)
-	//				{
-	//					m_itemDistance->x *= -1;
-	//				}
-	//				if (m_itemDistance->x < Item[m_num].GetItemDistance()->x)
-	//				{
-	//					m_num = i;
-	//				}
-	//			}
-	//			else
-	//			{
-	//				m_stat = false;
-	//				return;
-	//			}
-	//			if (!Item[m_num].GetStat())
-	//			{
-	//				m_num = i;
-	//			}
-	//			m_itemPos = Item[m_num].GetPos();
-	//			TakeUpItem(m_itemPos);
- //               Position += Move;
-	//		}
-	//		else if (Check())
-	//		{
-	//			m_stat = false;
-	//		}
-	//	}
-	//}
 }
 
 void FAIRY::TakeUpItem(LPD3DXVECTOR3 pos)

@@ -118,8 +118,7 @@ HRESULT BACKGROUND::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVE
 void BACKGROUND::Uninitialize(void)
 {
 	//---ŠJ•ú---//
-	SAFE_RELEASE((*VertexBuffer));
-    SAFE_RELEASE((*Texture));
+
 }
 
 /////////////////////////////////////////////

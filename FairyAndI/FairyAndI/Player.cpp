@@ -51,6 +51,10 @@ void PLAYER::Draw(void)
     //èâä˙âª
     D3DXMatrixIdentity(&mtxWorld);
 
+    //ëÂÇ´Ç≥ÇîΩâf
+    D3DXMatrixScaling(&mtxScale, 0.1F, 0.1F, 0.1F);
+    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxScale);
+
     //âÒì]ÇîΩâf
     D3DXMatrixRotationYawPitchRoll(&mtxRotation, D3DXToRadian(Rotation.y), D3DXToRadian(Rotation.x), D3DXToRadian(Rotation.z));
     D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRotation);
@@ -59,9 +63,6 @@ void PLAYER::Draw(void)
     D3DXMatrixTranslation(&mtxTranslate, Position.x, Position.y, Position.z);
     D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTranslate);
 
-    D3DXMatrixScaling(&mtxScale, 0.1F, 0.1F, 0.1F);
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxScale);
-    
     //ê›íË
     GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
@@ -209,7 +210,7 @@ void PLAYER::Update(void)
     //---ÉAÉCÉeÉÄê∂ê¨---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
     {
-        vecInstancePosition.x = Position.x - sinf(Rotation.y) * 10.0F - cosf(Rotation.y) * 8.0F;
+        vecInstancePosition.x = Position.x + sinf(D3DXToRadian(Rotation.y)) * 10.0F + cosf(D3DXToRadian(Rotation.y)) * 8.0F;
         vecInstancePosition.y = Position.y + 21.0F;
         vecInstancePosition.z = 0.0F;
 

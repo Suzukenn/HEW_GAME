@@ -133,9 +133,9 @@
     <ClCompile Include="GimmickFactory.cpp" />
     <ClCompile Include="IceGimmick.cpp" />
     <ClCompile Include="ItemBox.cpp" />
-    <ClCompile Include="ItemManager.cpp" />
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="OBB.cpp" />
+    <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="SkillFactory.cpp" />
     <ClCompile Include="Sphere.cpp" />
@@ -189,13 +189,13 @@
     <ClInclude Include="GimmickFactory.h" />
     <ClInclude Include="IceGimmick.h" />
     <ClInclude Include="ItemBox.h" />
-    <ClInclude Include="ItemManager.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="Button.h" />
     <ClInclude Include="Canvas.h" />
     <ClInclude Include="OBB.h" />
     <ClInclude Include="ModelManager.h" />
+    <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="SelectScene.h" />
     <ClInclude Include="SkillFactory.h" />
     <ClInclude Include="Sphere.h" />

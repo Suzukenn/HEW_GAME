@@ -14,6 +14,7 @@ class SPHERE;
 class BULLET final : public  GAMEOBJECT
 {
     public:
+        DWORD BornTime;
         std::weak_ptr<MODEL> Model;
         D3DXVECTOR3 Move;
 

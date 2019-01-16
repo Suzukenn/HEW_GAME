@@ -19,7 +19,7 @@ typedef enum
 } STATE;
 
 //‘O•ûéŒ¾//
-class OBB;
+class SPHERE;
 
 //ƒNƒ‰ƒXéŒ¾//
 class FAIRY final : public GAMEOBJECT
@@ -37,7 +37,7 @@ class FAIRY final : public GAMEOBJECT
 
         std::vector<GAMEOBJECT*> Element;
 
-        OBB* Collision;
+        SPHERE* Collision;
 
         bool SearchElement(D3DXVECTOR3&);
 

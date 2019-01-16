@@ -11,6 +11,7 @@
 
 //‘O•ûéŒ¾//
 class CHARACTERFACTORY;
+class OBJECTFACTORY;
 class GIMMICKFACTORY;
 class SKILLFACTORY;
 
@@ -30,6 +31,7 @@ class ACTORMANAGER
         static void Update(void);
 
         friend CHARACTERFACTORY;
+        friend OBJECTFACTORY;
         friend GIMMICKFACTORY;
         friend SKILLFACTORY;
 };
