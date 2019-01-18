@@ -1,27 +1,25 @@
-#ifndef _FIELD_H_
+ï»¿#ifndef _FIELD_H_
 #define _FIELD_H_
 
-//ƒwƒbƒ_ƒtƒ@ƒCƒ‹“Ç‚İ‚İ//
+//ï¼ï¼ï¼ãƒ˜ãƒƒãƒ€ãƒ•ã‚¡ã‚¤ãƒ«èª­ã¿è¾¼ã¿ï¼ï¼ï¼//
 #include <memory>
 #include "Main.h"
+#include "Model.h"
+#include "Transform.h"
 
-//ƒNƒ‰ƒXéŒ¾//
+//ï¼ï¼ï¼ã‚¯ãƒ©ã‚¹å®£è¨€ï¼ï¼ï¼//
 class FIELD
 {
     private:
-        D3DXVECTOR3 Position;					                //ˆÊ’u
-        D3DXVECTOR3 Rotation;					                //Œü‚«
-        std::unique_ptr<LPDIRECT3DTEXTURE9> Texture;		    //ƒeƒNƒXƒ`ƒƒ‚Ö‚Ìƒ|ƒCƒ“ƒ^
-        std::unique_ptr<LPDIRECT3DVERTEXBUFFER9> VertexBuffer;	//’¸“_ƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒCƒ“ƒ^
-        std::unique_ptr<LPDIRECT3DINDEXBUFFER9> IndexBuffer;	//ƒCƒ“ƒfƒbƒNƒXƒoƒbƒtƒ@‚Ö‚Ìƒ|ƒCƒ“ƒ^
-        int PolygonValue;
-        int VertexValue;
-
-        HRESULT MakeVertex(const LPDIRECT3DDEVICE9&, const int&, const int&, const float&, const float&);
-
+        TRANSFORM Transform;
+        LPDIRECT3DTEXTURE9 Texture;
+        static LPD3DXMESH Mesh;
+        LPD3DXBUFFER MaterialBuffer;
+        DWORD MaterialValue;
     public:
+        static bool CheckField(LPD3DXVECTOR3, LPD3DXVECTOR3, float&);
         void Draw(void);
-        HRESULT Initialize(LPCTSTR, const int&, const int&, const float&, const float&);
+        HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
         void Uninitialize(void);
         void Update(void);
 };

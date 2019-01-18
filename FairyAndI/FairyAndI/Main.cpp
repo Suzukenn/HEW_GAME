@@ -42,7 +42,7 @@ std::unique_ptr<LPD3DXFONT> g_pD3DXFont;	//フォントへのポインタ
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF  | _CRTDBG_LEAK_CHECK_DF);
-    //_CrtSetBreakAlloc(18292);
+    //_CrtSetBreakAlloc(18610);
 
     //---未使用宣言---//
 	UNREFERENCED_PARAMETER(hPrevInstance);

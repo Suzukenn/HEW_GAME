@@ -6,6 +6,7 @@
 #include "Canvas.h"
 #include "Field.h"
 #include "FlexibleCamera.h"
+#include "Ground.h"
 #include "Main.h"
 
 //＝＝＝クラス宣言＝＝＝//
@@ -14,6 +15,7 @@ class TRAINING final : public BASE_SCENE
     private:
         CANVAS Canvas;
         FIELD Field;
+        GROUND Ground;
         FLEXIBLECAMERA FlexibleCamera;
         int					m_num;		//アイテムの添え字用
         LPD3DXVECTOR3		m_itemPos;

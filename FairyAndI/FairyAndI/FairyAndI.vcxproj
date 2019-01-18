@@ -132,6 +132,7 @@
     <ClCompile Include="FireGimmick.cpp" />
     <ClCompile Include="GimmickFactory.cpp" />
     <ClCompile Include="Grenade.cpp" />
+    <ClCompile Include="Ground.cpp" />
     <ClCompile Include="IceGimmick.cpp" />
     <ClCompile Include="ItemBox.cpp" />
     <ClCompile Include="ModelManager.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="GimmickFactory.h" />
     <ClInclude Include="Grenade.h" />
+    <ClInclude Include="Ground.h" />
     <ClInclude Include="IceGimmick.h" />
     <ClInclude Include="ItemBox.h" />
     <ClInclude Include="Model.h" />

@@ -1,6 +1,7 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
 #include "CollisionManager.h"
+#include "Field.h"
 #include "InputManager.h"
 #include "ModelManager.h"
 #include "Player.h"
@@ -143,6 +144,7 @@ void PLAYER::Uninitialize(void)
 void PLAYER::Update(void)
 {
     //---各種宣言---//
+    float fAfterYPosition;
     D3DXVECTOR3 vecInstancePosition;
     D3DXVECTOR2 vecStickVector;
     D3DXVECTOR3 vecCameraRotation;
@@ -157,6 +159,13 @@ void PLAYER::Update(void)
 
 	//重力加算
 	Move.y -= GRAVITY;
+
+    //着地判定
+    if (FIELD::CheckField(&D3DXVECTOR3(Transform.Position.x, Transform.Position.y - 5.0F, Transform.Position.z), &D3DXVECTOR3(0.0F, 1.0F, 0.0F), fAfterYPosition))
+    {
+        Transform.Position.y = fAfterYPosition + 5.0F;
+        Move.y = 0.0F;
+    }
 
     //モデル操作
     if (vecStickVector != D3DXVECTOR2(0.0F, 0.0F))
@@ -179,11 +188,11 @@ void PLAYER::Update(void)
     Transform.Position += Move;
 
 	//移動制限
-	if (Transform.Position.y < 0.0F)
-	{
-        Transform.Position.y = 0.0F;
-		Move.y = 0.0F;
-	}
+	//if (Transform.Position.y < 0.0F)
+	//{
+ //       Transform.Position.y = 0.0F;
+	//	Move.y = 0.0F;
+	//}
 	if (Transform.Position.x > 1500.0F)
 	{
         Transform.Position.x = 1500.0F;
