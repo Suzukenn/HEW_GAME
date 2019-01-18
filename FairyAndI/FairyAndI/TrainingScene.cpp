@@ -31,14 +31,8 @@ void TRAINING::Draw(void)
 {
     //---オブジェクトの描画処理---//
     ACTORMANAGER::Draw();
-
     Field.Draw();
-    
-    //for (int i = 0; i < MAX_ITEM; i++)
-    //{
-    //    Item[i].Draw();
-    //}
-
+    Ground.Draw();
     Canvas.Draw();
 }
 
@@ -92,7 +86,7 @@ HRESULT TRAINING::Initialize(void)
     //---オブジェクトの初期化処理---//
 
     //キャラクター
-    CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+    CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(-20.0F, 50.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
     CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
 
     //エレメント
@@ -103,7 +97,14 @@ HRESULT TRAINING::Initialize(void)
 	GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(50.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
 
     //地形
-    hResult = Field.Initialize(TEXT("FIELD"), 40, 40, 8.0F, 8.0F);
+    //hResult = Field.Initialize(TEXT("Data/Common/Model/Field/Field.x"), TEXT("Field"), D3DXVECTOR3(0.0F, -10.0F, 0.0F), D3DXVECTOR3(20.0F, 20.0F, 20.0F));
+    hResult = Field.Initialize(TEXT("Data/Common/Model/Field/Field.x"), TEXT("Field"), D3DXVECTOR3(0.0F, -10.0F, 0.0F), D3DXVECTOR3(1.0F, 20.0F, 1.0F));
+    if (FAILED(hResult))
+    {
+        return E_FAIL;
+    }
+
+    hResult = Ground.Initialize(TEXT("FIELD"), 40, 40, 8.0F, 8.0F);
     if (FAILED(hResult))
     {
         return E_FAIL;

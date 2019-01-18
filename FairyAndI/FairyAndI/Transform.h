@@ -25,7 +25,7 @@ class TRANSFORM
             D3DXMatrixMultiply(&world, &world, &mtxScale);
 
             //‰ñ“]‚ð”½‰f
-            D3DXMatrixRotationYawPitchRoll(&mtxRotation, D3DXToRadian(Rotation.y), D3DXToRadian(Rotation.x), (Rotation.z));
+            D3DXMatrixRotationYawPitchRoll(&mtxRotation, D3DXToRadian(Rotation.y), D3DXToRadian(Rotation.x), D3DXToRadian(Rotation.z));
             D3DXMatrixMultiply(&world, &world, &mtxRotation);
 
             //ˆÚ“®‚ð”½‰f
