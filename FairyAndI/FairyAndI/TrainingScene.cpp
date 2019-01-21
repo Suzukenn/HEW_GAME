@@ -225,7 +225,7 @@ void TRAINING::Update(void)
     }
     if (INPUTMANAGER::GetKey(DIK_V, TRIGGER))
     {
-        WORDMANAGER::UnLockWord(TEXT("EARTH"));
+        WORDMANAGER::UnLockWord(TEXT("RICECAKE"));
     }
 
     Canvas.Update();

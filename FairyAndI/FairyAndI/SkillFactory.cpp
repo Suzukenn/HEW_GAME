@@ -14,14 +14,14 @@
 //
 //機能：弾の生成
 //
-//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
+//引数：(tstring)生成属性,(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void SKILLFACTORY::InstantiateBullet(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+void SKILLFACTORY::InstantiateBullet(tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
 	//---生成---//
-	ACTORMANAGER::GameObject.emplace_back(new BULLET(TEXT("ICE"), TEXT("Bullet"), position, rotation));
+	ACTORMANAGER::GameObject.emplace_back(new BULLET(TEXT("ICE"), type, position, rotation));
 }
 
 /////////////////////////////////////////////
@@ -29,14 +29,14 @@ void SKILLFACTORY::InstantiateBullet(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 //
 //機能：榴弾の生成
 //
-//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
+//引数：(tstring)生成属性,(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void SKILLFACTORY::InstantiateGrenade(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+void SKILLFACTORY::InstantiateGrenade(tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
 	//---生成---//
-	ACTORMANAGER::GameObject.emplace_back(new GRENADE(TEXT("FIRE"), TEXT("Bullet"), position, rotation));
+	ACTORMANAGER::GameObject.emplace_back(new GRENADE(TEXT("FIRE"), type, position, rotation));
 }
 
 /////////////////////////////////////////////
@@ -44,14 +44,14 @@ void SKILLFACTORY::InstantiateGrenade(D3DXVECTOR3 position, D3DXVECTOR3 rotation
 //
 //機能：罠の生成
 //
-//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
+//引数：(tstring)生成属性,(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void SKILLFACTORY::InstantiateTrap(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+void SKILLFACTORY::InstantiateTrap(tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
 	//---生成---//
-	ACTORMANAGER::GameObject.emplace_back(new TRAP(TEXT("RICECAKE"), TEXT("Trap"), position, rotation));
+	ACTORMANAGER::GameObject.emplace_back(new TRAP(TEXT("RICECAKE"), type, position, rotation));
 }
 
 /////////////////////////////////////////////
@@ -59,21 +59,22 @@ void SKILLFACTORY::InstantiateTrap(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 //
 //機能：スキルオブジェクトの生成
 //
-//引数：(tstring)生成オブジェクト,(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
+//引数：(tstring)生成属性,(tstring)生成オブジェクト,(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void SKILLFACTORY::InstantiateSkill(tstring gameobject, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+void SKILLFACTORY::InstantiateSkill(tstring type, tstring gameobject, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
-    std::unordered_map<tstring, std::function< void(D3DXVECTOR3, D3DXVECTOR3) >> Function = { {TEXT("FIRE"), InstantiateBullet }, {TEXT("WALL"), InstantiateWall } };
+    std::unordered_map<tstring, std::function< void(tstring, D3DXVECTOR3, D3DXVECTOR3) >> Function = { {TEXT("FIRE"), InstantiateGrenade }, { TEXT("ICE"), InstantiateBullet }, {TEXT("RICECAKE"), InstantiateTrap },{ TEXT("ROCK"), InstantiateWall } };
 
     //---生成---//
     for (auto& data : Function)
     {
-        if (gameobject.find(data.first) != tstring::npos)
+        if (data.first == gameobject)
         {
-            data.second(position, rotation);
+            data.second(type, position, rotation);
+            return;
         }
     }
 }
@@ -83,12 +84,12 @@ void SKILLFACTORY::InstantiateSkill(tstring gameobject, D3DXVECTOR3 position, D3
 //
 //機能：壁の生成
 //
-//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
+//引数：(tstring)生成属性,(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void SKILLFACTORY::InstantiateWall(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+void SKILLFACTORY::InstantiateWall(tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---生成---//
-    ACTORMANAGER::GameObject.emplace_back(new WALL(TEXT("WALL"), TEXT("Wall"), position, rotation));
+    ACTORMANAGER::GameObject.emplace_back(new WALL(TEXT("WALL"), type, position, rotation));
 }

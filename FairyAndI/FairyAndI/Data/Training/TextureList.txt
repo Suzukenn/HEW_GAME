@@ -4,3 +4,4 @@ Data/Training/UI/NounList.png NOUNLIST
 Data/Training/UI/Balloon.png BALLOON
 Data/Training/UI/Select.png MARKER
 Data/Training/UI/ItemBox.png ITEMBOX
+Data/Training/UI/Heart.tga HEART

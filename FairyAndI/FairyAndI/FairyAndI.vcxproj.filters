@@ -239,6 +239,9 @@
     <ClCompile Include="Ground.cpp">
       <Filter>ソース ファイル\Actor\Object</Filter>
     </ClCompile>
+    <ClCompile Include="Heart.cpp">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -435,6 +438,12 @@
     </ClInclude>
     <ClInclude Include="Ground.h">
       <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill.h">
+      <Filter>ソース ファイル\Actor\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Heart.h">
+      <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

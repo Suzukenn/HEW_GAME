@@ -2,11 +2,14 @@
 #define _CANVAS_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include <list>
+#include <array>
+#include "Heart.h"
 #include "ItemBox.h"
 #include "Main.h"
+#include "Player.h"
 #include "Sprite.h"
 #include "WordMenu.h"
+
 //＝＝＝クラス宣言＝＝＝//
 class CANVAS
 {
@@ -16,6 +19,8 @@ class CANVAS
         WORDMENU Menu;
 
         bool Mode;
+
+        std::array<HEART, MAX_PLAYER_HP> Heart;
 
     public:
         void Draw(void);

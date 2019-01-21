@@ -4,13 +4,11 @@
 #include "Fairy.h"
 #include "Player.h"
 
-//＝＝＝前方宣言＝＝＝//
-
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
 //関数名：InstantiateFairy
 //
-//機能：プレイヤーの生成
+//機能：フェアリーの生成
 //
 //引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
 //
@@ -18,7 +16,7 @@
 /////////////////////////////////////////////
 void CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    ACTORMANAGER::GameObject.emplace_back(new FAIRY(TEXT("Data/Common/Model/Character/car001.x"), TEXT("Fairy"), position, rotation));
+    ACTORMANAGER::GameObject.emplace_back(new FAIRY(TEXT("Data/Common/Model/Character/Fairy.x"), position, rotation));
 }
 
 /////////////////////////////////////////////
@@ -32,5 +30,5 @@ void CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3 position, D3DXVECTOR3 rotati
 /////////////////////////////////////////////
 void CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    ACTORMANAGER::GameObject.emplace_back(new PLAYER(TEXT("Data/Common/Model/Character/tiny_4anim.x"), TEXT("Player"), position, rotation));
+    ACTORMANAGER::GameObject.emplace_back(new PLAYER(TEXT("Data/Common/Model/Character/tiny_4anim.x"), position, rotation));
 }

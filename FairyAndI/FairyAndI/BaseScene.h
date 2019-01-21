@@ -8,10 +8,10 @@
 class BASE_SCENE
 {
     public:
-        virtual void Draw(void) = 0;
-        virtual void Uninitialize(void) = 0;
-        virtual HRESULT Initialize(void) = 0;
-        virtual void Update(void) = 0;
+        virtual void Draw(void) PURE;
+        virtual void Uninitialize(void) PURE;
+        virtual HRESULT Initialize(void) PURE;
+        virtual void Update(void) PURE;
 };
 
 #endif

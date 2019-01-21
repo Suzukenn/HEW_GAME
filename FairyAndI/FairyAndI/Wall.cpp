@@ -9,13 +9,13 @@
 //
 //機能：コンストラクタ
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(tstirng)生成属性,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：なし
 /////////////////////////////////////////////
-WALL::WALL(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+WALL::WALL(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(modelname, tag, position, rotation);
+    Initialize(modelname, type, position, rotation);
 }
 
 /////////////////////////////////////////////
@@ -35,7 +35,7 @@ WALL::~WALL()
 /////////////////////////////////////////////
 //関数名：Draw
 //
-//機能：弾丸の描画
+//機能：壁の描画
 //
 //引数：なし
 //
@@ -96,13 +96,13 @@ void WALL::Draw(void)
 /////////////////////////////////////////////
 //関数名：Initialize
 //
-//機能：弾丸の初期化
+//機能：壁の初期化
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(tstirng)生成属性,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT WALL::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT WALL::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -111,7 +111,8 @@ HRESULT WALL::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D
     Transform.Position = position;
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
-    Tag = tag;
+    Tag = TEXT("Wall");
+    Type = type;
 
     //---モデルの読み込み---//
     hResult = MODELMANAGER::GetModel(modelname, Model);
@@ -144,7 +145,7 @@ void WALL::OnCollision(COLLISION* opponent)
 /////////////////////////////////////////////
 //関数名：Uninitialize
 //
-//機能：弾丸の終了
+//機能：壁の終了
 //
 //引数：なし
 //
@@ -167,7 +168,7 @@ void WALL::Uninitialize(void)
 /////////////////////////////////////////////
 //関数名：Update
 //
-//機能：弾丸の更新
+//機能：壁の更新
 //
 //引数：なし
 //

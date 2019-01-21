@@ -27,13 +27,14 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
     //---各種宣言---//
     HRESULT hResult;
     DWORD nCounter;
+    MODEL mModel;
 
     TCHAR szDirectory[_MAX_DIR];
     TCHAR szCurrentDirectory[_MAX_PATH];
 
     LPDIRECT3DDEVICE9 pDevice;
     LPD3DXMATERIAL pMaterial;
-    MODEL mModel;
+    LPD3DXMESH pTempMesh;
 
     //---初期化処理---//
     pDevice = GetDevice();
@@ -94,6 +95,15 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
                 return hResult;
             }
         }
+    }
+
+    //法線がなければ追加
+    if (!(mModel.Mesh->GetFVF() & D3DFVF_NORMAL))
+    {
+        mModel.Mesh->CloneMeshFVF(mModel.Mesh->GetOptions(), mModel.Mesh->GetFVF() | D3DFVF_NORMAL, pDevice, &pTempMesh);
+        D3DXComputeNormals(pTempMesh, nullptr);
+        SAFE_RELEASE(mModel.Mesh);
+        mModel.Mesh = pTempMesh;
     }
 
     //カレントディレクトリを元に戻す
