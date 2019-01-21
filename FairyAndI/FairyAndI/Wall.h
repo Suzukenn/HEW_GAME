@@ -5,12 +5,13 @@
 #include <memory>
 #include "GameObject.h"
 #include "Main.h"
+#include "Skill.h"
 
 //‘O•ûéŒ¾//
 class OBB;
 
 //ƒNƒ‰ƒXéŒ¾//
-class WALL final : public GAMEOBJECT
+class WALL final : public SKILL
 {
     private:
         std::weak_ptr<MODEL> Model;
@@ -18,7 +19,7 @@ class WALL final : public GAMEOBJECT
 
     public:
         WALL(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
-        ~WALL();
+        ~WALL(void);
 
         void Draw(void);
         void Uninitialize(void);

@@ -19,10 +19,10 @@ class FIREGIMMICK final : public GAMEOBJECT
 
 	public:
 
-		FIREGIMMICK(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
-		~FIREGIMMICK();
+		FIREGIMMICK(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);
+		~FIREGIMMICK(void);
 
-		HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
+		HRESULT Initialize(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);
 		void Uninitialize(void);
 		void Update(void);
 		void Draw(void);

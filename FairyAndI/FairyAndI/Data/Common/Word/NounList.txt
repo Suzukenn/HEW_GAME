@@ -1,5 +1,5 @@
 Data/Common/Word/Noun/Fire.png FIRE
 Data/Common/Word/Noun/Ice.png ICE
 Data/Common/Word/Noun/Rock.png ROCK
-Data/Common/Word/Noun/Earth.png EARTH
+Data/Common/Word/Noun/RiceCake.png RICECAKE
 Data/Common/Word/Lock.png LOCK

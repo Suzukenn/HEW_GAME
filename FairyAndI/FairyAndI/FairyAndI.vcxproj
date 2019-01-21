@@ -133,6 +133,7 @@
     <ClCompile Include="GimmickFactory.cpp" />
     <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Heart.cpp" />
     <ClCompile Include="IceGimmick.cpp" />
     <ClCompile Include="ItemBox.cpp" />
     <ClCompile Include="ModelManager.cpp" />
@@ -192,6 +193,7 @@
     <ClInclude Include="GimmickFactory.h" />
     <ClInclude Include="Grenade.h" />
     <ClInclude Include="Ground.h" />
+    <ClInclude Include="Heart.h" />
     <ClInclude Include="IceGimmick.h" />
     <ClInclude Include="ItemBox.h" />
     <ClInclude Include="Model.h" />
@@ -202,6 +204,7 @@
     <ClInclude Include="ModelManager.h" />
     <ClInclude Include="ObjectFactory.h" />
     <ClInclude Include="SelectScene.h" />
+    <ClInclude Include="Skill.h" />
     <ClInclude Include="SkillFactory.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="Transform.h" />

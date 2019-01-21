@@ -17,9 +17,6 @@ class TRAINING final : public BASE_SCENE
         FIELD Field;
         GROUND Ground;
         FLEXIBLECAMERA FlexibleCamera;
-        int					m_num;		//アイテムの添え字用
-        LPD3DXVECTOR3		m_itemPos;
-        LPD3DXVECTOR3		m_itemDistance;
 
         bool Mode;
 

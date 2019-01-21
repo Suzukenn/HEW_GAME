@@ -18,13 +18,13 @@
 //
 //機能：コンストラクタ
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：なし
 /////////////////////////////////////////////
-FAIRY::FAIRY(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+FAIRY::FAIRY(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(modelname, tag, position, rotation);
+    Initialize(modelname, position, rotation);
 }
 
 /////////////////////////////////////////////
@@ -39,14 +39,7 @@ FAIRY::FAIRY(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 r
 void FAIRY::Draw(void)
 {
     //---各種宣言---//
-    DWORD nCounter;
-    LPDIRECT3DDEVICE9 pDevice;
     D3DXMATRIX mtxWorld;
-    LPD3DXMATERIAL pMatrix;
-    D3DMATERIAL9 matDef;
-
-    //---初期化処理---//
-    pDevice = GetDevice();
 
     //---ワールドマトリクスの設定---//
     //初期化
@@ -55,27 +48,8 @@ void FAIRY::Draw(void)
     //設定
     Transform.MakeWorldMatrix(mtxWorld);
 
-    // 現在のマテリアルを取得
-    pDevice->GetMaterial(&matDef);
-
     //---描画---//
-    //ポインタを取得
-    pMatrix = (LPD3DXMATERIAL)MaterialBuffer->GetBufferPointer();
-
-    for (nCounter = 0; nCounter < MaterialValue; ++nCounter)
-    {
-        //マテリアルの設定
-        pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
-
-        //テクスチャの設定
-        pDevice->SetTexture(0, Texture);
-
-        //描画
-        Mesh->DrawSubset(nCounter);
-    }
-
-    //マテリアルをデフォルトに戻す
-    pDevice->SetMaterial(&matDef);
+    Model.Draw(mtxWorld);
 }
 
 /////////////////////////////////////////////
@@ -83,11 +57,11 @@ void FAIRY::Draw(void)
 //
 //機能：フェアリーの初期化
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT FAIRY::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT FAIRY::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -96,22 +70,26 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, 
 	//初期設定
 	Transform.Position = D3DXVECTOR3(0.0F, 20.0F, 0.0F);
     Transform.Rotation = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
-    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
+    Transform.Scale = D3DXVECTOR3(100.0F, 100.0F, 100.0F);
 	Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
-    Tag = tag;
+    Tag = TEXT("Fairy");
     Collection = false;
     ToTargetAngle = 0.0F;
     ElementPosition = Transform.Position;
     State = STATE_CHASE;
 
-    //Xファイルの読み込み
-    hResult = D3DXLoadMeshFromX(TEXT("Data/Common/Model/Character/car001.x"), D3DXMESH_SYSTEMMEM, GetDevice(), nullptr, &MaterialBuffer, nullptr, &MaterialValue, &Mesh);
+    //---モデルの読み込み---//
+    hResult = Model.Initialize(modelfile);
     if (FAILED(hResult))
-	{
-        MessageBox(nullptr, TEXT("フェアリーのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+    {
+        MessageBox(nullptr, TEXT("プレイヤーのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
-		return hResult;
-	}
+        return hResult;
+    }
+    else
+    {
+        Model.ChangeAnimation(0);
+    }
 
     //---当たり判定の付与---//
     Collision = COLLISIONMANAGER::InstantiateToSphere(D3DXVECTOR3(Transform.Position.x + 0.0F, Transform.Position.y + 10.0F, Transform.Position.z + 0.0F), 5.0F, TEXT("Character"), this);
@@ -130,39 +108,39 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, 
 /////////////////////////////////////////////
 void FAIRY::OnCollision(COLLISION* opponent)
 {
-    if (opponent->Owner->GetTag() == TEXT("Player"))
-    {
-        //右向き
-        if (Transform.Rotation.y == SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F)
-        {
-            if (Transform.Position.x > PLAYER::GetPlayerPosition().x - 15.0F)
-            {
-                Move.x = -(VALUE_MOVE_FAIRY) / 3.0F;
-            }
-            else
-            {
-                Move.x = 0.0F;
-                Move.z = 0.0F;
-            }
-        }
-        //左向き
-        else if (Transform.Rotation.y == SIDEVIEWCAMERA::GetRotation().y + D3DX_PI * 0.5F)
-        {
-            if (Transform.Position.x < PLAYER::GetPlayerPosition().x + 15.0F)
-            {
-                Move.x = VALUE_MOVE_FAIRY / 3.0F;
-            }
-            else
-            {
-                Move.x = 0.0F;
-                Move.z = 0.0F;
-            }
-        }
-    }
-    else if (opponent->Owner->GetTag() == TEXT("Element"))
-    {
-        Collection = false;
-    }
+    //if (opponent->Owner->GetTag() == TEXT("Player"))
+    //{
+    //    //右向き
+    //    if (Transform.Rotation.y == SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F)
+    //    {
+    //        if (Transform.Position.x > PLAYER::GetPlayerPosition().x - 15.0F)
+    //        {
+    //            Move.x = -(VALUE_MOVE_FAIRY) / 3.0F;
+    //        }
+    //        else
+    //        {
+    //            Move.x = 0.0F;
+    //            Move.z = 0.0F;
+    //        }
+    //    }
+    //    //左向き
+    //    else if (Transform.Rotation.y == SIDEVIEWCAMERA::GetRotation().y + D3DX_PI * 0.5F)
+    //    {
+    //        if (Transform.Position.x < PLAYER::GetPlayerPosition().x + 15.0F)
+    //        {
+    //            Move.x = VALUE_MOVE_FAIRY / 3.0F;
+    //        }
+    //        else
+    //        {
+    //            Move.x = 0.0F;
+    //            Move.z = 0.0F;
+    //        }
+    //    }
+    //}
+    //else if (opponent->Owner->GetTag() == TEXT("Element"))
+    //{
+    //    Collection = false;
+    //}
 }
 
 /////////////////////////////////////////////
@@ -223,9 +201,7 @@ bool FAIRY::SearchElement(D3DXVECTOR3& destination)
 /////////////////////////////////////////////
 void FAIRY::Uninitialize(void)
 {
-    SAFE_RELEASE(Texture);
-    SAFE_RELEASE(Mesh);
-    SAFE_RELEASE(MaterialBuffer);
+    Model.Uninitialize();
 }
 
 /////////////////////////////////////////////
@@ -254,7 +230,7 @@ void FAIRY::Update(void)
     }
 
     //移動
-    Transform.Position += Move;
+    //Transform.Position += Move;
     Collision->Position = Transform.Position;
 
 

@@ -1,6 +1,7 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "Canvas.h"
 #include "InputManager.h"
+#include "Player.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -14,6 +15,15 @@
 /////////////////////////////////////////////
 void CANVAS::Draw(void)
 {
+    //---各種宣言---//
+    int nCounter;
+
+
+    for (nCounter = 0; nCounter < PLAYER::GetPlayerHP(); ++nCounter)
+    {
+        Heart.at(nCounter).Draw();
+    }
+
     ItemBox.Draw();
     Item.Draw();
     if (Mode)
@@ -34,6 +44,7 @@ void CANVAS::Draw(void)
 HRESULT CANVAS::Initialize(void)
 {
     //---各種宣言---//
+    int nCounter;
     HRESULT hResult;
 
     //---初期化処理---//
@@ -51,6 +62,7 @@ HRESULT CANVAS::Initialize(void)
         Uninitialize();
         return hResult;
     }
+
     //アイテム
     hResult = Item.Initialize(TEXT("UNKNOWN"), D3DXVECTOR2(1060.0F, 15.0F));
     if (FAILED(hResult))
@@ -60,6 +72,16 @@ HRESULT CANVAS::Initialize(void)
         return hResult;
     }
 
+    //ハート
+    for (nCounter = 0; nCounter < MAX_PLAYER_HP; ++nCounter)
+    {
+        hResult = Heart.at(nCounter).Initialize(TEXT("HEART"), D3DXVECTOR2(10.0F + 60.0F * nCounter, 10.0F), D3DXVECTOR2(50.0F, 50.0F));
+        if (FAILED(hResult))
+        {
+            MessageBox(nullptr, TEXT("ハートの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
+            return hResult;
+        }
+    }
 
     Mode = false;
 
@@ -77,6 +99,14 @@ HRESULT CANVAS::Initialize(void)
 /////////////////////////////////////////////
 void CANVAS::Uninitialize(void)
 {
+    //---各種宣言---//
+    int nCounter;
+
+    for (nCounter = 0; nCounter < MAX_PLAYER_HP; ++nCounter)
+    {
+        Heart.at(nCounter).Uninitialize();
+    }
+
     ItemBox.Uninitialize();
     Item.Uninitialize();
     Menu.Uninitialize();
@@ -93,18 +123,25 @@ void CANVAS::Uninitialize(void)
 /////////////////////////////////////////////
 void CANVAS::Update(void)
 {
+    //---各種宣言---//
+    int nCounter;
+
     //---表示モード切り替え---//
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER) || INPUTMANAGER::GetKey(DIK_A, TRIGGER))
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Mode = !Mode;
     }
 
+    for (nCounter = 0; nCounter < MAX_PLAYER_HP; ++nCounter)
+    {
+        Heart.at(nCounter).Update();
+    }
 
     if (Mode)
     {
         Menu.Update();
         Item.Update();
-        Item.SetTexture(WORDMENU::NotificationItem());
+        Item.SetTexture(WORDMENU::NotificationAdjective() + WORDMENU::NotificationNoun());
     }
     else
     {

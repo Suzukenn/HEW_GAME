@@ -3,12 +3,10 @@
 #include "BatteryGimmick.h"
 #include "Collision.h"
 #include "CollisionManager.h"
-#include "GimmickFactory.h"
 #include "ModelManager.h"
 #include "Player.h"
+#include "Skill.h"
 #include "SkillFactory.h"
-
-//＝＝＝定数・マクロ定義＝＝＝//
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -16,13 +14,13 @@
 //
 //機能：コンストラクタ
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：なし
 /////////////////////////////////////////////
-BATTERYGIMMICK::BATTERYGIMMICK(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+BATTERYGIMMICK::BATTERYGIMMICK(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(modelname, tag, position, rotation);
+    Initialize(modelname, position, rotation);
 }
 
 /////////////////////////////////////////////
@@ -34,7 +32,7 @@ BATTERYGIMMICK::BATTERYGIMMICK(LPCTSTR modelname, tstring tag, D3DXVECTOR3 posit
 //
 //戻り値：なし
 /////////////////////////////////////////////
-BATTERYGIMMICK::~BATTERYGIMMICK()
+BATTERYGIMMICK::~BATTERYGIMMICK(void)
 {
 	Uninitialize();
 }
@@ -105,11 +103,11 @@ void BATTERYGIMMICK::Draw(void)
 //
 //機能：砲台ギミックの初期化
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -119,7 +117,7 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 p
     Transform.Position = position;
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
-	Tag = tag;
+	Tag = TEXT("Battery");
 
     //Xファイルの読み込み
 	hResult = MODELMANAGER::GetModel(modelfile, Model);
@@ -148,10 +146,17 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 p
 /////////////////////////////////////////////
 void BATTERYGIMMICK::OnCollision(COLLISION* opponent)
 {
-	if (opponent->Owner->GetTag().find(TEXT("GimmickBullet")) != tstring::npos)
-	{
-		ACTORMANAGER::Destroy(this);
-		COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+    if (opponent->Owner->GetTag() == TEXT("Bullet"))
+    {
+        SKILL* Skill = dynamic_cast<SKILL*>(opponent->Owner);
+        if (Skill)
+        {
+            if (Skill->GetType() == TEXT("BATTERY"))
+            {
+                ACTORMANAGER::Destroy(this);
+                COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+            }
+        }
     }
 }
 
@@ -207,7 +212,7 @@ void BATTERYGIMMICK::Update(void)
 		}
 
 		//弾発射
-		GIMMICKFACTORY::InstantiateGimmick(TEXT("ICE"), BulletPosition, Transform.Rotation);
+		SKILLFACTORY::InstantiateSkill(TEXT("ICE"), TEXT("BATTERY"), BulletPosition, Transform.Rotation);
 		//リセット
 		Count = 0;
 	}

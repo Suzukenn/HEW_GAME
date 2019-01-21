@@ -6,12 +6,13 @@
 #include "GameObject.h"
 #include "Main.h"
 #include "Model.h"
+#include "Skill.h"
 
 //‘O•ûéŒ¾//
 class SPHERE;
 
 //ƒNƒ‰ƒXéŒ¾//
-class GRENADE final : public GAMEOBJECT
+class GRENADE final : public SKILL
 {
 	public:
 		DWORD BornTime;

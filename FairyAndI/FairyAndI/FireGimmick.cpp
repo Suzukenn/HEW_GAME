@@ -4,20 +4,20 @@
 #include "CollisionManager.h"
 #include "FireGimmick.h"
 #include "ModelManager.h"
-
+#include "Skill.h"
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
 //関数名：FIREGIMMICK
 //
 //機能：コンストラクタ
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：なし
 /////////////////////////////////////////////
-FIREGIMMICK::FIREGIMMICK(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+FIREGIMMICK::FIREGIMMICK(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(modelname, tag, position, rotation);
+    Initialize(modelname, position, rotation);
 }
 
 /////////////////////////////////////////////
@@ -29,7 +29,7 @@ FIREGIMMICK::FIREGIMMICK(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D
 //
 //戻り値：なし
 /////////////////////////////////////////////
-FIREGIMMICK::~FIREGIMMICK()
+FIREGIMMICK::~FIREGIMMICK(void)
 {
 	Uninitialize();
 }
@@ -100,11 +100,11 @@ void FIREGIMMICK::Draw(void)
 //
 //機能：炎の壁ギミックの初期化
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT FIREGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT FIREGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -114,9 +114,7 @@ HRESULT FIREGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 posi
     Transform.Position = position;
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
-	Tag = tag;
-
-	//Model.reset(new MODEL);
+	Tag = TEXT("Gimmick");
 
     //Xファイルの読み込み
 	hResult = MODELMANAGER::GetModel(modelfile, Model);
@@ -144,12 +142,25 @@ HRESULT FIREGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 posi
 /////////////////////////////////////////////
 void FIREGIMMICK::OnCollision(COLLISION* opponent)
 {
-	if (opponent->Owner->GetTag().find(TEXT("HotIce")) != tstring::npos ||
-		opponent->Owner->GetTag().find(TEXT("SoftIce")) != tstring::npos)
-	{
-		ACTORMANAGER::Destroy(this);
-		COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+    if (opponent->Owner->GetTag() == TEXT("Bullet"))
+    {
+        SKILL* Skill = dynamic_cast<SKILL*>(opponent->Owner);
+        if (Skill)
+        {
+            if (Skill->GetType() == TEXT("HOT") || Skill->GetType() == TEXT("ICE"))
+            {
+                ACTORMANAGER::Destroy(this);
+                COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+            }
+        }
     }
+
+	//if (opponent->Owner->GetTag().find(TEXT("HotIce")) != tstring::npos ||
+	//	opponent->Owner->GetTag().find(TEXT("SoftIce")) != tstring::npos)
+	//{
+	//	ACTORMANAGER::Destroy(this);
+	//	COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+ //   }
 }
 
 /////////////////////////////////////////////

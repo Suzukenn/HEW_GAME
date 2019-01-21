@@ -166,7 +166,7 @@ HRESULT WORDMANAGER::Initialize(void)
     }
 
     //合成アイテムテクスチャリストの読み込み
-    hResult = LoadTexture(conList, TEXT("Data/Common/Word/ItemList.txt"));
+    hResult = LoadTexture(conList, TEXT("Data/Common/Word/SkillList.txt"));
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("合成アイテムテクスチャリストの読み込みに失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);

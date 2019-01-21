@@ -14,13 +14,13 @@
 //
 //機能：コンストラクタ
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(tstirng)生成属性,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：なし
 /////////////////////////////////////////////
-TRAP::TRAP(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+TRAP::TRAP(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-	Initialize(modelname, tag, position, rotation);
+	Initialize(modelname, type, position, rotation);
 }
 
 /////////////////////////////////////////////
@@ -40,7 +40,7 @@ TRAP::~TRAP()
 /////////////////////////////////////////////
 //関数名：Draw
 //
-//機能：弾丸の描画
+//機能：罠の描画
 //
 //引数：なし
 //
@@ -88,9 +88,9 @@ void TRAP::Draw(void)
 		pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
 
 		//テクスチャの設定
-		pDevice->SetTexture(0, *pModel->Texture);
-
-		//描画
+        pDevice->SetTexture(0, *pModel->Texture);
+		
+        //描画
 		pModel->Mesh->DrawSubset(nCounter);
 	}
 
@@ -101,13 +101,13 @@ void TRAP::Draw(void)
 /////////////////////////////////////////////
 //関数名：Initialize
 //
-//機能：弾丸の初期化
+//機能：罠の初期化
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(tstirng)生成属性,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT TRAP::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT TRAP::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
 	//---各種宣言---//
 	HRESULT hResult;
@@ -116,15 +116,14 @@ HRESULT TRAP::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D
     Transform.Position = position;
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
-	BornTime = 0;
-	Move = D3DXVECTOR3(-sinf(Transform.Rotation.y) * 1.5F, 0.0F, -cosf(Transform.Rotation.y) * 1.5F);
-	Tag = tag;
+	Tag = TEXT("Trap");
+    Type = type;
 
 	//---モデルの読み込み---//
 	hResult = MODELMANAGER::GetModel(modelname, Model);
 	if (FAILED(hResult))
 	{
-		MessageBox(nullptr, TEXT("弾丸のモデルの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+		MessageBox(nullptr, TEXT("罠のモデルの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
 		Uninitialize();
 		return hResult;
 	}
@@ -146,14 +145,14 @@ HRESULT TRAP::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D
 /////////////////////////////////////////////
 void TRAP::OnCollision(COLLISION* opponent)
 {
-	ACTORMANAGER::Destroy(this);
-	COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+	//ACTORMANAGER::Destroy(this);
+	//COLLISIONMANAGER::Destroy((COLLISION*)Collision);
 }
 
 /////////////////////////////////////////////
 //関数名：Uninitialize
 //
-//機能：弾丸の終了
+//機能：罠の終了
 //
 //引数：なし
 //
@@ -176,7 +175,7 @@ void TRAP::Uninitialize(void)
 /////////////////////////////////////////////
 //関数名：Update
 //
-//機能：弾丸の更新
+//機能：罠の更新
 //
 //引数：なし
 //
@@ -184,15 +183,5 @@ void TRAP::Uninitialize(void)
 /////////////////////////////////////////////
 void TRAP::Update(void)
 {
-	++BornTime;
-	if (BornTime > 120)
-	{
-		ACTORMANAGER::Destroy(this);
-		COLLISIONMANAGER::Destroy((COLLISION*)Collision);
-	}
-	else
-	{
-        Transform.Position += Move;
-		Collision->Position = Transform.Position;
-	}
+
 }

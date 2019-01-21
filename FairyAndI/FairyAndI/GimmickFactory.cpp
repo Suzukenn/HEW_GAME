@@ -22,7 +22,7 @@
 void GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
 	//---ê∂ê¨---//
-	ACTORMANAGER::GameObject.emplace_back(new BATTERYGIMMICK(TEXT("FIRE"), TEXT("Gimmick"), position, rotation));
+	ACTORMANAGER::GameObject.emplace_back(new BATTERYGIMMICK(TEXT("FIRE"), position, rotation));
 }
 
 /////////////////////////////////////////////
@@ -52,7 +52,7 @@ void GIMMICKFACTORY::InstantiateBulletGimmick(D3DXVECTOR3 position, D3DXVECTOR3 
 void GIMMICKFACTORY::InstantiateFireGimmick(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---ê∂ê¨---//
-    ACTORMANAGER::GameObject.emplace_back(new FIREGIMMICK(TEXT("FIREGIMMICK"), TEXT("Gimmick"), position, rotation));
+    ACTORMANAGER::GameObject.emplace_back(new FIREGIMMICK(TEXT("FIREGIMMICK"), position, rotation));
 }
 
 /////////////////////////////////////////////
@@ -75,6 +75,7 @@ void GIMMICKFACTORY::InstantiateGimmick(tstring gameobject, D3DXVECTOR3 position
         if (gameobject.find(data.first) != tstring::npos)
         {
             data.second(position, rotation);
+            return;
         }
     }
 }
@@ -106,5 +107,5 @@ void GIMMICKFACTORY::InstantiateIceGimmick(D3DXVECTOR3 position, D3DXVECTOR3 rot
 void GIMMICKFACTORY::InstantiateWoodGimmick(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---ê∂ê¨---//
-    ACTORMANAGER::GameObject.emplace_back(new FIREGIMMICK(TEXT("WOODGIMMICK"), TEXT("Gimmick"), position, rotation));
+    ACTORMANAGER::GameObject.emplace_back(new WOODGIMMICK(TEXT("WOODGIMMICK"), TEXT("Gimmick"), position, rotation));
 }

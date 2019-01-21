@@ -14,13 +14,13 @@
 //
 //機能：コンストラクタ
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(tstirng)生成属性,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：なし
 /////////////////////////////////////////////
-GRENADE::GRENADE(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+GRENADE::GRENADE(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-	Initialize(modelname, tag, position, rotation);
+	Initialize(modelname, type, position, rotation);
 }
 
 /////////////////////////////////////////////
@@ -32,7 +32,7 @@ GRENADE::GRENADE(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTO
 //
 //戻り値：なし
 /////////////////////////////////////////////
-GRENADE::~GRENADE()
+GRENADE::~GRENADE(void)
 {
 	Uninitialize();
 }
@@ -40,7 +40,7 @@ GRENADE::~GRENADE()
 /////////////////////////////////////////////
 //関数名：Draw
 //
-//機能：弾丸の描画
+//機能：榴弾の描画
 //
 //引数：なし
 //
@@ -72,7 +72,7 @@ void GRENADE::Draw(void)
 	pModel = Model.lock();
 	if (!pModel)
 	{
-		MessageBox(nullptr, TEXT("弾丸のモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+		MessageBox(nullptr, TEXT("榴弾のモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
 		return;
 	}
 
@@ -101,13 +101,13 @@ void GRENADE::Draw(void)
 /////////////////////////////////////////////
 //関数名：Initialize
 //
-//機能：弾丸の初期化
+//機能：榴弾の初期化
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(tstirng)生成属性,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT GRENADE::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT GRENADE::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
 	//---各種宣言---//
 	HRESULT hResult;
@@ -118,7 +118,8 @@ HRESULT GRENADE::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
 	BornTime = 0;
 	Move = D3DXVECTOR3(-sinf(Transform.Rotation.y) * 1.5F, 3.0F, -cosf(Transform.Rotation.y) * 1.5F);
-	Tag = tag;
+	Tag = TEXT("Bullet");
+    Type = type;
 
 	//---モデルの読み込み---//
 	hResult = MODELMANAGER::GetModel(modelname, Model);
@@ -153,7 +154,7 @@ void GRENADE::OnCollision(COLLISION* opponent)
 /////////////////////////////////////////////
 //関数名：Uninitialize
 //
-//機能：弾丸の終了
+//機能：榴弾の終了
 //
 //引数：なし
 //
@@ -176,7 +177,7 @@ void GRENADE::Uninitialize(void)
 /////////////////////////////////////////////
 //関数名：Update
 //
-//機能：弾丸の更新
+//機能：榴弾の更新
 //
 //引数：なし
 //

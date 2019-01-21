@@ -3,6 +3,7 @@
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <memory>
+#include "AnimationModel.h"
 #include "GameObject.h"
 #include "Main.h"
 
@@ -24,26 +25,22 @@ class SPHERE;
 class FAIRY final : public GAMEOBJECT
 {
 	private:
-        LPDIRECT3DTEXTURE9 Texture;	//テクスチャへのポインタ
-        LPD3DXMESH Mesh;		    //メッシュ情報へのポインタ
-        LPD3DXBUFFER MaterialBuffer;//マテリアル情報へのポインタ
-        DWORD MaterialValue;	    //マテリアル情報の数
         D3DXVECTOR3	Move;	        //移動量
         D3DXVECTOR3	ElementPosition;//回収エレメントの位置
 		bool Collection;	        //回収状態
         STATE State;
 		float ToTargetAngle;
+        ANIMATIONMODEL Model;
 
         std::vector<GAMEOBJECT*> Element;
-
         SPHERE* Collision;
 
         bool SearchElement(D3DXVECTOR3&);
 
 	public:
-        FAIRY(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
+        FAIRY(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);
 
-		HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
+		HRESULT Initialize(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);
 		void Uninitialize(void);
 		void Update(void);
 		void Draw(void);

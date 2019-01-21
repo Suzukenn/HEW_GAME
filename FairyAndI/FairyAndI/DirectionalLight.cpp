@@ -37,7 +37,7 @@ HRESULT DIRECTIONALLIGHT::Initialize(void)
     Light.Ambient = D3DXCOLOR(1.0F, 1.0F, 1.0F, 1.0F);
 
     //•ûŒü
-    vecDirection = D3DXVECTOR3(0.0F, -0.6F, -1.0F);
+    vecDirection = D3DXVECTOR3(0.0F, -0.6F, 1.0F);
     D3DXVec3Normalize(&vecDirection, &vecDirection);
     Light.Direction = vecDirection;
 

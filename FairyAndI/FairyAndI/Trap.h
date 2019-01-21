@@ -6,29 +6,27 @@
 #include "GameObject.h"
 #include "Main.h"
 #include "Model.h"
+#include "Skill.h"
 
 //‘O•ûéŒ¾//
 class SPHERE;
 
 //ƒNƒ‰ƒXéŒ¾//
-class TRAP final : public  GAMEOBJECT
+class TRAP final : public SKILL
 {
-public:
-	DWORD BornTime;
-	std::weak_ptr<MODEL> Model;
-	D3DXVECTOR3 Move;
+    public:
+	    std::weak_ptr<MODEL> Model;
+	    SPHERE* Collision;
 
-	SPHERE* Collision;
+	    TRAP(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
+	    ~TRAP(void);
 
-	TRAP(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
-	~TRAP();
+	    void Draw(void);
+	    void Uninitialize(void);
+	    HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
+	    void Update(void);
 
-	void Draw(void);
-	void Uninitialize(void);
-	HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
-	void Update(void);
-
-	void OnCollision(COLLISION*);
+	    void OnCollision(COLLISION*);
 };
 
 #endif

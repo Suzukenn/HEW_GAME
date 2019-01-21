@@ -14,13 +14,13 @@
 //
 //機能：コンストラクタ
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(tstirng)生成属性,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：なし
 /////////////////////////////////////////////
-BULLET::BULLET(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+BULLET::BULLET(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(modelname, tag, position, rotation);
+    Initialize(modelname, type, position, rotation);
 }
 
 /////////////////////////////////////////////
@@ -32,7 +32,7 @@ BULLET::BULLET(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3
 //
 //戻り値：なし
 /////////////////////////////////////////////
-BULLET::~BULLET()
+BULLET::~BULLET(void)
 {
     Uninitialize();
 }
@@ -103,11 +103,11 @@ void BULLET::Draw(void)
 //
 //機能：弾丸の初期化
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(tstirng)生成属性,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT BULLET::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -118,7 +118,8 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position,
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
     BornTime = 0;
     Move = D3DXVECTOR3(-sinf(Transform.Rotation.y) * 1.5F, 0.0F, -cosf(Transform.Rotation.y) * 1.5F);
-    Tag = tag;
+    Tag = TEXT("Bullet");
+    Type = type;
 
     //---モデルの読み込み---//
     hResult = MODELMANAGER::GetModel(modelname, Model);

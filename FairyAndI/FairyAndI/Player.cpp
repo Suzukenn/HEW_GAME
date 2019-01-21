@@ -13,21 +13,22 @@
 #define GRAVITY 0.18F
 #define JUMP 5.0F
 
-static D3DXVECTOR3 pos;
-static D3DXVECTOR3 rot;
+int hp;
+D3DXVECTOR3 pos;
+D3DXVECTOR3 rot;
 
 /////////////////////////////////////////////
 //関数名：PLAYER
 //
 //機能：コンストラクタ
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：なし
 /////////////////////////////////////////////
-PLAYER::PLAYER(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+PLAYER::PLAYER(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(modelname, tag, position, rotation);
+    Initialize(modelname, position, rotation);
 }
 
 //＝＝＝関数定義＝＝＝//
@@ -61,11 +62,11 @@ void PLAYER::Draw(void)
 //
 //機能：プレイヤーの初期化
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT PLAYER::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -74,12 +75,13 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position,
     //位置・向きの初期設定
     Transform.Position = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
     Transform.Rotation = D3DXVECTOR3(270.0F, 270.0F, 0.0F);
-    Transform.Scale = D3DXVECTOR3(0.1F, 0.1F, 0.1F);
+    Transform.Scale = D3DXVECTOR3(0.01F, 0.01F, 0.01F);
+    HP = MAX_PLAYER_HP;
     Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
-    Tag = tag;
+    Tag = TEXT("Player");
 
     //---モデルの読み込み---//
-    hResult = Model.Initialize(TEXT("Data/Common/Model/Character/tiny_4anim.x"));
+    hResult = Model.Initialize(modelfile);
     if(FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("プレイヤーのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -122,14 +124,15 @@ void PLAYER::OnCollision(COLLISION* opponent)
 /////////////////////////////////////////////
 void PLAYER::Uninitialize(void)
 {
-    SAFE_RELEASE(Texture);
-    SAFE_RELEASE(Mesh);
-    SAFE_RELEASE(MaterialBuffer);
-
     Model.Uninitialize();
 
     ACTORMANAGER::Destroy(this);
-    COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+
+    if (Collision)
+    {
+        COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+        Collision = nullptr;
+    }
 }
 
 /////////////////////////////////////////////
@@ -209,9 +212,10 @@ void PLAYER::Update(void)
         vecInstancePosition.y = Transform.Position.y + 21.0F;
         vecInstancePosition.z = 0.0F;
 
-        SKILLFACTORY::InstantiateSkill(WORDMENU::NotificationItem(), vecInstancePosition, Transform.Rotation);
+        SKILLFACTORY::InstantiateSkill(WORDMENU::NotificationAdjective(), WORDMENU::NotificationNoun(), vecInstancePosition, Transform.Rotation);
     }
 
+    hp = HP;
     pos = Transform.Position;
     rot = Transform.Rotation;
 
@@ -231,14 +235,28 @@ void PLAYER::Update(void)
 
 }
 
+/////////////////////////////////////////////
+//関数名：GetPlayerHP
+//
+//機能：プレイヤーの更新
+//
+//引数：なし
+//
+//戻り値：なし
+/////////////////////////////////////////////
+int PLAYER::GetPlayerHP(void)
+{
+    return hp;
+}
+
 // モデル位置の取得
-const D3DXVECTOR3 PLAYER::GetPlayerPosition(void)
+D3DXVECTOR3 PLAYER::GetPlayerPosition(void)
 {
 	return pos;
 }
 
 // モデル向きの取得
-const D3DXVECTOR3 PLAYER::GetPlayerRotation(void)
+D3DXVECTOR3 PLAYER::GetPlayerRotation(void)
 {
 	return rot;
 }
