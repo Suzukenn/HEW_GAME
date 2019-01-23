@@ -108,39 +108,16 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 r
 /////////////////////////////////////////////
 void FAIRY::OnCollision(COLLISION* opponent)
 {
-    //if (opponent->Owner->GetTag() == TEXT("Player"))
-    //{
-    //    //右向き
-    //    if (Transform.Rotation.y == SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F)
-    //    {
-    //        if (Transform.Position.x > PLAYER::GetPlayerPosition().x - 15.0F)
-    //        {
-    //            Move.x = -(VALUE_MOVE_FAIRY) / 3.0F;
-    //        }
-    //        else
-    //        {
-    //            Move.x = 0.0F;
-    //            Move.z = 0.0F;
-    //        }
-    //    }
-    //    //左向き
-    //    else if (Transform.Rotation.y == SIDEVIEWCAMERA::GetRotation().y + D3DX_PI * 0.5F)
-    //    {
-    //        if (Transform.Position.x < PLAYER::GetPlayerPosition().x + 15.0F)
-    //        {
-    //            Move.x = VALUE_MOVE_FAIRY / 3.0F;
-    //        }
-    //        else
-    //        {
-    //            Move.x = 0.0F;
-    //            Move.z = 0.0F;
-    //        }
-    //    }
-    //}
-    //else if (opponent->Owner->GetTag() == TEXT("Element"))
-    //{
-    //    Collection = false;
-    //}
+    //プレイヤーの後ろにつく
+    if (opponent->Owner->GetTag() == TEXT("Player"))
+    {
+        //Move.x = 0.0F;
+        //Move.z = 0.0F;
+    }
+    else if (opponent->Owner->GetTag() == TEXT("Element"))
+    {
+        Collection = false;
+    }
 }
 
 /////////////////////////////////////////////
@@ -219,32 +196,34 @@ void FAIRY::Update(void)
     D3DXVECTOR3 vecFairyDistance;
 
     //---初期化処理---//
-    Transform.Rotation = PLAYER::GetPlayerRotation();
-	int num = 0;
+    //Transform.Rotation = PLAYER::GetPlayerRotation();
 
-    static int cnt;
+    static int nFrameCount;
 
-    if (++cnt > 120)
+    if (++nFrameCount > 120)
     {
-        cnt = 0;
+        nFrameCount = 0;
     }
 
     //移動
     //Transform.Position += Move;
     Collision->Position = Transform.Position;
 
-
     //ボタンを押したら思考状態へ移行
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
-        if (State == STATE_SYNTHIESIS)
-        {
-            State = STATE_CHASE;
-        }
-        else
-        {
-            State = STATE_SYNTHIESIS;
-        }
+        //if (State == STATE_CHASE)
+        //{
+        //    State = STATE_SYNTHIESIS;
+
+        //}
+        //else if (State == STATE_SYNTHIESIS)
+        //{
+        //    State = STATE_CHASE;
+        //}
+        State = (STATE)((DWORD)!State);
+
+        Model.ChangeAnimation((DWORD)State);
     }
 
 	//ボタンを押したらアイテムを取りに行く
@@ -278,7 +257,7 @@ void FAIRY::Update(void)
 
 	//移動量格納
 	Move.x = cosf(ToTargetAngle) * VALUE_MOVE_FAIRY;
-    Move.y = sinf(ToTargetAngle) * VALUE_MOVE_FAIRY + (sinf(-D3DX_PI * 0.5F + D3DX_PI / 60.0F * cnt) + 1.0F) * 0.5F;
+    Move.y = sinf(ToTargetAngle) * VALUE_MOVE_FAIRY + (sinf(-D3DX_PI * 0.5F + D3DX_PI / 60.0F * nFrameCount) + 1.0F) * 0.5F;
     if (Transform.Rotation.y == SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F && Transform.Position.x > PLAYER::GetPlayerPosition().x - 20.0F && Transform.Position.x < PLAYER::GetPlayerPosition().x + 20.0F)
     {
         Move.x = 0.0F;

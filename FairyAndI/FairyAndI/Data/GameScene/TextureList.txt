@@ -1,3 +1,7 @@
-Data/GameScene/BackGround/BackGround.tga BACKGROUND
+Data/GameScene/Texture/Field.jpg FIELD
 Data/GameScene/UI/AdjectiveList.png ADJECTIVELIST
 Data/GameScene/UI/NounList.png NOUNLIST
+Data/GameScene/UI/Balloon.png BALLOON
+Data/GameScene/UI/Select.png MARKER
+Data/GameScene/UI/ItemBox.png ITEMBOX
+Data/GameScene/UI/Heart.tga HEART

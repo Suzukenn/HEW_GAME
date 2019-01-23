@@ -142,7 +142,7 @@ HRESULT WORDMENU::Load(std::vector<std::vector<tstring>>& list)
     std::string szNoun;
     std::wstring wszAdjective;
     std::wstring wszNoun;
-    std::ifstream file(TEXT("Data/Common/Word/WordPair.txt"));
+    std::ifstream file(TEXT("Data/GameScene/Word/WordPair.txt"));
 
     //---初期化処理---//
     list.resize(2);
@@ -150,7 +150,7 @@ HRESULT WORDMENU::Load(std::vector<std::vector<tstring>>& list)
     //---ファイルの読み込み---//
     if (!file.is_open())
     {
-        MessageBox(nullptr, TEXT("ワードペアリストを開けませんでした"), TEXT("Data/Common/Word/WordPair.txt"), MB_ICONSTOP | MB_OK);
+        MessageBox(nullptr, TEXT("ワードペアリストを開けませんでした"), TEXT("Data/GameScene/Word/WordPair.txt"), MB_ICONSTOP | MB_OK);
         Uninitialize();
         return E_FAIL;
     }

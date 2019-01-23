@@ -146,17 +146,10 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DX
 /////////////////////////////////////////////
 void BATTERYGIMMICK::OnCollision(COLLISION* opponent)
 {
-    if (opponent->Owner->GetTag() == TEXT("Bullet"))
+    if (opponent->Owner->GetTag() == TEXT("BatteryCannon"))
     {
-        SKILL* Skill = dynamic_cast<SKILL*>(opponent->Owner);
-        if (Skill)
-        {
-            if (Skill->GetType() == TEXT("BATTERY"))
-            {
-                ACTORMANAGER::Destroy(this);
-                COLLISIONMANAGER::Destroy((COLLISION*)Collision);
-            }
-        }
+        ACTORMANAGER::Destroy(this);
+        COLLISIONMANAGER::Destroy((COLLISION*)Collision);
     }
 }
 

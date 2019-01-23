@@ -13,6 +13,18 @@
 #define GRAVITY 0.18F
 #define JUMP 5.0F
 
+//
+enum
+{
+    STATE_WAIT,
+    STATE_WALK,
+    STATE_RUN,
+    STATE_JUMP,
+    STATE_FALL,
+    STATE_ATTACK,
+    STATE_DAMAGE
+};
+
 int hp;
 D3DXVECTOR3 pos;
 D3DXVECTOR3 rot;
@@ -74,9 +86,11 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     //---èâä˙âªèàóù---//
     //à íuÅEå¸Ç´ÇÃèâä˙ê›íË
     Transform.Position = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
-    Transform.Rotation = D3DXVECTOR3(270.0F, 270.0F, 0.0F);
-    Transform.Scale = D3DXVECTOR3(0.01F, 0.01F, 0.01F);
+    Transform.Rotation = D3DXVECTOR3(0.0F, 270.0F, 0.0F);
+    Transform.Scale = D3DXVECTOR3(1000.0F, 1000.0F, 1000.0F);
+    //Transform.Scale = D3DXVECTOR3(0.1F, 0.1F, 0.1F);
     HP = MAX_PLAYER_HP;
+    State = STATE_WAIT;
     Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
     Tag = TEXT("Player");
 
@@ -94,7 +108,7 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     }
 
     //---ìñÇΩÇËîªíËÇÃïtó^---//
-    Collision = COLLISIONMANAGER::InstantiateToOBB(D3DXVECTOR3(Transform.Position.x + 5.0F, Transform.Position.y + 5.0F, Transform.Position.z + 5.0F), D3DXVECTOR3(5.0F, 5.0F, 5.0F), TEXT("Character"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Character"), this);
 
 	return hResult;
 }
@@ -219,19 +233,19 @@ void PLAYER::Update(void)
     pos = Transform.Position;
     rot = Transform.Rotation;
 
-    if (Move.x)
-    {
-        Model.ChangeAnimation(1);
-    }
-    else
-    {
-        Model.ChangeAnimation(0);
-    }
+    //if (Move.x)
+    //{
+    //    Model.ChangeAnimation(1);
+    //}
+    //else
+    //{
+    //    Model.ChangeAnimation(0);
+    //}
 
-    if (Move.y != 0.0F)
-    {
-        Model.ChangeAnimation(2);
-    }
+    //if (Move.y != 0.0F)
+    //{
+    //    Model.ChangeAnimation(2);
+    //}
 
 }
 

@@ -242,6 +242,9 @@
     <ClCompile Include="Heart.cpp">
       <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
+    <ClCompile Include="BatteryCannon.cpp">
+      <Filter>ソース ファイル\Actor\Gimmick</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -321,9 +324,6 @@
     </ClInclude>
     <ClInclude Include="WordPlate.h">
       <Filter>ソース ファイル\UI\WordMenu</Filter>
-    </ClInclude>
-    <ClInclude Include="Fairy.h">
-      <Filter>ソース ファイル\Actor\Character</Filter>
     </ClInclude>
     <ClInclude Include="DirectionalLight.h">
       <Filter>ソース ファイル\Actor\Staff</Filter>
@@ -444,6 +444,12 @@
     </ClInclude>
     <ClInclude Include="Heart.h">
       <Filter>ソース ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Fairy.h">
+      <Filter>ソース ファイル\Actor\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="BatteryCannon.h">
+      <Filter>ソース ファイル\Actor\Gimmick</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

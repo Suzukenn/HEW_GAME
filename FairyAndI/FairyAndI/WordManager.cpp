@@ -28,7 +28,7 @@ HRESULT WORDMANAGER::CreatePair(void)
     std::string szNoun;
     std::wstring wszAdjective;
     std::wstring wszNoun;
-    std::ifstream file(TEXT("Data/Common/Word/WordPair.txt"));
+    std::ifstream file(TEXT("Data/GameScene/Word/WordPair.txt"));
 
     //---初期化処理---//
     NounToAdjective.clear();
@@ -36,7 +36,7 @@ HRESULT WORDMANAGER::CreatePair(void)
     //---ファイルの読み込み---//
     if (!file.is_open())
     {
-        MessageBox(nullptr, TEXT("ワードペアリストを開けませんでした"), TEXT("Data/Common/Word/WordPair.txt"), MB_ICONSTOP | MB_OK);
+        MessageBox(nullptr, TEXT("ワードペアリストを開けませんでした"), TEXT("Data/GameScene/Word/WordPair.txt"), MB_ICONSTOP | MB_OK);
         Uninitialize();
         return E_FAIL;
     }
@@ -115,10 +115,10 @@ HRESULT WORDMANAGER::Initialize(void)
 
     //---オブジェクト準備---//
     //名詞テクスチャリストの読み込み
-    hResult = LoadTexture(conList, TEXT("Data/Common/Word/NounList.txt"));
+    hResult = LoadTexture(conList, TEXT("Data/GameScene/Word/NounList.txt"));
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("名詞テクスチャの読み込みに失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
+        MessageBox(nullptr, TEXT("名詞テクスチャの読み込みに失敗しました"), TEXT("Data/GameScene/Word/NounList.txt"), MB_ICONSTOP | MB_OK);
         Uninitialize();
         return hResult;
     }
@@ -136,10 +136,10 @@ HRESULT WORDMANAGER::Initialize(void)
     }
 
     //形容詞テクスチャリストの読み込み
-    hResult = LoadTexture(conList, TEXT("Data/Common/Word/AdjectiveList.txt"));
+    hResult = LoadTexture(conList, TEXT("Data/GameScene/Word/AdjectiveList.txt"));
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("形容詞テクスチャの読み込みに失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
+        MessageBox(nullptr, TEXT("形容詞テクスチャの読み込みに失敗しました"), TEXT("Data/GameScene/Word/AdjectiveList.txt"), MB_ICONSTOP | MB_OK);
         Uninitialize();
         return hResult;
     }
@@ -166,7 +166,7 @@ HRESULT WORDMANAGER::Initialize(void)
     }
 
     //合成アイテムテクスチャリストの読み込み
-    hResult = LoadTexture(conList, TEXT("Data/Common/Word/SkillList.txt"));
+    hResult = LoadTexture(conList, TEXT("Data/GameScene/Word/SkillList.txt"));
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("合成アイテムテクスチャリストの読み込みに失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);

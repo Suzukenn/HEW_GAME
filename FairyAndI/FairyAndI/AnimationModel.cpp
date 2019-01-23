@@ -21,7 +21,7 @@
 //
 //戻り値：なし
 /////////////////////////////////////////////
-ANIMATIONMODEL::ANIMATIONMODEL()
+ANIMATIONMODEL::ANIMATIONMODEL(void)
 {
     //アニメーションスピード初期化
     PlaySpeed = SKIN_ANIME_SPEED; //固定
@@ -44,7 +44,7 @@ ANIMATIONMODEL::ANIMATIONMODEL()
 //
 //戻り値：なし
 /////////////////////////////////////////////
-ANIMATIONMODEL::~ANIMATIONMODEL()
+ANIMATIONMODEL::~ANIMATIONMODEL(void)
 {
     //Uninitialize();
 }
@@ -161,7 +161,7 @@ HRESULT ANIMATIONMODEL::AllocateBoneMatrix(LPD3DXMESHCONTAINER meshcontainer)
 void ANIMATIONMODEL::ChangeAnimation(DWORD animationnumber)
 {
     //指定値の境界チェック
-    if (animationnumber < 0 || animationnumber > AnimationData.size())
+    if (animationnumber > AnimationData.size())
     {
         return;
     }

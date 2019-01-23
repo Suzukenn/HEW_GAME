@@ -1,0 +1,5 @@
+Data/GameScene/Word/Noun/Fire.png FIRE
+Data/GameScene/Word/Noun/Ice.png ICE
+Data/GameScene/Word/Noun/Rock.png ROCK
+Data/GameScene/Word/Noun/RiceCake.png RICECAKE
+Data/GameScene/Word/Lock.png LOCK
