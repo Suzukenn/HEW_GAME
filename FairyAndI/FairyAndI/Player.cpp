@@ -209,7 +209,7 @@ void PLAYER::Update(void)
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
     {
         vecInstancePosition.x = Transform.Position.x + sinf(D3DXToRadian(Transform.Rotation.y)) * 10.0F + cosf(D3DXToRadian(Transform.Rotation.y)) * 8.0F;
-        vecInstancePosition.y = Transform.Position.y + 21.0F;
+        vecInstancePosition.y = Transform.Position.y + 10.0F/*21.0F*/;
         vecInstancePosition.z = 0.0F;
 
         SKILLFACTORY::InstantiateSkill(WORDMENU::NotificationAdjective(), WORDMENU::NotificationNoun(), vecInstancePosition, Transform.Rotation);

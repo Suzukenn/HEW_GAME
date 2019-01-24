@@ -4,6 +4,7 @@
 #include "CharacterFactory.h"
 #include "CollisionManager.h"
 #include "DirectionalLight.h"
+#include "Enemy.h"
 #include "FlexibleCamera.h"
 #include "GimmickFactory.h"
 #include "InputManager.h"
@@ -88,6 +89,8 @@ HRESULT TRAINING::Initialize(void)
     //キャラクター
     CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(-20.0F, 50.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
     CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+	CHARACTERFACTORY::InstantiatePlant(D3DXVECTOR3(50.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+	CHARACTERFACTORY::InstantiateSlime(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
 
     //エレメント
     OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3(100.0F, 0.0F, 0.0F));

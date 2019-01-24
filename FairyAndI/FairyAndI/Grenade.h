@@ -17,6 +17,7 @@ class GRENADE final : public SKILL
 	public:
 		DWORD BornTime;
 		D3DXVECTOR3 Move;
+		bool	Throw;		//ç≈èâÇ…è„Ç…è„Ç∞ÇÈÇÊÇ§
 
 		std::weak_ptr<MODEL> Model;
 		SPHERE* Collision;

@@ -117,7 +117,7 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
     BornTime = 0;
-    Move = D3DXVECTOR3(-sinf(Transform.Rotation.y) * 1.5F, 0.0F, -cosf(Transform.Rotation.y) * 1.5F);
+	Move = D3DXVECTOR3(sinf(Transform.Rotation.y) * 1.5F, 0.0F, 0.0F);//-cosf(Transform.Rotation.y) * 1.5F);
     Tag = TEXT("Bullet");
     Type = type;
 
@@ -147,8 +147,23 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position
 /////////////////////////////////////////////
 void BULLET::OnCollision(COLLISION* opponent)
 {
-    ACTORMANAGER::Destroy(this);
-    COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+	if (opponent->Owner->GetTag() == TEXT("Element") ||
+		opponent->Owner->GetTag() == TEXT("Player") ||
+		opponent->Owner->GetTag() == TEXT("Fairy"))
+	{
+		return;
+	}
+
+	//’µ‚Ë•Ô‚Á‚½“®‚«
+	if (opponent->Owner->GetTag() == TEXT("Trap"))
+	{
+		Move.x *= -1;
+		Move.y *= -1;
+		return;
+	}
+
+	ACTORMANAGER::Destroy(this);
+	COLLISIONMANAGER::Destroy((COLLISION*)Collision);
 }
 
 /////////////////////////////////////////////

@@ -130,7 +130,7 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DX
 
     //---“–‚½‚è”»’è‚Ì•t—^---//
 	//Collision = COLLISIONMANAGER::InstantiateToOBB(Position, Rotation, TEXT("Object"), this);
-	Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Object"), this);
+	Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Object"), this);
 
 	return hResult;
 }
@@ -202,17 +202,17 @@ void BATTERYGIMMICK::Update(void)
 	{
 		if (PLAYER::GetPlayerPosition().x < Transform.Position.x)
 		{
-            Transform.Rotation.y = D3DX_PI * 0.50F;
+            Transform.Rotation.y = -(D3DX_PI * 0.50F);
 			BulletPosition.x = Transform.Position.x - 10.0F;
 		}
 		else if (PLAYER::GetPlayerPosition().x > Transform.Position.x)
 		{
-            Transform.Rotation.y = -(D3DX_PI * 0.50f);
+            Transform.Rotation.y = D3DX_PI * 0.50F;
 			BulletPosition.x = Transform.Position.x + 10.0F;
 		}
 
 		//’e”­ŽË
-		SKILLFACTORY::InstantiateSkill(TEXT("ICE"), TEXT("BATTERY"), BulletPosition, Transform.Rotation);
+		SKILLFACTORY::InstantiateSkill(TEXT("BATTERY"), TEXT("ICE"), BulletPosition, Transform.Rotation);
 		//ƒŠƒZƒbƒg
 		Count = 0;
 	}
