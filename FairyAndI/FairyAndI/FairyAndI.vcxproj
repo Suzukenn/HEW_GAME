@@ -136,7 +136,7 @@
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Heart.cpp" />
     <ClCompile Include="IceGimmick.cpp" />
-    <ClCompile Include="ItemBox.cpp" />
+    <ClCompile Include="SkillBox.cpp" />
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="OBB.cpp" />
     <ClCompile Include="ObjectFactory.cpp" />
@@ -197,7 +197,7 @@
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Heart.h" />
     <ClInclude Include="IceGimmick.h" />
-    <ClInclude Include="ItemBox.h" />
+    <ClInclude Include="SkillBox.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="Button.h" />

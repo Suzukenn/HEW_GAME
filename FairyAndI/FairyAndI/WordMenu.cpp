@@ -11,8 +11,10 @@
 #include "WordMenu.h"
 #include "WordPlate.h"
 #include "WordManager.h"
+
 //＝＝＝グローバル宣言＝＝＝//
 int WORDMENU::State;
+bool WORDMENU::Control;
 BACKGROUND WORDMENU::Back;
 SELECTMARKER WORDMENU::SelectMarker;
 
@@ -33,6 +35,11 @@ void WORDMENU::Draw(void)
 {
     //---各種宣言---//
     int nCounter;
+
+    if (!Control)
+    {
+        return;
+    }
 
     Back.Draw();
     SelectMarker.Draw();
@@ -69,6 +76,7 @@ HRESULT WORDMENU::Initialize(void)
     std::vector<std::vector<tstring>> conList;
 
     //---初期化処理---//
+    Control = false;
     State = SETTING_STATE_SELECT;
 
     //データのロード
@@ -93,7 +101,7 @@ HRESULT WORDMENU::Initialize(void)
     //選択中の言葉の初期化
     for (nCounter = 0; nCounter < 2; ++nCounter)
     {
-        hResult = SelectWord.at(nCounter).Initialize(TEXT("LOCK"), vecPanelPosition[nCounter]);
+        hResult = SelectWord.at(nCounter).Initialize(TEXT("EMPTY"), vecPanelPosition[nCounter]);
         if (FAILED(hResult))
         {
             MessageBox(nullptr, TEXT("掛け合わせパネルの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -217,10 +225,23 @@ void WORDMENU::Update(void)
 {
     //---各種宣言---//
     bool bCheck;
-
     static int nNextState = SETTING_STATE_ADJECTIVELIST;
-
     static tstring strCurrentWord;
+
+    //---モード切替---//
+    if (State == SETTING_STATE_SELECT && INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    {
+        Control = !Control;
+    }
+    if (Control)
+    {
+        SelectWord.at(0).SetTexture(List.at(0).GetSelectWord());
+        SelectWord.at(1).SetTexture(List.at(1).GetSelectWord());
+    }
+    else
+    {
+        return;
+    }
 
     //---各種処理---//
     switch (State)
@@ -234,15 +255,10 @@ void WORDMENU::Update(void)
                 SelectMarker.Update();
                 nNextState = !nNextState;
             }
-
-            if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
+            else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
             {
                 strCurrentWord = List.at(nNextState).GetSelectWord();
                 State = nNextState;
-            }
-            else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
-            {
-                return;
             }
 
             break;

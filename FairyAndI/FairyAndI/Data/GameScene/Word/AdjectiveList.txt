@@ -2,4 +2,4 @@ Data/GameScene/Word/Adjective/Hot.png HOT
 Data/GameScene/Word/Adjective/Cold.png COLD
 Data/GameScene/Word/Adjective/Hard.png HARD
 Data/GameScene/Word/Adjective/Soft.png SOFT
-Data/GameScene/Word/Lock.png LOCK
+Data/GameScene/Word/Adjective/Empty.png EMPTY

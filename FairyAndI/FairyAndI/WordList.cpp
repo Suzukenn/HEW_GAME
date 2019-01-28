@@ -115,7 +115,7 @@ HRESULT WORDLIST::ResetWordNumber(tstring word)
     int nCounter;
 
     //---‘I‘ğ’†‚ÌŒ¾—t‚Ì’Tõ---//
-    for (nCounter=0;nCounter<WordList.size();++nCounter)
+    for (nCounter = 0; nCounter < WordList.size(); ++nCounter)
     {
         if (WordList.at(nCounter) == word)
         {
@@ -123,7 +123,7 @@ HRESULT WORDLIST::ResetWordNumber(tstring word)
             return S_OK;
         }
     }
-    return E_NOTIMPL;
+    return E_FAIL;
 }
 
 

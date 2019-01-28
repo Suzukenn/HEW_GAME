@@ -26,7 +26,7 @@ HRESULT TEXTUREMANAGER::Create(const FILEPARAMETER& data)
     std::unique_ptr<LPDIRECT3DTEXTURE9> pTexture;
 
     //---初期化処理---//
-    pTexture.reset(new LPDIRECT3DTEXTURE9());
+    pTexture.reset(new LPDIRECT3DTEXTURE9);
 
     //---データの展開---//
     //ファイルの指定確認
@@ -181,7 +181,7 @@ HRESULT TEXTUREMANAGER::GetTexture(LPCTSTR texturename, LPDIRECT3DTEXTURE9& addr
         address = Texture.at(texturename);
         if (!address)
         {
-            MessageBox(nullptr, TEXT("テクスチャが存在しません"), texturename, MB_ICONSTOP | MB_OK);
+            MessageBox(nullptr, TEXT("テクスチャのアドレスが存在しません"), texturename, MB_ICONSTOP | MB_OK);
             return E_FAIL;
         }
     }

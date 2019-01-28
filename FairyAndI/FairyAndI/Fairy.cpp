@@ -206,7 +206,7 @@ void FAIRY::Update(void)
     }
 
     //移動
-    //Transform.Position += Move;
+    Transform.Position += Move;
     Collision->Position = Transform.Position;
 
     //ボタンを押したら思考状態へ移行

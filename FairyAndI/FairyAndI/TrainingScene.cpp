@@ -164,6 +164,7 @@ void TRAINING::Uninitialize(void)
     SIDEVIEWCAMERA::Uninitialize();
     ACTORMANAGER::Uninitialize();
     COLLISIONMANAGER::Uninitialize();
+    WORDMANAGER::Uninitialize();
 
     //---テクスチャの削除---//
     TEXTUREMANAGER::Uninitialize();

@@ -14,4 +14,4 @@ Data/GameScene/Word/Skill/SoftFire.png SOFTFIRE
 Data/GameScene/Word/Skill/SoftIce.png SOFTICE
 Data/GameScene/Word/Skill/SoftRock.png SOFTROCK
 Data/GameScene/Word/Skill/SoftRiceCake.png SOFTRICECAKE
-Data/GameScene/Word/Skill/UnKnown.png UNKNOWN
+Data/GameScene/Word/Skill/Empty.png EMPTY

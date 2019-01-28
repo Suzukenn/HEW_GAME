@@ -87,7 +87,7 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
         if (pMaterial[nCounter].pTextureFilename && pMaterial[nCounter].pTextureFilename[0])
         {
             // テクスチャファイルを読み込む
-            hResult = D3DXCreateTextureFromFile(pDevice, (LPCWSTR)pMaterial[nCounter].pTextureFilename, &mModel.Texture[nCounter]);
+            hResult = D3DXCreateTextureFromFile(pDevice, (LPCTSTR)pMaterial[nCounter].pTextureFilename, &mModel.Texture[nCounter]);
             if (FAILED(hResult))
             {
                 mModel.Texture[nCounter] = nullptr;

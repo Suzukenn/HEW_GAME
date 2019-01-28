@@ -86,7 +86,7 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     //---‰Šú‰»ˆ—---//
     //ˆÊ’uEŒü‚«‚Ì‰Šúİ’è
     Transform.Position = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
-    Transform.Rotation = D3DXVECTOR3(0.0F, 270.0F, 0.0F);
+    Transform.Rotation = D3DXVECTOR3(270.0F, 270.0F, 0.0F);
     Transform.Scale = D3DXVECTOR3(1000.0F, 1000.0F, 1000.0F);
     //Transform.Scale = D3DXVECTOR3(0.1F, 0.1F, 0.1F);
     HP = MAX_PLAYER_HP;
@@ -205,11 +205,11 @@ void PLAYER::Update(void)
     Transform.Position += Move;
 
 	//ˆÚ“®§ŒÀ
-	//if (Transform.Position.y < 0.0F)
-	//{
- //       Transform.Position.y = 0.0F;
-	//	Move.y = 0.0F;
-	//}
+	if (Transform.Position.y < 0.0F)
+	{
+        Transform.Position.y = 0.0F;
+		Move.y = 0.0F;
+	}
 	if (Transform.Position.x > 1500.0F)
 	{
         Transform.Position.x = 1500.0F;
