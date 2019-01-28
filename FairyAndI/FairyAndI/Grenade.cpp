@@ -117,8 +117,9 @@ HRESULT GRENADE::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 positio
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
 	BornTime = 0;
-	Move = D3DXVECTOR3(-sinf(Transform.Rotation.y) * 1.5F, 3.0F, -cosf(Transform.Rotation.y) * 1.5F);
-	Tag = TEXT("Bullet");
+	Move = D3DXVECTOR3(sinf(Transform.Rotation.y) * 1.5F, 3.0F, 0.0F);//-cosf(Transform.Rotation.y) * 1.5F);
+	Throw = true;
+	Tag = TEXT("Grenade");
     Type = type;
 
 	//---ƒ‚ƒfƒ‹‚Ì“Ç‚Ýž‚Ý---//
@@ -147,6 +148,11 @@ HRESULT GRENADE::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 positio
 /////////////////////////////////////////////
 void GRENADE::OnCollision(COLLISION* opponent)
 {
+	if (opponent->Owner->GetTag().find(TEXT("Player")) != tstring::npos)
+	{
+		return;
+	}
+
 	ACTORMANAGER::Destroy(this);
 	COLLISIONMANAGER::Destroy((COLLISION*)Collision);
 }
@@ -190,10 +196,16 @@ void GRENADE::Update(void)
 	{
 		ACTORMANAGER::Destroy(this);
 		COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+		Throw = true;
+	}
+	else if (Throw)
+	{
+		Move.y += 0.5F;
+		Throw = false;
 	}
 	else
 	{
-		Move.y += 0.5F;
+		Move.y -= 0.1F;		//žÖ’e‚Éd—Í‚ð‰ÁŽZ
         Transform.Position += Move;
 		Collision->Position = Transform.Position;
 	}

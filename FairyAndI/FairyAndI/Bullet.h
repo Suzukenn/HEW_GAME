@@ -16,13 +16,12 @@ class BULLET final : public SKILL
     public:
         D3DXVECTOR3 Move;
         DWORD BornTime;
-        tstring Type;
 
         std::weak_ptr<MODEL> Model;
         SPHERE* Collision;
 
         BULLET(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
-        ~BULLET(void);
+        ~BULLET();
 
         void Draw(void);
         void Uninitialize(void);
@@ -30,6 +29,7 @@ class BULLET final : public SKILL
         void Update(void);
 
         void OnCollision(COLLISION*);
+        tstring GetType(void) { return Type; }
 };
 
 #endif
