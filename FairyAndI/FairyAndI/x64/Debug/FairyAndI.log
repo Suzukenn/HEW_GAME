@@ -1,3 +1,10 @@
-﻿  Canvas.cpp
+﻿  SkillFactory.cpp
+  Grenade.cpp
+  GimmickFactory.cpp
+  Enemy.cpp
+  Bullet.cpp
+  BatteryGimmick.cpp
+  コードを生成中...
+  LINK : 前回のインクリメンタル リンクで D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.exe
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.pdb (Partial PDB)

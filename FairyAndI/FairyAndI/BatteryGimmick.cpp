@@ -130,7 +130,7 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DX
 
     //---“–‚½‚è”»’è‚Ì•t—^---//
 	//Collision = COLLISIONMANAGER::InstantiateToOBB(Position, Rotation, TEXT("Object"), this);
-	Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Object"), this);
+	Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Object"), this);
 
 	return hResult;
 }
@@ -146,10 +146,17 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DX
 /////////////////////////////////////////////
 void BATTERYGIMMICK::OnCollision(COLLISION* opponent)
 {
-    if (opponent->Owner->GetTag() == TEXT("BatteryCannon"))
+    if (opponent->Owner->GetTag() == TEXT("Bullet"))
     {
-        ACTORMANAGER::Destroy(this);
-        COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+        SKILL* Skill = dynamic_cast<SKILL*>(opponent->Owner);
+        if (Skill)
+        {
+            if (Skill->GetType() == TEXT("RETURN"))
+            {
+                ACTORMANAGER::Destroy(this);
+                COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+            }
+        }
     }
 }
 
@@ -188,24 +195,24 @@ void BATTERYGIMMICK::Uninitialize(void)
 void BATTERYGIMMICK::Update(void)
 {	
 	static int Count;	//’e‚ðo‚·ŠÔŠu•b”
-	D3DXVECTOR3 BulletPosition = D3DXVECTOR3(0.0F, 20.0F, 0.0F);
+	D3DXVECTOR3 BulletPosition = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
 
 	//2•bŒo‚Á‚½‚ç
 	if (++Count > 120)
 	{
 		if (PLAYER::GetPlayerPosition().x < Transform.Position.x)
 		{
-            Transform.Rotation.y = D3DX_PI * 0.50F;
+            Transform.Rotation.y = -(D3DX_PI * 0.50F);
 			BulletPosition.x = Transform.Position.x - 10.0F;
 		}
 		else if (PLAYER::GetPlayerPosition().x > Transform.Position.x)
 		{
-            Transform.Rotation.y = -(D3DX_PI * 0.50f);
+            Transform.Rotation.y = D3DX_PI * 0.50F;
 			BulletPosition.x = Transform.Position.x + 10.0F;
 		}
 
 		//’e”­ŽË
-		SKILLFACTORY::InstantiateSkill(TEXT("ICE"), TEXT("BATTERY"), BulletPosition, Transform.Rotation);
+		SKILLFACTORY::InstantiateSkill(TEXT("BATTERY"), TEXT("ICE"), BulletPosition, Transform.Rotation);
 		//ƒŠƒZƒbƒg
 		Count = 0;
 	}

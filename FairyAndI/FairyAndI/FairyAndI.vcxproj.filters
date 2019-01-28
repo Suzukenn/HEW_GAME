@@ -245,6 +245,9 @@
     <ClCompile Include="SkillBox.cpp">
       <Filter>ソース ファイル\UI\WordMenu</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル\Actor\Character</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -450,6 +453,9 @@
     </ClInclude>
     <ClInclude Include="SkillBox.h">
       <Filter>ソース ファイル\UI\WordMenu</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ソース ファイル\Actor\Character</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
