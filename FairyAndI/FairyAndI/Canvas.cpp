@@ -7,7 +7,7 @@
 /////////////////////////////////////////////
 //関数名：Draw
 //
-//機能：背景の描画
+//機能：キャンバスの描画
 //
 //引数：なし
 //
@@ -18,24 +18,21 @@ void CANVAS::Draw(void)
     //---各種宣言---//
     int nCounter;
 
-
+    //---描画---//
     for (nCounter = 0; nCounter < PLAYER::GetPlayerHP(); ++nCounter)
     {
         Heart.at(nCounter).Draw();
     }
 
-    ItemBox.Draw();
-    Item.Draw();
-    if (Mode)
-    {
-        Menu.Draw();
-    }
+    SkillBox.Draw();
+    Skill.Draw();
+    Menu.Draw();
 }
 
 /////////////////////////////////////////////
 //関数名：Initialize
 //
-//機能：背景の初期化
+//機能：キャンバスの初期化
 //
 //引数：なし
 //
@@ -54,8 +51,8 @@ HRESULT CANVAS::Initialize(void)
         return hResult;
     }
 
-    //アイテムボックス
-    hResult = ItemBox.Initialize(TEXT("ITEMBOX"), D3DXVECTOR2(1050.0F, 10.0F), D3DXVECTOR2(150.0F, 150.0F), { 2, 1 });
+    //スキルボックス
+    hResult = SkillBox.Initialize(TEXT("SKILLBOX"), D3DXVECTOR2(1050.0F, 10.0F), D3DXVECTOR2(150.0F, 150.0F), { 2, 1 });
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("アイテムボックスの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -63,8 +60,8 @@ HRESULT CANVAS::Initialize(void)
         return hResult;
     }
 
-    //アイテム
-    hResult = Item.Initialize(TEXT("UNKNOWN"), D3DXVECTOR2(1060.0F, 15.0F));
+    //スキル
+    hResult = Skill.Initialize(TEXT("EMPTY"), D3DXVECTOR2(1076.0F, 35.0F), D3DXVECTOR2(100.0F, 100.0F));
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("アイテムの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -91,7 +88,7 @@ HRESULT CANVAS::Initialize(void)
 /////////////////////////////////////////////
 //関数名：Uninitialize
 //
-//機能：背景の終了
+//機能：キャンバスの終了
 //
 //引数：なし
 //
@@ -107,15 +104,15 @@ void CANVAS::Uninitialize(void)
         Heart.at(nCounter).Uninitialize();
     }
 
-    ItemBox.Uninitialize();
-    Item.Uninitialize();
+    SkillBox.Uninitialize();
+    Skill.Uninitialize();
     Menu.Uninitialize();
 }
 
 /////////////////////////////////////////////
 //関数名：Update
 //
-//機能：背景の更新
+//機能：キャンバスの更新
 //
 //引数：なし
 //
@@ -137,14 +134,7 @@ void CANVAS::Update(void)
         Heart.at(nCounter).Update();
     }
 
-    if (Mode)
-    {
-        Menu.Update();
-        Item.Update();
-        Item.SetTexture(WORDMENU::NotificationAdjective() + WORDMENU::NotificationNoun());
-    }
-    else
-    {
-        ItemBox.Update();
-    }
+    Menu.Update();
+    SkillBox.Update();
+    if (Mode)Skill.SetTexture(WORDMENU::NotificationAdjective() + WORDMENU::NotificationNoun());
 }

@@ -50,8 +50,8 @@ HRESULT WORDPLATE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVEC
     //---初期化処理---//
     Position = position;
     Size = size;
-    Texture.reset(new LPDIRECT3DTEXTURE9());
-    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9());
+    Texture.reset(new LPDIRECT3DTEXTURE9);
+    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9);
 
     //---テクスチャの読み込み---//
     hResult = SetTexture(texturename);
@@ -102,6 +102,8 @@ HRESULT WORDPLATE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVEC
         return hResult;
     }
 
+    TEXTUREMANAGER::GetTexture(TEXT("EMPTY"), *Texture);
+
     return hResult;
 }
 
@@ -117,7 +119,7 @@ HRESULT WORDPLATE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVEC
 void WORDPLATE::Uninitialize(void)
 {
     //---開放---//
-
+    Texture.release();
 }
 
 /////////////////////////////////////////////

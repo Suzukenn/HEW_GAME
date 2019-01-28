@@ -164,9 +164,6 @@
     <ClCompile Include="Field.cpp">
       <Filter>ソース ファイル\Actor\Object</Filter>
     </ClCompile>
-    <ClCompile Include="ItemBox.cpp">
-      <Filter>ソース ファイル\UI\WordMenu</Filter>
-    </ClCompile>
     <ClCompile Include="ActorManager.cpp">
       <Filter>ソース ファイル\System\Manager</Filter>
     </ClCompile>
@@ -241,6 +238,12 @@
     </ClCompile>
     <ClCompile Include="Heart.cpp">
       <Filter>ソース ファイル\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="BatteryCannon.cpp">
+      <Filter>ソース ファイル\Actor\Gimmick</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillBox.cpp">
+      <Filter>ソース ファイル\UI\WordMenu</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -322,9 +325,6 @@
     <ClInclude Include="WordPlate.h">
       <Filter>ソース ファイル\UI\WordMenu</Filter>
     </ClInclude>
-    <ClInclude Include="Fairy.h">
-      <Filter>ソース ファイル\Actor\Character</Filter>
-    </ClInclude>
     <ClInclude Include="DirectionalLight.h">
       <Filter>ソース ファイル\Actor\Staff</Filter>
     </ClInclude>
@@ -345,9 +345,6 @@
     </ClInclude>
     <ClInclude Include="SoundParameter.h">
       <Filter>ソース ファイル\System\Parameter</Filter>
-    </ClInclude>
-    <ClInclude Include="ItemBox.h">
-      <Filter>ソース ファイル\UI\WordMenu</Filter>
     </ClInclude>
     <ClInclude Include="ActorManager.h">
       <Filter>ソース ファイル\System\Manager</Filter>
@@ -444,6 +441,15 @@
     </ClInclude>
     <ClInclude Include="Heart.h">
       <Filter>ソース ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Fairy.h">
+      <Filter>ソース ファイル\Actor\Character</Filter>
+    </ClInclude>
+    <ClInclude Include="BatteryCannon.h">
+      <Filter>ソース ファイル\Actor\Gimmick</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillBox.h">
+      <Filter>ソース ファイル\UI\WordMenu</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

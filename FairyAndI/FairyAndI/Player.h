@@ -8,20 +8,21 @@
 
 //---定数・マクロ定義---//
 #define MAX_PLAYER_HP 5
-#define	VALUE_MOVE_PLAYER 5.0F
+#define	VALUE_MOVE_PLAYER 1.0F
 
 //＝＝＝前方宣言＝＝＝//
-class OBB;
+class SPHERE;
 
 //＝＝＝クラス定義＝＝＝//
 class PLAYER final : public GAMEOBJECT
 {
 	private:
         int HP;
+        int State;
         D3DXVECTOR3 Move;
         ANIMATIONMODEL Model;
 
-        OBB* Collision;
+        SPHERE* Collision;
 
 	public:
         PLAYER(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);

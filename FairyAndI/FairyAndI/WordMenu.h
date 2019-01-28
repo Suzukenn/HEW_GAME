@@ -23,6 +23,7 @@ class WORDMENU
 {
     private:
         static int State;
+        static bool Control;
         static BACKGROUND Back;
         static SELECTMARKER SelectMarker;
         static std::array<WORDPLATE, 2> SelectWord;

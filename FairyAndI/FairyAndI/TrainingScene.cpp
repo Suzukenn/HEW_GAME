@@ -53,13 +53,13 @@ HRESULT TRAINING::Initialize(void)
     Mode = true;
 
     //---データの読み込み---//
-    hResult = TEXTUREMANAGER::Initialize(TEXT("Data/Training/TextureList.txt"));
+    hResult = TEXTUREMANAGER::Initialize(TEXT("Data/GameScene/TextureList.txt"));
     if (FAILED(hResult))
     {
         return E_FAIL;
     }
 
-    hResult = MODELMANAGER::Initialize(TEXT("Data/Common/Model/ModelList.txt"));
+    hResult = MODELMANAGER::Initialize(TEXT("Data/GameScene/Model/ModelList.txt"));
     if (FAILED(hResult))
     {
         return E_FAIL;
@@ -87,7 +87,7 @@ HRESULT TRAINING::Initialize(void)
 
     //キャラクター
     CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(-20.0F, 50.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
-    CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+    CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
 
     //エレメント
     OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3(100.0F, 0.0F, 0.0F));
@@ -98,7 +98,7 @@ HRESULT TRAINING::Initialize(void)
 
     //地形
     //hResult = Field.Initialize(TEXT("Data/Common/Model/Field/Field.x"), TEXT("Field"), D3DXVECTOR3(0.0F, -10.0F, 0.0F), D3DXVECTOR3(20.0F, 20.0F, 20.0F));
-    hResult = Field.Initialize(TEXT("Data/Common/Model/Field/Field.x"), TEXT("Field"), D3DXVECTOR3(0.0F, -10.0F, 0.0F), D3DXVECTOR3(1.0F, 20.0F, 1.0F));
+    hResult = Field.Initialize(TEXT("Data/GameScene/Model/Field/Field.x"), TEXT("Field"), D3DXVECTOR3(0.0F, -10.0F, 0.0F), D3DXVECTOR3(1.0F, 20.0F, 1.0F));
     if (FAILED(hResult))
     {
         return E_FAIL;
@@ -164,6 +164,7 @@ void TRAINING::Uninitialize(void)
     SIDEVIEWCAMERA::Uninitialize();
     ACTORMANAGER::Uninitialize();
     COLLISIONMANAGER::Uninitialize();
+    WORDMANAGER::Uninitialize();
 
     //---テクスチャの削除---//
     TEXTUREMANAGER::Uninitialize();
@@ -186,10 +187,6 @@ void TRAINING::Update(void)
     //---各種宣言---//
     static bool bCameraMode = false;
 
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
-    {
-        Mode = !Mode;
-    }
 
     //---オブジェクトの更新処理---//
     if (Mode)
@@ -204,13 +201,13 @@ void TRAINING::Update(void)
         DIRECTIONALLIGHT::Update();
 
         COLLISIONMANAGER::Update();
-
-        //---画面遷移---//
-        if (INPUTMANAGER::GetKey(DIK_SPACE, TRIGGER))
-        {
-            SCENEMANAGER::SetScene(SCENE_TITLE);
-        }
     }
+
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    {
+        Mode = !Mode;
+    }
+
     if (INPUTMANAGER::GetKey(DIK_Z, TRIGGER))
     {
         WORDMANAGER::UnLockWord(TEXT("FIRE"));
@@ -229,4 +226,10 @@ void TRAINING::Update(void)
     }
 
     Canvas.Update();
+
+    //---画面遷移---//
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_BACK, TRIGGER))
+    {
+        SCENEMANAGER::SetScene(SCENE_TITLE);
+    }
 }

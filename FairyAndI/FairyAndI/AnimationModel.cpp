@@ -21,7 +21,7 @@
 //
 //戻り値：なし
 /////////////////////////////////////////////
-ANIMATIONMODEL::ANIMATIONMODEL()
+ANIMATIONMODEL::ANIMATIONMODEL(void)
 {
     //アニメーションスピード初期化
     PlaySpeed = SKIN_ANIME_SPEED; //固定
@@ -44,7 +44,7 @@ ANIMATIONMODEL::ANIMATIONMODEL()
 //
 //戻り値：なし
 /////////////////////////////////////////////
-ANIMATIONMODEL::~ANIMATIONMODEL()
+ANIMATIONMODEL::~ANIMATIONMODEL(void)
 {
     //Uninitialize();
 }
@@ -130,21 +130,15 @@ HRESULT ANIMATIONMODEL::AllocateBoneMatrix(LPD3DXMESHCONTAINER meshcontainer)
         //子フレーム(ボーン)のアドレスを検索して格納
         pFrame = (ANIMATIONMODELFREAM*)D3DXFrameFind(FrameRoot, pMeshContainer->pSkinInfo->GetBoneName(dwCounter));
 
-        if (!pFrame)
+        if (pFrame)
+        {
+            //各ボーンのワールド行列格納用変数に最終行列を格納
+            pMeshContainer->BoneMatrix[dwCounter] = &pFrame->CombinedTransformationMatrix;
+        }
+        else
         {
             return E_FAIL;
         }
-        pMeshContainer->BoneMatrix[dwCounter] = &pFrame->CombinedTransformationMatrix;
-
-        //if (pFrame)
-        //{
-        //    //各ボーンのワールド行列格納用変数に最終行列を格納
-        //    pMeshContainer->BoneMatrix[dwCounter] = &pFrame->CombinedTransformationMatrix;
-        //}
-        //else
-        //{
-        //    return E_FAIL;
-        //}
     }
     return S_OK;
 }
@@ -161,7 +155,7 @@ HRESULT ANIMATIONMODEL::AllocateBoneMatrix(LPD3DXMESHCONTAINER meshcontainer)
 void ANIMATIONMODEL::ChangeAnimation(DWORD animationnumber)
 {
     //指定値の境界チェック
-    if (animationnumber < 0 || animationnumber > AnimationData.size())
+    if (animationnumber > AnimationData.size())
     {
         return;
     }
@@ -411,7 +405,7 @@ void ANIMATIONMODEL::RenderMeshContainer(LPD3DXMESHCONTAINER meshcontainer, LPD3
     else
     {
         pDevice->SetTransform(D3DTS_WORLD, &pFrame->CombinedTransformationMatrix);
-        for (DWORD dwAttributeCounter = 0; dwAttributeCounter < pMeshContainer->NumMaterials; ++dwAttributeCounter)
+        for (dwAttributeCounter = 0; dwAttributeCounter < pMeshContainer->NumMaterials; ++dwAttributeCounter)
         {
             dwAttribute = pMeshContainer->AttributeTable[dwAttributeCounter].AttribId;
             pDevice->SetMaterial(&pMeshContainer->pMaterials[dwAttribute].MatD3D);

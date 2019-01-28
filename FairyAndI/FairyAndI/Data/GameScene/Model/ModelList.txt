@@ -1,0 +1,6 @@
+Data/GameScene/Model/Character/car000.x PLAYER
+Data/GameScene/Model/Character/car001.x FAIRY
+Data/GameScene/Model/Element/Rock.x FIRE
+Data/GameScene/Model/Element/Rock.x ROCK
+Data/GameScene/Model/Element/RiceCake.x RICECAKE
+Data/GameScene/Model/Element/Ice.x ICE

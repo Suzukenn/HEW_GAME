@@ -22,7 +22,7 @@ class BULLET final : public SKILL
         SPHERE* Collision;
 
         BULLET(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
-        ~BULLET();
+        ~BULLET(void);
 
         void Draw(void);
         void Uninitialize(void);
@@ -30,7 +30,6 @@ class BULLET final : public SKILL
         void Update(void);
 
         void OnCollision(COLLISION*);
-        tstring GetType(void) { return Type; }
 };
 
 #endif
