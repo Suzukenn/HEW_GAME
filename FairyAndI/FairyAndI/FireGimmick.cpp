@@ -147,7 +147,7 @@ void FIREGIMMICK::OnCollision(COLLISION* opponent)
         SKILL* Skill = dynamic_cast<SKILL*>(opponent->Owner);
         if (Skill)
         {
-            if (Skill->GetType() == TEXT("HOT") || Skill->GetType() == TEXT("ICE"))
+            if (Skill->GetType() == TEXT("HOT") || Skill->GetType() == TEXT("SOFT"))
             {
                 ACTORMANAGER::Destroy(this);
                 COLLISIONMANAGER::Destroy((COLLISION*)Collision);

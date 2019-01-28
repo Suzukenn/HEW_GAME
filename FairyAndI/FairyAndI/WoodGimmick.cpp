@@ -3,6 +3,7 @@
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "ModelManager.h"
+#include "Skill.h"
 #include "WoodGimmick.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
@@ -144,12 +145,29 @@ HRESULT WOODGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 posi
 /////////////////////////////////////////////
 void WOODGIMMICK::OnCollision(COLLISION* opponent)
 {
-	if (opponent->Owner->GetTag().find(TEXT("Fire")) != tstring::npos || 
+
+	if (opponent->Owner->GetTag() == TEXT("Grenade"))
+	{
+		ACTORMANAGER::Destroy(this);
+		COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+	}
+
+	SKILL* Skill = dynamic_cast<SKILL*>(opponent->Owner);
+	if (Skill)
+	{
+		if (Skill->GetType() == TEXT("HOT"))
+		{
+			ACTORMANAGER::Destroy(this);
+			COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+		}
+	}
+
+	/*if (opponent->Owner->GetTag().find(TEXT("Fire")) != tstring::npos || 
 		opponent->Owner->GetTag().find(TEXT("Hot")) != tstring::npos)
 	{
 		ACTORMANAGER::Destroy(this);
 		COLLISIONMANAGER::Destroy((COLLISION*)Collision);
-    }
+    }*/
 }
 
 /////////////////////////////////////////////

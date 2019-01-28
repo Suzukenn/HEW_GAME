@@ -4,6 +4,7 @@
 #include "CollisionManager.h"
 #include "IceGimmick.h"
 #include "ModelManager.h"
+#include "Skill.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
 
@@ -144,11 +145,15 @@ HRESULT ICEGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 posit
 /////////////////////////////////////////////
 void ICEGIMMICK::OnCollision(COLLISION* opponent)
 {
-	if (opponent->Owner->GetTag().find(TEXT("Hot")) != tstring::npos)
+	SKILL* Skill = dynamic_cast<SKILL*>(opponent->Owner);
+	if (Skill)
 	{
-		ACTORMANAGER::Destroy(this);
-		COLLISIONMANAGER::Destroy((COLLISION*)Collision);
-    }
+		if (Skill->GetType() == TEXT("HOT"))
+		{
+			ACTORMANAGER::Destroy(this);
+			COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+		}
+	}
 }
 
 /////////////////////////////////////////////

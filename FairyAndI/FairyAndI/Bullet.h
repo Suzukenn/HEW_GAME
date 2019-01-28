@@ -16,7 +16,6 @@ class BULLET final : public SKILL
     public:
         D3DXVECTOR3 Move;
         DWORD BornTime;
-        tstring Type;
 
         std::weak_ptr<MODEL> Model;
         SPHERE* Collision;
