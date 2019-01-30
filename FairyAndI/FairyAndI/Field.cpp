@@ -176,10 +176,10 @@ HRESULT FIELD::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, 
 /////////////////////////////////////////////
 void FIELD::Uninitialize(void)
 {
-    //---ŠJ•ú---//
-    SAFE_RELEASE(MaterialBuffer);
-    SAFE_RELEASE(Mesh);
-    SAFE_RELEASE(Texture);
+    ////---ŠJ•ú---//
+    //SAFE_RELEASE(MaterialBuffer);
+    //SAFE_RELEASE(Mesh);
+    //SAFE_RELEASE(Texture);
 }
 
 /////////////////////////////////////////////

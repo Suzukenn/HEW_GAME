@@ -4,6 +4,7 @@
 #include "CharacterFactory.h"
 #include "CollisionManager.h"
 #include "DirectionalLight.h"
+#include "Fade.h"
 #include "FlexibleCamera.h"
 #include "GimmickFactory.h"
 #include "InputManager.h"
@@ -137,6 +138,8 @@ HRESULT TRAINING::Initialize(void)
     {
         return E_FAIL;
     }
+
+	FADE::SetFade(FADE_IN);
 
     //---BGMçƒê∂---//
     SOUNDMANAGER::Play(TEXT("BGM_TRAINING"));

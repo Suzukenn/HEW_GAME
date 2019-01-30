@@ -1,4 +1,5 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
+#include "Fade.h"
 #include "GameOver.h"
 #include "GameScene.h"
 #include "SceneManager.h"
@@ -24,6 +25,8 @@ SCENE SCENEMANAGER::NextScene = CurrentScene;
 void SCENEMANAGER::Draw(void)
 {
     Scene->Draw();
+
+	FADE::Draw();
 }
 
 /////////////////////////////////////////////
@@ -38,6 +41,8 @@ void SCENEMANAGER::Draw(void)
 void SCENEMANAGER::Uninitialize(void)
 {
     Scene->Uninitialize();
+
+	FADE::Uninitialize();
 }
 
 /////////////////////////////////////////////
@@ -57,7 +62,13 @@ HRESULT SCENEMANAGER::Initialize(void)
     //---初期化処理---//
     hResult = E_FAIL;
 
-    //---シーンの切り替え---//
+    //---シーンとフェードの切り替え---//
+	hResult = FADE::Initialize();
+	if (FAILED(hResult))
+	{
+		MessageBox(nullptr, TEXT("フェードの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
+		return hResult;
+	}
     hResult = Scene->Initialize();
     if (FAILED(hResult))
     {
@@ -131,4 +142,6 @@ void SCENEMANAGER::Update(void)
         //---シーン関数呼び出し---//
         Scene->Update();
     }
+
+	FADE::Update();
 }
