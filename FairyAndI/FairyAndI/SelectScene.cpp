@@ -48,6 +48,8 @@ HRESULT SELECTSCENE::Initialize(void)
         return E_FAIL;
     }
 
+	FADE::SetFade(FADE_IN);
+
     //---BGMçƒê∂---//
     SOUNDMANAGER::Play(TEXT("BGM_SELECT"));
 

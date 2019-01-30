@@ -4,6 +4,7 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <memory>
 #include "BaseScene.h"
+#include "Fade.h"
 #include "Main.h"
 
 //＝＝＝列挙型定義＝＝＝//

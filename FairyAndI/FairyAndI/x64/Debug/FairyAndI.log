@@ -1,10 +1,4 @@
-﻿  SkillFactory.cpp
-  Grenade.cpp
-  GimmickFactory.cpp
-  Enemy.cpp
-  Bullet.cpp
-  BatteryGimmick.cpp
-  コードを生成中...
-  LINK : 前回のインクリメンタル リンクで D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.exe が見つからなかったか、ビルドされませんでした。フル リンクを行います。
-  FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.exe
-  FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.pdb (Partial PDB)
+﻿  Fade.cpp
+c:\users\tsuyoshi\documents\github\hew_game\fairyandi\fairyandi\fade.cpp(189): warning C4715: 'FADE::CheckFadeEnd': 値を返さないコントロール パスがあります。
+  FairyAndI.vcxproj -> C:\Users\tsuyoshi\Documents\GitHub\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.exe
+  FairyAndI.vcxproj -> C:\Users\tsuyoshi\Documents\GitHub\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.pdb (Partial PDB)

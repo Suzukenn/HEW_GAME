@@ -131,6 +131,7 @@
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="Element.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Fade.cpp" />
     <ClCompile Include="FireGimmick.cpp" />
     <ClCompile Include="GimmickFactory.cpp" />
     <ClCompile Include="Grenade.cpp" />
@@ -190,6 +191,7 @@
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="Element.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Fade.h" />
     <ClInclude Include="FireGimmick.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ActorManager.h" />
