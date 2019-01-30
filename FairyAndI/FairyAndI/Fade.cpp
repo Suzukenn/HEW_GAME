@@ -28,22 +28,14 @@ void FADE::Draw(void)
 	//---初期化処理---//
 	pDevice = GetDevice();
 
-	// 2D用レンダリング設定
-	pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);
-	pDevice->SetRenderState(D3DRS_ZENABLE, FALSE);
-
 	// 頂点書式設定
-	pDevice->SetFVF(FVF_VERTEX_FADE);
+	pDevice->SetFVF(FVF_VERTEX_2D);
 
 	// テクスチャ設定
 	pDevice->SetTexture(0, NULL);
 
 	// 頂点配列によるポリゴン描画
 	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLEFAN, 2, &Vertex, sizeof(VERTEX_2D));
-
-	// 2D用レンダリング設定解除
-	pDevice->SetRenderState(D3DRS_ZENABLE, TRUE);
-	pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
 }
 
 /////////////////////////////////////////////
@@ -68,19 +60,19 @@ HRESULT FADE::Initialize(void)
 	Directory = 0;
 	Fade = 0;
 
-	Vertex[0].Position = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
-	Vertex[1].Position = D3DXVECTOR3(1.0F, 0.0F, 0.0F);
-	Vertex[2].Position = D3DXVECTOR3(1.0F, 1.0F, 0.0F);
-	Vertex[3].Position = D3DXVECTOR3(0.0F, 1.0F, 0.0F);
+	Vertex.at(0).Position = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
+	Vertex.at(1).Position = D3DXVECTOR3(1.0F, 0.0F, 0.0F);
+	Vertex.at(2).Position = D3DXVECTOR3(1.0F, 1.0F, 0.0F);
+	Vertex.at(3).Position = D3DXVECTOR3(0.0F, 1.0F, 0.0F);
 
 	//値の設定
 	for (nCounter = 0; nCounter < 4; ++nCounter)
 	{
-		Vertex[nCounter].Position.x *= SCREEN_WIDTH;
-		Vertex[nCounter].Position.y *= SCREEN_HEIGHT;
-		Vertex[nCounter].Position.z = 0.0F;
-		Vertex[nCounter].RHW = 1.0F;
-		Vertex[nCounter].Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);
+		Vertex.at(nCounter).Position.x *= SCREEN_WIDTH;
+		Vertex.at(nCounter).Position.y *= SCREEN_HEIGHT;
+		Vertex.at(nCounter).Position.z = 0.0F;
+		Vertex.at(nCounter).RHW = 1.0F;
+		Vertex.at(nCounter).Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);
 	}
 
 	return S_OK;
@@ -111,6 +103,10 @@ void FADE::Uninitialize(void)
 /////////////////////////////////////////////
 void FADE::Update(void)
 {
+    //---各種宣言---//
+    int nCounter;
+    D3DCOLOR dwColor;
+
 	Fade += Directory;
 	if (Fade < 0)
 	{
@@ -121,10 +117,10 @@ void FADE::Update(void)
 		Fade = 60;
 	}
 	Alpha = Fade * 255 / 60;
-	D3DCOLOR color = D3DCOLOR_ARGB(Alpha, 0, 0, 0);
-	for (int i = 0; i < 4; ++i) 
+	dwColor = D3DCOLOR_ARGB(Alpha, 0, 0, 0);
+	for (nCounter = 0; nCounter < 4; ++nCounter)
 	{
-		Vertex[i].Diffuse = color;
+		Vertex.at(nCounter).Diffuse = dwColor;
 	}
 }
 
@@ -141,18 +137,18 @@ void FADE::SetFade(FADETYPE fadetype)
 {
 	switch (fadetype)
 	{
-	case FADE_IN:
-		Fade = 60;
-		Directory = -1;
-		break;
+	    case FADE_IN:
+		    Fade = 60;
+		    Directory = -1;
+		    break;
 
-	case FADE_OUT:
-		Fade = 0;
-		Directory = 1;
-		break;
+	    case FADE_OUT:
+		    Fade = 0;
+		    Directory = 1;
+		    break;
 
-	default:
-		break;
+	    default:
+		    break;
 	}
 }
 
@@ -165,25 +161,17 @@ void FADE::SetFade(FADETYPE fadetype)
 //
 //戻り値：(int)
 /////////////////////////////////////////////
-int FADE::CheckFadeEnd(FADETYPE fadetype)
+bool FADE::CheckFadeEnd(FADETYPE fadetype)
 {
 	switch (fadetype)
 	{
-	case FADE_IN:
-		if (Directory < 0 && Fade <= 0)
-		{
-			return true;
-		}
-		return false;
+	    case FADE_IN:
+            return Directory < 0 && Fade <= 0 ? true : false;
 
-	case FADE_OUT:
-		if (Directory > 0 && Fade >= 60)
-		{
-			return true;
-		}
-		return false;
+	    case FADE_OUT:
+            return Directory > 0 && Fade >= 60 ? true : false;
 
-	default:
-		break;
+	    default:
+            return false;
 	}
 }

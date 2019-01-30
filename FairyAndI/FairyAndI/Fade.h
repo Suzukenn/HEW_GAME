@@ -29,7 +29,7 @@ class FADE
 		static void Update(void);
 
 		static void SetFade(FADETYPE);
-		static int CheckFadeEnd(FADETYPE);
+		static bool CheckFadeEnd(FADETYPE);
 };
 
 #endif
