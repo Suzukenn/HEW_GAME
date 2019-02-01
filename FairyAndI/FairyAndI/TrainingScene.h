@@ -3,6 +3,7 @@
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "BaseScene.h"
+#include "BackGround.h"
 #include "Canvas.h"
 #include "Field.h"
 #include "FlexibleCamera.h"
@@ -13,6 +14,7 @@
 class TRAINING final : public BASE_SCENE
 {
     private:
+		BACKGROUND Back;
         CANVAS Canvas;
         FIELD Field;
         GROUND Ground;

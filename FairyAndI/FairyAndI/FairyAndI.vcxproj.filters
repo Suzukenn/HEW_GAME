@@ -251,6 +251,9 @@
     <ClCompile Include="Fade.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="BackImage.cpp">
+      <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h">
@@ -462,6 +465,9 @@
     </ClInclude>
     <ClInclude Include="Fade.h">
       <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BackImage.h">
+      <Filter>ソース ファイル\Actor\Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

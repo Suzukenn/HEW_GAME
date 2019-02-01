@@ -121,6 +121,7 @@
     <ClCompile Include="AnimationModel.cpp" />
     <ClCompile Include="AnimationModelHierarchy.cpp" />
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="BackImage.cpp" />
     <ClCompile Include="BatteryCannon.cpp" />
     <ClCompile Include="BatteryGimmick.cpp" />
     <ClCompile Include="Bullet.cpp" />
@@ -183,6 +184,7 @@
     <ClInclude Include="AnimationModelContainer.h" />
     <ClInclude Include="AnimationModelFrame.h" />
     <ClInclude Include="AnimationModelHierarchy.h" />
+    <ClInclude Include="BackImage.h" />
     <ClInclude Include="BatteryCannon.h" />
     <ClInclude Include="BatteryGimmick.h" />
     <ClInclude Include="Bullet.h" />

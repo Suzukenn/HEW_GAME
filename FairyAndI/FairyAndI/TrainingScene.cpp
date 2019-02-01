@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
+#include "BackGround.h"
 #include "Canvas.h"
 #include "CharacterFactory.h"
 #include "CollisionManager.h"
@@ -35,6 +36,7 @@ void TRAINING::Draw(void)
     Field.Draw();
     Ground.Draw();
     Canvas.Draw();
+	Back.Draw();
 }
 
 /////////////////////////////////////////////
@@ -110,7 +112,11 @@ HRESULT TRAINING::Initialize(void)
     {
         return E_FAIL;
     }
-
+	hResult = Back.Initialize(TEXT("BACKGROUND"));
+	if (FAILED(hResult))
+	{
+		return E_FAIL;
+	}
     //フレキシブルカメラ
     hResult = FlexibleCamera.Initialize(D3DXVECTOR3(0.0F, 100.0F, -200.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
     if (FAILED(hResult))

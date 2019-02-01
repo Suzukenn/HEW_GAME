@@ -19,7 +19,7 @@
 void TITLE::Draw(void)
 {
     //---オブジェクトの描画処理---//
-    Back.Draw();
+    BackImage.Draw();
     StartButton.Draw();
     TrainingButton.Draw();
 }
@@ -47,7 +47,7 @@ HRESULT TITLE::Initialize(void)
 
     //---オブジェクトの初期化処理---//
     //背景
-    hResult = Back.Initialize((TEXT("BACKGROUND")));
+    hResult = BackImage.Initialize((TEXT("BACKIMAGE")));
     if (FAILED(hResult))
     {
         return E_FAIL;
@@ -88,7 +88,7 @@ HRESULT TITLE::Initialize(void)
 void TITLE::Uninitialize(void)
 {
     //---オブジェクトの終了処理---//
-    Back.Uninitialize();
+    BackImage.Uninitialize();
     StartButton.Uninitialize();
     TrainingButton.Uninitialize();
 
@@ -113,7 +113,7 @@ void TITLE::Update(void)
 	static int Mood;
 
     //---オブジェクトの更新処理---//
-    Back.Update();
+    BackImage.Update();
     StartButton.Update();
     TrainingButton.Update();
 

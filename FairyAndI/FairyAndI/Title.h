@@ -4,6 +4,7 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "BackGround.h"
 #include "BaseScene.h"
+#include "BackImage.h"
 #include "Fade.h"
 #include "Main.h"
 #include "StartButton.h"
@@ -13,7 +14,7 @@
 class TITLE final : public BASE_SCENE
 {
     private:
-        BACKGROUND Back;
+        BACKIMAGE BackImage;
         STARTBUTTON StartButton;
         TRAININGBUTTON TrainingButton;
 
