@@ -18,7 +18,7 @@
 void GAME::Draw(void)
 {
     //---オブジェクトの描画処理---//
-    Back.Draw();
+    //Back.Draw();
 }
 
 /////////////////////////////////////////////
@@ -38,10 +38,10 @@ HRESULT GAME::Initialize(void)
     }
 
     //---オブジェクトの初期化処理---//
-    if (FAILED(Back.Initialize(TEXT("BACKGROUND"))))
-    {
-        return E_FAIL;
-    }
+    //if (FAILED(Back.Initialize(TEXT("BACKGROUND"))))
+    //{
+    //    return E_FAIL;
+    //}
 
     //---BGM再生---//
     SOUNDMANAGER::Play(TEXT("BGM_GAME"));

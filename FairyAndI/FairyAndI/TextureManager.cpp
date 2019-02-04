@@ -114,7 +114,7 @@ HRESULT TEXTUREMANAGER::Load(std::vector<FILEPARAMETER>& list, LPCTSTR filename)
     list.resize(999);
 
     //---ファイルの読み込み---//
-    if (!file.is_open())
+    if (file.fail())
     {
         MessageBox(nullptr, TEXT("テクスチャリストを開けませんでした"), filename, MB_ICONSTOP | MB_OK);
         Uninitialize();

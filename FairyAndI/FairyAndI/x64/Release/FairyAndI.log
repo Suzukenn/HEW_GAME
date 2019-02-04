@@ -1,22 +1,8 @@
-﻿  ActorManager.cpp
-  AnimationModel.cpp
-AnimationModel.cpp(336): error C2039: 'GetBoneMatrix': 'ANIMATIONMODEL' のメンバーではありません。
-  d:\documents\hal課題\2年\he\hew_game\fairyandi\fairyandi\AnimationModel.h(15): note: 'ANIMATIONMODEL' の宣言を確認してください
-AnimationModel.cpp(344): error C2065: 'FrameRoot': 定義されていない識別子です。
-AnimationModel.cpp(344): error C3861: 'SearchBoneFrame': 識別子が見つかりませんでした
-AnimationModel.cpp(369): error C2039: 'GetBoneMatrixAddress': 'ANIMATIONMODEL' のメンバーではありません。
-  d:\documents\hal課題\2年\he\hew_game\fairyandi\fairyandi\AnimationModel.h(15): note: 'ANIMATIONMODEL' の宣言を確認してください
-AnimationModel.cpp(375): error C2065: 'FrameRoot': 定義されていない識別子です。
-AnimationModel.cpp(375): error C3861: 'SearchBoneFrame': 識別子が見つかりませんでした
-AnimationModel.cpp(669): warning C4267: '=': 'size_t' から 'DWORD' に変換しました。データが失われているかもしれません。
-  Bullet.cpp
-  Fairy.cpp
-Fairy.cpp(311): warning C4101: 'nCounter': ローカル変数は 1 度も使われていません。
-  Player.cpp
-Player.cpp(44): warning C4101: 'nCounter': ローカル変数は 1 度も使われていません。
-Player.cpp(50): warning C4101: 'matDef': ローカル変数は 1 度も使われていません。
-Player.cpp(49): warning C4101: 'pMatrix': ローカル変数は 1 度も使われていません。
-  SceneManager.cpp
-  SideViewCamera.cpp
-SideViewCamera.cpp(146): warning C4244: '=': 'FLOAT' から 'SHORT' への変換です。データが失われる可能性があります。
-  TrainingScene.cpp
+﻿  TextureManager.cpp
+  コード生成しています。
+  150 of 4065 functions ( 3.7%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    30 functions had inline decision re-evaluated but remain unchanged
+  コード生成が終了しました。
+  FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
+  FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)

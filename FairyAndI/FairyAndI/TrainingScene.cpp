@@ -5,6 +5,7 @@
 #include "CollisionManager.h"
 #include "DirectionalLight.h"
 #include "Fade.h"
+#include "Field.h"
 #include "FlexibleCamera.h"
 #include "GimmickFactory.h"
 #include "InputManager.h"
