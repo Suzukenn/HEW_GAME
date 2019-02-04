@@ -58,8 +58,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     //---初期化処理---//
     setlocale(LC_ALL, "Japanese");
-    g_pD3D.reset(new LPDIRECT3D9());
-    g_pD3DDevice.reset(new LPDIRECT3DDEVICE9());
+    g_pD3D.reset(new LPDIRECT3D9);
+    g_pD3DDevice.reset(new LPDIRECT3DDEVICE9);
 
 #ifdef _DEBUG
     g_pD3DXFont.reset(new LPD3DXFONT());
@@ -274,12 +274,6 @@ HRESULT Initialize(HINSTANCE instance, HWND handle)
     }
 
     //---シーン初期化---//
-    if (SUCCEEDED(hResult))
-    {
-        hResult = SCENEMANAGER::Initialize();
-    }
-
-    //---デバッグ表示初期化---//
     if (SUCCEEDED(hResult))
     {
         hResult = SCENEMANAGER::Initialize();

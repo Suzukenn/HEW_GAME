@@ -1,3 +1,3 @@
-Data/Title/BackGround/Title.png BACKGROUND
-Data/Title/UI/GameStartButton.png START_BUTTON
-Data/Title/UI/Training.tga TRAINING_BUTTON
+Data/Title/Title.png BACKGROUND
+Data/Title/GameStartButton.png START_BUTTON
+Data/Title/Training.tga TRAINING_BUTTON

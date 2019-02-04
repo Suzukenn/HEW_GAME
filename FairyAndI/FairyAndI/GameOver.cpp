@@ -85,7 +85,7 @@ void GAMEOVER::Update(void)
     Back.Update();
 
     //---‰æ–Ê‘JˆÚ---//
-    if (INPUTMANAGER::GetKey(DIK_A, TRIGGER))
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
     {
         SCENEMANAGER::SetScene(SCENE_TITLE);
     }
