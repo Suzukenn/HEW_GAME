@@ -1,3 +1,4 @@
+Data/GameScene/Texture/Field.jpg BACKGROUND
 Data/GameScene/Texture/Field.jpg FIELD
 Data/GameScene/UI/AdjectiveList.png ADJECTIVELIST
 Data/GameScene/UI/NounList.png NOUNLIST

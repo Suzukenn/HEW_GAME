@@ -1,11 +1,11 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
+#include "BackGround.h"
 #include "Canvas.h"
 #include "CharacterFactory.h"
 #include "CollisionManager.h"
 #include "DirectionalLight.h"
 #include "Fade.h"
-#include "Field.h"
 #include "FlexibleCamera.h"
 #include "GimmickFactory.h"
 #include "InputManager.h"
@@ -36,6 +36,7 @@ void TRAINING::Draw(void)
     Field.Draw();
     Ground.Draw();
     Canvas.Draw();
+    Back.Draw();
 }
 
 /////////////////////////////////////////////
@@ -95,8 +96,8 @@ HRESULT TRAINING::Initialize(void)
     OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3(100.0F, 0.0F, 0.0F));
     OBJECTFACTORY::InstantiateIceElement(D3DXVECTOR3(-50.0F, 0.0F, 0.0F));
 
-	//ギミック
-	GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(50.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+    //ギミック
+    GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(50.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
 
     //地形
     //hResult = Field.Initialize(TEXT("Data/Common/Model/Field/Field.x"), TEXT("Field"), D3DXVECTOR3(0.0F, -10.0F, 0.0F), D3DXVECTOR3(20.0F, 20.0F, 20.0F));
@@ -111,7 +112,11 @@ HRESULT TRAINING::Initialize(void)
     {
         return E_FAIL;
     }
-
+    hResult = Back.Initialize(TEXT("BACKGROUND"));
+    if (FAILED(hResult))
+    {
+        return E_FAIL;
+    }
     //フレキシブルカメラ
     hResult = FlexibleCamera.Initialize(D3DXVECTOR3(0.0F, 100.0F, -200.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
     if (FAILED(hResult))
@@ -140,7 +145,7 @@ HRESULT TRAINING::Initialize(void)
         return E_FAIL;
     }
 
-	FADE::SetFade(FADE_IN);
+    FADE::SetFade(FADE_IN);
 
     //---BGM再生---//
     SOUNDMANAGER::Play(TEXT("BGM_TRAINING"));
