@@ -7,6 +7,7 @@
 #include "Main.h"
 #include "Player.h"
 #include "SkillBox.h"
+#include "Timer.h"
 #include "WordMenu.h"
 
 //ƒNƒ‰ƒXéŒ¾//
@@ -17,6 +18,8 @@ class CANVAS
         WORDPLATE Skill;
         WORDMENU Menu;
         bool Mode;
+
+		TIMER Timer;
 
         std::array<HEART, MAX_PLAYER_HP> Heart;
 

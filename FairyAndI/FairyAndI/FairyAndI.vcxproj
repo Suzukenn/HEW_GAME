@@ -146,6 +146,7 @@
     <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="SkillFactory.cpp" />
     <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Trap.cpp" />
     <ClCompile Include="Wall.cpp" />
     <ClCompile Include="WoodGimmick.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="Skill.h" />
     <ClInclude Include="SkillFactory.h" />
     <ClInclude Include="Sphere.h" />
+    <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Trap.h" />
     <ClInclude Include="Wall.h" />

@@ -24,6 +24,8 @@ void CANVAS::Draw(void)
         Heart.at(nCounter).Draw();
     }
 
+	Timer.Draw();
+
     SkillBox.Draw();
     Skill.Draw();
     Menu.Draw();
@@ -80,6 +82,15 @@ HRESULT CANVAS::Initialize(void)
         }
     }
 
+	//タイマー
+	hResult = Timer.Initialize(TEXT("TIMER"), D3DXVECTOR2(SCREEN_CENTER_X, 35.0F), D3DXVECTOR2(17.0F, 35.0F), 10);
+	if (FAILED(hResult))
+	{
+		MessageBox(nullptr, TEXT("アイテムの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
+		Uninitialize();
+		return hResult;
+	}
+
     Mode = false;
 
     return hResult;
@@ -103,6 +114,8 @@ void CANVAS::Uninitialize(void)
     {
         Heart.at(nCounter).Uninitialize();
     }
+
+	Timer.Uninitialize();
 
     SkillBox.Uninitialize();
     Skill.Uninitialize();
@@ -133,6 +146,8 @@ void CANVAS::Update(void)
     {
         Heart.at(nCounter).Update();
     }
+
+	Timer.Update();
 
     Menu.Update();
     SkillBox.Update();
