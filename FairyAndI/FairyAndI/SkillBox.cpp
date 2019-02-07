@@ -74,6 +74,34 @@ HRESULT SKILLBOX::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECT
 }
 
 /////////////////////////////////////////////
+//関数名：SetSpriteUV
+//
+//機能：アニメーションの更新
+//
+//引数：(int)フレーム番号
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void SKILLBOX::SetSpriteUV(int number)
+{
+    //---各種宣言---//
+    int nCounter;       //カウンター
+    float fU;           //U値
+    float fV;           //V値
+
+                        //---値算出---//
+    fU = (number % UV.x) * (1.0F / UV.x);
+    fV = (number / UV.x) * (1.0F / UV.y);
+
+    //---値更新---//
+    for (nCounter = 0; nCounter < 4; ++nCounter)
+    {
+        Vertex.at(nCounter).U = fU + (nCounter % 2) * (1.0F / UV.x);
+        Vertex.at(nCounter).V = fV + (nCounter / 2) * (1.0F / UV.y);
+    }
+}
+
+/////////////////////////////////////////////
 //関数名：Uninitialize
 //
 //機能：スプライトの終了

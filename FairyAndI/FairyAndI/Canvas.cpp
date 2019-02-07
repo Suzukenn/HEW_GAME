@@ -27,6 +27,7 @@ void CANVAS::Draw(void)
     SkillBox.Draw();
     Skill.Draw();
     Menu.Draw();
+    TimeGauge.Draw();
 }
 
 /////////////////////////////////////////////
@@ -80,6 +81,14 @@ HRESULT CANVAS::Initialize(void)
         }
     }
 
+    //タイムゲージ
+    hResult = TimeGauge.Initialize(TEXT("GAUGEBACK"), TEXT("GAUGEMEMORY"), D3DXVECTOR2(400.0F, 10.0F), D3DXVECTOR2(200.0F, 50.0F));
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("タイムゲージの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        return hResult;
+    }
+
     Mode = false;
 
     return hResult;
@@ -107,6 +116,7 @@ void CANVAS::Uninitialize(void)
     SkillBox.Uninitialize();
     Skill.Uninitialize();
     Menu.Uninitialize();
+    TimeGauge.Uninitialize();
 }
 
 /////////////////////////////////////////////
@@ -137,4 +147,5 @@ void CANVAS::Update(void)
     Menu.Update();
     SkillBox.Update();
     if (Mode)Skill.SetTexture(WORDMENU::NotificationAdjective() + WORDMENU::NotificationNoun());
+    TimeGauge.Update();
 }

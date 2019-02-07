@@ -279,14 +279,7 @@ HRESULT Initialize(HINSTANCE instance, HWND handle)
         hResult = SCENEMANAGER::Initialize();
     }
 
-    if (SUCCEEDED(hResult))
-    {
-        return S_OK;
-    }
-    else
-    {
-        return S_FALSE;
-    }
+    return hResult;
 }
 
 /////////////////////////////////////////////

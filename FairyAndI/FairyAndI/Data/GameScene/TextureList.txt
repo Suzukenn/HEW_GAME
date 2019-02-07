@@ -7,3 +7,5 @@ Data/GameScene/UI/Select.png MARKER
 Data/GameScene/UI/SkillBox.png SKILLBOX
 Data/GameScene/UI/Heart.png HEART
 Data/GameScene/UI/Empty.png EMPTY
+Data/GameScene/UI/GaugeBack.png GAUGEBACK
+Data/GameScene/UI/GaugeMemory.png GAUGEMEMORY

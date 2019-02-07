@@ -7,6 +7,7 @@
 #include "Main.h"
 #include "Player.h"
 #include "SkillBox.h"
+#include "SquareGauge.h"
 #include "WordMenu.h"
 
 //ƒNƒ‰ƒXéŒ¾//
@@ -16,6 +17,7 @@ class CANVAS
         SKILLBOX SkillBox;
         WORDPLATE Skill;
         WORDMENU Menu;
+        SQUAREGAUGE TimeGauge;
         bool Mode;
 
         std::array<HEART, MAX_PLAYER_HP> Heart;
