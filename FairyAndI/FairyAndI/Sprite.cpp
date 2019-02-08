@@ -49,8 +49,8 @@ HRESULT SPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTOR
     //---初期化処理---//
     Position = position;
     Size = size;
-    Texture.reset(new LPDIRECT3DTEXTURE9());
-    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9());
+    Texture.reset(new LPDIRECT3DTEXTURE9);
+    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9);
 
     //---テクスチャの読み込み---//
     hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);

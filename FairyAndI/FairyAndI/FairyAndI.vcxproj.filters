@@ -69,6 +69,9 @@
     <Filter Include="ソース ファイル\Actor\Skill">
       <UniqueIdentifier>{143a0185-73e7-4fc6-bac6-c1b95f5cc2fe}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソース ファイル\UI\Gauge">
+      <UniqueIdentifier>{88326fd5-f1da-45f9-83b4-d062b61873de}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -236,9 +239,6 @@
     <ClCompile Include="Ground.cpp">
       <Filter>ソース ファイル\Actor\Object</Filter>
     </ClCompile>
-    <ClCompile Include="Heart.cpp">
-      <Filter>ソース ファイル\UI</Filter>
-    </ClCompile>
     <ClCompile Include="BatteryCannon.cpp">
       <Filter>ソース ファイル\Actor\Gimmick</Filter>
     </ClCompile>
@@ -253,6 +253,12 @@
     </ClCompile>
     <ClCompile Include="BackImage.cpp">
       <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Heart.cpp">
+      <Filter>ソース ファイル\UI\Gauge</Filter>
+    </ClCompile>
+    <ClCompile Include="SquareGauge.cpp">
+      <Filter>ソース ファイル\UI\Gauge</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -448,9 +454,6 @@
     <ClInclude Include="Skill.h">
       <Filter>ソース ファイル\Actor\Skill</Filter>
     </ClInclude>
-    <ClInclude Include="Heart.h">
-      <Filter>ソース ファイル\UI</Filter>
-    </ClInclude>
     <ClInclude Include="Fairy.h">
       <Filter>ソース ファイル\Actor\Character</Filter>
     </ClInclude>
@@ -468,6 +471,12 @@
     </ClInclude>
     <ClInclude Include="BackImage.h">
       <Filter>ソース ファイル\Actor\Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Heart.h">
+      <Filter>ソース ファイル\UI\Gauge</Filter>
+    </ClInclude>
+    <ClInclude Include="SquareGauge.h">
+      <Filter>ソース ファイル\UI\Gauge</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
