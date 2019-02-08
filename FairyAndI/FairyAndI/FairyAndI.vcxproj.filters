@@ -259,6 +259,8 @@
     </ClCompile>
     <ClCompile Include="SquareGauge.cpp">
       <Filter>ソース ファイル\UI\Gauge</Filter>
+    <ClCompile Include="Timer.cpp">
+      <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -477,6 +479,8 @@
     </ClInclude>
     <ClInclude Include="SquareGauge.h">
       <Filter>ソース ファイル\UI\Gauge</Filter>
+    <ClInclude Include="Timer.h">
+      <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

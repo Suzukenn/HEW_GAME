@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "SkillBox.h"
 #include "SquareGauge.h"
+#include "Timer.h"
 #include "WordMenu.h"
 
 //ƒNƒ‰ƒXéŒ¾//
@@ -19,6 +20,8 @@ class CANVAS
         WORDMENU Menu;
         SQUAREGAUGE TimeGauge;
         bool Mode;
+
+		TIMER Timer;
 
         std::array<HEART, MAX_PLAYER_HP> Heart;
 
