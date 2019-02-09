@@ -188,7 +188,7 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3
     //マテリアルあり
     if (NumMaterials > 0)
     {
-        if (FileDirectory.at(0))
+        if (lstrlenA((LPCSTR)FileDirectory.begin()._Ptr))
         {
             GetCurrentDirectory(_MAX_PATH, szCurrentDirectory);
             SetCurrentDirectory(FileDirectory.begin()._Ptr);
@@ -219,7 +219,7 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3
         }
 
         //カレントディレクトリを元に戻す
-        if (FileDirectory.at(0))
+        if (lstrlenA((LPCSTR)FileDirectory.begin()._Ptr))
         {
             SetCurrentDirectory(szCurrentDirectory);
         }

@@ -159,6 +159,7 @@ void COLLISIONMANAGER::Update(void)
     std::list<COLLISION*>::iterator itrCollision;
 
     //---‰Šú‰»ˆ—---//
+    bHit = false;
     bDestroy = false;
     itrCollision = Collision.begin();
 
