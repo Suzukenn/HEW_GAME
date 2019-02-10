@@ -25,7 +25,7 @@ void ANIMATIONSPRITE::Draw(void)
     pDevice->SetTexture(0, *Texture);    //テクスチャ設定
 
     //---頂点バッファによる背景描画---//
-    pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &Vertex.begin(), sizeof(VERTEX_2D));
+    pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &Vertex, sizeof(VERTEX_2D));
 }
 
 /////////////////////////////////////////////
@@ -53,7 +53,7 @@ HRESULT ANIMATIONSPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D
     hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("背景のテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("スプライトのテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
         return hResult;
     }
@@ -62,8 +62,8 @@ HRESULT ANIMATIONSPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D
     for (nCounter = 0; nCounter < 4; ++nCounter)
     {
         SetSpriteUV(1);
-        Vertex.at(nCounter).Position.x = Position.x + Size.x * (nCounter & 1);
-        Vertex.at(nCounter).Position.y = Position.y + Size.y * ((nCounter >> 1) & 1);
+        Vertex.at(nCounter).Position.x = position.x + Vertex.at(nCounter).U * Size.x;
+        Vertex.at(nCounter).Position.y = position.y + Vertex.at(nCounter).V * Size.y;
         Vertex.at(nCounter).Position.z = 0.0F;
         Vertex.at(nCounter).RHW = 1.0F;
         Vertex.at(nCounter).Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);
@@ -81,7 +81,7 @@ HRESULT ANIMATIONSPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void ANIMATIONSPRITE::SetSpriteUV(int number)
+void ANIMATIONSPRITE::SetSpriteUV(int number) 
 {
     //---各種宣言---//
     int nCounter;       //カウンター
@@ -90,13 +90,13 @@ void ANIMATIONSPRITE::SetSpriteUV(int number)
 
     //---値算出---//
     fU = (number % UV.x) * (1.0F / UV.x);
-    fV = (number / UV.y) * (1.0F / UV.y);
+    fV = (number / UV.x) * (1.0F / UV.y);
 
     //---値更新---//
-    for (nCounter = 0; nCounter < 4; nCounter++)
+    for (nCounter = 0; nCounter < 4; ++nCounter)
     {
         Vertex.at(nCounter).U = fU + (nCounter % 2) * (1.0F / UV.x);
-        Vertex.at(nCounter).V = fV + (nCounter >> 1) * (1.0F / UV.y);
+        Vertex.at(nCounter).V = fV + (nCounter / 2) * (1.0F / UV.y);
     }
 }
 

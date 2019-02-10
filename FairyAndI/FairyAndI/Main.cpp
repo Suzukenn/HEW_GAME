@@ -13,8 +13,8 @@
 
 //＝＝＝定数・マクロ定義＝＝＝//
 #define FPS 1000 / 60
-#define WINDOW_CAPTION "スケータガール RESTART"	//ウインドウのキャプション名
-#define WINDOW_CLASS_NAME "SkaterGirl"			//ウインドウのクラス名
+#define WINDOW_CAPTION "妖精×私"	    //ウインドウのキャプション名
+#define WINDOW_CLASS_NAME "FairyAndI"	//ウインドウのクラス名
 
 //＝＝＝プロトタイプ宣言＝＝＝//
 void Draw(void);
@@ -42,6 +42,7 @@ std::unique_ptr<LPD3DXFONT> g_pD3DXFont;	//フォントへのポインタ
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
     _CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF  | _CRTDBG_LEAK_CHECK_DF);
+    //_CrtSetBreakAlloc(18610);
 
     //---未使用宣言---//
 	UNREFERENCED_PARAMETER(hPrevInstance);
@@ -57,8 +58,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     //---初期化処理---//
     setlocale(LC_ALL, "Japanese");
-    g_pD3D.reset(new LPDIRECT3D9());
-    g_pD3DDevice.reset(new LPDIRECT3DDEVICE9());
+    g_pD3D.reset(new LPDIRECT3D9);
+    g_pD3DDevice.reset(new LPDIRECT3DDEVICE9);
 
 #ifdef _DEBUG
     g_pD3DXFont.reset(new LPD3DXFONT());
@@ -278,20 +279,7 @@ HRESULT Initialize(HINSTANCE instance, HWND handle)
         hResult = SCENEMANAGER::Initialize();
     }
 
-    //---デバッグ表示初期化---//
-    if (SUCCEEDED(hResult))
-    {
-        hResult = SCENEMANAGER::Initialize();
-    }
-
-    if (SUCCEEDED(hResult))
-    {
-        return S_OK;
-    }
-    else
-    {
-        return S_FALSE;
-    }
+    return hResult;
 }
 
 /////////////////////////////////////////////

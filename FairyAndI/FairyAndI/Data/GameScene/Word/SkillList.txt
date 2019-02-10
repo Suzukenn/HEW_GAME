@@ -1,0 +1,17 @@
+Data/GameScene/Word/Skill/HotFire.png HOTFIRE
+Data/GameScene/Word/Skill/HotIce.png HOTICE
+Data/GameScene/Word/Skill/HotRock.png HOTROCK
+Data/GameScene/Word/Skill/HotRiceCake.png HOTRICECAKE
+Data/GameScene/Word/Skill/ColdFire.png COLDFIRE
+Data/GameScene/Word/Skill/ColdIce.png COLDICE
+Data/GameScene/Word/Skill/ColdRock.png COLDROCK
+Data/GameScene/Word/Skill/ColdRiceCake.png COLDRICECAKE
+Data/GameScene/Word/Skill/HardFire.png HARDFIRE
+Data/GameScene/Word/Skill/HardIce.png HARDICE
+Data/GameScene/Word/Skill/HardRock.png HARDROCK
+Data/GameScene/Word/Skill/HardRiceCake.png HARDRICECAKE
+Data/GameScene/Word/Skill/SoftFire.png SOFTFIRE
+Data/GameScene/Word/Skill/SoftIce.png SOFTICE
+Data/GameScene/Word/Skill/SoftRock.png SOFTROCK
+Data/GameScene/Word/Skill/SoftRiceCake.png SOFTRICECAKE
+Data/GameScene/Word/Skill/Empty.png EMPTY

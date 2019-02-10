@@ -49,8 +49,8 @@ HRESULT SPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTOR
     //---初期化処理---//
     Position = position;
     Size = size;
-    Texture.reset(new LPDIRECT3DTEXTURE9());
-    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9());
+    Texture.reset(new LPDIRECT3DTEXTURE9);
+    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9);
 
     //---テクスチャの読み込み---//
     hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
@@ -85,8 +85,8 @@ HRESULT SPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTOR
     {
         pVertex[nCounter].U = (float)(nCounter & 1);
         pVertex[nCounter].V = (float)((nCounter >> 1) & 1);
-        pVertex[nCounter].Position.x = pVertex[nCounter].U * SCREEN_WIDTH;
-        pVertex[nCounter].Position.y = pVertex[nCounter].V * SCREEN_HEIGHT;
+        pVertex[nCounter].Position.x = position.x + pVertex[nCounter].U * Size.x;
+        pVertex[nCounter].Position.y = position.y + pVertex[nCounter].V * Size.y;
         pVertex[nCounter].Position.z = 0.0F;
         pVertex[nCounter].RHW = 1.0F;
         pVertex[nCounter].Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);
@@ -132,4 +132,18 @@ void SPRITE::Uninitialize(void)
 void SPRITE::Update(void)
 {
 
+}
+
+/////////////////////////////////////////////
+//関数名：SetAlpha
+//
+//機能：背景の更新
+//
+//引数：なし
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void SPRITE::SetAlpha(D3DCOLOR color)
+{
+	
 }

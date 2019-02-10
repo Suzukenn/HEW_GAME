@@ -1,6 +1,7 @@
 Data/Sound/BGM/Game.wav 1 BGM_GAME
 Data/Sound/BGM/GameOver.wav 0 BGM_GAMEOVER
 Data/Sound/BGM/Opening.wav 1 BGM_OPENING
+Data/Sound/BGM/Select.wav 1 BGM_SELECT
 Data/Sound/BGM/Training.wav 1 BGM_TRAINING
 Data/Sound/SE/Break.wav 0 SE_BREAK
 Data/Sound/SE/Damage.wav 0 SE_DAMAGE

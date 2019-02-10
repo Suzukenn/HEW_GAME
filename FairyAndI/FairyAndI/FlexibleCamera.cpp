@@ -37,6 +37,59 @@ HRESULT FLEXIBLECAMERA::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 reverso)
 }
 
 /////////////////////////////////////////////
+//関数名：SetCamera
+//
+//機能：カメラの設定
+//
+//引数：なし
+//
+//戻り値：(HRESULT)処理の成否
+/////////////////////////////////////////////
+HRESULT FLEXIBLECAMERA::SetCamera(void)
+{
+    //---各種宣言---//
+    HRESULT hResult;
+    D3DXMATRIX mtxView;					// ビューマトリックス
+    D3DXMATRIX mtxProjection;			// プロジェクションマトリックス
+    LPDIRECT3DDEVICE9 pDevice;
+
+    //---初期化処理---//
+    pDevice = GetDevice();
+
+    //---ビューマトリクスの設定---//
+    //初期化
+    D3DXMatrixIdentity(&mtxView);
+
+    //作成
+    D3DXMatrixLookAtLH(&mtxView, &Position, &ReversoPoint, &UpVector);
+
+    //設定
+    hResult = pDevice->SetTransform(D3DTS_VIEW, &mtxView);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("カメラのビューマトリクスの設定に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        return hResult;
+    }
+
+    //---プロジェクションマトリックス設定---//
+    //初期化
+    D3DXMatrixIdentity(&mtxProjection);
+
+    //作成
+    D3DXMatrixPerspectiveFovLH(&mtxProjection, D3DXToRadian(45.0F), SCREEN_WIDTH / SCREEN_HEIGHT, 10.0F, 1000.0F);
+
+    //設定
+    hResult = pDevice->SetTransform(D3DTS_PROJECTION, &mtxProjection);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("カメラのプロジェクションマトリクスの設定に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        return hResult;
+    }
+
+    return hResult;
+}
+
+/////////////////////////////////////////////
 //関数名：Uninitialize
 //
 //機能：カメラの終了
@@ -232,57 +285,4 @@ void FLEXIBLECAMERA::Update(void)
     //DEBUG::PrintDebugData(TEXT("左旋回：Q\n"));
     //DEBUG::PrintDebugData(TEXT("右旋回：E\n"));
 #endif
-}
-
-/////////////////////////////////////////////
-//関数名：SetCamera
-//
-//機能：カメラの設定
-//
-//引数：なし
-//
-//戻り値：(HRESULT)処理の成否
-/////////////////////////////////////////////
-HRESULT FLEXIBLECAMERA::SetCamera(void)
-{
-    //---各種宣言---//
-    HRESULT hResult;
-    D3DXMATRIX mtxView;					// ビューマトリックス
-    D3DXMATRIX mtxProjection;			// プロジェクションマトリックス
-    LPDIRECT3DDEVICE9 pDevice;
-
-    //---初期化処理---//
-    pDevice = GetDevice();
-
-    //---ビューマトリクスの設定---//
-    //初期化
-    D3DXMatrixIdentity(&mtxView);
-
-    //作成
-    D3DXMatrixLookAtLH(&mtxView, &Position, &ReversoPoint, &UpVector);
-
-    //設定
-    hResult = pDevice->SetTransform(D3DTS_VIEW, &mtxView);
-    if (FAILED(hResult))
-    {
-        MessageBox(nullptr, TEXT("カメラのビューマトリクスの設定に失敗しました"), TEXT("初期化エラー"), MB_OK);
-        return hResult;
-    }
-
-    //---プロジェクションマトリックス設定---//
-    //初期化
-    D3DXMatrixIdentity(&mtxProjection);
-
-    //作成
-    D3DXMatrixPerspectiveFovLH(&mtxProjection, D3DXToRadian(45.0F), SCREEN_WIDTH / SCREEN_HEIGHT, 10.0F, 1000.0F);
-
-    //設定
-    hResult = pDevice->SetTransform(D3DTS_PROJECTION, &mtxProjection);
-    if (FAILED(hResult))
-    {
-        MessageBox(nullptr, TEXT("カメラのプロジェクションマトリクスの設定に失敗しました"), TEXT("初期化エラー"), MB_OK);
-        return hResult;
-    }
-
-    return hResult;
 }

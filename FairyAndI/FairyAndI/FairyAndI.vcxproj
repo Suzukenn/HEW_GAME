@@ -28,14 +28,14 @@
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v140</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -101,6 +101,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -114,15 +115,54 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ActorManager.cpp" />
+    <ClCompile Include="AnimationModel.cpp" />
+    <ClCompile Include="AnimationModelHierarchy.cpp" />
     <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="BackImage.cpp" />
+    <ClCompile Include="BatteryCannon.cpp" />
+    <ClCompile Include="BatteryGimmick.cpp" />
+    <ClCompile Include="Billboard.cpp" />
+    <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Canvas.cpp" />
+    <ClCompile Include="CharacterFactory.cpp" />
+    <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="Element.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Fade.cpp" />
+    <ClCompile Include="FireGimmick.cpp" />
+    <ClCompile Include="GimmickFactory.cpp" />
+    <ClCompile Include="Grenade.cpp" />
+    <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Heart.cpp" />
+    <ClCompile Include="IceGimmick.cpp" />
+    <ClCompile Include="SkillBox.cpp" />
+    <ClCompile Include="ModelManager.cpp" />
+    <ClCompile Include="OBB.cpp" />
+    <ClCompile Include="ObjectFactory.cpp" />
+    <ClCompile Include="SelectScene.cpp" />
+    <ClCompile Include="SkillFactory.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="SquareGauge.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Trap.cpp" />
+    <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="WoodGimmick.cpp" />
+    <ClCompile Include="WordManager.cpp" />
+    <ClCompile Include="SideViewCamera.cpp" />
+    <ClCompile Include="Fairy.cpp" />
     <ClCompile Include="FlexibleCamera.cpp" />
     <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Field.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SelectMarker.cpp" />
     <ClCompile Include="WordList.cpp" />
     <ClCompile Include="WordMenu.cpp" />
     <ClCompile Include="Sprite.cpp" />
@@ -136,7 +176,6 @@
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Mouse.cpp" />
-    <ClCompile Include="Position.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="SoundManager.cpp" />
     <ClCompile Include="AnimationSprite.cpp" />
@@ -146,19 +185,62 @@
     <ClCompile Include="WordPlate.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationModel.h" />
+    <ClInclude Include="AnimationModelContainer.h" />
+    <ClInclude Include="AnimationModelFrame.h" />
+    <ClInclude Include="AnimationModelHierarchy.h" />
+    <ClInclude Include="BackImage.h" />
+    <ClInclude Include="BatteryCannon.h" />
+    <ClInclude Include="BatteryGimmick.h" />
+    <ClInclude Include="Billboard.h" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="CharacterFactory.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="Element.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Fade.h" />
+    <ClInclude Include="FireGimmick.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ActorManager.h" />
     <ClInclude Include="BackGround.h" />
-    <ClInclude Include="Base2DObjeck.h" />
+    <ClInclude Include="GimmickFactory.h" />
+    <ClInclude Include="Grenade.h" />
+    <ClInclude Include="Ground.h" />
+    <ClInclude Include="Heart.h" />
+    <ClInclude Include="IceGimmick.h" />
+    <ClInclude Include="SkillBox.h" />
+    <ClInclude Include="Model.h" />
     <ClInclude Include="BaseScene.h" />
     <ClInclude Include="Button.h" />
+    <ClInclude Include="Canvas.h" />
+    <ClInclude Include="OBB.h" />
+    <ClInclude Include="ModelManager.h" />
+    <ClInclude Include="ObjectFactory.h" />
+    <ClInclude Include="SelectScene.h" />
+    <ClInclude Include="Skill.h" />
+    <ClInclude Include="SkillFactory.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="SquareGauge.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Trap.h" />
+    <ClInclude Include="Wall.h" />
+    <ClInclude Include="WoodGimmick.h" />
+    <ClInclude Include="WordManager.h" />
+    <ClInclude Include="SideViewCamera.h" />
+    <ClInclude Include="Fairy.h" />
     <ClInclude Include="FlexibleCamera.h" />
     <ClInclude Include="Debug.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Field.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="SelectMarker.h" />
     <ClInclude Include="WordList.h" />
     <ClInclude Include="WordMenu.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="TextureManager.h" />
-    <ClInclude Include="TextureParameter.h" />
+    <ClInclude Include="FileParameter.h" />
     <ClInclude Include="TrainingButton.h" />
     <ClInclude Include="TrainingScene.h" />
     <ClInclude Include="GameOver.h" />
@@ -168,7 +250,6 @@
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Main.h" />
     <ClInclude Include="Mouse.h" />
-    <ClInclude Include="Position.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="SoundManager.h" />

@@ -1,3 +1,13 @@
-Data/GameScene/BackGround/BackGround.tga BACKGROUND
+Data/GameScene/Texture/Field.jpg BACKGROUND
+Data/GameScene/Texture/Field.jpg FIELD
 Data/GameScene/UI/AdjectiveList.png ADJECTIVELIST
 Data/GameScene/UI/NounList.png NOUNLIST
+Data/GameScene/UI/Balloon.png BALLOON
+Data/GameScene/UI/Select.png MARKER
+Data/GameScene/UI/SkillBox.png SKILLBOX
+Data/GameScene/UI/Heart.png HEART
+Data/GameScene/UI/Empty.png EMPTY
+Data/GameScene/UI/GaugeBack.png GAUGEBACK
+Data/GameScene/UI/GaugeMemory.png GAUGEMEMORY
+Data/GameScene/UI/Number.png TIMER
+

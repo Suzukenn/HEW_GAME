@@ -4,6 +4,7 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <d3d9.h>
 #include <d3dx9.h>
+#include <iosfwd>
 #include <string>
 #include <Windows.h>
 
@@ -27,6 +28,12 @@
 #ifndef SAFE_RELEASE
 #define SAFE_RELEASE(x) {if(x){x->Release();x = nullptr;}}
 #endif
+#ifndef SAFE_DELETE
+#define SAFE_DELETE(x)       { if(x) { delete (x); (x)=nullptr; } }
+#endif
+#ifndef SAFE_DELETE_ARRAY
+#define SAFE_DELETE_ARRAY(x) { if(x) { delete[] (x); (x)=nullptr; } }
+#endif
 
 //＝＝＝型宣言＝＝＝//
 typedef std::basic_string<TCHAR> tstring;
@@ -36,7 +43,7 @@ typedef struct
 {
     int Frame; //パターン番号
     int Count; //フレーム数
-}MOTION;
+} MOTION;
 
 typedef struct
 {

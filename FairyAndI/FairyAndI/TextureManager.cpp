@@ -14,19 +14,19 @@ std::unordered_map<tstring, LPDIRECT3DTEXTURE9> TEXTUREMANAGER::Texture;        
 /////////////////////////////////////////////
 //関数名：Create
 //
-//機能：ソースボイスの作成
+//機能：テクスチャの作成
 //
-//引数：(TEXTUREPARAMETER)参照データ
+//引数：(FILEPARAMETER)参照データ
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT TEXTUREMANAGER::Create(const TEXTUREPARAMETER& data)
+HRESULT TEXTUREMANAGER::Create(const FILEPARAMETER& data)
 {
     //---各種宣言---//
     std::unique_ptr<LPDIRECT3DTEXTURE9> pTexture;
 
     //---初期化処理---//
-    pTexture.reset(new LPDIRECT3DTEXTURE9());
+    pTexture.reset(new LPDIRECT3DTEXTURE9);
 
     //---データの展開---//
     //ファイルの指定確認
@@ -39,7 +39,7 @@ HRESULT TEXTUREMANAGER::Create(const TEXTUREPARAMETER& data)
     //テクスチャの作成
     if (SUCCEEDED(D3DXCreateTextureFromFile(GetDevice(), data.FileName.data(), pTexture.get())))
     {
-        Texture.insert(std::make_pair(data.CallKey, *pTexture));
+        Texture.emplace(std::make_pair(data.CallKey, *pTexture));
     }
     else
     {
@@ -64,7 +64,7 @@ HRESULT TEXTUREMANAGER::Initialize(LPCTSTR filename)
     //---各種宣言---//
     HRESULT hResult;
 
-    std::vector<TEXTUREPARAMETER> conList;
+    std::vector<FILEPARAMETER> conList;
 
     //---初期化処理---//
 
@@ -97,11 +97,11 @@ HRESULT TEXTUREMANAGER::Initialize(LPCTSTR filename)
 //
 //機能：読み込みデータの格納
 //
-//引数：(TEXTUREPARAMETER)テクスチャリスト,(LPCTSTR)ファイル名
+//引数：(std::vector<FILEPARAMETER>&)テクスチャリスト,(LPCTSTR)ファイル名
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT TEXTUREMANAGER::Load(std::vector<TEXTUREPARAMETER>& list, LPCTSTR filename)
+HRESULT TEXTUREMANAGER::Load(std::vector<FILEPARAMETER>& list, LPCTSTR filename)
 {
     //---各種宣言---//
     int nCounter;
@@ -114,7 +114,7 @@ HRESULT TEXTUREMANAGER::Load(std::vector<TEXTUREPARAMETER>& list, LPCTSTR filena
     list.resize(999);
 
     //---ファイルの読み込み---//
-    if (!file.is_open())
+    if (file.fail())
     {
         MessageBox(nullptr, TEXT("テクスチャリストを開けませんでした"), filename, MB_ICONSTOP | MB_OK);
         Uninitialize();
@@ -132,14 +132,15 @@ HRESULT TEXTUREMANAGER::Load(std::vector<TEXTUREPARAMETER>& list, LPCTSTR filena
         list.at(nCounter).CallKey.resize(szKeyName.size());
         list.at(nCounter).CallKey = std::wstring(szKeyName.begin(), szKeyName.end());
 #else
-        list.at(nCounter).FileName = szFileName.c_str();;
-        list.at(nCounter).CallKey = szKeyName.c_str();
+        list.at(nCounter).FileName = szFileName;
+        list.at(nCounter).CallKey = szKeyName;
 #endif
 
         ++nCounter;
     }
 
     list.resize(nCounter);
+    list.shrink_to_fit();
 
     return S_OK;
 }
@@ -155,7 +156,7 @@ HRESULT TEXTUREMANAGER::Load(std::vector<TEXTUREPARAMETER>& list, LPCTSTR filena
 /////////////////////////////////////////////
 void TEXTUREMANAGER::Uninitialize(void)
 {
-    //---解放---//
+    //---開放---//
     //テクスチャの破棄
     for (auto& data : Texture)
     {
@@ -180,7 +181,7 @@ HRESULT TEXTUREMANAGER::GetTexture(LPCTSTR texturename, LPDIRECT3DTEXTURE9& addr
         address = Texture.at(texturename);
         if (!address)
         {
-            MessageBox(nullptr, TEXT("テクスチャが存在しません"), texturename, MB_ICONSTOP | MB_OK);
+            MessageBox(nullptr, TEXT("テクスチャのアドレスが存在しません"), texturename, MB_ICONSTOP | MB_OK);
             return E_FAIL;
         }
     }

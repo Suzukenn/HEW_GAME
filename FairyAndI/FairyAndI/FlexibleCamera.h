@@ -19,7 +19,6 @@ class FLEXIBLECAMERA
         void Uninitialize(void);
         void Update(void);
         HRESULT SetCamera(void);
-
 };
 
 #endif

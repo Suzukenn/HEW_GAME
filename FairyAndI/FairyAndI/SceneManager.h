@@ -4,6 +4,7 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <memory>
 #include "BaseScene.h"
+#include "Fade.h"
 #include "Main.h"
 
 //＝＝＝列挙型定義＝＝＝//
@@ -11,6 +12,7 @@ typedef enum
 {
     SCENE_TRAINING,
     SCENE_TITLE,
+    SCENE_SELECT,
     SCENE_GAME,
     SCENE_GAMEOVER,
     MAX_SCENE

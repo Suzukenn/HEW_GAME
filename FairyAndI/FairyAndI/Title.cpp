@@ -70,6 +70,9 @@ HRESULT TITLE::Initialize(void)
     //---BGM再生---//
     SOUNDMANAGER::Play(TEXT("BGM_OPENING"));
 
+	//フェード開始
+	FADE::SetFade(FADE_IN);
+
     return S_OK;
 }
 
@@ -107,8 +110,39 @@ void TITLE::Uninitialize(void)
 /////////////////////////////////////////////
 void TITLE::Update(void)
 {
+	static int Mood;
+
     //---オブジェクトの更新処理---//
     Back.Update();
     StartButton.Update();
     TrainingButton.Update();
+
+	//フェードインが終わっていたら
+	if (FADE::CheckFadeEnd(FADE_IN))
+	{
+		if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
+		{
+			FADE::SetFade(FADE_OUT);
+			//SCENEMANAGER::SetScene(SCENE_SELECT);
+			Mood = 1;
+		}
+		else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_START, TRIGGER))
+		{
+			FADE::SetFade(FADE_OUT);
+			//SCENEMANAGER::SetScene(SCENE_TRAINING);
+			Mood = 2;
+		}
+	}
+	//フェードアウトが終わっていたら
+	if (FADE::CheckFadeEnd(FADE_OUT))
+	{
+		if (Mood == 1)
+		{
+			SCENEMANAGER::SetScene(SCENE_SELECT);
+		}
+		else if(Mood == 2)
+		{
+			SCENEMANAGER::SetScene(SCENE_TRAINING);
+		}
+	}
 }

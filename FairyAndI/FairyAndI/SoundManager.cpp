@@ -42,7 +42,7 @@ HRESULT SOUNDMANAGER::Create(const SOUNDPARAMETER& data)
     }
 
     //データのロード
-    if (wavBuffer.Load(data.FileName.data()))
+    if (wavBuffer.Load(data.FileName.data(), data.LoopCount))
     {
         WaveSound.insert(std::make_pair(data.CallKey, wavBuffer));
     }
@@ -55,7 +55,7 @@ HRESULT SOUNDMANAGER::Create(const SOUNDPARAMETER& data)
     //ソースボイスの作成
     if (SUCCEEDED((*Manager)->CreateSourceVoice(pVoice.get(), &WaveSound.at(data.CallKey).GetFormat())))
     {
-        SourceVoice.insert(std::make_pair(data.CallKey, (*pVoice)));
+        SourceVoice.emplace(std::make_pair(data.CallKey, (*pVoice)));
     }
     else
     {
@@ -168,9 +168,9 @@ HRESULT SOUNDMANAGER::Load(std::vector<SOUNDPARAMETER>& list)
         list.at(nCounter).CallKey.resize(szKeyName.size());
         list.at(nCounter).CallKey = std::wstring(szKeyName.begin(), szKeyName.end());
 #else
-        list.at(nCounter).FileName = szFileName.c_str();;
+        list.at(nCounter).FileName = szFileName;
         list.at(nCounter).LoopCount = nLoop;
-        list.at(nCounter).CallKey = szKeyName.c_str();
+        list.at(nCounter).CallKey = szKeyName;
 #endif
 
         ++nCounter;

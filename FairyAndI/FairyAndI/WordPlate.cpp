@@ -1,6 +1,7 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "TextureManager.h"
 #include "WordPlate.h"
+#include "WordManager.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -49,11 +50,11 @@ HRESULT WORDPLATE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVEC
     //---初期化処理---//
     Position = position;
     Size = size;
-    Texture.reset(new LPDIRECT3DTEXTURE9());
+    Texture.reset(new LPDIRECT3DTEXTURE9);
     VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9);
 
     //---テクスチャの読み込み---//
-    hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
+    hResult = SetTexture(texturename);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("ワードプレートのテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -85,8 +86,8 @@ HRESULT WORDPLATE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVEC
     {
         pVertex[nCounter].U = (float)(nCounter & 1);
         pVertex[nCounter].V = (float)((nCounter >> 1) & 1);
-        pVertex[nCounter].Position.x = pVertex[nCounter].U * SCREEN_WIDTH;
-        pVertex[nCounter].Position.y = pVertex[nCounter].V * SCREEN_HEIGHT;
+        pVertex[nCounter].Position.x = position.x + pVertex[nCounter].U * Size.x;
+        pVertex[nCounter].Position.y = position.y + pVertex[nCounter].V * Size.y;
         pVertex[nCounter].Position.z = 0.0F;
         pVertex[nCounter].RHW = 1.0F;
         pVertex[nCounter].Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);
@@ -100,6 +101,8 @@ HRESULT WORDPLATE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVEC
         Uninitialize();
         return hResult;
     }
+
+    TEXTUREMANAGER::GetTexture(TEXT("EMPTY"), *Texture);
 
     return hResult;
 }
@@ -116,8 +119,7 @@ HRESULT WORDPLATE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVEC
 void WORDPLATE::Uninitialize(void)
 {
     //---開放---//
-    SAFE_RELEASE((*VertexBuffer));
-    SAFE_RELEASE((*Texture));
+    Texture.release();
 }
 
 /////////////////////////////////////////////
@@ -132,4 +134,24 @@ void WORDPLATE::Uninitialize(void)
 void WORDPLATE::Update(void)
 {
 
+}
+
+/////////////////////////////////////////////
+//関数名：SetTexture
+//
+//機能：ワードプレートの適用テクスチャの設定
+//
+//引数：(tstring)テクスチャ名
+//
+//戻り値：(HRESULT)処理の成否
+/////////////////////////////////////////////
+HRESULT WORDPLATE::SetTexture(tstring texturename)
+{
+    if (FAILED(WORDMANAGER::GetWordTexture(texturename, *Texture)))
+    {
+        MessageBox(nullptr, TEXT("ワードプレートのテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
+        return E_FAIL;
+    }
+    return S_OK;
 }

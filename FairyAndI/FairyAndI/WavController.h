@@ -8,23 +8,24 @@
 //＝＝＝クラス宣言＝＝＝//
 class WAVCONTROLLER
 {
-	private:
-		HMMIO				Mmio;		    //MMIOハンドル
-		MMIOINFO			MmioInfo;	    //MMIO情報構造体
-		MMCKINFO			RiffChunk;	    //RIFFチャンク
-		MMCKINFO			FormatChunk;	//フォーマットチャンク
-		MMCKINFO			DataChunk;	    //DATA チャンク
-		WAVEFORMATEX		WaveFormat;	    //WAVフォーマット構造体	
-		std::vector<BYTE>	WaveData;		//音楽データ	
+    private:
+        HMMIO				Mmio;		    //MMIOハンドル
+        MMIOINFO			MmioInfo;	    //MMIO情報構造体
+        MMCKINFO			RiffChunk;	    //RIFFチャンク
+        MMCKINFO			FormatChunk;	//フォーマットチャンク
+        MMCKINFO			DataChunk;	    //DATA チャンク
+        WAVEFORMATEX		WaveFormat;	    //WAVフォーマット構造体	
         UINT32			    LoopCount;		//ループ再生
-		
-	public:
-		bool Load(LPCTSTR);
 
-		const WAVEFORMATEX& GetFormat(void);
+        std::vector<BYTE>	WaveData;		//音楽データ	
+
+    public:
+        bool Load(LPCTSTR, UINT32);
+
+        const WAVEFORMATEX& GetFormat(void);
         UINT32 GetLoop(void);
-		const BYTE& GetWaveData(void);
-		std::size_t GetWaveSize(void);
+        const BYTE& GetWaveData(void);
+        std::size_t GetWaveSize(void);
 };
 
 #endif
