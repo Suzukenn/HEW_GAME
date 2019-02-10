@@ -101,6 +101,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -114,6 +115,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <Profile>true</Profile>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -124,6 +126,7 @@
     <ClCompile Include="BackImage.cpp" />
     <ClCompile Include="BatteryCannon.cpp" />
     <ClCompile Include="BatteryGimmick.cpp" />
+    <ClCompile Include="Billboard.cpp" />
     <ClCompile Include="Bullet.cpp" />
     <ClCompile Include="Button.cpp" />
     <ClCompile Include="Canvas.cpp" />
@@ -189,6 +192,7 @@
     <ClInclude Include="BackImage.h" />
     <ClInclude Include="BatteryCannon.h" />
     <ClInclude Include="BatteryGimmick.h" />
+    <ClInclude Include="Billboard.h" />
     <ClInclude Include="Bullet.h" />
     <ClInclude Include="CharacterFactory.h" />
     <ClInclude Include="Collision.h" />

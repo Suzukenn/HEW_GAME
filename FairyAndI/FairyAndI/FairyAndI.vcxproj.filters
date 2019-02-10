@@ -1,496 +1,151 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="ソース ファイル">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
-    <Filter Include="リソース ファイル">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="ソース ファイル\Actor">
-      <UniqueIdentifier>{7b9613c0-5548-42d2-9ee3-98b8ebc5aed3}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Scene">
-      <UniqueIdentifier>{a622a525-50e2-4a77-9179-477de2c447fb}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\System">
-      <UniqueIdentifier>{bd5dfc6d-9781-49b1-b314-af8714352f92}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\System\Input">
-      <UniqueIdentifier>{6d613e3c-ec72-4000-b1a5-f0ceb060860b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\System\Manager">
-      <UniqueIdentifier>{6b395189-66f4-42c9-8a04-1666cd02a751}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\System\Sound">
-      <UniqueIdentifier>{ce46bc4a-5520-42b5-af6b-a86d297a444b}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\UI">
-      <UniqueIdentifier>{7389ed9a-ab2e-4db2-8f4c-0afafdb10f47}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\UI\Button">
-      <UniqueIdentifier>{150b6293-5c74-4f52-b6d4-0f0aaedd2484}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\UI\WordMenu">
-      <UniqueIdentifier>{c6244d99-b959-48a5-9d15-23b284da9450}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Actor\Character">
-      <UniqueIdentifier>{a8fd700d-2db0-4abc-bd3e-1ca77798d838}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Actor\Staff">
-      <UniqueIdentifier>{69beaa8f-7ad9-461c-835c-b11334c46871}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Actor\Object">
-      <UniqueIdentifier>{82f89c94-7aea-4814-8543-da9a2d11428f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Parts">
-      <UniqueIdentifier>{4ac2e438-95ec-4d96-aee4-d19eba3ce953}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\System\Parameter">
-      <UniqueIdentifier>{0f44c79e-0f0b-4245-9571-edbc73b2f7ce}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\System\Collision">
-      <UniqueIdentifier>{13c74ef5-8644-4472-98e9-bbe5d48e766d}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Parts\2D">
-      <UniqueIdentifier>{ab190310-7b15-4c47-b6ba-e91554688f2c}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Parts\3D">
-      <UniqueIdentifier>{e9794838-385c-4301-a8c6-db5af0172d7f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\System\Factory">
-      <UniqueIdentifier>{ac04728f-8076-4be5-b47e-986140a33148}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Actor\Gimmick">
-      <UniqueIdentifier>{35c43f22-f8d5-4be5-9b51-9cfdb7b4e7f9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\Actor\Skill">
-      <UniqueIdentifier>{143a0185-73e7-4fc6-bac6-c1b95f5cc2fe}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="ソース ファイル\UI\Gauge">
-      <UniqueIdentifier>{88326fd5-f1da-45f9-83b4-d062b61873de}</UniqueIdentifier>
-    </Filter>
+    <ClCompile Include="ActorManager.cpp" />
+    <ClCompile Include="AnimationModel.cpp" />
+    <ClCompile Include="AnimationModelHierarchy.cpp" />
+    <ClCompile Include="BackGround.cpp" />
+    <ClCompile Include="BackImage.cpp" />
+    <ClCompile Include="BatteryCannon.cpp" />
+    <ClCompile Include="BatteryGimmick.cpp" />
+    <ClCompile Include="Bullet.cpp" />
+    <ClCompile Include="Button.cpp" />
+    <ClCompile Include="Canvas.cpp" />
+    <ClCompile Include="CharacterFactory.cpp" />
+    <ClCompile Include="Collision.cpp" />
+    <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="Element.cpp" />
+    <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="Fade.cpp" />
+    <ClCompile Include="FireGimmick.cpp" />
+    <ClCompile Include="GimmickFactory.cpp" />
+    <ClCompile Include="Grenade.cpp" />
+    <ClCompile Include="Ground.cpp" />
+    <ClCompile Include="Heart.cpp" />
+    <ClCompile Include="IceGimmick.cpp" />
+    <ClCompile Include="SkillBox.cpp" />
+    <ClCompile Include="ModelManager.cpp" />
+    <ClCompile Include="OBB.cpp" />
+    <ClCompile Include="ObjectFactory.cpp" />
+    <ClCompile Include="SelectScene.cpp" />
+    <ClCompile Include="SkillFactory.cpp" />
+    <ClCompile Include="Sphere.cpp" />
+    <ClCompile Include="SquareGauge.cpp" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Trap.cpp" />
+    <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="WoodGimmick.cpp" />
+    <ClCompile Include="WordManager.cpp" />
+    <ClCompile Include="SideViewCamera.cpp" />
+    <ClCompile Include="Fairy.cpp" />
+    <ClCompile Include="FlexibleCamera.cpp" />
+    <ClCompile Include="Debug.cpp" />
+    <ClCompile Include="DirectionalLight.cpp" />
+    <ClCompile Include="Field.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="SelectMarker.cpp" />
+    <ClCompile Include="WordList.cpp" />
+    <ClCompile Include="WordMenu.cpp" />
+    <ClCompile Include="Sprite.cpp" />
+    <ClCompile Include="TextureManager.cpp" />
+    <ClCompile Include="TrainingButton.cpp" />
+    <ClCompile Include="TrainingScene.cpp" />
+    <ClCompile Include="GameOver.cpp" />
+    <ClCompile Include="GamePad.cpp" />
+    <ClCompile Include="GameScene.cpp" />
+    <ClCompile Include="InputManager.cpp" />
+    <ClCompile Include="Keyboard.cpp" />
+    <ClCompile Include="Main.cpp" />
+    <ClCompile Include="Mouse.cpp" />
+    <ClCompile Include="SceneManager.cpp" />
+    <ClCompile Include="SoundManager.cpp" />
+    <ClCompile Include="AnimationSprite.cpp" />
+    <ClCompile Include="StartButton.cpp" />
+    <ClCompile Include="Title.cpp" />
+    <ClCompile Include="WavController.cpp" />
+    <ClCompile Include="WordPlate.cpp" />
+    <ClCompile Include="Billboard.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Main.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="GameOver.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GameScene.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="GamePad.cpp">
-      <Filter>ソース ファイル\System\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="InputManager.cpp">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Keyboard.cpp">
-      <Filter>ソース ファイル\System\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="Mouse.cpp">
-      <Filter>ソース ファイル\System\Input</Filter>
-    </ClCompile>
-    <ClCompile Include="SceneManager.cpp">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="SoundManager.cpp">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="WavController.cpp">
-      <Filter>ソース ファイル\System\Sound</Filter>
-    </ClCompile>
-    <ClCompile Include="Title.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="TrainingScene.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="TextureManager.cpp">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="WordManager.cpp">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="SelectScene.cpp">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="ModelManager.cpp">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Button.cpp">
-      <Filter>ソース ファイル\UI\Button</Filter>
-    </ClCompile>
-    <ClCompile Include="StartButton.cpp">
-      <Filter>ソース ファイル\UI\Button</Filter>
-    </ClCompile>
-    <ClCompile Include="TrainingButton.cpp">
-      <Filter>ソース ファイル\UI\Button</Filter>
-    </ClCompile>
-    <ClCompile Include="SelectMarker.cpp">
-      <Filter>ソース ファイル\UI\WordMenu</Filter>
-    </ClCompile>
-    <ClCompile Include="WordList.cpp">
-      <Filter>ソース ファイル\UI\WordMenu</Filter>
-    </ClCompile>
-    <ClCompile Include="WordMenu.cpp">
-      <Filter>ソース ファイル\UI\WordMenu</Filter>
-    </ClCompile>
-    <ClCompile Include="WordPlate.cpp">
-      <Filter>ソース ファイル\UI\WordMenu</Filter>
-    </ClCompile>
-    <ClCompile Include="Fairy.cpp">
-      <Filter>ソース ファイル\Actor\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="Player.cpp">
-      <Filter>ソース ファイル\Actor\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="DirectionalLight.cpp">
-      <Filter>ソース ファイル\Actor\Staff</Filter>
-    </ClCompile>
-    <ClCompile Include="FlexibleCamera.cpp">
-      <Filter>ソース ファイル\Actor\Staff</Filter>
-    </ClCompile>
-    <ClCompile Include="SideViewCamera.cpp">
-      <Filter>ソース ファイル\Actor\Staff</Filter>
-    </ClCompile>
-    <ClCompile Include="Canvas.cpp">
-      <Filter>ソース ファイル\Actor\Staff</Filter>
-    </ClCompile>
-    <ClCompile Include="BackGround.cpp">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Field.cpp">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="ActorManager.cpp">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionManager.cpp">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Collision.cpp">
-      <Filter>ソース ファイル\System\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="Sphere.cpp">
-      <Filter>ソース ファイル\System\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="OBB.cpp">
-      <Filter>ソース ファイル\System\Collision</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationSprite.cpp">
-      <Filter>ソース ファイル\Parts\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Sprite.cpp">
-      <Filter>ソース ファイル\Parts\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="Debug.cpp">
-      <Filter>ソース ファイル\Parts\2D</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationModelHierarchy.cpp">
-      <Filter>ソース ファイル\Parts\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationModel.cpp">
-      <Filter>ソース ファイル\Parts\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Element.cpp">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="CharacterFactory.cpp">
-      <Filter>ソース ファイル\System\Factory</Filter>
-    </ClCompile>
-    <ClCompile Include="GimmickFactory.cpp">
-      <Filter>ソース ファイル\System\Factory</Filter>
-    </ClCompile>
-    <ClCompile Include="SkillFactory.cpp">
-      <Filter>ソース ファイル\System\Factory</Filter>
-    </ClCompile>
-    <ClCompile Include="FireGimmick.cpp">
-      <Filter>ソース ファイル\Actor\Gimmick</Filter>
-    </ClCompile>
-    <ClCompile Include="IceGimmick.cpp">
-      <Filter>ソース ファイル\Actor\Gimmick</Filter>
-    </ClCompile>
-    <ClCompile Include="WoodGimmick.cpp">
-      <Filter>ソース ファイル\Actor\Gimmick</Filter>
-    </ClCompile>
-    <ClCompile Include="BatteryGimmick.cpp">
-      <Filter>ソース ファイル\Actor\Gimmick</Filter>
-    </ClCompile>
-    <ClCompile Include="ObjectFactory.cpp">
-      <Filter>ソース ファイル\System\Factory</Filter>
-    </ClCompile>
-    <ClCompile Include="Grenade.cpp">
-      <Filter>ソース ファイル\Actor\Skill</Filter>
-    </ClCompile>
-    <ClCompile Include="Trap.cpp">
-      <Filter>ソース ファイル\Actor\Skill</Filter>
-    </ClCompile>
-    <ClCompile Include="Bullet.cpp">
-      <Filter>ソース ファイル\Actor\Skill</Filter>
-    </ClCompile>
-    <ClCompile Include="Wall.cpp">
-      <Filter>ソース ファイル\Actor\Skill</Filter>
-    </ClCompile>
-    <ClCompile Include="Ground.cpp">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="BatteryCannon.cpp">
-      <Filter>ソース ファイル\Actor\Gimmick</Filter>
-    </ClCompile>
-    <ClCompile Include="SkillBox.cpp">
-      <Filter>ソース ファイル\UI\WordMenu</Filter>
-    </ClCompile>
-    <ClCompile Include="Enemy.cpp">
-      <Filter>ソース ファイル\Actor\Character</Filter>
-    </ClCompile>
-    <ClCompile Include="Fade.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="BackImage.cpp">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClCompile>
-    <ClCompile Include="Heart.cpp">
-      <Filter>ソース ファイル\UI\Gauge</Filter>
-    </ClCompile>
-    <ClCompile Include="SquareGauge.cpp">
-      <Filter>ソース ファイル\UI\Gauge</Filter>
-    <ClCompile Include="Timer.cpp">
-      <Filter>ソース ファイル\UI</Filter>
-    </ClCompile>
+    <ClInclude Include="AnimationModel.h" />
+    <ClInclude Include="AnimationModelContainer.h" />
+    <ClInclude Include="AnimationModelFrame.h" />
+    <ClInclude Include="AnimationModelHierarchy.h" />
+    <ClInclude Include="BackImage.h" />
+    <ClInclude Include="BatteryCannon.h" />
+    <ClInclude Include="BatteryGimmick.h" />
+    <ClInclude Include="Bullet.h" />
+    <ClInclude Include="CharacterFactory.h" />
+    <ClInclude Include="Collision.h" />
+    <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="Element.h" />
+    <ClInclude Include="Enemy.h" />
+    <ClInclude Include="Fade.h" />
+    <ClInclude Include="FireGimmick.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="ActorManager.h" />
+    <ClInclude Include="BackGround.h" />
+    <ClInclude Include="GimmickFactory.h" />
+    <ClInclude Include="Grenade.h" />
+    <ClInclude Include="Ground.h" />
+    <ClInclude Include="Heart.h" />
+    <ClInclude Include="IceGimmick.h" />
+    <ClInclude Include="SkillBox.h" />
+    <ClInclude Include="Model.h" />
+    <ClInclude Include="BaseScene.h" />
+    <ClInclude Include="Button.h" />
+    <ClInclude Include="Canvas.h" />
+    <ClInclude Include="OBB.h" />
+    <ClInclude Include="ModelManager.h" />
+    <ClInclude Include="ObjectFactory.h" />
+    <ClInclude Include="SelectScene.h" />
+    <ClInclude Include="Skill.h" />
+    <ClInclude Include="SkillFactory.h" />
+    <ClInclude Include="Sphere.h" />
+    <ClInclude Include="SquareGauge.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="Transform.h" />
+    <ClInclude Include="Trap.h" />
+    <ClInclude Include="Wall.h" />
+    <ClInclude Include="WoodGimmick.h" />
+    <ClInclude Include="WordManager.h" />
+    <ClInclude Include="SideViewCamera.h" />
+    <ClInclude Include="Fairy.h" />
+    <ClInclude Include="FlexibleCamera.h" />
+    <ClInclude Include="Debug.h" />
+    <ClInclude Include="DirectionalLight.h" />
+    <ClInclude Include="Field.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="SelectMarker.h" />
+    <ClInclude Include="WordList.h" />
+    <ClInclude Include="WordMenu.h" />
+    <ClInclude Include="Sprite.h" />
+    <ClInclude Include="TextureManager.h" />
+    <ClInclude Include="FileParameter.h" />
+    <ClInclude Include="TrainingButton.h" />
+    <ClInclude Include="TrainingScene.h" />
+    <ClInclude Include="GameOver.h" />
+    <ClInclude Include="GamePad.h" />
+    <ClInclude Include="GameScene.h" />
+    <ClInclude Include="InputManager.h" />
+    <ClInclude Include="Keyboard.h" />
+    <ClInclude Include="Main.h" />
+    <ClInclude Include="Mouse.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="SceneManager.h" />
+    <ClInclude Include="SoundManager.h" />
+    <ClInclude Include="SoundParameter.h" />
+    <ClInclude Include="AnimationSprite.h" />
+    <ClInclude Include="StartButton.h" />
+    <ClInclude Include="Title.h" />
+    <ClInclude Include="WavController.h" />
+    <ClInclude Include="WordPlate.h" />
+    <ClInclude Include="Billboard.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Main.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="BaseScene.h">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameScene.h">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GameOver.h">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="GamePad.h">
-      <Filter>ソース ファイル\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="InputManager.h">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Keyboard.h">
-      <Filter>ソース ファイル\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="Mouse.h">
-      <Filter>ソース ファイル\System\Input</Filter>
-    </ClInclude>
-    <ClInclude Include="SceneManager.h">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundManager.h">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="WavController.h">
-      <Filter>ソース ファイル\System\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="Title.h">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>リソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="TrainingScene.h">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="TextureManager.h">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="WordManager.h">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="SelectScene.h">
-      <Filter>ソース ファイル\Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="ModelManager.h">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="FileParameter.h">
-      <Filter>ソース ファイル\System\Parameter</Filter>
-    </ClInclude>
-    <ClInclude Include="Button.h">
-      <Filter>ソース ファイル\UI\Button</Filter>
-    </ClInclude>
-    <ClInclude Include="StartButton.h">
-      <Filter>ソース ファイル\UI\Button</Filter>
-    </ClInclude>
-    <ClInclude Include="TrainingButton.h">
-      <Filter>ソース ファイル\UI\Button</Filter>
-    </ClInclude>
-    <ClInclude Include="SelectMarker.h">
-      <Filter>ソース ファイル\UI\WordMenu</Filter>
-    </ClInclude>
-    <ClInclude Include="WordList.h">
-      <Filter>ソース ファイル\UI\WordMenu</Filter>
-    </ClInclude>
-    <ClInclude Include="WordMenu.h">
-      <Filter>ソース ファイル\UI\WordMenu</Filter>
-    </ClInclude>
-    <ClInclude Include="WordPlate.h">
-      <Filter>ソース ファイル\UI\WordMenu</Filter>
-    </ClInclude>
-    <ClInclude Include="DirectionalLight.h">
-      <Filter>ソース ファイル\Actor\Staff</Filter>
-    </ClInclude>
-    <ClInclude Include="FlexibleCamera.h">
-      <Filter>ソース ファイル\Actor\Staff</Filter>
-    </ClInclude>
-    <ClInclude Include="SideViewCamera.h">
-      <Filter>ソース ファイル\Actor\Staff</Filter>
-    </ClInclude>
-    <ClInclude Include="Canvas.h">
-      <Filter>ソース ファイル\Actor\Staff</Filter>
-    </ClInclude>
-    <ClInclude Include="BackGround.h">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Field.h">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="SoundParameter.h">
-      <Filter>ソース ファイル\System\Parameter</Filter>
-    </ClInclude>
-    <ClInclude Include="ActorManager.h">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Player.h">
-      <Filter>ソース ファイル\Actor\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionManager.h">
-      <Filter>ソース ファイル\System\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="OBB.h">
-      <Filter>ソース ファイル\System\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="Sphere.h">
-      <Filter>ソース ファイル\System\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="Collision.h">
-      <Filter>ソース ファイル\System\Collision</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationSprite.h">
-      <Filter>ソース ファイル\Parts\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="Sprite.h">
-      <Filter>ソース ファイル\Parts\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="GameObject.h">
-      <Filter>ソース ファイル\Parts\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Model.h">
-      <Filter>ソース ファイル\Parts\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Debug.h">
-      <Filter>ソース ファイル\Parts\2D</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationModel.h">
-      <Filter>ソース ファイル\Parts\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationModelHierarchy.h">
-      <Filter>ソース ファイル\Parts\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationModelFrame.h">
-      <Filter>ソース ファイル\Parts\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationModelContainer.h">
-      <Filter>ソース ファイル\Parts\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Element.h">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="CharacterFactory.h">
-      <Filter>ソース ファイル\System\Factory</Filter>
-    </ClInclude>
-    <ClInclude Include="GimmickFactory.h">
-      <Filter>ソース ファイル\System\Factory</Filter>
-    </ClInclude>
-    <ClInclude Include="SkillFactory.h">
-      <Filter>ソース ファイル\System\Factory</Filter>
-    </ClInclude>
-    <ClInclude Include="FireGimmick.h">
-      <Filter>ソース ファイル\Actor\Gimmick</Filter>
-    </ClInclude>
-    <ClInclude Include="IceGimmick.h">
-      <Filter>ソース ファイル\Actor\Gimmick</Filter>
-    </ClInclude>
-    <ClInclude Include="WoodGimmick.h">
-      <Filter>ソース ファイル\Actor\Gimmick</Filter>
-    </ClInclude>
-    <ClInclude Include="BatteryGimmick.h">
-      <Filter>ソース ファイル\Actor\Gimmick</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectFactory.h">
-      <Filter>ソース ファイル\System\Factory</Filter>
-    </ClInclude>
-    <ClInclude Include="Grenade.h">
-      <Filter>ソース ファイル\Actor\Skill</Filter>
-    </ClInclude>
-    <ClInclude Include="Trap.h">
-      <Filter>ソース ファイル\Actor\Skill</Filter>
-    </ClInclude>
-    <ClInclude Include="Bullet.h">
-      <Filter>ソース ファイル\Actor\Skill</Filter>
-    </ClInclude>
-    <ClInclude Include="Wall.h">
-      <Filter>ソース ファイル\Actor\Skill</Filter>
-    </ClInclude>
-    <ClInclude Include="Transform.h">
-      <Filter>ソース ファイル\Parts\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Ground.h">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Skill.h">
-      <Filter>ソース ファイル\Actor\Skill</Filter>
-    </ClInclude>
-    <ClInclude Include="Fairy.h">
-      <Filter>ソース ファイル\Actor\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="BatteryCannon.h">
-      <Filter>ソース ファイル\Actor\Gimmick</Filter>
-    </ClInclude>
-    <ClInclude Include="SkillBox.h">
-      <Filter>ソース ファイル\UI\WordMenu</Filter>
-    </ClInclude>
-    <ClInclude Include="Enemy.h">
-      <Filter>ソース ファイル\Actor\Character</Filter>
-    </ClInclude>
-    <ClInclude Include="Fade.h">
-      <Filter>ソース ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="BackImage.h">
-      <Filter>ソース ファイル\Actor\Object</Filter>
-    </ClInclude>
-    <ClInclude Include="Heart.h">
-      <Filter>ソース ファイル\UI\Gauge</Filter>
-    </ClInclude>
-    <ClInclude Include="SquareGauge.h">
-      <Filter>ソース ファイル\UI\Gauge</Filter>
-    <ClInclude Include="Timer.h">
-      <Filter>ソース ファイル\UI</Filter>
-    </ClInclude>
+    <ResourceCompile Include="FairyAndI.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="FairyAndI.APS">
-      <Filter>リソース ファイル</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="FairyAndI.rc">
-      <Filter>リソース ファイル</Filter>
-    </ResourceCompile>
+    <None Include="FairyAndI.APS" />
   </ItemGroup>
 </Project>
