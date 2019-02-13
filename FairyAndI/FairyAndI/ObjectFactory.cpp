@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include "ActorManager.h"
 #include "Element.h"
+#include "Goal.h"
 #include "ObjectFactory.h"
 
 //＝＝＝関数定義＝＝＝//
@@ -19,6 +20,21 @@ void OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3 position)
 {
     //---生成---//
     ACTORMANAGER::GameObject.emplace_back(new ELEMENT(TEXT("FIRE"), TEXT("FIRE"), position, D3DXVECTOR3(0.0F, 0.0F, 0.0F)));
+}
+
+/////////////////////////////////////////////
+//関数名：InstantiateGoal
+//
+//機能：ゴールの生成
+//
+//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void OBJECTFACTORY::InstantiateGoal(D3DXVECTOR3 position)
+{
+	//---生成---//
+	ACTORMANAGER::GameObject.emplace_back(new GOAL(TEXT("GOAL"), position, D3DXVECTOR3(0.0F, 0.0F, 0.0F)));
 }
 
 /////////////////////////////////////////////
