@@ -12,6 +12,8 @@ class OBJECTFACTORY
         static void InstantiateIceElement(D3DXVECTOR3);
         static void InstantiateRockElement(D3DXVECTOR3);
 
+		static void InstantiateGoal(D3DXVECTOR3);
+
         friend ACTORMANAGER;
 };
 

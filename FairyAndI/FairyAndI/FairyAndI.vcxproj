@@ -137,7 +137,9 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="FireGimmick.cpp" />
+    <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="GimmickFactory.cpp" />
+    <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Heart.cpp" />
@@ -201,10 +203,12 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Fade.h" />
     <ClInclude Include="FireGimmick.h" />
+    <ClInclude Include="GameClear.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ActorManager.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="GimmickFactory.h" />
+    <ClInclude Include="Goal.h" />
     <ClInclude Include="Grenade.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Heart.h" />

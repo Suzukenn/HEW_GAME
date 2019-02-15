@@ -5,6 +5,7 @@
   BackImage.cpp
   BatteryCannon.cpp
   BatteryGimmick.cpp
+  Billboard.cpp
   Bullet.cpp
   Button.cpp
   Canvas.cpp
@@ -15,10 +16,12 @@
   Enemy.cpp
   Fade.cpp
   FireGimmick.cpp
+  GameClear.cpp
   GimmickFactory.cpp
+  コンパイル中...
+  Goal.cpp
   Grenade.cpp
   Ground.cpp
-  コンパイル中...
   Heart.cpp
   IceGimmick.cpp
   SkillBox.cpp
@@ -36,10 +39,10 @@
   WordManager.cpp
   SideViewCamera.cpp
   Fairy.cpp
+  コンパイル中...
   FlexibleCamera.cpp
   Debug.cpp
   DirectionalLight.cpp
-  コンパイル中...
   Field.cpp
   Player.cpp
   SelectMarker.cpp
@@ -57,15 +60,15 @@
   Main.cpp
   Mouse.cpp
   SceneManager.cpp
+  コンパイル中...
   SoundManager.cpp
   AnimationSprite.cpp
   StartButton.cpp
-  コンパイル中...
   Title.cpp
   WavController.cpp
   WordPlate.cpp
   コード生成しています。
-  All 4078 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  All 4099 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
   コード生成が終了しました。
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)

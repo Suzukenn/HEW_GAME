@@ -1,12 +1,16 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
+#include "Collision.h"
 #include "CollisionManager.h"
+#include "Fade.h"
 #include "Field.h"
 #include "InputManager.h"
 #include "ModelManager.h"
 #include "Player.h"
+#include "SceneManager.h"
 #include "SideViewCamera.h"
 #include "SkillFactory.h"
+#include "Sphere.h"
 #include "WordMenu.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
@@ -124,6 +128,11 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
 /////////////////////////////////////////////
 void PLAYER::OnCollision(COLLISION* opponent)
 {
+	/*if (opponent->Owner->GetTag() == TEXT("Goal"))
+	{
+		FADE::SetFade(FADE_OUT);
+		Goal = true;
+	}*/
     //Position = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
 }
 
@@ -203,6 +212,7 @@ void PLAYER::Update(void)
 
 	//---位置情報更新---//
     Transform.Position += Move;
+	Collision->Position = Transform.Position;
 
 	//移動制限
 	if (Transform.Position.y < 0.0F)

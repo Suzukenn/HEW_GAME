@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "Fade.h"
+#include "GameClear.h"
 #include "GameOver.h"
 #include "GameScene.h"
 #include "SceneManager.h"
@@ -129,6 +130,9 @@ void SCENEMANAGER::Update(void)
             case SCENE_GAMEOVER:
                 Scene.reset(new GAMEOVER());
                 break;
+			case SCENE_GAMECLEAR:
+				Scene.reset(new GAMECLEAR());
+				break;
         }
         if (FAILED(Scene->Initialize()))
         {
