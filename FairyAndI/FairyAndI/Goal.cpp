@@ -71,7 +71,7 @@ void GOAL::Draw(void)
     pModel = Model.lock();
     if (!pModel)
     {
-        MessageBox(nullptr, TEXT("弾丸のモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("ゴールのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         return;
     }
 
@@ -188,8 +188,8 @@ void GOAL::Update(void)
 	{
 		FADE::SetFade(FADE_OUT);
 	}
-		if (FADE::CheckFadeEnd(FADE_OUT))
-		{
-			SCENEMANAGER::SetScene(SCENE_GAMECLEAR);
-		}
+	if (FADE::CheckFadeEnd(FADE_OUT))
+	{
+		SCENEMANAGER::SetScene(SCENE_GAMECLEAR);
+	}
 }
