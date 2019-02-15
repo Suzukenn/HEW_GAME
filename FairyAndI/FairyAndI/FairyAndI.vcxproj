@@ -160,7 +160,6 @@
     <ClCompile Include="SideViewCamera.cpp" />
     <ClCompile Include="Fairy.cpp" />
     <ClCompile Include="FlexibleCamera.cpp" />
-    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -235,7 +234,6 @@
     <ClInclude Include="SideViewCamera.h" />
     <ClInclude Include="Fairy.h" />
     <ClInclude Include="FlexibleCamera.h" />
-    <ClInclude Include="Debug.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="Player.h" />
