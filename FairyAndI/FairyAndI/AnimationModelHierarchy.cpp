@@ -8,20 +8,6 @@
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
-//関数名：ANIMATIONMODELHIERARCHY
-//
-//機能：コンストラクタ
-//
-//引数：なし
-//
-//戻り値：なし
-/////////////////////////////////////////////
-ANIMATIONMODELHIERARCHY::ANIMATIONMODELHIERARCHY(void)
-{
-    FileDirectory.assign(0);
-}
-
-/////////////////////////////////////////////
 //関数名：CreateFrame
 //
 //機能：フレームの作成
@@ -36,36 +22,16 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateFrame(LPCSTR Name, LPD3DXFRAME* ppNewFram
     ANIMATIONMODELFREAM* pFrame;
 
     //---初期化処理---//
-    *ppNewFrame = nullptr;              //新しいフレームアドレス格納用変数を初期化
+    *ppNewFrame = nullptr;            //新しいフレームアドレス格納用変数を初期化
     pFrame = new ANIMATIONMODELFREAM; //フレームの領域確保
-
-    //領域確保の失敗時の処理
-    if (pFrame)
-    {
-        memset(pFrame, 0, sizeof(ANIMATIONMODELFREAM));
-    }
-    else
-    {
-        return E_OUTOFMEMORY;
-    }
+    memset(pFrame, 0, sizeof(ANIMATIONMODELFREAM));
 
     //---フレーム名格納---//
     if (Name)
     {
-        //フレーム名格納用領域確保
+        //フレーム名格納
         pFrame->Name = new char[lstrlenA(Name) + 1];
-
-        //領域確保の失敗時の処理
-        if (pFrame->Name)
-        {
-            //フレーム名格納
-            lstrcpyA(pFrame->Name, Name);
-        }
-        else
-        {
-            delete pFrame;
-            return E_OUTOFMEMORY;
-        }
+        lstrcpyA(pFrame->Name, Name);
     }
     else
     {
@@ -94,6 +60,7 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateFrame(LPCSTR Name, LPD3DXFRAME* ppNewFram
 HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3DXMESHDATA* pMeshData, CONST D3DXMATERIAL* pMaterials, CONST D3DXEFFECTINSTANCE* pEffectInstances, DWORD NumMaterials, CONST DWORD* pAdjacency, LPD3DXSKININFO pSkinInfo, LPD3DXMESHCONTAINER* ppMeshContainer)
 {
     //---各種宣言---//
+    HRESULT hResult;
     DWORD dwFacesAmount;
     DWORD dwCounter;
     DWORD dwMaterial;
@@ -126,18 +93,9 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3
     //---メッシュ名のコピー---//
     if (Name)
     {
-        //メッシュコンテナの名前格納用領域を動的確保
+        //メッシュコンテナの名前格納
         pMeshContainer->Name = new char[lstrlenA(Name) + 1];
-
-        if (pMeshContainer->Name)
-        {
-            lstrcpyA(pMeshContainer->Name, Name);
-        }
-        else
-        {
-            delete pMeshContainer;
-            return E_OUTOFMEMORY;
-        }
+        lstrcpyA(pMeshContainer->Name, Name);
     }
     else
     {
@@ -156,37 +114,41 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3
     else
     {
         // 法線を持たない場合は追加
-        if (FAILED(pMesh->CloneMeshFVF(pMesh->GetOptions(), pMesh->GetFVF() | D3DFVF_NORMAL, pDevice, &pMeshContainer->MeshData.pMesh))) 
+        hResult = pMesh->CloneMeshFVF(pMesh->GetOptions(), pMesh->GetFVF() | D3DFVF_NORMAL, pDevice, &pMeshContainer->MeshData.pMesh);
+        if (FAILED(hResult)) 
         {
-            pDevice->Release();
+            MessageBox(nullptr, TEXT("メッシュの頂点情報形式の複製に失敗しました"), TEXT("初期化エラー"), MB_OK);
             DestroyMeshContainer(pMeshContainer);
-            return E_FAIL;
+            return hResult;
         }
         pMesh = pMeshContainer->MeshData.pMesh;
-        D3DXComputeNormals(pMesh, nullptr);
+        hResult = D3DXComputeNormals(pMesh, nullptr);
+        if (FAILED(hResult))
+        {
+            MessageBox(nullptr, TEXT("メッシュの法線の計算に失敗しました"), TEXT("初期化エラー"), MB_OK);
+            DestroyMeshContainer(pMeshContainer);
+            return hResult;
+        }
     }
 
     //---メッシュのマテリアル設定----//
     pMeshContainer->NumMaterials = max(1, NumMaterials);                                //メッシュのマテリアル数を格納(最大で1つ)
     pMeshContainer->pMaterials = new D3DXMATERIAL[pMeshContainer->NumMaterials];        //メッシュコンテナの、マテリアルデータ格納領域を動的確保
-    pMeshContainer->Textures = new LPDIRECT3DTEXTURE9[pMeshContainer->NumMaterials];    //メッシュコンテナの、テクスチャデータ格納領域を動的確保
+    pMeshContainer->Texture.resize(pMeshContainer->NumMaterials);                       //メッシュコンテナの、テクスチャデータ格納領域を動的確保
     pMeshContainer->pAdjacency = new DWORD[dwFacesAmount * 3];                          //メッシュコンテナの、面ごとに持つ3つの隣接性情報が格納されたDWORD型のアドレス格納用(ポインタ)変数
-    if (!pMeshContainer->pAdjacency || !pMeshContainer->Textures || !pMeshContainer->pMaterials)
+    if (!pMeshContainer->pAdjacency || pMeshContainer->Texture.empty() || !pMeshContainer->pMaterials)
     {
+        MessageBox(nullptr, TEXT("メッシュのマテリアル情報が足りません"), TEXT("初期化エラー"), MB_OK);
         DestroyMeshContainer(pMeshContainer);
-        pDevice->Release();
         return E_OUTOFMEMORY;
     }
-
-    //テクスチャデータ格納用領域を初期化(memsetを使用して0で中身を埋める)
-    memset(pMeshContainer->Textures, 0, sizeof(LPDIRECT3DTEXTURE9) * pMeshContainer->NumMaterials);
 
     //外部引数の隣接性情報をメッシュコンテナに格納
     memcpy(pMeshContainer->pAdjacency, pAdjacency, sizeof(DWORD) * dwFacesAmount * 3);
 
     //---マテリアルの格納---//
     //マテリアルあり
-    if (NumMaterials > 0)
+    if (NumMaterials)
     {
         if (lstrlenA((LPCSTR)FileDirectory.begin()._Ptr))
         {
@@ -211,9 +173,12 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3
                 strTexturePathW = std::wstring(strTexturePath.begin(), strTexturePath.end());
 
                 //テクスチャ情報の読み込み
-                if (FAILED(D3DXCreateTextureFromFile(pDevice, strTexturePathW.data(), &pMeshContainer->Textures[dwMaterial])))
+                hResult = D3DXCreateTextureFromFile(pDevice, strTexturePathW.data(), &pMeshContainer->Texture.at(dwMaterial));
+                if (FAILED(hResult))
                 {
-                    pMeshContainer->Textures[dwMaterial] = nullptr;
+                    MessageBox(nullptr, TEXT("メッシュのテクスチャの読み込みに失敗しました"), TEXT("初期化エラー"), MB_OK);
+                    pMeshContainer->Texture.at(dwMaterial) = nullptr;
+                    //return hResult;
                 }
             }
         }
@@ -227,7 +192,7 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3
     else
     {
         //マテリアルなし
-        memset(&pMeshContainer->pMaterials, 0, sizeof(D3DXMATERIAL));   //マテリアルデータ初期化(memsetを使用して中身を0で埋める)
+        memset(&pMeshContainer->pMaterials, 0, sizeof(D3DXMATERIAL));   //マテリアルデータ初期化
         pMeshContainer->pMaterials->pTextureFilename = nullptr;         //テクスチャファイル名をnullptrに
 
         //マテリアルカラーを0.5に設定
@@ -240,62 +205,57 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3
     }
 
     //---属性テーブルの取得---//
-    if (FAILED(pMeshContainer->MeshData.pMesh->CloneMeshFVF(D3DXMESH_MANAGED, pMeshContainer->MeshData.pMesh->GetFVF(), pDevice, &pMesh)))
+    hResult = pMeshContainer->MeshData.pMesh->CloneMeshFVF(D3DXMESH_MANAGED, pMeshContainer->MeshData.pMesh->GetFVF(), pDevice, &pMesh);
+    if (FAILED(hResult))
     {
-        pDevice->Release();
-        return E_FAIL;
+        MessageBox(nullptr, TEXT("メッシュの頂点情報形式の読み込みに失敗しました"), TEXT("初期化エラー"), MB_OK);
+        return hResult;
     }
     SAFE_RELEASE(pMeshContainer->MeshData.pMesh);
     pMeshContainer->MeshData.pMesh = pMesh;
 
-    if (FAILED(pMesh->GetAttributeTable(nullptr, &pMeshContainer->AttributeGroupValue)))
+    hResult = pMesh->GetAttributeTable(nullptr, &pMeshContainer->AttributeGroupValue);
+    if (FAILED(hResult))
     {
-        pDevice->Release();
-        return E_FAIL;
+        MessageBox(nullptr, TEXT("メッシュの属性テーブルのエントリ数の読み込みに失敗しました"), TEXT("初期化エラー"), MB_OK);
+        return hResult;
     }
-    pMeshContainer->AttributeTable = new D3DXATTRIBUTERANGE[pMeshContainer->AttributeGroupValue];
-    if (!pMeshContainer->AttributeTable)
+    pMeshContainer->AttributeTable.resize(pMeshContainer->AttributeGroupValue);
+    hResult = pMesh->GetAttributeTable(pMeshContainer->AttributeTable.begin()._Ptr, &pMeshContainer->AttributeGroupValue);
+    if (FAILED(hResult))
     {
-        pMeshContainer->AttributeGroupValue = 0;
-        pDevice->Release();
-        return E_OUTOFMEMORY;
-    }
-    if (FAILED(pMesh->GetAttributeTable(pMeshContainer->AttributeTable, nullptr)))
-    {
-        pDevice->Release();
-        return E_FAIL;
+        MessageBox(nullptr, TEXT("メッシュの属性テーブルの読み込みに失敗しました"), TEXT("初期化エラー"), MB_OK);
+        return hResult;
     }
 
     //---スキン情報の取得---//
     if (pSkinInfo)
     {
-        pMeshContainer->pSkinInfo = pSkinInfo;                              //メッシュ情報を格納(今回は通常メッシュと完全に分けているためすべてスキンメッシュ情報となる)
-        pSkinInfo->AddRef();                                                //参照カウンタ
-        dwBoneValue = pSkinInfo->GetNumBones();                             //ボーンの数を取得
-        pMeshContainer->BoneOffsetMatrix = new D3DXMATRIX[dwBoneValue];     //フレーム(ボーン)単位でのワールド行列格納用領域の動的確保
-        if (!pMeshContainer->BoneOffsetMatrix)
-        {
-            return E_OUTOFMEMORY;
-        }
+        pMeshContainer->pSkinInfo = pSkinInfo;                  //メッシュ情報を格納(今回は通常メッシュと完全に分けているためすべてスキンメッシュ情報となる)
+        pSkinInfo->AddRef();                                    //参照カウンタ
+        dwBoneValue = pSkinInfo->GetNumBones();                 //ボーンの数を取得
+        pMeshContainer->BoneOffsetMatrix.resize(dwBoneValue);   //フレーム(ボーン)単位でのワールド行列格納用領域の動的確保
 
         //ボーンの数だけループさせる
         for (dwCounter = 0; dwCounter < dwBoneValue; ++dwCounter)
         {
             //角フレーム(ボーン)のオフセット行列を取得して格納
-            memcpy(&pMeshContainer->BoneOffsetMatrix[dwCounter], pMeshContainer->pSkinInfo->GetBoneOffsetMatrix(dwCounter), sizeof(D3DMATRIX));
+            pMeshContainer->BoneOffsetMatrix.at(dwCounter) = *pMeshContainer->pSkinInfo->GetBoneOffsetMatrix(dwCounter);
         }
 
         //---固定パイプライン描画用に変換---//
-        if (FAILED(pMeshContainer->pSkinInfo->ConvertToBlendedMesh(pMesh, 0, pMeshContainer->pAdjacency, nullptr, nullptr, nullptr, &pMeshContainer->Weight, &pMeshContainer->BoneValue, &pMeshContainer->BoneBuffer, &pMeshContainer->MeshData.pMesh)))
+        hResult = pMeshContainer->pSkinInfo->ConvertToBlendedMesh(pMesh, 0, pMeshContainer->pAdjacency, nullptr, nullptr, nullptr, &pMeshContainer->Weight, &pMeshContainer->BoneValue, &pMeshContainer->BoneBuffer, &pMeshContainer->MeshData.pMesh);
+        if (FAILED(hResult))
         {
-            return E_FAIL;
+            MessageBox(nullptr, TEXT("メッシュを固定パイプライン用に変換できませんでした"), TEXT("初期化エラー"), MB_OK);
+            return hResult;
         }
     }
 
     //ローカルに生成したメッシュコンテナーを呼び出し側にコピーする
     *ppMeshContainer = pMeshContainer;
     
-    return S_OK;
+    return hResult;
 }
 
 /////////////////////////////////////////////
@@ -334,8 +294,6 @@ HRESULT ANIMATIONMODELHIERARCHY::DestroyFrame(LPD3DXFRAME pFrameToFree)
 HRESULT ANIMATIONMODELHIERARCHY::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshContainerBase)
 {
     //---各種宣言---//
-    DWORD dwMaterial;
-
     ANIMATIONMODELCONTAINER* pMeshContainer;
 
     //---初期化処理---//
@@ -346,25 +304,30 @@ HRESULT ANIMATIONMODELHIERARCHY::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshC
     SAFE_RELEASE(pMeshContainer->pSkinInfo);
     SAFE_DELETE_ARRAY(pMeshContainer->pAdjacency);
     SAFE_DELETE_ARRAY(pMeshContainer->pMaterials);
-    SAFE_DELETE_ARRAY(pMeshContainer->BoneMatrix);
+    for (auto& data : pMeshContainer->BoneMatrix)
+    {
+        SAFE_DELETE(data);
+    }
+    pMeshContainer->BoneMatrix.clear();
 
     //テクスチャ解放
-    if (pMeshContainer->Textures)
+    if (!pMeshContainer->Texture.empty())
     {
-        for (dwMaterial = 0; dwMaterial < pMeshContainer->NumMaterials; ++dwMaterial)
+        for (auto& data : pMeshContainer->Texture)
         {
-            SAFE_RELEASE(pMeshContainer->Textures[dwMaterial]);
+            SAFE_RELEASE(data);
         }
     }
-    SAFE_DELETE_ARRAY(pMeshContainer->Textures);
+    pMeshContainer->Texture.clear();
     SAFE_RELEASE(pMeshContainer->MeshData.pMesh);
 
     //ボーン開放
     if (pMeshContainer->BoneBuffer)
     {
         SAFE_RELEASE(pMeshContainer->BoneBuffer);
-        SAFE_DELETE_ARRAY(pMeshContainer->BoneOffsetMatrix);
+        pMeshContainer->BoneOffsetMatrix.clear();
     }
+
     SAFE_DELETE(pMeshContainer);
     pMeshContainerBase = nullptr;
     return S_OK;
@@ -381,12 +344,5 @@ HRESULT ANIMATIONMODELHIERARCHY::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshC
 /////////////////////////////////////////////
 void ANIMATIONMODELHIERARCHY::SetDirectory(LPCTSTR directory)
 {
-    if (directory)
-    {
-        lstrcpy(FileDirectory.data(), directory);
-    }
-    else
-    {
-        FileDirectory.at(0) = 0;
-    }
+    directory? lstrcpy(FileDirectory.data(), directory): FileDirectory.assign(0);
 }

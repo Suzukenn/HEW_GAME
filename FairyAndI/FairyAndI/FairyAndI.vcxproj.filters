@@ -194,6 +194,9 @@
     <ClCompile Include="WordList.cpp">
       <Filter>ソースコード\UI\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>ソースコード\Parts\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />

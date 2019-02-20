@@ -28,18 +28,15 @@ class ANIMATIONMODEL
 
         HRESULT AllocateAllBoneMatrices(LPD3DXFRAME);
         HRESULT AllocateBoneMatrix(LPD3DXMESHCONTAINER);
-        void DrawFrame(LPD3DXFRAME);
+        void DrawFrame(LPD3DXFRAME, bool);
         void SetTime(double);
-        void RenderMeshContainer(LPD3DXMESHCONTAINER, LPD3DXFRAME);
+        void RenderMeshContainer(LPD3DXMESHCONTAINER, LPD3DXFRAME, bool);
         void UpdateFrameMatrices(LPD3DXFRAME, LPD3DXMATRIX);
 
     public:
-        ANIMATIONMODEL(void);
-        ~ANIMATIONMODEL(void);
-
         void ChangeAnimation(DWORD);
-        void Draw(D3DXMATRIX);
-        HRESULT Initialize(LPCTSTR);
+        void Draw(D3DXMATRIX, bool);
+        HRESULT Initialize(LPCTSTR, float);
         void Uninitialize(void);
 };
 

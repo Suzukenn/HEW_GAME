@@ -14,6 +14,8 @@ class SPHERE;
 class GOAL final : public GAMEOBJECT
 {
 	private:
+        bool Gray;
+
         std::weak_ptr<MODEL> Model;
         SPHERE* Collision;
 

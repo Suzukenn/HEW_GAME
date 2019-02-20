@@ -14,22 +14,22 @@ class OBB;
 class ICEGIMMICK final : public GAMEOBJECT
 {
 	private:
+        bool Gray;
 
 		std::weak_ptr<MODEL> Model;
         OBB* Collision;
 
 	public:
 
-		ICEGIMMICK(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
-		~ICEGIMMICK();
+		ICEGIMMICK(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);
+		~ICEGIMMICK(void);
 
-		HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
+		HRESULT Initialize(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);
 		void Uninitialize(void);
 		void Update(void);
 		void Draw(void);
 
         void OnCollision(COLLISION*);
-
-		D3DXVECTOR3 GetPos(void);
 };
+
 #endif

@@ -199,19 +199,19 @@ void TRAINING::Update(void)
 
 
     //---オブジェクトの更新処理---//
-    if (Mode)
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_START, TRIGGER))
     {
-        if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_START, TRIGGER)) bCameraMode = !bCameraMode;
-        bCameraMode ? FlexibleCamera.Update() : SIDEVIEWCAMERA::Update(PLAYER::GetPlayerPosition());
-
-        ACTORMANAGER::Update();
-
-        Field.Update();
-
-        DIRECTIONALLIGHT::Update();
-
-        COLLISIONMANAGER::Update();
+        bCameraMode = !bCameraMode;
     }
+    bCameraMode ? FlexibleCamera.Update() : SIDEVIEWCAMERA::Update(PLAYER::GetPlayerPosition());
+
+    ACTORMANAGER::Update();
+
+    Field.Update();
+
+    DIRECTIONALLIGHT::Update();
+
+    COLLISIONMANAGER::Update();
 
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {

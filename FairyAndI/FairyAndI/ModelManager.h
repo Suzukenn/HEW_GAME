@@ -22,6 +22,8 @@ class MODELMANAGER
         static void Uninitialize(void);
 
         static HRESULT GetModel(tstring, std::weak_ptr<MODEL>&);
+
+        friend MODEL;
 };
 
 #endif

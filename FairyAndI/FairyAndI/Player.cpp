@@ -70,7 +70,7 @@ void PLAYER::Draw(void)
     Transform.MakeWorldMatrix(mtxWorld);
 
     //---描画---//
-    Model.Draw(mtxWorld);
+    Model.Draw(mtxWorld, false);
 }
 
 /////////////////////////////////////////////
@@ -99,7 +99,7 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     Tag = TEXT("Player");
 
     //---モデルの読み込み---//
-    hResult = Model.Initialize(modelfile);
+    hResult = Model.Initialize(modelfile, 1.0F);
     if(FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("プレイヤーのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);

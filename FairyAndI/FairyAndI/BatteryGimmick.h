@@ -14,13 +14,13 @@ class SPHERE;
 class BATTERYGIMMICK final : public GAMEOBJECT
 {
 	private:
+        bool Gray;
 
 		std::weak_ptr<MODEL> Model;
 		SPHERE* Collision;
 		//OBB* Collision;
 
 	public:
-
 		BATTERYGIMMICK(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);
 		~BATTERYGIMMICK(void);
 
@@ -30,7 +30,6 @@ class BATTERYGIMMICK final : public GAMEOBJECT
 		void Draw(void);
 
         void OnCollision(COLLISION*);
-
-		D3DXVECTOR3 GetPos(void);
 };
+
 #endif

@@ -4,6 +4,7 @@
 #include "CollisionManager.h"
 #include "Fade.h"
 #include "Goal.h"
+#include "InputManager.h"
 #include "ModelManager.h"
 #include "SceneManager.h"
 
@@ -48,16 +49,9 @@ GOAL::~GOAL(void)
 void GOAL::Draw(void)
 {
     //---各種宣言---//
-    DWORD nCounter;
-    LPDIRECT3DDEVICE9 pDevice;
     D3DXMATRIX mtxWorld;
-    LPD3DXMATERIAL pMatrix;
-    D3DMATERIAL9 matDef;
 
     std::shared_ptr<MODEL> pModel;
-
-    //---初期化処理---//
-    pDevice = GetDevice();
 
     //---ワールドマトリクスの設定---//
     //初期化
@@ -65,6 +59,7 @@ void GOAL::Draw(void)
 
     //設定
     Transform.MakeWorldMatrix(mtxWorld);
+    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---描画---//
     //描画対象チェック
@@ -75,26 +70,8 @@ void GOAL::Draw(void)
         return;
     }
 
-    // 現在のマテリアルを取得
-    pDevice->GetMaterial(&matDef);
-
-    //ポインタを取得
-    pMatrix = (LPD3DXMATERIAL)pModel->MaterialBuffer->GetBufferPointer();
-
-    for (nCounter = 0; nCounter < pModel->MaterialValue; ++nCounter)
-    {
-        //マテリアルの設定
-        pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
-
-        //テクスチャの設定
-        pDevice->SetTexture(0, *pModel->Texture);
-
-        //描画
-        pModel->Mesh->DrawSubset(nCounter);
-    }
-
-    //マテリアルをデフォルトに戻す
-    pDevice->SetMaterial(&matDef);
+    //描画
+    pModel->Draw(Gray);
 }
 
 /////////////////////////////////////////////
@@ -117,9 +94,10 @@ HRESULT GOAL::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVECTOR3 ro
     Transform.Position = position;
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
+    Gray = false;
     Tag = TEXT("Goal");
 
-    // Xファイルの読み込み
+    //---モデルの読み込み---//
     hResult = MODELMANAGER::GetModel(modelname, Model);
     if (FAILED(hResult))
     {
@@ -184,7 +162,17 @@ void GOAL::Uninitialize(void)
 /////////////////////////////////////////////
 void GOAL::Update(void)
 {
-	if (Goal == 1)
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    {
+        Gray = !Gray;
+    }
+
+    if (!Gray)
+    {
+        return;
+    }
+
+    if (Goal == 1)
 	{
 		FADE::SetFade(FADE_OUT);
 	}

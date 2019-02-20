@@ -28,13 +28,14 @@ HRESULT WORDMANAGER::CreatePair(void)
     std::string szNoun;
     std::wstring wszAdjective;
     std::wstring wszNoun;
-    std::ifstream file(TEXT("Data/GameScene/Word/WordPair.txt"));
+    std::ifstream file;
 
     //---初期化処理---//
     NounToAdjective.clear();
 
     //---ファイルの読み込み---//
-    if (!file.is_open())
+    file.open("Data/GameScene/Word/WordPair.txt");
+    if (file.fail())
     {
         MessageBox(nullptr, TEXT("ワードペアリストを開けませんでした"), TEXT("Data/GameScene/Word/WordPair.txt"), MB_ICONSTOP | MB_OK);
         Uninitialize();
@@ -54,6 +55,8 @@ HRESULT WORDMANAGER::CreatePair(void)
 #endif
         NounToAdjective.emplace(std::make_pair(wszNoun, wszAdjective));
     }
+
+    file.close();
 
     return S_OK;
 }

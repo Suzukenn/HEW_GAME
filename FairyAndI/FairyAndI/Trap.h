@@ -15,6 +15,8 @@ class SPHERE;
 class TRAP final : public SKILL
 {
     public:
+        bool Gray;
+
 	    std::weak_ptr<MODEL> Model;
 	    SPHERE* Collision;
 

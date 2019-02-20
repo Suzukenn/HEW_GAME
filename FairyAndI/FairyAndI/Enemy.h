@@ -24,6 +24,8 @@ class SPHERE;
 class ENEMY final : public GAMEOBJECT
 {
 	private:
+        bool Gray;
+
 		std::weak_ptr<MODEL> Model;
 		//OBB* Collision;
 		SPHERE* Collision;
