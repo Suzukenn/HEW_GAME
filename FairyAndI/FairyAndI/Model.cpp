@@ -20,8 +20,6 @@ void MODEL::Draw(bool effect)
     D3DMATERIAL9 matDefault;
     D3DMATERIAL9 matEffect;
 
-    const D3DCOLORVALUE GrayScale = { 0.2126F, 0.7152F, 0.0722F , 1.0F };
-
     LPDIRECT3DDEVICE9 pDevice;
     LPD3DXMATERIAL pMatrix;
 

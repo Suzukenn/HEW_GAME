@@ -70,7 +70,7 @@ void PLAYER::Draw(void)
     Transform.MakeWorldMatrix(mtxWorld);
 
     //---•`‰æ---//
-    Model.Draw(mtxWorld, false);
+    Model.Draw(mtxWorld, true);
 }
 
 /////////////////////////////////////////////

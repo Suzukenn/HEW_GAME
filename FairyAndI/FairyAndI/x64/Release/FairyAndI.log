@@ -1,12 +1,36 @@
-﻿  Element.cpp
+﻿  AnimationModel.cpp
+  AnimationModelHierarchy.cpp
+  BatteryCannon.cpp
+  BatteryGimmick.cpp
+  Bullet.cpp
+  Canvas.cpp
+  CharacterFactory.cpp
+  Element.cpp
+  Enemy.cpp
+  Fairy.cpp
   Field.cpp
+  FireGimmick.cpp
+  GimmickFactory.cpp
+  Goal.cpp
+  Grenade.cpp
+  IceGimmick.cpp
+  Model.cpp
+  ModelManager.cpp
+  ObjectFactory.cpp
   Player.cpp
+  コンパイル中...
   SceneManager.cpp
+  SideViewCamera.cpp
+  SkillFactory.cpp
   TrainingScene.cpp
+  Trap.cpp
+  Wall.cpp
+  WoodGimmick.cpp
+  WordManager.cpp
   コード生成しています。
-  157 of 4357 functions ( 3.6%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    36 functions had inline decision re-evaluated but remain unchanged
+  465 of 4559 functions (10.2%) were compiled, the rest were copied from previous compilation.
+    209 functions were new in current compilation
+    163 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)
