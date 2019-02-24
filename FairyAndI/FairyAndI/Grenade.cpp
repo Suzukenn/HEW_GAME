@@ -6,7 +6,6 @@
 #include "Model.h"
 #include "ModelManager.h"
 #include "Sphere.h"
-#include "Player.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -48,54 +47,30 @@ GRENADE::~GRENADE(void)
 /////////////////////////////////////////////
 void GRENADE::Draw(void)
 {
-	//---各種宣言---//
-	DWORD nCounter;
-	LPDIRECT3DDEVICE9 pDevice;
-	D3DXMATRIX mtxWorld;
-	LPD3DXMATERIAL pMatrix;
-	D3DMATERIAL9 matDef;
+    //---各種宣言---//
+    D3DXMATRIX mtxWorld;
 
-	std::shared_ptr<MODEL> pModel;
+    std::shared_ptr<MODEL> pModel;
 
-	//---初期化処理---//
-	pDevice = GetDevice();
+    //---ワールドマトリクスの設定---//
+    //初期化
+    D3DXMatrixIdentity(&mtxWorld);
 
-	//---ワールドマトリクスの設定---//
-	//初期化
-	D3DXMatrixIdentity(&mtxWorld);
-
-	//設定
+    //設定
     Transform.MakeWorldMatrix(mtxWorld);
+    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
-	//---描画---//
-	//描画対象チェック
-	pModel = Model.lock();
-	if (!pModel)
-	{
-		MessageBox(nullptr, TEXT("榴弾のモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
-		return;
-	}
+    //---描画---//
+    //描画対象チェック
+    pModel = Model.lock();
+    if (!pModel)
+    {
+        MessageBox(nullptr, TEXT("榴弾のモデル情報の取得に失敗しました"), TEXT("描画エラー"), MB_OK);
+        return;
+    }
 
-	// 現在のマテリアルを取得
-	pDevice->GetMaterial(&matDef);
-
-	//ポインタを取得
-	pMatrix = (LPD3DXMATERIAL)pModel->MaterialBuffer->GetBufferPointer();
-
-	for (nCounter = 0; nCounter < pModel->MaterialValue; ++nCounter)
-	{
-		//マテリアルの設定
-		pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
-
-		//テクスチャの設定
-		pDevice->SetTexture(0, *pModel->Texture);
-
-		//描画
-		pModel->Mesh->DrawSubset(nCounter);
-	}
-
-	//マテリアルをデフォルトに戻す
-	pDevice->SetMaterial(&matDef);
+    //描画
+    pModel->Draw(Gray);
 }
 
 /////////////////////////////////////////////

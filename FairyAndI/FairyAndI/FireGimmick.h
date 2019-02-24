@@ -14,11 +14,12 @@ class OBB;
 class FIREGIMMICK final : public GAMEOBJECT
 {
 	private:
+        bool Gray;
+
 		std::weak_ptr<MODEL> Model;
         OBB* Collision;
 
 	public:
-
 		FIREGIMMICK(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);
 		~FIREGIMMICK(void);
 
@@ -28,7 +29,5 @@ class FIREGIMMICK final : public GAMEOBJECT
 		void Draw(void);
 
         void OnCollision(COLLISION*);
-
-		D3DXVECTOR3 GetPos(void);
 };
 #endif

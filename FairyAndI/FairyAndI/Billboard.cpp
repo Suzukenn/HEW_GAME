@@ -1,6 +1,7 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "Billboard.h"
 #include "SideViewCamera.h"
+#include "Texture.h"
 #include "TextureManager.h"
 
 //＝＝＝関数定義＝＝＝//
@@ -9,21 +10,28 @@
 //
 //機能：ビルボードの描画
 //
-//引数：(D3DXVECTOR3)位置
+//引数：なし
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void BILLBOARD::Draw(D3DXVECTOR3 position)
+void BILLBOARD::Draw(void)
 {
+    return;
     //---各種宣言---//
     D3DXMATRIX mtxView;
     D3DXMATRIX mtxWorld;
 
     LPDIRECT3DDEVICE9 pDevice;
+    std::shared_ptr<TEXTURE> pTexture;
 
     //---初期化処理---//
     pDevice = GetDevice();
     D3DXMatrixIdentity(&mtxWorld);
+    pTexture = Texture.lock();
+    if (!pTexture)
+    {
+        MessageBox(nullptr, TEXT("描画対象のテクスチャが存在しません"), TEXT("描画エラー"), MB_OK);
+    }
 
     //---方向設定---//
     SIDEVIEWCAMERA::GetViewMtx(&mtxView);
@@ -39,14 +47,14 @@ void BILLBOARD::Draw(D3DXVECTOR3 position)
 
     //---書式設定---//
     // 頂点バッファをレンダリングパイプラインに設定
-    pDevice->SetFVF(FVF_VERTEX_3D);    //フォーマット設定
-    pDevice->SetTexture(0, Texture);   //テクスチャ設定
+    pDevice->SetFVF(FVF_VERTEX_3D);            //フォーマット設定
+    pDevice->SetTexture(0, pTexture->Image);   //テクスチャ設定
 
     //---頂点バッファによる描画---//
     // 移動を反映
-    mtxWorld._41 = position.x;
-    mtxWorld._42 = position.y;
-    mtxWorld._43 = position.z;
+    mtxWorld._41 = Transform.Position.x;
+    mtxWorld._42 = Transform.Position.y;
+    mtxWorld._43 = Transform.Position.z;
 
     // ワールドマトリックスの設定
     pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
@@ -60,17 +68,20 @@ void BILLBOARD::Draw(D3DXVECTOR3 position)
 //
 //機能：ビルボードの初期化
 //
-//引数：(LPCTSTR)テクスチャ
+//引数：(LPCTSTR)テクスチャ,(D3DXVECTOR3)位置,(D3DXVECTOR3)大きさ,(POINT)UV分割値
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT BILLBOARD::Initialize(LPCTSTR texturename, POINT uv)
+HRESULT BILLBOARD::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVECTOR3 scale, POINT uv)
 {
     //---各種宣言---//
     int nCounter;
     HRESULT hResult;
 
     //---初期化処理---//
+    Transform.Position = position;
+    Transform.Rotation = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
+    Transform.Scale = scale;
     UV = uv;
 
     //---テクスチャの読み込み---//
@@ -108,7 +119,7 @@ HRESULT BILLBOARD::Initialize(LPCTSTR texturename, POINT uv)
 /////////////////////////////////////////////
 void BILLBOARD::Uninitialize(void)
 {
-    Texture = nullptr;
+    Texture.reset();
 }
 
 /////////////////////////////////////////////

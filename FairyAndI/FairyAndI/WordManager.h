@@ -7,21 +7,18 @@
 #include "FileParameter.h"
 #include "Main.h"
 
+class TEXTURE;
+
 //ÅÅÅÅÅÅÉNÉâÉXêÈåæÅÅÅÅÅÅ//
 class WORDMANAGER
 {
     private:
-        static std::unordered_map<tstring, LPDIRECT3DTEXTURE9> NounTexture;
-        static std::unordered_map<tstring, LPDIRECT3DTEXTURE9> AdjectiveTexture;
         static std::unordered_map<tstring, bool> NounLock;
         static std::unordered_map<tstring, bool> AdjectiveLock;
-        static std::unordered_map<tstring, tstring> NounToAdjective;
-        static std::unordered_map<tstring, LPDIRECT3DTEXTURE9> SkillTexture;
         static std::unordered_map<tstring, bool> SkillLock;
+        static std::unordered_map<tstring, tstring> NounToAdjective;
 
-        static HRESULT CreatePair(void);
-        static HRESULT CreateTexture(std::unordered_map<tstring, LPDIRECT3DTEXTURE9>&, const FILEPARAMETER&);
-        static HRESULT LoadTexture(std::vector<FILEPARAMETER>&, LPCTSTR);
+        static HRESULT CreateWord(void);
 
     public:
         static HRESULT Initialize(void);
@@ -29,8 +26,8 @@ class WORDMANAGER
         static HRESULT UnLockWord(LPCTSTR);
         static void Update(void);
 
-        static HRESULT GetWordLock(tstring, bool&);
-        static HRESULT GetWordTexture(tstring, LPDIRECT3DTEXTURE9&);
+        static HRESULT GetWordLock(LPCTSTR, bool&);
+        static HRESULT GetWordTexture(LPCTSTR, std::weak_ptr<TEXTURE>&);
 };
 
 #endif

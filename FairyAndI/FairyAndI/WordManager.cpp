@@ -1,40 +1,39 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <fstream>
+#include "TextureManager.h"
 #include "WordManager.h"
 
 //＝＝＝グローバル宣言＝＝＝//
-std::unordered_map<tstring, LPDIRECT3DTEXTURE9> WORDMANAGER::NounTexture;
-std::unordered_map<tstring, LPDIRECT3DTEXTURE9> WORDMANAGER::AdjectiveTexture;
 std::unordered_map<tstring, bool> WORDMANAGER::NounLock;
 std::unordered_map<tstring, bool> WORDMANAGER::AdjectiveLock;
-std::unordered_map<tstring, tstring> WORDMANAGER::NounToAdjective;
-std::unordered_map<tstring, LPDIRECT3DTEXTURE9> WORDMANAGER::SkillTexture;
 std::unordered_map<tstring, bool> WORDMANAGER::SkillLock;
+std::unordered_map<tstring, tstring> WORDMANAGER::NounToAdjective;
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
-//関数名：CreatePair
+//関数名：CreateWord
 //
-//機能：ペアの作成
+//機能：言葉の作成
 //
 //引数：なし
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT WORDMANAGER::CreatePair(void)
+HRESULT WORDMANAGER::CreateWord(void)
 {
     //---各種宣言---//
     std::string szAdjective;
     std::string szNoun;
     std::wstring wszAdjective;
     std::wstring wszNoun;
-    std::ifstream file(TEXT("Data/GameScene/Word/WordPair.txt"));
+    std::ifstream file;
 
     //---初期化処理---//
     NounToAdjective.clear();
 
     //---ファイルの読み込み---//
-    if (!file.is_open())
+    file.open("Data/GameScene/Word/WordPair.txt");
+    if (file.fail())
     {
         MessageBox(nullptr, TEXT("ワードペアリストを開けませんでした"), TEXT("Data/GameScene/Word/WordPair.txt"), MB_ICONSTOP | MB_OK);
         Uninitialize();
@@ -44,55 +43,29 @@ HRESULT WORDMANAGER::CreatePair(void)
     //---データの抽出---//
     while (!file.eof())
     {
+        //データの読み取り
         file >> szNoun >> szAdjective;
 
+        //データの作成
 #ifdef _UNICODE
         wszNoun = std::wstring(szNoun.begin(), szNoun.end());
         wszNoun.shrink_to_fit();
         wszAdjective = std::wstring(szAdjective.begin(), szAdjective.end());
         wszAdjective.shrink_to_fit();
-#endif
+
         NounToAdjective.emplace(std::make_pair(wszNoun, wszAdjective));
+        NounLock.insert(std::make_pair(wszNoun, false));
+        AdjectiveLock.insert(std::make_pair(wszAdjective, false));
+
+#else
+        NounToAdjective.emplace(std::make_pair(szNoun, szAdjective));
+        NounLock.insert(std::make_pair(szNoun, false));
+        AdjectiveLock.insert(std::make_pair(szAdjective, false));
+#endif
+
     }
 
-    return S_OK;
-}
-
-/////////////////////////////////////////////
-//関数名：CreateTexture
-//
-//機能：テクスチャの作成
-//
-//引数：(std::unordered_map<tstring, LPDIRECT3DTEXTURE9>)格納リスト,(FILEPARAMETER)参照データ
-//
-//戻り値：(HRESULT)処理の成否
-/////////////////////////////////////////////
-HRESULT WORDMANAGER::CreateTexture(std::unordered_map<tstring, LPDIRECT3DTEXTURE9>& list, const FILEPARAMETER& data)
-{
-    //---各種宣言---//
-    std::unique_ptr<LPDIRECT3DTEXTURE9> pTexture;
-
-    //---初期化処理---//
-    pTexture.reset(new LPDIRECT3DTEXTURE9());
-
-    //---データの展開---//
-    //ファイルの指定確認
-    if (!data.FileName.data())
-    {
-        MessageBox(nullptr, TEXT("開くテクスチャファイルが見つかりません"), data.FileName.data(), MB_ICONSTOP | MB_OK);
-        return E_FAIL;
-    }
-
-    //テクスチャの作成
-    if (SUCCEEDED(D3DXCreateTextureFromFile(GetDevice(), data.FileName.data(), pTexture.get())))
-    {
-        list.emplace(std::make_pair(data.CallKey, *pTexture));
-    }
-    else
-    {
-        MessageBox(nullptr, TEXT("テクスチャの作成に失敗しました"), data.FileName.data(), MB_ICONSTOP | MB_OK);
-        return E_FAIL;
-    }
+    file.close();
 
     return S_OK;
 }
@@ -114,50 +87,8 @@ HRESULT WORDMANAGER::Initialize(void)
     std::vector<FILEPARAMETER> conList;
 
     //---オブジェクト準備---//
-    //名詞テクスチャリストの読み込み
-    hResult = LoadTexture(conList, TEXT("Data/GameScene/Word/NounList.txt"));
-    if (FAILED(hResult))
-    {
-        MessageBox(nullptr, TEXT("名詞テクスチャの読み込みに失敗しました"), TEXT("Data/GameScene/Word/NounList.txt"), MB_ICONSTOP | MB_OK);
-        Uninitialize();
-        return hResult;
-    }
-
-    //名詞テクスチャの作成
-    for (auto& data : conList)
-    {
-        if (FAILED(CreateTexture(NounTexture, data)))
-        {
-            MessageBox(nullptr, TEXT("名詞テクスチャデータの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
-            Uninitialize();
-            return hResult;
-        }
-        NounLock.insert(std::make_pair(data.CallKey, false));
-    }
-
-    //形容詞テクスチャリストの読み込み
-    hResult = LoadTexture(conList, TEXT("Data/GameScene/Word/AdjectiveList.txt"));
-    if (FAILED(hResult))
-    {
-        MessageBox(nullptr, TEXT("形容詞テクスチャの読み込みに失敗しました"), TEXT("Data/GameScene/Word/AdjectiveList.txt"), MB_ICONSTOP | MB_OK);
-        Uninitialize();
-        return hResult;
-    }
-
-    //形容詞テクスチャの作成
-    for (auto& data : conList)
-    {
-        if (FAILED(CreateTexture(AdjectiveTexture, data)))
-        {
-            MessageBox(nullptr, TEXT("形容詞テクスチャデータの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
-            Uninitialize();
-            return hResult;
-        }
-        AdjectiveLock.insert(std::make_pair(data.CallKey, false));
-    }
-
-    //ワードペアの作成
-    hResult = CreatePair();
+    //ワードの準備
+    hResult = CreateWord();
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("ワードペアの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
@@ -165,80 +96,16 @@ HRESULT WORDMANAGER::Initialize(void)
         return hResult;
     }
 
-    //合成アイテムテクスチャリストの読み込み
-    hResult = LoadTexture(conList, TEXT("Data/GameScene/Word/SkillList.txt"));
-    if (FAILED(hResult))
+    //合成アイテムテクスチャリストの作成
+    for (auto& Noun : NounLock)
     {
-        MessageBox(nullptr, TEXT("合成アイテムテクスチャリストの読み込みに失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
-        Uninitialize();
-        return hResult;
-    }
-
-    //合成アイテムテクスチャの作成
-    for (auto& data : conList)
-    {
-        if (FAILED(CreateTexture(SkillTexture, data)))
+        for (auto& Adjective : AdjectiveLock)
         {
-            MessageBox(nullptr, TEXT("合成アイテムテクスチャデータの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
-            Uninitialize();
-            return hResult;
+            SkillLock.insert(std::make_pair(Adjective.first + Noun.first, false));
         }
-        SkillLock.insert(std::make_pair(data.CallKey, false));
     }
 
     return hResult;
-}
-
-/////////////////////////////////////////////
-//関数名：LoadTexture
-//
-//機能：ワードテクスチャの読み込み
-//
-//引数：(FILEPARAMETER)テクスチャリスト,(LPCTSTR)リストファイル
-//
-//戻り値：(HRESULT)処理の成否
-/////////////////////////////////////////////
-HRESULT WORDMANAGER::LoadTexture(std::vector<FILEPARAMETER>& list, LPCTSTR filename)
-{
-    //---各種宣言---//
-    int nCounter;
-    std::string szFileName;
-    std::string szKeyName;
-    std::ifstream file(filename);
-
-    //---初期化処理---//
-    nCounter = 0;
-    list.resize(999);
-
-    //---ファイルの読み込み---//
-    if (!file.is_open())
-    {
-        MessageBox(nullptr, TEXT("テクスチャリストを開けませんでした"), filename, MB_ICONSTOP | MB_OK);
-        Uninitialize();
-        return E_FAIL;
-    }
-
-    //---データの抽出---//
-    while (!file.eof())
-    {
-        file >> szFileName >> szKeyName;
-
-#ifdef _UNICODE
-        list.at(nCounter).FileName.resize(szFileName.size());
-        list.at(nCounter).FileName = std::wstring(szFileName.begin(), szFileName.end());
-        list.at(nCounter).CallKey.resize(szKeyName.size());
-        list.at(nCounter).CallKey = std::wstring(szKeyName.begin(), szKeyName.end());
-#else
-        list.at(nCounter).FileName = szFileName;
-        list.at(nCounter).CallKey = szKeyName;
-#endif
-
-        ++nCounter;
-    }
-
-    list.resize(nCounter);
-
-    return S_OK;
 }
 
 /////////////////////////////////////////////
@@ -253,31 +120,17 @@ HRESULT WORDMANAGER::LoadTexture(std::vector<FILEPARAMETER>& list, LPCTSTR filen
 void WORDMANAGER::Uninitialize(void)
 {
     //---開放---//
-    //名詞テクスチャの破棄
-    for (auto& data : NounTexture)
-    {
-        SAFE_RELEASE(data.second);
-    }
-    NounTexture.clear();
-
-    //形容詞テクスチャの破棄
-    for (auto& data : AdjectiveTexture)
-    {
-        SAFE_RELEASE(data.second);
-    }
-    AdjectiveTexture.clear();
-
     //名詞ロックの破棄
     NounLock.clear();
 
     //形容詞ロックの破棄
     AdjectiveLock.clear();
 
-    //ペア辞書の破棄
-    NounToAdjective.clear();
-
     //スキルロックの破棄
     SkillLock.clear();
+
+    //ペア辞書の破棄
+    NounToAdjective.clear();
 }
 
 /////////////////////////////////////////////
@@ -349,7 +202,7 @@ void WORDMANAGER::Update(void)
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT WORDMANAGER::GetWordLock(tstring word, bool& lock)
+HRESULT WORDMANAGER::GetWordLock(LPCTSTR word, bool& lock)
 {
     try
     {
@@ -363,7 +216,7 @@ HRESULT WORDMANAGER::GetWordLock(tstring word, bool& lock)
         }
         catch (const std::out_of_range&)
         {
-            MessageBox(nullptr, TEXT("単語がが存在しません"), TEXT("取得エラー"), MB_ICONSTOP | MB_OK);
+            MessageBox(nullptr, TEXT("単語が存在しません"), TEXT("取得エラー"), MB_ICONSTOP | MB_OK);
             return E_FAIL;
         }
     }
@@ -375,18 +228,17 @@ HRESULT WORDMANAGER::GetWordLock(tstring word, bool& lock)
 //
 //機能：テクスチャの取得
 //
-//引数：(tstring)言葉,(LPDIRECT3DTEXTURE9)格納アドレス
+//引数：(tstring)言葉,(std::weak_ptr<TEXTURE>)格納アドレス
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT WORDMANAGER::GetWordTexture(tstring word, LPDIRECT3DTEXTURE9& address)
+HRESULT WORDMANAGER::GetWordTexture(LPCTSTR word, std::weak_ptr<TEXTURE>& address)
 {
     try
     {
-        address = NounLock.at(word) ? NounTexture.at(word) : NounTexture.at(TEXT("EMPTY"));
-        if (!address)
+        if (FAILED(TEXTUREMANAGER::GetTexture(NounLock.at(word) ? word : TEXT("EMPTY"), address)))
         {
-            MessageBox(nullptr, TEXT("テクスチャが存在しません"), TEXT("取得エラー"), MB_ICONSTOP | MB_OK);
+            MessageBox(nullptr, TEXT("名詞テクスチャが存在しません"), word, MB_ICONSTOP | MB_OK);
             return E_FAIL;
         }
     }
@@ -394,10 +246,9 @@ HRESULT WORDMANAGER::GetWordTexture(tstring word, LPDIRECT3DTEXTURE9& address)
     {
         try
         {
-            address = AdjectiveLock.at(word) ? AdjectiveTexture.at(word) : AdjectiveTexture.at(TEXT("EMPTY"));
-            if (!address)
+            if (FAILED(TEXTUREMANAGER::GetTexture(AdjectiveLock.at(word) ? word : TEXT("EMPTY"), address)))
             {
-                MessageBox(nullptr, TEXT("テクスチャが存在しません"), TEXT("取得エラー"), MB_ICONSTOP | MB_OK);
+                MessageBox(nullptr, TEXT("形容詞テクスチャが存在しません"), word, MB_ICONSTOP | MB_OK);
                 return E_FAIL;
             }
         }
@@ -405,17 +256,27 @@ HRESULT WORDMANAGER::GetWordTexture(tstring word, LPDIRECT3DTEXTURE9& address)
         {
             try
             {
-                address = SkillLock.at(word) ? SkillTexture.at(word) : SkillTexture.at(TEXT("EMPTY"));
-                if (!address)
+                if (FAILED(TEXTUREMANAGER::GetTexture(SkillLock.at(word) ? word : TEXT("EMPTY"), address)))
                 {
-                    MessageBox(nullptr, TEXT("テクスチャが存在しません"), TEXT("取得エラー"), MB_ICONSTOP | MB_OK);
+                    MessageBox(nullptr, TEXT("スキルテクスチャが存在しません"), word, MB_ICONSTOP | MB_OK);
                     return E_FAIL;
                 }
             }
             catch (const std::out_of_range&)
             {
-                MessageBox(nullptr, TEXT("テクスチャが存在しません"), TEXT("取得エラー"), MB_ICONSTOP | MB_OK);
-                return E_FAIL;
+                try
+                {
+                    if (FAILED(TEXTUREMANAGER::GetTexture(TEXT("EMPTY"), address)))
+                    {
+                        MessageBox(nullptr, TEXT("エンプティテクスチャが存在しません"), word, MB_ICONSTOP | MB_OK);
+                        return E_FAIL;
+                    }
+                }
+                catch (const std::out_of_range&)
+                {
+                    MessageBox(nullptr, TEXT("表示可能な言葉のテクスチャが存在しません"), word, MB_ICONSTOP | MB_OK);
+                    return E_FAIL;
+                }
             }
         }
     }

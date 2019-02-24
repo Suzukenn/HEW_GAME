@@ -16,6 +16,7 @@ class FIELD
         static LPD3DXMESH Mesh;
         LPD3DXBUFFER MaterialBuffer;
         DWORD MaterialValue;
+
     public:
         static bool CheckField(LPD3DXVECTOR3, LPD3DXVECTOR3, float&);
         void Draw(void);

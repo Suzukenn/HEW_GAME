@@ -3,6 +3,7 @@
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "Enemy.h"
+#include "InputManager.h"
 #include "ModelManager.h"
 #include "Player.h"
 #include "Skill.h"
@@ -32,7 +33,7 @@ ENEMY::ENEMY(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 r
 //
 //戻り値：なし
 /////////////////////////////////////////////
-ENEMY::~ENEMY()
+ENEMY::~ENEMY(void)
 {
 	Uninitialize();
 }
@@ -49,55 +50,29 @@ ENEMY::~ENEMY()
 void ENEMY::Draw(void)
 {
     //---各種宣言---//
-    DWORD nCounter;
-    LPDIRECT3DDEVICE9 pDevice;
-    D3DXMATRIX mtxRotation;
-    D3DXMATRIX mtxTranslate;
     D3DXMATRIX mtxWorld;
-    LPD3DXMATERIAL pMatrix;
-    D3DMATERIAL9 matDef;
 
     std::shared_ptr<MODEL> pModel;
-
-    //---初期化処理---//
-    pDevice = GetDevice();
 
     //---ワールドマトリクスの設定---//
     //初期化
     D3DXMatrixIdentity(&mtxWorld);
 
-    //回転を反映
+    //設定
     Transform.MakeWorldMatrix(mtxWorld);
+    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---描画---//
     //描画対象チェック
     pModel = Model.lock();
     if (!pModel)
     {
-        MessageBox(nullptr, TEXT("敵のモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("敵のモデル情報の取得に失敗しました"), TEXT("描画エラー"), MB_OK);
         return;
     }
 
-    // 現在のマテリアルを取得
-    pDevice->GetMaterial(&matDef);
-
-    //ポインタを取得
-    pMatrix = (LPD3DXMATERIAL)pModel->MaterialBuffer->GetBufferPointer();
-
-    for (nCounter = 0; nCounter < pModel->MaterialValue; ++nCounter)
-    {
-        //マテリアルの設定
-        pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
-
-        //テクスチャの設定
-        pDevice->SetTexture(0, *pModel->Texture);
-
-        //描画
-        pModel->Mesh->DrawSubset(nCounter);
-    }
-
-    //マテリアルをデフォルトに戻す
-    pDevice->SetMaterial(&matDef);
+    //描画
+    pModel->Draw(Gray);
 }
 
 /////////////////////////////////////////////
@@ -216,123 +191,109 @@ void ENEMY::Update(void)
 
 	switch (StateType)
 	{
-	//===敵の通常時の行動===//
-	case ENEMYSTATE_NORMAL:
-		//===敵の通常移動===//
-		if (Transform.Position.x > InitialPosition.x + 50.0F ||
-			Transform.Position.x < InitialPosition.x - 50.0F)
-		{
-			if (Transform.Position.x > InitialPosition.x + 50.0F)
-			{
-				Transform.Position.x = InitialPosition.x + 50.0F;
-			}
-			else if (Transform.Position.x < InitialPosition.x - 50.0F)
-			{
-				Transform.Position.x = InitialPosition.x - 50.0F;
-			}
+	    //===敵の通常時の行動===//
+	    case ENEMYSTATE_NORMAL:
+		    //===敵の通常移動===//
+		    if (Transform.Position.x > InitialPosition.x + 50.0F ||
+			    Transform.Position.x < InitialPosition.x - 50.0F)
+		    {
+			    if (Transform.Position.x > InitialPosition.x + 50.0F)
+			    {
+				    Transform.Position.x = InitialPosition.x + 50.0F;
+			    }
+			    else if (Transform.Position.x < InitialPosition.x - 50.0F)
+			    {
+				    Transform.Position.x = InitialPosition.x - 50.0F;
+			    }
 
-			//２秒止まる
-			if (++Count > 120)
-			{
-				Transform.Rotation.y *= -1;
-				Move.x *= -1;
-				Count = 0;
-			}
-		}
-		//===敵の索敵===//
-		//範囲内＆視界に入ったら（？）戦闘態勢へ
-		if (PLAYER::GetPlayerPosition().x > Transform.Position.x - 50.0F &&
-			PLAYER::GetPlayerPosition().x < Transform.Position.x + 50.0F)
-		{
-			if (PLAYER::GetPlayerPosition().x > Transform.Position.x && Transform.Rotation.y > 0.0F ||
-				PLAYER::GetPlayerPosition().x < Transform.Position.x &&Transform.Rotation.y < 0.0F)
-			{
-				StateType = ENEMYSTATE_BATTLE;
-			}
-		}
-		break;
+			    //2秒止まる
+			    if (++Count > 120)
+			    {
+				    Transform.Rotation.y *= -1;
+				    Move.x *= -1;
+				    Count = 0;
+			    }
+		    }
+		    //===敵の索敵===//
+		    //範囲内＆視界に入ったら（？）戦闘態勢へ
+		    if (PLAYER::GetPlayerPosition().x > Transform.Position.x - 50.0F &&
+			    PLAYER::GetPlayerPosition().x < Transform.Position.x + 50.0F)
+		    {
+			    if (PLAYER::GetPlayerPosition().x > Transform.Position.x && Transform.Rotation.y > 0.0F ||
+				    PLAYER::GetPlayerPosition().x < Transform.Position.x &&Transform.Rotation.y < 0.0F)
+			    {
+				    StateType = ENEMYSTATE_BATTLE;
+			    }
+		    }
+		    break;
 	
-		//===敵の戦闘態勢時の行動===//
-	case ENEMYSTATE_BATTLE:
-		//===敵の戦闘時の移動===//
-		if (PLAYER::GetPlayerPosition().x - 10.0F <Transform.Position.x &&
-			PLAYER::GetPlayerPosition().x + 10.0F > Transform.Position.x)
-		{
-			Move.x = 0.0F;
-			//近距離攻撃ならここで宣言する
-		}
-		else if (PLAYER::GetPlayerPosition().x < Transform.Position.x)
-		{
-			Move.x = -1.0F;
-			Transform.Rotation.y = -180.0F;
-		}
-		else if (PLAYER::GetPlayerPosition().x > Transform.Position.x)
-		{
-			Move.x = 1.0F;
-			Transform.Rotation.y = 180.0F;
-		}
+		    //===敵の戦闘態勢時の行動===//
+	    case ENEMYSTATE_BATTLE:
+		    //===敵の戦闘時の移動===//
+		    if (PLAYER::GetPlayerPosition().x - 10.0F <Transform.Position.x &&
+			    PLAYER::GetPlayerPosition().x + 10.0F > Transform.Position.x)
+		    {
+			    Move.x = 0.0F;
+			    //近距離攻撃ならここで宣言する
+		    }
+		    else if (PLAYER::GetPlayerPosition().x < Transform.Position.x)
+		    {
+			    Move.x = -1.0F;
+			    Transform.Rotation.y = -180.0F;
+		    }
+		    else if (PLAYER::GetPlayerPosition().x > Transform.Position.x)
+		    {
+			    Move.x = 1.0F;
+			    Transform.Rotation.y = 180.0F;
+		    }
 
-		//===索敵範囲外なら==//
-		if (PLAYER::GetPlayerPosition().x < Transform.Position.x - 50.0F ||
-			PLAYER::GetPlayerPosition().x > Transform.Position.x + 50.0F)
-		{
-			if (InitialPosition.x + 50.0F < Transform.Position.x ||
-				InitialPosition.x - 50.0F > Transform.Position.x)
-			{
-				StateType = ENEMYSTATE_RETURN;
-			}
-			else
-			{
-				StateType = ENEMYSTATE_NORMAL;
-			}
-		}
-		break;
+		    //===索敵範囲外なら==//
+		    if (PLAYER::GetPlayerPosition().x < Transform.Position.x - 50.0F ||
+			    PLAYER::GetPlayerPosition().x > Transform.Position.x + 50.0F)
+		    {
+			    if (InitialPosition.x + 50.0F < Transform.Position.x ||
+				    InitialPosition.x - 50.0F > Transform.Position.x)
+			    {
+				    StateType = ENEMYSTATE_RETURN;
+			    }
+			    else
+			    {
+				    StateType = ENEMYSTATE_NORMAL;
+			    }
+		    }
+		    break;
 
-	//===元の位置に戻るまで===//
-	case ENEMYSTATE_RETURN:
+	    //===元の位置に戻るまで===//
+	    case ENEMYSTATE_RETURN:
 
-		if (InitialPosition.x < Transform.Position.x)
-		{
-			Move.x = -1.0F;
-			Transform.Rotation.y = -180.0F;
-		}
-		else if (InitialPosition.x > Transform.Position.x)
-		{
-			Move.x = 1.0F;
-			Transform.Rotation.y = 180.0F;
-		}
+		    if (InitialPosition.x < Transform.Position.x)
+		    {
+			    Move.x = -1.0F;
+			    Transform.Rotation.y = -180.0F;
+		    }
+		    else if (InitialPosition.x > Transform.Position.x)
+		    {
+			    Move.x = 1.0F;
+			    Transform.Rotation.y = 180.0F;
+		    }
 
-		//戻ってる最中にプレイヤーを見つけたら
-		if (PLAYER::GetPlayerPosition().x > Transform.Position.x && Transform.Rotation.y > 0.0F ||
-			PLAYER::GetPlayerPosition().x < Transform.Position.x && Transform.Rotation.y < 0.0F)
-		{
-			StateType = ENEMYSTATE_BATTLE;
-		}
-		//プレイヤーを見つけず初期位置まで来たら
-		else if (InitialPosition.x + 50.0F > Transform.Position.x &&
-			InitialPosition.x - 50.0F < Transform.Position.x)
-		{
-			StateType = ENEMYSTATE_NORMAL;
-		}
-		break;
+		    //戻ってる最中にプレイヤーを見つけたら
+		    if (PLAYER::GetPlayerPosition().x > Transform.Position.x && Transform.Rotation.y > 0.0F ||
+			    PLAYER::GetPlayerPosition().x < Transform.Position.x && Transform.Rotation.y < 0.0F)
+		    {
+			    StateType = ENEMYSTATE_BATTLE;
+		    }
+		    //プレイヤーを見つけず初期位置まで来たら
+		    else if (InitialPosition.x + 50.0F > Transform.Position.x &&
+			    InitialPosition.x - 50.0F < Transform.Position.x)
+		    {
+			    StateType = ENEMYSTATE_NORMAL;
+		    }
+		    break;
 
-	default:
-		break;
+	    default:
+		    break;
 	}
 
 	Collision->Position = Transform.Position;
-}
-
-/////////////////////////////////////////////
-//関数名：GetPos
-//
-//機能：敵の位置情報取得
-//
-//引数：なし
-//
-//戻り値：なし
-/////////////////////////////////////////////
-D3DXVECTOR3 ENEMY::GetPos(void)
-{
-	return Transform.Position;
 }

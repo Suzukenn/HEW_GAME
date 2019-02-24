@@ -16,6 +16,7 @@ class BATTERYCANNON final : public GAMEOBJECT
     public:
         D3DXVECTOR3 Move;
         DWORD BornTime;
+        bool Gray;
 
         std::weak_ptr<MODEL> Model;
         SPHERE* Collision;

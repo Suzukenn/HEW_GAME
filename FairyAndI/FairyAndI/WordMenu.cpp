@@ -1,21 +1,16 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include <array>
 #include <fstream>
 #include <vector>
-#include "BackGround.h"
 #include "Main.h"
 #include "InputManager.h"
-#include "SelectMarker.h"
 #include "SoundManager.h"
-#include "WordList.h"
 #include "WordMenu.h"
-#include "WordPlate.h"
 #include "WordManager.h"
 
 //＝＝＝グローバル宣言＝＝＝//
 int WORDMENU::State;
 bool WORDMENU::Control;
-BACKGROUND WORDMENU::Back;
+BACKIMAGE WORDMENU::Back;
 SELECTMARKER WORDMENU::SelectMarker;
 
 std::array<WORDPLATE, 2> WORDMENU::SelectWord;
@@ -72,7 +67,7 @@ HRESULT WORDMENU::Initialize(void)
 
     const D3DXVECTOR2 vecListPosition[2] = { D3DXVECTOR2(50.0F, 500.0F), D3DXVECTOR2(750.0F, 500.0F) };
     const D3DXVECTOR2 vecPanelPosition[2] = { D3DXVECTOR2(400.0F, 130.0F), D3DXVECTOR2(750.0F, 130.0F) };
-    LPCTSTR strWord[2] = { TEXT("ADJECTIVELIST"), TEXT("NOUNLIST") };
+    const LPCTSTR strWord[2] = { TEXT("ADJECTIVELIST"), TEXT("NOUNLIST") };
     std::vector<std::vector<tstring>> conList;
 
     //---初期化処理---//
@@ -150,13 +145,14 @@ HRESULT WORDMENU::Load(std::vector<std::vector<tstring>>& list)
     std::string szNoun;
     std::wstring wszAdjective;
     std::wstring wszNoun;
-    std::ifstream file(TEXT("Data/GameScene/Word/WordPair.txt"));
+    std::ifstream file;
 
     //---初期化処理---//
     list.resize(2);
 
     //---ファイルの読み込み---//
-    if (!file.is_open())
+    file.open(TEXT("Data/GameScene/Word/WordPair.txt"));
+    if (file.fail())
     {
         MessageBox(nullptr, TEXT("ワードペアリストを開けませんでした"), TEXT("Data/GameScene/Word/WordPair.txt"), MB_ICONSTOP | MB_OK);
         Uninitialize();
@@ -226,7 +222,7 @@ void WORDMENU::Update(void)
     //---各種宣言---//
     bool bCheck;
     static int nNextState = SETTING_STATE_ADJECTIVELIST;
-    static tstring strCurrentWord;
+    static LPCTSTR strCurrentWord;
 
     //---モード切替---//
     if (State == SETTING_STATE_SELECT && INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))

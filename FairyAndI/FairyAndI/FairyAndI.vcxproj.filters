@@ -194,6 +194,9 @@
     <ClCompile Include="WordList.cpp">
       <Filter>ソースコード\UI\Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Model.cpp">
+      <Filter>ソースコード\Parts\3D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -418,6 +421,9 @@
     </ClInclude>
     <ClInclude Include="SoundParameter.h">
       <Filter>ソースコード\System\Parameter</Filter>
+    </ClInclude>
+    <ClInclude Include="Texture.h">
+      <Filter>ソースコード\Parts\2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
