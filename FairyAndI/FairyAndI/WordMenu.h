@@ -3,7 +3,7 @@
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <array>
-#include "BackGround.h"
+#include "BackImage.h"
 #include "Main.h"
 #include "SelectMarker.h"
 #include "WordList.h"
@@ -24,7 +24,7 @@ class WORDMENU
     private:
         static int State;
         static bool Control;
-        static BACKGROUND Back;
+        static BACKIMAGE Back;
         static SELECTMARKER SelectMarker;
         static std::array<WORDPLATE, 2> SelectWord;
         static std::array<WORDLIST, 2> List;

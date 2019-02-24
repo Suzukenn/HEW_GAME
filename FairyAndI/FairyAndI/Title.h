@@ -2,7 +2,7 @@
 #define _TITLE_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include "BackGround.h"
+#include "BackImage.h"
 #include "BaseScene.h"
 #include "Fade.h"
 #include "Main.h"
@@ -13,7 +13,7 @@
 class TITLE final : public BASE_SCENE
 {
     private:
-        BACKGROUND Back;
+        BACKIMAGE Back;
         STARTBUTTON StartButton;
         TRAININGBUTTON TrainingButton;
 

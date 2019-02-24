@@ -1,19 +1,23 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
+#include "Collision.h"
 #include "CollisionManager.h"
+#include "Fade.h"
 #include "Field.h"
 #include "InputManager.h"
 #include "ModelManager.h"
 #include "Player.h"
+#include "SceneManager.h"
 #include "SideViewCamera.h"
 #include "SkillFactory.h"
+#include "Sphere.h"
 #include "WordMenu.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
 #define GRAVITY 0.18F
 #define JUMP 5.0F
 
-//
+//＝＝＝列挙型定義＝＝＝//
 enum
 {
     STATE_WAIT,
@@ -25,6 +29,7 @@ enum
     STATE_DAMAGE
 };
 
+//＝＝＝グローバル宣言＝＝＝//
 int hp;
 D3DXVECTOR3 pos;
 D3DXVECTOR3 rot;
@@ -66,7 +71,7 @@ void PLAYER::Draw(void)
     Transform.MakeWorldMatrix(mtxWorld);
 
     //---描画---//
-    Model.Draw(mtxWorld);
+    Model.Draw(mtxWorld, Gray);
 }
 
 /////////////////////////////////////////////
@@ -91,11 +96,12 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     //Transform.Scale = D3DXVECTOR3(0.1F, 0.1F, 0.1F);
     HP = MAX_PLAYER_HP;
     State = STATE_WAIT;
+    Gray = false;
     Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
     Tag = TEXT("Player");
 
     //---モデルの読み込み---//
-    hResult = Model.Initialize(modelfile);
+    hResult = Model.Initialize(modelfile, 1.0F);
     if(FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("プレイヤーのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -124,6 +130,11 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
 /////////////////////////////////////////////
 void PLAYER::OnCollision(COLLISION* opponent)
 {
+	/*if (opponent->Owner->GetTag() == TEXT("Goal"))
+	{
+		FADE::SetFade(FADE_OUT);
+		Goal = true;
+	}*/
     //Position = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
 }
 
@@ -169,6 +180,16 @@ void PLAYER::Update(void)
     //---初期化処理---//
     Move.x = 0.0F;
 
+    //---フリーズ判定---//
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    {
+        Gray = !Gray;
+    }
+    if (Gray)
+    {
+        return;
+    }
+
     //---移動処理---//
 	//カメラの向き取得
     vecCameraRotation = SIDEVIEWCAMERA::GetRotation();
@@ -203,6 +224,7 @@ void PLAYER::Update(void)
 
 	//---位置情報更新---//
     Transform.Position += Move;
+	Collision->Position = Transform.Position;
 
 	//移動制限
 	if (Transform.Position.y < 0.0F)

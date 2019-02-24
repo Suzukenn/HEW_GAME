@@ -2,8 +2,8 @@
 #include <functional>
 #include <unordered_map>
 #include "ActorManager.h"
+#include "BatteryCannon.h"
 #include "BatteryGimmick.h"
-#include "Bullet.h"
 #include "FireGimmick.h"
 #include "GimmickFactory.h"
 #include "IceGimmick.h"
@@ -37,7 +37,7 @@ void GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3 position, D3DXVECTOR3
 void GIMMICKFACTORY::InstantiateBulletGimmick(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
 	//---ê∂ê¨---//
-	ACTORMANAGER::GameObject.emplace_back(new BULLET(TEXT("ICE"), TEXT("Gimmick"), position, rotation));
+	ACTORMANAGER::GameObject.emplace_back(new BATTERYCANNON(TEXT("ICE"), position, rotation));
 }
 
 /////////////////////////////////////////////
@@ -92,7 +92,7 @@ void GIMMICKFACTORY::InstantiateGimmick(tstring gameobject, D3DXVECTOR3 position
 void GIMMICKFACTORY::InstantiateIceGimmick(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---ê∂ê¨---//
-    ACTORMANAGER::GameObject.emplace_back(new ICEGIMMICK(TEXT("ICEGIMMICK"), TEXT("Gimmick"), position, rotation));
+    ACTORMANAGER::GameObject.emplace_back(new ICEGIMMICK(TEXT("ICEGIMMICK"), position, rotation));
 }
 
 /////////////////////////////////////////////
@@ -107,5 +107,5 @@ void GIMMICKFACTORY::InstantiateIceGimmick(D3DXVECTOR3 position, D3DXVECTOR3 rot
 void GIMMICKFACTORY::InstantiateWoodGimmick(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---ê∂ê¨---//
-    ACTORMANAGER::GameObject.emplace_back(new WOODGIMMICK(TEXT("WOODGIMMICK"), TEXT("Gimmick"), position, rotation));
+    ACTORMANAGER::GameObject.emplace_back(new WOODGIMMICK(TEXT("WOODGIMMICK"), position, rotation));
 }

@@ -3,6 +3,7 @@
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "Element.h"
+#include "InputManager.h"
 #include "ModelManager.h"
 #include "WordManager.h"
 
@@ -47,16 +48,9 @@ ELEMENT::~ELEMENT(void)
 void ELEMENT::Draw(void)
 {
     //---各種宣言---//
-    DWORD nCounter;
-    LPDIRECT3DDEVICE9 pDevice;
     D3DXMATRIX mtxWorld;
-    LPD3DXMATERIAL pMatrix;
-    D3DMATERIAL9 matDef;
 
     std::shared_ptr<MODEL> pModel;
-
-    //---初期化処理---//
-    pDevice = GetDevice();
 
     //---ワールドマトリクスの設定---//
     //初期化
@@ -64,6 +58,7 @@ void ELEMENT::Draw(void)
 
     //設定
     Transform.MakeWorldMatrix(mtxWorld);
+    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---描画---//
     //描画対象チェック
@@ -74,26 +69,8 @@ void ELEMENT::Draw(void)
         return;
     }
 
-    // 現在のマテリアルを取得
-    pDevice->GetMaterial(&matDef);
-
-    //ポインタを取得
-    pMatrix = (LPD3DXMATERIAL)pModel->MaterialBuffer->GetBufferPointer();
-
-    for (nCounter = 0; nCounter < pModel->MaterialValue; ++nCounter)
-    {
-        //マテリアルの設定
-        pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
-
-        //テクスチャの設定
-        pDevice->SetTexture(0, *pModel->Texture);
-
-        //描画
-        pModel->Mesh->DrawSubset(nCounter);
-    }
-
-    //マテリアルをデフォルトに戻す
-    pDevice->SetMaterial(&matDef);
+    //描画
+    pModel->Draw(Gray);
 }
 
 /////////////////////////////////////////////
@@ -117,10 +94,11 @@ HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 positio
     Transform.Position = position;
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
+    Gray = false;
     Type = type;
     Tag = TEXT("Element");
 
-    // Xファイルの読み込み
+    //---モデルの読み込み---//
     hResult = MODELMANAGER::GetModel(modelname, Model);
     if (FAILED(hResult))
     {
@@ -185,5 +163,8 @@ void ELEMENT::Uninitialize(void)
 /////////////////////////////////////////////
 void ELEMENT::Update(void)
 {
-
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    {
+        Gray = !Gray;
+    }
 }

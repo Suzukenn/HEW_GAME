@@ -89,15 +89,16 @@ HRESULT WORDLIST::Initialize(LPCTSTR texturename, std::vector<tstring>& list, D3
 /////////////////////////////////////////////
 void WORDLIST::ResetTexture(void)
 {
-#ifdef _UNICODE
-    WordPlate.at(0).SetTexture(WordList.at((SelectNumber + (int)WordList.size() - 1) % (int)WordList.size()).data());
-    WordPlate.at(1).SetTexture(WordList.at(SelectNumber % (int)WordList.size()).data());
-    WordPlate.at(2).SetTexture(WordList.at((SelectNumber + 1) % (int)WordList.size()).data());
-#else
-    WordPlate.at(0).SetTexture(WordList.at((SelectNumber + (int)WordList.size() - 1) % (int)WordList.size()).c_str());
-    WordPlate.at(1).SetTexture(WordList.at(SelectNumber % (int)WordList.size()).c_str());
-    WordPlate.at(2).SetTexture(WordList.at((SelectNumber + 1) % (int)WordList.size()).c_str());
-#endif
+    //---各種宣言---//
+    int nListSize;
+
+    //---初期化処理---//
+    nListSize = (int)WordList.size();
+
+    //---テクスチャの設定---//
+    WordPlate.at(0).SetTexture(WordList.at((SelectNumber + nListSize - 1) % nListSize).data());
+    WordPlate.at(1).SetTexture(WordList.at(SelectNumber % nListSize).data());
+    WordPlate.at(2).SetTexture(WordList.at((SelectNumber + 1) % nListSize).data());
 }
 
 /////////////////////////////////////////////
@@ -160,15 +161,21 @@ void WORDLIST::Uninitialize(void)
 /////////////////////////////////////////////
 void WORDLIST::Update(void)
 {
+    //---各種宣言---//
+    int nListSize;
+
+    //---初期化処理---//
+    nListSize = (int)WordList.size();
+
     //---カーソル移動---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_LEFT_SHOULDER, TRIGGER))
     {
-        SelectNumber = (SelectNumber + (int)WordList.size() - 1) % (int)WordList.size();
+        SelectNumber = (SelectNumber + nListSize - 1) % nListSize;
         ResetTexture();
     }
     else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_RIGHT_SHOULDER, TRIGGER))
     {
-        SelectNumber = (SelectNumber + 1) % (int)WordList.size();
+        SelectNumber = (SelectNumber + 1) % nListSize;
         ResetTexture();
     }
 }

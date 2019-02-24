@@ -2,6 +2,7 @@
 #include "ActorManager.h"
 #include "Collision.h"
 #include "CollisionManager.h"
+#include "InputManager.h"
 #include "ModelManager.h"
 #include "WoodGimmick.h"
 
@@ -13,13 +14,13 @@
 //
 //機能：コンストラクタ
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：なし
 /////////////////////////////////////////////
-WOODGIMMICK::WOODGIMMICK(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+WOODGIMMICK::WOODGIMMICK(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(modelname, tag, position, rotation);
+    Initialize(modelname, position, rotation);
 }
 
 /////////////////////////////////////////////
@@ -31,7 +32,7 @@ WOODGIMMICK::WOODGIMMICK(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, D
 //
 //戻り値：なし
 /////////////////////////////////////////////
-WOODGIMMICK::~WOODGIMMICK()
+WOODGIMMICK::~WOODGIMMICK(void)
 {
 	Uninitialize();
 }
@@ -48,16 +49,9 @@ WOODGIMMICK::~WOODGIMMICK()
 void WOODGIMMICK::Draw(void)
 {
     //---各種宣言---//
-    DWORD nCounter;
-    LPDIRECT3DDEVICE9 pDevice;
     D3DXMATRIX mtxWorld;
-    LPD3DXMATERIAL pMatrix;
-    D3DMATERIAL9 matDef;
 
     std::shared_ptr<MODEL> pModel;
-
-    //---初期化処理---//
-    pDevice = GetDevice();
 
     //---ワールドマトリクスの設定---//
     //初期化
@@ -65,36 +59,19 @@ void WOODGIMMICK::Draw(void)
 
     //設定
     Transform.MakeWorldMatrix(mtxWorld);
+    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---描画---//
     //描画対象チェック
     pModel = Model.lock();
     if (!pModel)
     {
-        MessageBox(nullptr, TEXT("大樹ギミックのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("大樹ギミックのモデル情報の取得に失敗しました"), TEXT("描画エラー"), MB_OK);
         return;
     }
 
-    // 現在のマテリアルを取得
-    pDevice->GetMaterial(&matDef);
-
-    //ポインタを取得
-    pMatrix = (LPD3DXMATERIAL)pModel->MaterialBuffer->GetBufferPointer();
-
-    for (nCounter = 0; nCounter < pModel->MaterialValue; ++nCounter)
-    {
-        //マテリアルの設定
-        pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
-
-        //テクスチャの設定
-        pDevice->SetTexture(0, *pModel->Texture);
-
-        //描画
-        pModel->Mesh->DrawSubset(nCounter);
-    }
-
-    //マテリアルをデフォルトに戻す
-    pDevice->SetMaterial(&matDef);
+    //描画
+    pModel->Draw(Gray);
 }
 
 /////////////////////////////////////////////
@@ -102,11 +79,11 @@ void WOODGIMMICK::Draw(void)
 //
 //機能：大樹ギミックの初期化
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT WOODGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT WOODGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -116,9 +93,10 @@ HRESULT WOODGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 posi
     Transform.Position = position;
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
-	Tag = tag;
+    Gray = false;
+	Tag = TEXT("Gimmick");
 
-    //Xファイルの読み込み
+    //---モデルの読み込み---//
     hResult = MODELMANAGER::GetModel(modelfile, Model);
     if (FAILED(hResult))
 	{
@@ -144,8 +122,7 @@ HRESULT WOODGIMMICK::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 posi
 /////////////////////////////////////////////
 void WOODGIMMICK::OnCollision(COLLISION* opponent)
 {
-	if (opponent->Owner->GetTag().find(TEXT("Fire")) != tstring::npos || 
-		opponent->Owner->GetTag().find(TEXT("Hot")) != tstring::npos)
+	if (opponent->Owner->GetTag().find(TEXT("Fire")) != tstring::npos || opponent->Owner->GetTag().find(TEXT("Hot")) != tstring::npos)
 	{
 		ACTORMANAGER::Destroy(this);
 		COLLISIONMANAGER::Destroy((COLLISION*)Collision);
@@ -186,19 +163,8 @@ void WOODGIMMICK::Uninitialize(void)
 /////////////////////////////////////////////
 void WOODGIMMICK::Update(void)
 {	
-
-}
-
-/////////////////////////////////////////////
-//関数名：GetPos
-//
-//機能：大樹ギミックの位置情報取得
-//
-//引数：なし
-//
-//戻り値：なし
-/////////////////////////////////////////////
-D3DXVECTOR3 WOODGIMMICK::GetPos(void)
-{
-	return Transform.Position;
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    {
+        Gray = !Gray;
+    }
 }

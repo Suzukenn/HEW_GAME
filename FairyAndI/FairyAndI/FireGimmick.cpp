@@ -3,8 +3,10 @@
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "FireGimmick.h"
+#include "InputManager.h"
 #include "ModelManager.h"
 #include "Skill.h"
+
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
 //関数名：FIREGIMMICK
@@ -46,16 +48,9 @@ FIREGIMMICK::~FIREGIMMICK(void)
 void FIREGIMMICK::Draw(void)
 {
     //---各種宣言---//
-    DWORD nCounter;
-    LPDIRECT3DDEVICE9 pDevice;
     D3DXMATRIX mtxWorld;
-    LPD3DXMATERIAL pMatrix;
-    D3DMATERIAL9 matDef;
 
     std::shared_ptr<MODEL> pModel;
-
-    //---初期化処理---//
-    pDevice = GetDevice();
 
     //---ワールドマトリクスの設定---//
     //初期化
@@ -63,36 +58,19 @@ void FIREGIMMICK::Draw(void)
 
     //設定
     Transform.MakeWorldMatrix(mtxWorld);
+    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---描画---//
     //描画対象チェック
     pModel = Model.lock();
     if (!pModel)
     {
-        MessageBox(nullptr, TEXT("炎の壁ギミックのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("炎の壁ギミックのモデル情報の取得に失敗しました"), TEXT("描画エラー"), MB_OK);
         return;
     }
 
-    // 現在のマテリアルを取得
-    pDevice->GetMaterial(&matDef);
-
-    //ポインタを取得
-    pMatrix = (LPD3DXMATERIAL)pModel->MaterialBuffer->GetBufferPointer();
-
-    for (nCounter = 0; nCounter < pModel->MaterialValue; ++nCounter)
-    {
-        //マテリアルの設定
-        pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
-
-        //テクスチャの設定
-        pDevice->SetTexture(0, *pModel->Texture);
-
-        //描画
-        pModel->Mesh->DrawSubset(nCounter);
-    }
-
-    //マテリアルをデフォルトに戻す
-    pDevice->SetMaterial(&matDef);
+    //描画
+    pModel->Draw(Gray);
 }
 
 /////////////////////////////////////////////
@@ -114,10 +92,11 @@ HRESULT FIREGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVEC
     Transform.Position = position;
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
+    Gray = false;
 	Tag = TEXT("Gimmick");
 
-    //Xファイルの読み込み
-	hResult = MODELMANAGER::GetModel(modelfile, Model);
+    //---モデルの読み込み---//
+    hResult = MODELMANAGER::GetModel(modelfile, Model);
     if (FAILED(hResult))
 	{
         MessageBox(nullptr, TEXT("炎の壁ギミックのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -197,19 +176,8 @@ void FIREGIMMICK::Uninitialize(void)
 /////////////////////////////////////////////
 void FIREGIMMICK::Update(void)
 {	
-
-}
-
-/////////////////////////////////////////////
-//関数名：GetPos
-//
-//機能：炎の壁ギミックの位置情報取得
-//
-//引数：なし
-//
-//戻り値：なし
-/////////////////////////////////////////////
-D3DXVECTOR3 FIREGIMMICK::GetPos(void)
-{
-	return Transform.Position;
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    {
+        Gray = !Gray;
+    }
 }

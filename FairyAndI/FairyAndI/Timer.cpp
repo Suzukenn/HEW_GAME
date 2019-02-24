@@ -1,13 +1,12 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "Timer.h"
+#include "Texture.h"
 #include "TextureManager.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
 //テクスチャ分割数
 #define TIME_DIV_U			(10)	//横分割数
 #define TIME_DIV_V			(1)		//縦分割数
-
-//＝＝＝グローバル宣言＝＝＝//
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -21,16 +20,24 @@
 /////////////////////////////////////////////
 void TIMER::Draw(void)
 {
-	LPDIRECT3DDEVICE9 pDevice = GetDevice();
+    //---各種宣言---//
+    LPDIRECT3DDEVICE9 pDevice;
+    std::shared_ptr<TEXTURE> pTexture;
 
-	// 頂点書式設定
-	pDevice->SetFVF(FVF_VERTEX_2D);
+    //---初期化処理---//
+    pDevice = GetDevice();
+    pTexture = Texture.lock();
+    if (!pTexture)
+    {
+        MessageBox(nullptr, TEXT("描画対象のテクスチャが存在しません"), TEXT("描画エラー"), MB_OK);
+    }
 
-	// テクスチャ設定
-	pDevice->SetTexture(0, *Texture);
+    //---書式設定---//
+    pDevice->SetFVF(FVF_VERTEX_2D);             //フォーマット設定
+    pDevice->SetTexture(0, pTexture->Image);    //テクスチャ設定
 
-	// 頂点配列によるポリゴン描画
-	pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, Length * 4 - 2, &Vertex, sizeof(VERTEX_2D));
+    //---頂点バッファによる背景描画---//
+    pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, Length * 4 - 2, &Vertex, sizeof(VERTEX_2D));
 }
 
 /////////////////////////////////////////////
@@ -53,11 +60,10 @@ HRESULT TIMER::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTOR2
 	Size = size;
 	Length = MAX_LENGTH;
 	Timer = timer;
-	Texture.reset(new LPDIRECT3DTEXTURE9());
-	VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9());
+	VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9);
 
 	//---テクスチャの読み込み---//
-	hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
+	hResult = TEXTUREMANAGER::GetTexture(texturename, Texture);
 	if (FAILED(hResult))
 	{
 		MessageBox(nullptr, TEXT("タイマーのテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -88,13 +94,13 @@ HRESULT TIMER::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTOR2
 		//値の設定
 		for (nCounter = 0; nCounter < 4; ++nCounter)
 		{
-			Vertex[i * 4 + nCounter].U = (float)(nCounter & 1);
-			Vertex[i * 4 + nCounter].V = (float)((nCounter >> 1) & 1);
-			Vertex[i * 4 + nCounter].Position.x = position.x + Vertex[nCounter].U * Size.x;
-			Vertex[i * 4 + nCounter].Position.y = position.y + Vertex[nCounter].V * Size.y;
-			Vertex[i * 4 + nCounter].Position.z = 0.0F;
-			Vertex[i * 4 + nCounter].RHW = 1.0F;
-			Vertex[i * 4 + nCounter].Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);
+			Vertex.at(i * 4 + nCounter).U = (float)(nCounter & 1);
+			Vertex.at(i * 4 + nCounter).V = (float)((nCounter >> 1) & 1);
+			Vertex.at(i * 4 + nCounter).Position.x = position.x + Vertex[nCounter].U * Size.x;
+			Vertex.at(i * 4 + nCounter).Position.y = position.y + Vertex[nCounter].V * Size.y;
+			Vertex.at(i * 4 + nCounter).Position.z = 0.0F;
+			Vertex.at(i * 4 + nCounter).RHW = 1.0F;
+			Vertex.at(i * 4 + nCounter).Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);
 		}
 	}
 	//バッファのポインタの解放
@@ -187,11 +193,11 @@ void TIMER::Update(void)
 		for (int j = 0; j < 4; ++j)
 		{
 			// 位置を更新
-			Vertex[i * 4 + j].Position.x = Position.x + (dx[j] + i) * Size.x;
-			Vertex[i * 4 + j].Position.y = Position.y + dy[j] * Size.y;
+			Vertex.at(i * 4 + j).Position.x = Position.x + (dx[j] + i) * Size.x;
+			Vertex.at(i * 4 + j).Position.y = Position.y + dy[j] * Size.y;
 			// フレーム設定
-			Vertex[i * 4 + j].U = (u + dx[j]) * (1.0f / TIME_DIV_U);
-			Vertex[i * 4 + j].V = (v + dy[j]) * (1.0f / TIME_DIV_V);
+			Vertex.at(i * 4 + j).U = (u + dx[j]) * (1.0f / TIME_DIV_U);
+			Vertex.at(i * 4 + j).V = (v + dy[j]) * (1.0f / TIME_DIV_V);
 		}
 	}
    

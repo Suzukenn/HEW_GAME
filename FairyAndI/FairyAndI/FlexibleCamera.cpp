@@ -1,5 +1,4 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include "Debug.h"
 #include "FlexibleCamera.h"
 #include "InputManager.h"
 
@@ -262,27 +261,4 @@ void FLEXIBLECAMERA::Update(void)
     }
 
     SetCamera();
-
-#ifdef _DEBUG
-    //---デバッグ表示---//
-    //DEBUG::PrintDebugData(TEXT("[カメラの視点　：(%f：%f：%f)]\n"), Position.x, Position.y, Position.z);
-    //DEBUG::PrintDebugData(TEXT("[カメラの注視点：(%f：%f：%f)]\n"), ReversoPoint.x, ReversoPoint.y, ReversoPoint.z);
-    //DEBUG::PrintDebugData(TEXT("[カメラの向き　：(%f)]\n"), Rotation.y);
-    //DEBUG::PrintDebugData(TEXT("\n"));
-    //DEBUG::PrintDebugData(TEXT("***視点操作***\n"));
-    //DEBUG::PrintDebugData(TEXT("前移動：W\n"));
-    //DEBUG::PrintDebugData(TEXT("後移動：S\n"));
-    //DEBUG::PrintDebugData(TEXT("左移動：A\n"));
-    //DEBUG::PrintDebugData(TEXT("右移動：D\n"));
-    //DEBUG::PrintDebugData(TEXT("***位置操作***\n"));
-    //DEBUG::PrintDebugData(TEXT("上移動：Y\n"));
-    //DEBUG::PrintDebugData(TEXT("下移動：N\n"));
-    //DEBUG::PrintDebugData(TEXT("左旋回：Z\n"));
-    //DEBUG::PrintDebugData(TEXT("右旋回：C\n"));
-    //DEBUG::PrintDebugData(TEXT("***注視点操作***\n"));
-    //DEBUG::PrintDebugData(TEXT("上移動：T\n"));
-    //DEBUG::PrintDebugData(TEXT("下移動：B\n"));
-    //DEBUG::PrintDebugData(TEXT("左旋回：Q\n"));
-    //DEBUG::PrintDebugData(TEXT("右旋回：E\n"));
-#endif
 }

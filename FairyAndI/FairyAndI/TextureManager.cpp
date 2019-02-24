@@ -1,14 +1,13 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include <fstream>
-#include <memory>
 #include <string>
-#include <unordered_map>
 #include <vector>
 #include "Main.h"
+#include "Texture.h"
 #include "TextureManager.h"
 
 //＝＝＝グローバル変数＝＝＝//
-std::unordered_map<tstring, LPDIRECT3DTEXTURE9> TEXTUREMANAGER::Texture;           //テクスチャ
+std::unordered_map<tstring, std::shared_ptr<TEXTURE>> TEXTUREMANAGER::Texture;
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -23,10 +22,9 @@ std::unordered_map<tstring, LPDIRECT3DTEXTURE9> TEXTUREMANAGER::Texture;        
 HRESULT TEXTUREMANAGER::Create(const FILEPARAMETER& data)
 {
     //---各種宣言---//
-    std::unique_ptr<LPDIRECT3DTEXTURE9> pTexture;
+    TEXTURE tTexture;
 
     //---初期化処理---//
-    pTexture.reset(new LPDIRECT3DTEXTURE9);
 
     //---データの展開---//
     //ファイルの指定確認
@@ -37,9 +35,10 @@ HRESULT TEXTUREMANAGER::Create(const FILEPARAMETER& data)
     }
 
     //テクスチャの作成
-    if (SUCCEEDED(D3DXCreateTextureFromFile(GetDevice(), data.FileName.data(), pTexture.get())))
+    if (SUCCEEDED(D3DXCreateTextureFromFile(GetDevice(), data.FileName.data(), &tTexture.Image)))
     {
-        Texture.emplace(std::make_pair(data.CallKey, *pTexture));
+        tTexture.Image->GetLevelDesc(0, &tTexture.Descriptor);
+        Texture.emplace(std::make_pair(data.CallKey, std::make_shared<TEXTURE>(tTexture)));
     }
     else
     {
@@ -160,7 +159,7 @@ void TEXTUREMANAGER::Uninitialize(void)
     //テクスチャの破棄
     for (auto& data : Texture)
     {
-        SAFE_RELEASE(data.second);
+        SAFE_RELEASE(data.second->Image);
     }
     Texture.clear();
 }
@@ -174,16 +173,11 @@ void TEXTUREMANAGER::Uninitialize(void)
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT TEXTUREMANAGER::GetTexture(LPCTSTR texturename, LPDIRECT3DTEXTURE9& address)
+HRESULT TEXTUREMANAGER::GetTexture(LPCTSTR texturename, std::weak_ptr<TEXTURE>& address)
 {
     try
     {
         address = Texture.at(texturename);
-        if (!address)
-        {
-            MessageBox(nullptr, TEXT("テクスチャのアドレスが存在しません"), texturename, MB_ICONSTOP | MB_OK);
-            return E_FAIL;
-        }
     }
     catch (const std::out_of_range&)
     {

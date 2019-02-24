@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "Sprite.h"
+#include "Texture.h"
 #include "TextureManager.h"
 
 //＝＝＝関数定義＝＝＝//
@@ -16,14 +17,20 @@ void SPRITE::Draw(void)
 {
     //---各種宣言---//
     LPDIRECT3DDEVICE9 pDevice;
+    std::shared_ptr<TEXTURE> pTexture;
 
     //---初期化処理---//
     pDevice = GetDevice();
+    pTexture = Texture.lock();
+    if (!pTexture)
+    {
+        MessageBox(nullptr, TEXT("描画対象のテクスチャが存在しません"), TEXT("描画エラー"), MB_OK);
+    }
 
     //---書式設定---//
     pDevice->SetStreamSource(0, *VertexBuffer, 0, sizeof(VERTEX_2D)); //頂点書式設定
     pDevice->SetFVF(FVF_VERTEX_2D);                                   //フォーマット設定
-    pDevice->SetTexture(0, *Texture);                                 //テクスチャ設定
+    pDevice->SetTexture(0, pTexture->Image);                          //テクスチャ設定
 
     //---頂点バッファによる背景描画---//
     pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
@@ -49,11 +56,10 @@ HRESULT SPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTOR
     //---初期化処理---//
     Position = position;
     Size = size;
-    Texture.reset(new LPDIRECT3DTEXTURE9);
     VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9);
 
     //---テクスチャの読み込み---//
-    hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
+    hResult = TEXTUREMANAGER::GetTexture(texturename, Texture);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("スプライトのテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -117,21 +123,7 @@ void SPRITE::Uninitialize(void)
 {
     //---開放---//
     SAFE_RELEASE((*VertexBuffer));
-    SAFE_RELEASE((*Texture));
-}
-
-/////////////////////////////////////////////
-//関数名：Update
-//
-//機能：背景の更新
-//
-//引数：なし
-//
-//戻り値：なし
-/////////////////////////////////////////////
-void SPRITE::Update(void)
-{
-
+    Texture.reset();
 }
 
 /////////////////////////////////////////////

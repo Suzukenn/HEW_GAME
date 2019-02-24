@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "CollisionManager.h"
+#include "InputManager.h"
 #include "ModelManager.h"
 #include "Wall.h"
 
@@ -27,7 +28,7 @@ WALL::WALL(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 ro
 //
 //戻り値：なし
 /////////////////////////////////////////////
-WALL::~WALL()
+WALL::~WALL(void)
 {
     Uninitialize();
 }
@@ -44,16 +45,9 @@ WALL::~WALL()
 void WALL::Draw(void)
 {
     //---各種宣言---//
-    DWORD nCounter;
-    LPDIRECT3DDEVICE9 pDevice;
     D3DXMATRIX mtxWorld;
-    LPD3DXMATERIAL pMatrix;
-    D3DMATERIAL9 matDef;
 
     std::shared_ptr<MODEL> pModel;
-
-    //---初期化処理---//
-    pDevice = GetDevice();
 
     //---ワールドマトリクスの設定---//
     //初期化
@@ -61,36 +55,19 @@ void WALL::Draw(void)
 
     //設定
     Transform.MakeWorldMatrix(mtxWorld);
+    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---描画---//
     //描画対象チェック
     pModel = Model.lock();
     if (!pModel)
     {
-        MessageBox(nullptr, TEXT("弾丸のモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("壁のモデル情報の取得に失敗しました"), TEXT("描画エラー"), MB_OK);
         return;
     }
 
-    // 現在のマテリアルを取得
-    pDevice->GetMaterial(&matDef);
-
-    //ポインタを取得
-    pMatrix = (LPD3DXMATERIAL)pModel->MaterialBuffer->GetBufferPointer();
-
-    for (nCounter = 0; nCounter < pModel->MaterialValue; ++nCounter)
-    {
-        //マテリアルの設定
-        pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
-
-        //テクスチャの設定
-        pDevice->SetTexture(0, *pModel->Texture);
-
-        //描画
-        pModel->Mesh->DrawSubset(nCounter);
-    }
-
-    //マテリアルをデフォルトに戻す
-    pDevice->SetMaterial(&matDef);
+    //描画
+    pModel->Draw(Gray);
 }
 
 /////////////////////////////////////////////
@@ -111,6 +88,7 @@ HRESULT WALL::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, 
     Transform.Position = position;
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
+    Gray = false;
     Tag = TEXT("Wall");
     Type = type;
 
@@ -118,11 +96,12 @@ HRESULT WALL::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, 
     hResult = MODELMANAGER::GetModel(modelname, Model);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("弾丸のモデルの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("壁のモデルの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
         return hResult;
     }
 
+    //---当たり判定の付与---//
     Collision = COLLISIONMANAGER::InstantiateToOBB(Transform.Position, Transform.Rotation, TEXT("Wall"), this);
 
     return hResult;
@@ -176,5 +155,8 @@ void WALL::Uninitialize(void)
 /////////////////////////////////////////////
 void WALL::Update(void)
 {
-
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    {
+        Gray = !Gray;
+    }
 }

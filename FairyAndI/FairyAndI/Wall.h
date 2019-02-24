@@ -14,6 +14,8 @@ class OBB;
 class WALL final : public SKILL
 {
     private:
+        bool Gray;
+
         std::weak_ptr<MODEL> Model;
         OBB* Collision;
 

@@ -2,8 +2,6 @@
 #define _TRANSFORM_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include <memory>
-#include "Main.h"
 
 //＝＝＝クラス宣言＝＝＝//
 class TRANSFORM
@@ -31,9 +29,6 @@ class TRANSFORM
             //移動を反映
             D3DXMatrixTranslation(&mtxTranslate, Position.x, Position.y, Position.z);
             D3DXMatrixMultiply(&world, &world, &mtxTranslate);
-
-            //設定
-            GetDevice()->SetTransform(D3DTS_WORLD, &world);
         }
 };
 

@@ -137,11 +137,14 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="FireGimmick.cpp" />
+    <ClCompile Include="GameClear.cpp" />
     <ClCompile Include="GimmickFactory.cpp" />
+    <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Grenade.cpp" />
     <ClCompile Include="Ground.cpp" />
     <ClCompile Include="Heart.cpp" />
     <ClCompile Include="IceGimmick.cpp" />
+    <ClCompile Include="Model.cpp" />
     <ClCompile Include="SkillBox.cpp" />
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="OBB.cpp" />
@@ -158,7 +161,6 @@
     <ClCompile Include="SideViewCamera.cpp" />
     <ClCompile Include="Fairy.cpp" />
     <ClCompile Include="FlexibleCamera.cpp" />
-    <ClCompile Include="Debug.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="Field.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -201,10 +203,12 @@
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Fade.h" />
     <ClInclude Include="FireGimmick.h" />
+    <ClInclude Include="GameClear.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ActorManager.h" />
     <ClInclude Include="BackGround.h" />
     <ClInclude Include="GimmickFactory.h" />
+    <ClInclude Include="Goal.h" />
     <ClInclude Include="Grenade.h" />
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Heart.h" />
@@ -222,6 +226,7 @@
     <ClInclude Include="SkillFactory.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="SquareGauge.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Timer.h" />
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Trap.h" />
@@ -231,7 +236,6 @@
     <ClInclude Include="SideViewCamera.h" />
     <ClInclude Include="Fairy.h" />
     <ClInclude Include="FlexibleCamera.h" />
-    <ClInclude Include="Debug.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="Field.h" />
     <ClInclude Include="Player.h" />

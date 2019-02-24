@@ -45,9 +45,7 @@ void CHARACTERFACTORY::InstantiatePlant(D3DXVECTOR3 position, D3DXVECTOR3 rotati
 /////////////////////////////////////////////
 void CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    //ACTORMANAGER::GameObject.emplace_back(new PLAYER(TEXT("Data/GameScene/Model/Character/Player.x"), position, rotation));
-    //ACTORMANAGER::GameObject.emplace_back(new PLAYER(TEXT("Data/GameScene/Model/Character/tiny_4anim.x"), position, rotation));
-    ACTORMANAGER::GameObject.emplace_back(new PLAYER(TEXT("Data/GameScene/Model/Character/Wait.x"), position, rotation));
+    ACTORMANAGER::GameObject.emplace_back(new PLAYER(TEXT("Data/GameScene/Model/Character/Player.x"), position, rotation));
 }
 
 /////////////////////////////////////////////

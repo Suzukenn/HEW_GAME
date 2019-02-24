@@ -48,54 +48,30 @@ BATTERYGIMMICK::~BATTERYGIMMICK(void)
 /////////////////////////////////////////////
 void BATTERYGIMMICK::Draw(void)
 {
-	//---各種宣言---//
-	DWORD nCounter;
-	LPDIRECT3DDEVICE9 pDevice;
-	D3DXMATRIX mtxWorld;
-	LPD3DXMATERIAL pMatrix;
-	D3DMATERIAL9 matDef;
+    //---各種宣言---//
+    D3DXMATRIX mtxWorld;
 
-	std::shared_ptr<MODEL> pModel;
+    std::shared_ptr<MODEL> pModel;
 
-	//---初期化処理---//
-	pDevice = GetDevice();
+    //---ワールドマトリクスの設定---//
+    //初期化
+    D3DXMatrixIdentity(&mtxWorld);
 
-	//---ワールドマトリクスの設定---//
-	//初期化
-	D3DXMatrixIdentity(&mtxWorld);
-
-	//設定
+    //設定
     Transform.MakeWorldMatrix(mtxWorld);
+    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
-	//---描画---//
-	//描画対象チェック
-	pModel = Model.lock();
-	if (!pModel)
-	{
-		MessageBox(nullptr, TEXT("砲台ギミックのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
-		return;
-	}
+    //---描画---//
+    //描画対象チェック
+    pModel = Model.lock();
+    if (!pModel)
+    {
+        MessageBox(nullptr, TEXT("砲台ギミックのモデル情報の取得に失敗しました"), TEXT("描画エラー"), MB_OK);
+        return;
+    }
 
-	// 現在のマテリアルを取得
-	pDevice->GetMaterial(&matDef);
-
-	//ポインタを取得
-	pMatrix = (LPD3DXMATERIAL)pModel->MaterialBuffer->GetBufferPointer();
-
-	for (nCounter = 0; nCounter < pModel->MaterialValue; ++nCounter)
-	{
-		//マテリアルの設定
-		pDevice->SetMaterial(&pMatrix[nCounter].MatD3D);
-
-		//テクスチャの設定
-		pDevice->SetTexture(0, *pModel->Texture);
-
-		//描画
-		pModel->Mesh->DrawSubset(nCounter);
-	}
-
-	//マテリアルをデフォルトに戻す
-	pDevice->SetMaterial(&matDef);
+    //描画
+    pModel->Draw(Gray);
 }
 
 /////////////////////////////////////////////
@@ -117,10 +93,11 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DX
     Transform.Position = position;
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
+    Gray = false;
 	Tag = TEXT("Battery");
 
-    //Xファイルの読み込み
-	hResult = MODELMANAGER::GetModel(modelfile, Model);
+    //---モデルの読み込み---//
+    hResult = MODELMANAGER::GetModel(modelfile, Model);
     if (FAILED(hResult))
 	{
         MessageBox(nullptr, TEXT("砲台ギミックのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -202,12 +179,12 @@ void BATTERYGIMMICK::Update(void)
 	{
 		if (PLAYER::GetPlayerPosition().x < Transform.Position.x)
 		{
-            Transform.Rotation.y = -(D3DX_PI * 0.50F);
+            Transform.Rotation.y = -180.0F;
 			BulletPosition.x = Transform.Position.x - 10.0F;
 		}
 		else if (PLAYER::GetPlayerPosition().x > Transform.Position.x)
 		{
-            Transform.Rotation.y = D3DX_PI * 0.50F;
+            Transform.Rotation.y = 180.0F;
 			BulletPosition.x = Transform.Position.x + 10.0F;
 		}
 
@@ -216,18 +193,4 @@ void BATTERYGIMMICK::Update(void)
 		//リセット
 		Count = 0;
 	}
-}
-
-/////////////////////////////////////////////
-//関数名：GetPos
-//
-//機能：砲台ギミックの位置情報取得
-//
-//引数：なし
-//
-//戻り値：なし
-/////////////////////////////////////////////
-D3DXVECTOR3 BATTERYGIMMICK::GetPos(void)
-{
-	return Transform.Position;
 }

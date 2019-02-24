@@ -6,6 +6,9 @@
 #include "Main.h"
 #include "Sprite.h"
 
+//＝＝＝前方宣言＝＝＝//
+class TEXTURE;
+
 //＝＝＝クラス宣言＝＝＝//
 class SQUAREGAUGE
 {
@@ -13,7 +16,7 @@ class SQUAREGAUGE
         float Percent;
         D3DXVECTOR2 Size;
         std::array<VERTEX_2D, 4> MemoryVertex;                //頂点バッファ
-        std::unique_ptr<LPDIRECT3DTEXTURE9> MemoryTexture;    //テクスチャへのポインタ
+        std::weak_ptr<TEXTURE> MemoryTexture;    //テクスチャへのポインタ
         SPRITE Back;
 
     public:

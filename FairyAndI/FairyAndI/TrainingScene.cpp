@@ -98,6 +98,7 @@ HRESULT TRAINING::Initialize(void)
 
     //ギミック
     GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(50.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+	OBJECTFACTORY::InstantiateGoal(D3DXVECTOR3(150.0F, 10.0F, 0.0F));
 
     //地形
     //hResult = Field.Initialize(TEXT("Data/Common/Model/Field/Field.x"), TEXT("Field"), D3DXVECTOR3(0.0F, -10.0F, 0.0F), D3DXVECTOR3(20.0F, 20.0F, 20.0F));
@@ -198,19 +199,19 @@ void TRAINING::Update(void)
 
 
     //---オブジェクトの更新処理---//
-    if (Mode)
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_START, TRIGGER))
     {
-        if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_START, TRIGGER)) bCameraMode = !bCameraMode;
-        bCameraMode ? FlexibleCamera.Update() : SIDEVIEWCAMERA::Update(PLAYER::GetPlayerPosition());
-
-        ACTORMANAGER::Update();
-
-        Field.Update();
-
-        DIRECTIONALLIGHT::Update();
-
-        COLLISIONMANAGER::Update();
+        bCameraMode = !bCameraMode;
     }
+    bCameraMode ? FlexibleCamera.Update() : SIDEVIEWCAMERA::Update(PLAYER::GetPlayerPosition());
+
+    ACTORMANAGER::Update();
+
+    Field.Update();
+
+    DIRECTIONALLIGHT::Update();
+
+    COLLISIONMANAGER::Update();
 
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {

@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "AnimationSprite.h"
+#include "Texture.h"
 #include "TextureManager.h"
 
 //＝＝＝関数定義＝＝＝//
@@ -16,13 +17,19 @@ void ANIMATIONSPRITE::Draw(void)
 {
     //---各種宣言---//
     LPDIRECT3DDEVICE9 pDevice;
+    std::shared_ptr<TEXTURE> pTexture;
 
     //---初期化処理---//
     pDevice = GetDevice();
+    pTexture = Texture.lock();
+    if (!pTexture)
+    {
+        MessageBox(nullptr, TEXT("描画対象のテクスチャが存在しません"), TEXT("描画エラー"), MB_OK);
+    }
 
     //---書式設定---//
-    pDevice->SetFVF(FVF_VERTEX_2D);     //フォーマット設定
-    pDevice->SetTexture(0, *Texture);    //テクスチャ設定
+    pDevice->SetFVF(FVF_VERTEX_2D);             //フォーマット設定
+    pDevice->SetTexture(0, pTexture->Image);    //テクスチャ設定
 
     //---頂点バッファによる背景描画---//
     pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &Vertex, sizeof(VERTEX_2D));
@@ -47,10 +54,9 @@ HRESULT ANIMATIONSPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D
     Position = position;
     Size = size;
     UV = uv;
-    Texture.reset(new LPDIRECT3DTEXTURE9());
 
     //---テクスチャの読み込み---//
-    hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
+    hResult = TEXTUREMANAGER::GetTexture(texturename, Texture);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("スプライトのテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -62,8 +68,8 @@ HRESULT ANIMATIONSPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D
     for (nCounter = 0; nCounter < 4; ++nCounter)
     {
         SetSpriteUV(1);
-        Vertex.at(nCounter).Position.x = position.x + Vertex.at(nCounter).U * Size.x;
-        Vertex.at(nCounter).Position.y = position.y + Vertex.at(nCounter).V * Size.y;
+        Vertex.at(nCounter).Position.x = position.x + (nCounter & 1) * Size.x;
+        Vertex.at(nCounter).Position.y = position.y + ((nCounter >> 1) & 1) * Size.y;
         Vertex.at(nCounter).Position.z = 0.0F;
         Vertex.at(nCounter).RHW = 1.0F;
         Vertex.at(nCounter).Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);
@@ -112,19 +118,5 @@ void ANIMATIONSPRITE::SetSpriteUV(int number)
 void ANIMATIONSPRITE::Uninitialize(void)
 {
     //---開放---//
-    SAFE_RELEASE((*Texture));
-}
-
-/////////////////////////////////////////////
-//関数名：Update
-//
-//機能：背景の更新
-//
-//引数：なし
-//
-//戻り値：なし
-/////////////////////////////////////////////
-void ANIMATIONSPRITE::Update(void)
-{
-
+    Texture.reset();
 }

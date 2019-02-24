@@ -65,8 +65,8 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
     mModel.Mesh->OptimizeInplace(D3DXMESHOPT_COMPACT | D3DXMESHOPT_ATTRSORT, 0, 0, 0, 0);
     mModel.AttributeValue = 0;
     mModel.Mesh->GetAttributeTable(nullptr, &mModel.AttributeValue);
-    mModel.Attribute = new D3DXATTRIBUTERANGE[mModel.AttributeValue];
-    mModel.Mesh->GetAttributeTable(mModel.Attribute, &mModel.AttributeValue);
+    mModel.Attribute.resize(mModel.AttributeValue);
+    mModel.Mesh->GetAttributeTable(mModel.Attribute.at(0), &mModel.AttributeValue);
 
     //カレントディレクトリを変更
     if (szDirectory[0])
@@ -77,8 +77,8 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
 
     //マテリアル読み込み
     pMaterial = (LPD3DXMATERIAL)mModel.MaterialBuffer->GetBufferPointer();
-    mModel.Material = new D3DMATERIAL9[mModel.MaterialValue];
-    mModel.Texture = new LPDIRECT3DTEXTURE9[mModel.MaterialValue];
+    mModel.Material.resize(mModel.MaterialValue);
+    mModel.Texture.resize(mModel.MaterialValue);
     for (nCounter = 0; nCounter < mModel.MaterialValue; ++nCounter)
     {
         mModel.Material[nCounter] = pMaterial[nCounter].MatD3D;
@@ -175,14 +175,15 @@ HRESULT MODELMANAGER::Load(std::vector<FILEPARAMETER>& list, LPCTSTR filename)
     int nCounter;
     std::string szFileName;
     std::string szKeyName;
-    std::ifstream file(filename);
+    std::ifstream file;
 
     //---初期化処理---//
     nCounter = 0;
     list.resize(999);
 
     //---ファイルの読み込み---//
-    if (!file.is_open())
+    file.open(filename);
+    if (file.fail())
     {
         MessageBox(nullptr, TEXT("モデルリストを開けませんでした"), filename, MB_ICONSTOP | MB_OK);
         Uninitialize();
@@ -208,6 +209,7 @@ HRESULT MODELMANAGER::Load(std::vector<FILEPARAMETER>& list, LPCTSTR filename)
     }
 
     list.resize(nCounter);
+    file.close();
 
     return S_OK;
 }
@@ -227,9 +229,12 @@ void MODELMANAGER::Uninitialize(void)
     //モデルの破棄
     for (auto& data : Model)
     {
-        SAFE_RELEASE((*data.second->Texture));
         SAFE_RELEASE((data.second->Mesh));
         SAFE_RELEASE((data.second->MaterialBuffer));
+        for (auto& texture : data.second->Texture)
+        {
+            SAFE_RELEASE((texture));
+        }
     }
     Model.clear();
 }
@@ -239,11 +244,11 @@ void MODELMANAGER::Uninitialize(void)
 //
 //機能：テクスチャの取得
 //
-//引数：(tstring)テクスチャ名,(MODEL*)格納アドレス
+//引数：(LPCTSTR)テクスチャ名,(MODEL*)格納アドレス
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT MODELMANAGER::GetModel(tstring modelname, std::weak_ptr<MODEL>& address)
+HRESULT MODELMANAGER::GetModel(LPCTSTR modelname, std::weak_ptr<MODEL>& address)
 {
     try
     {

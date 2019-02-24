@@ -6,6 +6,9 @@
 #include <memory>
 #include "Main.h"
 
+//＝＝＝前方宣言＝＝＝//
+class TEXTURE;
+
 //＝＝＝クラス宣言＝＝＝//
 class ANIMATIONSPRITE
 {
@@ -13,15 +16,16 @@ class ANIMATIONSPRITE
         D3DXVECTOR2 Position;            //位置座標
         D3DXVECTOR2 Size;                //大きさ
         POINT UV;                                       //UV分割数
-        std::unique_ptr<LPDIRECT3DTEXTURE9> Texture;    //テクスチャへのポインタ
+        
         std::array<VERTEX_2D, 4> Vertex;                //頂点バッファ
+
+        std::weak_ptr<TEXTURE> Texture;    //テクスチャへのポインタ
 
     public:
         virtual void Draw(void);
-        virtual HRESULT Initialize(LPCTSTR, D3DXVECTOR2, D3DXVECTOR2, POINT);
-        virtual void SetSpriteUV(int);
+        virtual HRESULT Initialize(LPCTSTR, D3DXVECTOR2, D3DXVECTOR2, POINT uv = { 1, 1 });
+        void SetSpriteUV(int);
         virtual void Uninitialize(void);
-        virtual void Update(void);
 };
 
 #endif

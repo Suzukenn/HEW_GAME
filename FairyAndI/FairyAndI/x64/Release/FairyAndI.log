@@ -1,71 +1,9 @@
-﻿  ActorManager.cpp
-  AnimationModel.cpp
-  AnimationModelHierarchy.cpp
-  BackGround.cpp
-  BackImage.cpp
-  BatteryCannon.cpp
-  BatteryGimmick.cpp
-  Bullet.cpp
-  Button.cpp
-  Canvas.cpp
+﻿  AnimationModelHierarchy.cpp
   CharacterFactory.cpp
-  Collision.cpp
-  CollisionManager.cpp
-  Element.cpp
-  Enemy.cpp
-  Fade.cpp
-  FireGimmick.cpp
-  GimmickFactory.cpp
-  Grenade.cpp
-  Ground.cpp
-  コンパイル中...
-  Heart.cpp
-  IceGimmick.cpp
-  SkillBox.cpp
-  ModelManager.cpp
-  OBB.cpp
-  ObjectFactory.cpp
-  SelectScene.cpp
-  SkillFactory.cpp
-  Sphere.cpp
-  SquareGauge.cpp
-  Timer.cpp
-  Trap.cpp
-  Wall.cpp
-  WoodGimmick.cpp
-  WordManager.cpp
-  SideViewCamera.cpp
-  Fairy.cpp
-  FlexibleCamera.cpp
-  Debug.cpp
-  DirectionalLight.cpp
-  コンパイル中...
-  Field.cpp
-  Player.cpp
-  SelectMarker.cpp
-  WordList.cpp
-  WordMenu.cpp
-  Sprite.cpp
-  TextureManager.cpp
-  TrainingButton.cpp
-  TrainingScene.cpp
-  GameOver.cpp
-  GamePad.cpp
-  GameScene.cpp
-  InputManager.cpp
-  Keyboard.cpp
-  Main.cpp
-  Mouse.cpp
-  SceneManager.cpp
-  SoundManager.cpp
-  AnimationSprite.cpp
-  StartButton.cpp
-  コンパイル中...
-  Title.cpp
-  WavController.cpp
-  WordPlate.cpp
   コード生成しています。
-  All 4078 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  148 of 4590 functions ( 3.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    37 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)

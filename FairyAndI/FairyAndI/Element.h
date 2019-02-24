@@ -14,6 +14,7 @@ class SPHERE;
 class ELEMENT final : public GAMEOBJECT
 {
 	private:
+        bool Gray;
         tstring Type;
 
         std::weak_ptr<MODEL> Model;

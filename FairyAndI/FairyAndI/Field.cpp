@@ -109,6 +109,7 @@ void FIELD::Draw(void)
 
     //ワールドマトリックスの設定---//
     Transform.MakeWorldMatrix(mtxWorld);
+    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---描画---//
     // 現在のマテリアルを取得
@@ -177,9 +178,9 @@ HRESULT FIELD::Initialize(LPCTSTR modelfile, tstring tag, D3DXVECTOR3 position, 
 void FIELD::Uninitialize(void)
 {
     ////---開放---//
-    //SAFE_RELEASE(MaterialBuffer);
-    //SAFE_RELEASE(Mesh);
-    //SAFE_RELEASE(Texture);
+    SAFE_RELEASE(MaterialBuffer);
+    SAFE_RELEASE(Mesh);
+    SAFE_RELEASE(Texture);
 }
 
 /////////////////////////////////////////////

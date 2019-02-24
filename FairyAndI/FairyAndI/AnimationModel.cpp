@@ -9,58 +9,23 @@
 #include "Main.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
-#define SKIN_ANIME_SPEED 60.0F / 4800.0F    //アニメーションコントローラーのスピード
+#define SKIN_ANIME_SPEED 0.000125F    //アニメーションコントローラーのスピード
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
-//関数名：ANIMATIONMODEL
-//
-//機能：コンストラクタ
-//
-//引数：なし
-//
-//戻り値：なし
-/////////////////////////////////////////////
-ANIMATIONMODEL::ANIMATIONMODEL(void)
-{
-    //アニメーションスピード初期化
-    PlaySpeed = SKIN_ANIME_SPEED; //固定
-
-    //現在のアニメーショントラック初期化
-    CurrentTrack = 0;
-
-    //アニメーションデータトラック初期化
-    CurrentTrackDescription = { D3DXPRIORITY_LOW, 1.0F, 1.0F, 0.0, TRUE };
-
-    AnimationData.clear();
-}
-
-/////////////////////////////////////////////
-//関数名：ANIMATIONMODEL
-//
-//機能：コンストラクタ
-//
-//引数：なし
-//
-//戻り値：なし
-/////////////////////////////////////////////
-ANIMATIONMODEL::~ANIMATIONMODEL(void)
-{
-    //Uninitialize();
-}
-
-/////////////////////////////////////////////
 //関数名：AllocateBoneMatrix
 //
-//機能：ボーン行列の初期化
+//機能：ボーン行列のアロケート
 //
-//引数：(LPD3DXFRAME)ルートフレーム,(LPD3DXMESHCONTAINER)メッシュコンテナ
+//引数：(LPD3DXFRAME)処理フレーム
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
 HRESULT ANIMATIONMODEL::AllocateAllBoneMatrices(LPD3DXFRAME frame)
 {
     //---各種宣言---//
+    HRESULT hResult;
+
     ANIMATIONMODELFREAM* pFrame;
 
     //---初期化処理---//
@@ -70,25 +35,31 @@ HRESULT ANIMATIONMODEL::AllocateAllBoneMatrices(LPD3DXFRAME frame)
     if (frame->pMeshContainer)
     {
         //ボーン行列の初期化処理
-        if (FAILED(AllocateBoneMatrix(frame->pMeshContainer)))
+        hResult = AllocateBoneMatrix(frame->pMeshContainer);
+        if (FAILED(hResult))
         {
-            return E_FAIL;
+            MessageBox(nullptr, TEXT("ボーン行列の初期化に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
+            return hResult;
         }
     }
 
     //再帰判断処理
     if (frame->pFrameSibling)
     {
-        if (FAILED(AllocateAllBoneMatrices(frame->pFrameSibling)))
+        hResult = AllocateAllBoneMatrices(frame->pFrameSibling);
+        if (FAILED(hResult))
         {
-            return E_FAIL;
+            MessageBox(nullptr, TEXT("兄弟フレームのボーン行列の初期化に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
+            return hResult;
         }
     }
     if (frame->pFrameFirstChild)
     {
-        if (FAILED(AllocateAllBoneMatrices(frame->pFrameFirstChild)))
+        hResult = AllocateAllBoneMatrices(frame->pFrameFirstChild);
+        if (FAILED(hResult))
         {
-            return E_FAIL;
+            MessageBox(nullptr, TEXT("子フレームのボーン行列の初期化に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
+            return hResult;
         }
     }
     return S_OK;
@@ -99,7 +70,7 @@ HRESULT ANIMATIONMODEL::AllocateAllBoneMatrices(LPD3DXFRAME frame)
 //
 //機能：ボーンマトリクスの生成
 //
-//引数：(LPD3DXFRAME)ルートフレーム,(LPD3DXMESHCONTAINER)メッシュコンテナ
+//引数：(LPD3DXMESHCONTAINER)メッシュコンテナ
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
@@ -122,7 +93,7 @@ HRESULT ANIMATIONMODEL::AllocateBoneMatrix(LPD3DXMESHCONTAINER meshcontainer)
     }
 
     dwBoneValue = pMeshContainer->pSkinInfo->GetNumBones();     //ボーンの数取得
-    pMeshContainer->BoneMatrix = new LPD3DXMATRIX[dwBoneValue]; //各ボーンのワールド行列格納用領域を確保
+    pMeshContainer->BoneMatrix.resize(dwBoneValue); //各ボーンのワールド行列格納用領域を確保
 
     //---ボーンのポインタの格納---//
     for (dwCounter = 0; dwCounter < dwBoneValue; ++dwCounter)
@@ -133,7 +104,7 @@ HRESULT ANIMATIONMODEL::AllocateBoneMatrix(LPD3DXMESHCONTAINER meshcontainer)
         if (pFrame)
         {
             //各ボーンのワールド行列格納用変数に最終行列を格納
-            pMeshContainer->BoneMatrix[dwCounter] = &pFrame->CombinedTransformationMatrix;
+            pMeshContainer->BoneMatrix.at(dwCounter) = &pFrame->CombinedTransformationMatrix;
         }
         else
         {
@@ -168,7 +139,12 @@ void ANIMATIONMODEL::ChangeAnimation(DWORD animationnumber)
         CurrentTrack = animationnumber;
 
         //アニメーションを最初の位置から再生させる
-        AnimationController->SetTrackAnimationSet(0, AnimationData.at(animationnumber));
+        if (FAILED(AnimationController->SetTrackAnimationSet(0, AnimationData.at(animationnumber))))
+        {
+            MessageBox(nullptr, TEXT("アニメーションの変更に失敗しました"), TEXT("描画エラー"), MB_ICONSTOP | MB_OK);
+            exit(EXIT_FAILURE);
+        }
+
     }
 }
 
@@ -177,11 +153,11 @@ void ANIMATIONMODEL::ChangeAnimation(DWORD animationnumber)
 //
 //機能：モデルの描画
 //
-//引数：なし
+//引数：(D3DXMATRIX)ワールドマトリクス,(bool)エフェクトの有効状態
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void ANIMATIONMODEL::Draw(D3DXMATRIX worldmatrix)
+void ANIMATIONMODEL::Draw(D3DXMATRIX worldmatrix, bool effect)
 {
     // アニメーション更新
     if (AnimationController)
@@ -201,7 +177,7 @@ void ANIMATIONMODEL::Draw(D3DXMATRIX worldmatrix)
         UpdateFrameMatrices(FrameRoot, &worldmatrix);
 
         //アニメーション描画
-        DrawFrame(FrameRoot);
+        DrawFrame(FrameRoot, effect);
     }
 }
 
@@ -210,11 +186,11 @@ void ANIMATIONMODEL::Draw(D3DXMATRIX worldmatrix)
 //
 //機能：フレームのレンダリング
 //
-//引数：(LPD3DXFRAME)ルートフレーム,(LPD3DXMESHCONTAINER)メッシュコンテナ
+//引数：(LPD3DXFRAME)ルートフレーム,(bool)エフェクトの有効状態
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void ANIMATIONMODEL::DrawFrame(LPD3DXFRAME framebase)
+void ANIMATIONMODEL::DrawFrame(LPD3DXFRAME framebase, bool effect)
 {
     //---各種宣言---//
     LPD3DXMESHCONTAINER pMeshContainer;
@@ -226,7 +202,7 @@ void ANIMATIONMODEL::DrawFrame(LPD3DXFRAME framebase)
     while (pMeshContainer)
     {
         //メッシュのレンダリング
-        RenderMeshContainer(pMeshContainer, framebase);
+        RenderMeshContainer(pMeshContainer, framebase, effect);
 
         //次のメッシュコンテナへアクティブを移す
         pMeshContainer = pMeshContainer->pNextMeshContainer;
@@ -235,13 +211,13 @@ void ANIMATIONMODEL::DrawFrame(LPD3DXFRAME framebase)
     //兄弟フレームのレンダリング
     if (framebase->pFrameSibling)
     {
-        DrawFrame(framebase->pFrameSibling);
+        DrawFrame(framebase->pFrameSibling, effect);
     }
 
     //子フレームのレンダリング
     if (framebase->pFrameFirstChild)
     {
-        DrawFrame(framebase->pFrameFirstChild);
+        DrawFrame(framebase->pFrameFirstChild, effect);
     }
 }
 
@@ -250,11 +226,11 @@ void ANIMATIONMODEL::DrawFrame(LPD3DXFRAME framebase)
 //
 //機能：モデルの初期化
 //
-//引数：
+//引数：(LPCTSTR)ファイル名,(float)再生速度
 //
-//戻り値：なし
+//戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT ANIMATIONMODEL::Initialize(LPCTSTR filename)
+HRESULT ANIMATIONMODEL::Initialize(LPCTSTR filename, float speed)
 {
     //---各種宣言---//
     DWORD dwCounter;
@@ -262,6 +238,12 @@ HRESULT ANIMATIONMODEL::Initialize(LPCTSTR filename)
 
     TCHAR szDirectory[_MAX_DIR];
     TCHAR szWork[_MAX_DIR];
+
+    //---初期化処理---//
+    PlaySpeed = SKIN_ANIME_SPEED * speed;
+    CurrentTrack = 0;
+    CurrentTrackDescription = { D3DXPRIORITY_LOW, 1.0F, 1.0F, 0.0, TRUE };
+    AnimationData.clear();
 
     //---ディレクトリの抽出---//
     if (filename)
@@ -316,7 +298,7 @@ HRESULT ANIMATIONMODEL::Initialize(LPCTSTR filename)
         UpdateFrameMatrices(FrameRoot, &World);
     }
 
-    return S_OK;
+    return hResult;
 }
 
 /////////////////////////////////////////////
@@ -324,25 +306,28 @@ HRESULT ANIMATIONMODEL::Initialize(LPCTSTR filename)
 //
 //機能：フレーム内のメッシュのレンダリング
 //
-//引数：(LPD3DXMESHCONTAINER)メッシュコンテナ,(LPD3DXFRAME)レンダリングフレーム
+//引数：(LPD3DXMESHCONTAINER)メッシュコンテナ,(LPD3DXFRAME)レンダリングフレーム,(bool)エフェクトの有効状態
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-void ANIMATIONMODEL::RenderMeshContainer(LPD3DXMESHCONTAINER meshcontainer, LPD3DXFRAME frame)
+void ANIMATIONMODEL::RenderMeshContainer(LPD3DXMESHCONTAINER meshcontainer, LPD3DXFRAME frame, bool effect)
 {
     //---各種宣言---//
+    HRESULT hResult;
     DWORD dwAttribute;
     DWORD dwBoneCounter;
     DWORD dwWeightCounter;
     DWORD dwBlendMatrixNumber;
     DWORD dwPreviewBoneID;
-    LPD3DXBONECOMBINATION pBoneCombination;
     DWORD dwMatrixID;
-    ANIMATIONMODELCONTAINER* pMeshContainer;
-    ANIMATIONMODELFREAM* pFrame;
+    D3DMATERIAL9 matEffect;
+
     volatile DWORD dwAttributeCounter;
 
     LPDIRECT3DDEVICE9 pDevice;
+    LPD3DXBONECOMBINATION pBoneCombination;
+    ANIMATIONMODELCONTAINER* pMeshContainer;
+    ANIMATIONMODELFREAM* pFrame;
 
     //---初期化処理---//
     pMeshContainer = (ANIMATIONMODELCONTAINER*)meshcontainer;
@@ -375,7 +360,11 @@ void ANIMATIONMODEL::RenderMeshContainer(LPD3DXMESHCONTAINER meshcontainer, LPD3
             }
 
             //ジオメトリブレンディングを使用するために行列の個数を指定
-            pDevice->SetRenderState(D3DRS_VERTEXBLEND, dwBlendMatrixNumber);
+            hResult = pDevice->SetRenderState(D3DRS_VERTEXBLEND, dwBlendMatrixNumber);
+            if (FAILED(hResult))
+            {
+                MessageBox(nullptr, TEXT("テクスチャの設定に失敗しました"), TEXT("描画エラー"), MB_ICONSTOP | MB_OK);
+            }
 
             //影響している行列の検索
             for (dwWeightCounter = 0; dwWeightCounter < pMeshContainer->Weight; ++dwWeightCounter)
@@ -387,30 +376,78 @@ void ANIMATIONMODEL::RenderMeshContainer(LPD3DXMESHCONTAINER meshcontainer, LPD3
                 if (dwMatrixID != UINT_MAX)
                 {
                     //行列スタックに格納
-                    pDevice->SetTransform(D3DTS_WORLDMATRIX(dwWeightCounter), &(pMeshContainer->BoneOffsetMatrix[dwMatrixID] * (*pMeshContainer->BoneMatrix[dwMatrixID])));
+                    hResult = pDevice->SetTransform(D3DTS_WORLDMATRIX(dwWeightCounter), &(pMeshContainer->BoneOffsetMatrix[dwMatrixID] * (*pMeshContainer->BoneMatrix[dwMatrixID])));
+                    if (FAILED(hResult))
+                    {
+                        MessageBox(nullptr, TEXT("行列スタックへの格納に失敗しました"), TEXT("描画エラー"), MB_ICONSTOP | MB_OK);
+                    }
                 }
             }
-            pDevice->SetMaterial(&pMeshContainer->pMaterials[pBoneCombination[dwBoneCounter].AttribId].MatD3D);
-            pDevice->SetTexture(0, pMeshContainer->Textures[pBoneCombination[dwBoneCounter].AttribId]);
+
+            //マテリアルの設定
+            if (effect)
+            {
+                matEffect = pMeshContainer->pMaterials[pBoneCombination[dwBoneCounter].AttribId].MatD3D;
+                matEffect.Diffuse = { 0.5F, 0.5F, 0.5F, 1.0F };
+                hResult = pDevice->SetMaterial(&matEffect);
+            }
+            else
+            {
+                hResult = pDevice->SetMaterial(&pMeshContainer->pMaterials[pBoneCombination[dwBoneCounter].AttribId].MatD3D);
+            }
+
+            if (FAILED(hResult))
+            {
+                MessageBox(nullptr, TEXT("マテリアルの設定に失敗しました"), TEXT("描画エラー"), MB_ICONSTOP | MB_OK);
+            }
+
+            hResult = pDevice->SetTexture(0, pMeshContainer->Texture.at(pBoneCombination[dwBoneCounter].AttribId));
+            if (FAILED(hResult))
+            {
+                MessageBox(nullptr, TEXT("テクスチャの設定に失敗しました"), TEXT("描画エラー"), MB_ICONSTOP | MB_OK);
+            }
 
             //属性テーブルの識別子を格納
             dwPreviewBoneID = pBoneCombination[dwBoneCounter].AttribId;
 
             //メッシュの描画
-            pMeshContainer->MeshData.pMesh->DrawSubset(dwBoneCounter);
+            hResult = pMeshContainer->MeshData.pMesh->DrawSubset(dwBoneCounter);
+            if (FAILED(hResult))
+            {
+                MessageBox(nullptr, TEXT("メッシュの描画に失敗しました"), TEXT("描画エラー"), MB_ICONSTOP | MB_OK);
+            }
         }
     }
 
     //通常メッシュの描画
     else
     {
-        pDevice->SetTransform(D3DTS_WORLD, &pFrame->CombinedTransformationMatrix);
+        hResult = pDevice->SetTransform(D3DTS_WORLD, &pFrame->CombinedTransformationMatrix);
         for (dwAttributeCounter = 0; dwAttributeCounter < pMeshContainer->NumMaterials; ++dwAttributeCounter)
         {
-            dwAttribute = pMeshContainer->AttributeTable[dwAttributeCounter].AttribId;
-            pDevice->SetMaterial(&pMeshContainer->pMaterials[dwAttribute].MatD3D);
-            pDevice->SetTexture(0, pMeshContainer->Textures[dwAttribute]);
-            pMeshContainer->MeshData.pMesh->DrawSubset(dwAttribute);
+            //属性テーブルの取得
+            dwAttribute = pMeshContainer->AttributeTable.at(dwAttributeCounter).AttribId;
+
+            //マテリアルの設定
+            hResult = pDevice->SetMaterial(&pMeshContainer->pMaterials[dwAttribute].MatD3D);
+            if (FAILED(hResult))
+            {
+                MessageBox(nullptr, TEXT("マテリアルの設定に失敗しました"), TEXT("描画エラー"), MB_ICONSTOP | MB_OK);
+            }
+
+            //テクスチャの設定
+            hResult = pDevice->SetTexture(0, pMeshContainer->Texture.at(dwAttribute));
+            if (FAILED(hResult))
+            {
+                MessageBox(nullptr, TEXT("テクスチャの設定に失敗しました"), TEXT("描画エラー"), MB_ICONSTOP | MB_OK);
+            }
+
+            //メッシュの描画
+            hResult = pMeshContainer->MeshData.pMesh->DrawSubset(dwAttribute);
+            if (FAILED(hResult))
+            {
+                MessageBox(nullptr, TEXT("メッシュの描画に失敗しました"), TEXT("描画エラー"), MB_ICONSTOP | MB_OK);
+            }
         }
     }
 }
