@@ -21,7 +21,7 @@ class MODELMANAGER
         static HRESULT Initialize(LPCTSTR);
         static void Uninitialize(void);
 
-        static HRESULT GetModel(tstring, std::weak_ptr<MODEL>&);
+        static HRESULT GetModel(LPCTSTR, std::weak_ptr<MODEL>&);
 
         friend MODEL;
 };

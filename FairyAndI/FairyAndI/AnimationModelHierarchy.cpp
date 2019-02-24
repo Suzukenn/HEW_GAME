@@ -178,7 +178,7 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3
                 {
                     MessageBox(nullptr, TEXT("メッシュのテクスチャの読み込みに失敗しました"), TEXT("初期化エラー"), MB_OK);
                     pMeshContainer->Texture.at(dwMaterial) = nullptr;
-                    //return hResult;
+                    return hResult;
                 }
             }
         }

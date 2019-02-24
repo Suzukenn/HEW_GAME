@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "Ground.h"
+#include "Texture.h"
 #include "TextureManager.h"
 
 //＝＝＝関数定義＝＝＝//
@@ -15,29 +16,31 @@
 void GROUND::Draw(void)
 {
     //---各種宣言---//
-    LPDIRECT3DDEVICE9 pDevice;
     D3DXMATRIX mtxRotation;
     D3DXMATRIX mtxTranslate;
     D3DXMATRIX mtxWorld;
 
+    LPDIRECT3DDEVICE9 pDevice;
+    std::shared_ptr<TEXTURE> pTexture;
+
     //---初期化処理---//
     pDevice = GetDevice();
+    D3DXMatrixIdentity(&mtxWorld);
+    pTexture = Texture.lock();
+    if (!pTexture)
+    {
+        MessageBox(nullptr, TEXT("描画対象のテクスチャが存在しません"), TEXT("描画エラー"), MB_OK);
+    }
 
     //ワールドマトリックスの設定---//
     //ワールドマトリックスの初期化
     D3DXMatrixIdentity(&mtxWorld);
 
-    //回転を反映
-    D3DXMatrixRotationYawPitchRoll(&mtxRotation, Rotation.y, Rotation.x, Rotation.z);
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxRotation);
+    //設定
+    Transform.MakeWorldMatrix(mtxWorld);
+    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
-    //移動を反映
-    D3DXMatrixTranslation(&mtxTranslate, Position.x, Position.y, Position.z);
-    D3DXMatrixMultiply(&mtxWorld, &mtxWorld, &mtxTranslate);
-
-    //ワールドマトリックスの設定
-    pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
-
+    //---描画---//
     //頂点バッファをレンダリングパイプラインに設定
     pDevice->SetStreamSource(0, *VertexBuffer, 0, sizeof(VERTEX_3D));
 
@@ -48,7 +51,7 @@ void GROUND::Draw(void)
     pDevice->SetIndices(*IndexBuffer);
 
     //テクスチャの設定
-    pDevice->SetTexture(0, *Texture);
+    pDevice->SetTexture(0, pTexture->Image);
 
     //ポリゴンの描画
     pDevice->DrawIndexedPrimitive(D3DPT_TRIANGLESTRIP, 0, 0, VertexValue, 0, PolygonValue);
@@ -69,12 +72,12 @@ HRESULT GROUND::Initialize(LPCTSTR texturename, const int& valueX, const int& va
     HRESULT hResult;
 
     //---初期化処理---//
-    Position = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
-    Rotation = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
-    Texture.reset(new LPDIRECT3DTEXTURE9);
+    Transform.Position = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
+    Transform.Rotation = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
+    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
 
     //---テクスチャの読み込み---//
-    hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
+    hResult = TEXTUREMANAGER::GetTexture(texturename, Texture);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("地形のテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -83,7 +86,7 @@ HRESULT GROUND::Initialize(LPCTSTR texturename, const int& valueX, const int& va
     }
 
     //---頂点情報の作成---//
-    hResult = MakeVertex(GetDevice(), valueX, valueZ, sizeX, sizeZ);
+    hResult = MakeVertex(valueX, valueZ, sizeX, sizeZ);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("地形の頂点情報の作成に失敗しました"), texturename, MB_OK);
@@ -95,46 +98,15 @@ HRESULT GROUND::Initialize(LPCTSTR texturename, const int& valueX, const int& va
 }
 
 /////////////////////////////////////////////
-//関数名：Uninitialize
-//
-//機能：地形の終了
-//
-//引数：なし
-//
-//戻り値：なし
-/////////////////////////////////////////////
-void GROUND::Uninitialize(void)
-{
-    //---開放---//
-    SAFE_RELEASE((*VertexBuffer));
-    SAFE_RELEASE((*IndexBuffer));
-    SAFE_RELEASE((*Texture));
-}
-
-/////////////////////////////////////////////
-//関数名：Update
-//
-//機能：地形の更新
-//
-//引数：なし
-//
-//戻り値：なし
-/////////////////////////////////////////////
-void GROUND::Update(void)
-{
-
-}
-
-/////////////////////////////////////////////
 //関数名：MakeVertex
 //
 //機能：地形の頂点データの作成
 //
-//引数：(const LPDIRECT3DDEVICE9&)デバイス,(const int&)Xポリゴン数,(const int&)Zポリゴン数,(const float&)Xサイズ,(const float&)Zサイズ
+//引数：(int)Xポリゴン数,(int)Zポリゴン数,(float)サイズX,(float)サイズZ
 //
-//戻り値：なし
+//戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT GROUND::MakeVertex(const LPDIRECT3DDEVICE9& device, const int& valueX, const int& valueZ, const float& sizeX, const float& sizeZ)
+HRESULT GROUND::MakeVertex(int valueX, int valueZ, float sizeX, float sizeZ)
 {
     //---各種宣言---//
     int nCounterX;
@@ -144,12 +116,14 @@ HRESULT GROUND::MakeVertex(const LPDIRECT3DDEVICE9& device, const int& valueX, c
     int nVertexNumber;
     HRESULT hResult;
 
+    LPDIRECT3DDEVICE9 pDevice;
     VERTEX_3D *pVertex;
     WORD *pIndex;
 
     //---初期化処理---//
-    IndexBuffer.reset(new LPDIRECT3DINDEXBUFFER9());
-    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9());
+    pDevice = GetDevice();
+    IndexBuffer.reset(new LPDIRECT3DINDEXBUFFER9);
+    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9);
 
     //---各種算出---//
     VertexValue = (valueX + 1) * (valueZ + 1);                          //頂点数(インデックス有なら)
@@ -158,7 +132,7 @@ HRESULT GROUND::MakeVertex(const LPDIRECT3DDEVICE9& device, const int& valueX, c
 
     //---バッファの生成---//
     //頂点バッファ
-    hResult = device->CreateVertexBuffer(sizeof(VERTEX_3D) * VertexValue, D3DUSAGE_WRITEONLY, FVF_VERTEX_3D, D3DPOOL_MANAGED, VertexBuffer.get(), nullptr);
+    hResult = pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * VertexValue, D3DUSAGE_WRITEONLY, FVF_VERTEX_3D, D3DPOOL_MANAGED, VertexBuffer.get(), nullptr);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("地形の頂点バッファの作成に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -166,7 +140,7 @@ HRESULT GROUND::MakeVertex(const LPDIRECT3DDEVICE9& device, const int& valueX, c
     }
 
     //インデックスバッファ
-    hResult = device->CreateIndexBuffer(sizeof(WORD) * nIndexValue, D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, IndexBuffer.get(), nullptr);
+    hResult = pDevice->CreateIndexBuffer(sizeof(WORD) * nIndexValue, D3DUSAGE_WRITEONLY, D3DFMT_INDEX16, D3DPOOL_MANAGED, IndexBuffer.get(), nullptr);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("地形のインデックスバッファの作成に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -249,4 +223,21 @@ HRESULT GROUND::MakeVertex(const LPDIRECT3DDEVICE9& device, const int& valueX, c
     }
 
     return hResult;
+}
+
+/////////////////////////////////////////////
+//関数名：Uninitialize
+//
+//機能：地形の終了
+//
+//引数：なし
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void GROUND::Uninitialize(void)
+{
+    //---開放---//
+    SAFE_RELEASE((*VertexBuffer));
+    SAFE_RELEASE((*IndexBuffer));
+    Texture.reset();
 }

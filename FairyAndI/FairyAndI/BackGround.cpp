@@ -42,51 +42,7 @@ static TBillboard g_billboard[MAX_BILLBOARD];	// ビルボード情報
 /////////////////////////////////////////////
 void BACKGROUND::Draw(void)
 {
-	//---各種宣言---//
-	LPDIRECT3DDEVICE9 pDevice;
-
-	//---初期化処理---//
-	pDevice = GetDevice();
-
-	// 回転を反映
-	D3DXMATRIX mtxView;
-	SIDEVIEWCAMERA::GetViewMtx(&mtxView);
-	g_mtxWorldBillboard._11 = mtxView._11;
-	g_mtxWorldBillboard._12 = mtxView._21;
-	g_mtxWorldBillboard._13 = mtxView._31;
-	g_mtxWorldBillboard._21 = mtxView._12;
-	g_mtxWorldBillboard._22 = mtxView._22;
-	g_mtxWorldBillboard._23 = mtxView._32;
-	g_mtxWorldBillboard._31 = mtxView._13;
-	g_mtxWorldBillboard._32 = mtxView._23;
-	g_mtxWorldBillboard._33 = mtxView._33;
-
-	// 頂点バッファをレンダリングパイプラインに設定
-	pDevice->SetStreamSource(0, g_pD3DVtxBuffBillboard, 0, sizeof(VERTEX_3D));
-
-	//---書式設定---//
-    pDevice->SetStreamSource(0, *VertexBuffer, 0, sizeof(VERTEX_2D)); //頂点書式設定
-	pDevice->SetFVF(FVF_VERTEX_2D);                                   //フォーマット設定
-	pDevice->SetTexture(0, *Texture);                                 //テクスチャ設定			
-	//pDevice->SetRenderState(D3DRS_LIGHTING, FALSE);  // ライティング無効化
-
-	for (int i = 0; i < MAX_BILLBOARD; ++i) {
-		if (!g_billboard[i].stat) continue;
-
-		// 移動を反映
-		g_mtxWorldBillboard._41 = g_billboard[i].pos.x;
-		g_mtxWorldBillboard._42 = g_billboard[i].pos.y;
-		g_mtxWorldBillboard._43 = g_billboard[i].pos.z;
-
-		// ワールドマトリックスの設定
-		pDevice->SetTransform(D3DTS_WORLD, &g_mtxWorldBillboard);
-	}
-
-	//---頂点バッファによる背景描画---//
-    pDevice->DrawPrimitive(D3DPT_TRIANGLESTRIP, 0, 2);
-
-	//pDevice->SetRenderState(D3DRS_LIGHTING, TRUE);
-
+    BILLBOARD::Draw();
 }
 
 /////////////////////////////////////////////
@@ -94,86 +50,24 @@ void BACKGROUND::Draw(void)
 //
 //機能：背景の初期化
 //
-//引数：(LPCTSTR)テクスチャ名,(D3DXVECTOR2)位置,(D3DXVECTOR2)大きさ
+//引数：(LPCTSTR)テクスチャ名,(D3DXVECTOR3)位置,(D3DXVECTOR3)大きさ
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT BACKGROUND::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTOR2 size)
+HRESULT BACKGROUND::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVECTOR3 size)
 {
-	//---各種宣言---//
-	int nCounter;
-	HRESULT hResult;
-	LPDIRECT3DDEVICE9 pDevice;
+    //---各種宣言---//
+    HRESULT hResult;
 
-	VERTEX_2D* pVertex;
-
-	//---初期化処理---//
-    Position = position;
-    Size = size;
-	pDevice = GetDevice();
-    Texture.reset(new LPDIRECT3DTEXTURE9());
-    VertexBuffer.reset(new LPDIRECT3DVERTEXBUFFER9());
-	//---テクスチャの読み込み---//
-
-	hResult = TEXTUREMANAGER::GetTexture(texturename, *Texture);
-
-	// 頂点情報の作成
-	hResult = MakeVertexBillboard(pDevice);
+    //---初期化処理---//
+    hResult = BILLBOARD::Initialize(texturename, position, size);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("背景のテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
-        Uninitialize();
+        MessageBox(nullptr, TEXT("の初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
         return hResult;
     }
 
-   // ---頂点バッファの生成---//
-	hResult = pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4, 0, FVF_VERTEX_2D, D3DPOOL_MANAGED, VertexBuffer.get(), nullptr);
-	if (FAILED(hResult))
-	{
-        MessageBox(nullptr, TEXT("背景の頂点バッファの生成に失敗しました"), TEXT("初期化エラー"), MB_OK);
-        Uninitialize();
-		return hResult;
-	}
-
-	//---頂点バッファへの値の設定---//
-	//バッファのポインタを取得
-    hResult = (*VertexBuffer)->Lock(0, 0, (void**)&pVertex, 0);
-    if (FAILED(hResult))
-    {
-        MessageBox(nullptr, TEXT("背景の頂点バッファのポインタの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
-        Uninitialize();
-        return hResult;
-    }
-
-    //値の設定
-	for (nCounter = 0; nCounter < 4; ++nCounter)
-	{
-		pVertex[nCounter].U = (float)(nCounter & 1);
-		pVertex[nCounter].V = (float)((nCounter >> 1) & 1);
-		pVertex[nCounter].Position.x = position.x + pVertex[nCounter].U * Size.x;
-		pVertex[nCounter].Position.y = position.y + pVertex[nCounter].V * Size.y;
-		pVertex[nCounter].Position.z = 300.0F;
-		pVertex[nCounter].RHW = 1.0F;
-		pVertex[nCounter].Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);
-	}
-
-	// ビルボードの初期設定
-	for (int i = 0; i < MAX_BILLBOARD; ++i) {
-		g_billboard[i].stat = 0;
-		g_billboard[i].pos = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-		g_billboard[i].vel = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	}
-
-	//バッファのポインタの解放
-    hResult = (*VertexBuffer)->Unlock();
-    if (FAILED(hResult))
-    {
-        MessageBox(nullptr, TEXT("背景の頂点バッファのポインタの開放に失敗しました"), TEXT("初期化エラー"), MB_OK);
-        Uninitialize();
-        return hResult;
-    }
-
-	return hResult;
+    return hResult;
 }
 
 /////////////////////////////////////////////

@@ -7,11 +7,14 @@
 #include "FileParameter.h"
 #include "Main.h"
 
+
+class TEXTURE;
+
 //ƒNƒ‰ƒXéŒ¾//
 class TEXTUREMANAGER
 {
     private:
-        static std::unordered_map<tstring, LPDIRECT3DTEXTURE9> Texture;
+        static std::unordered_map<tstring, std::shared_ptr<TEXTURE>> Texture;
 
         static HRESULT Create(const FILEPARAMETER&);
         static HRESULT Load(std::vector<FILEPARAMETER>&, LPCTSTR);
@@ -20,7 +23,7 @@ class TEXTUREMANAGER
         static HRESULT Initialize(LPCTSTR);
         static void Uninitialize(void);
 
-        static HRESULT GetTexture(LPCTSTR, LPDIRECT3DTEXTURE9&);
+        static HRESULT GetTexture(LPCTSTR, std::weak_ptr<TEXTURE>&);
 };
 
 #endif

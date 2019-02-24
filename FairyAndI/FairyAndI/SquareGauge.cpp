@@ -1,12 +1,13 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "SquareGauge.h"
+#include "Texture.h"
 #include "TextureManager.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
 //関数名：Draw
 //
-//機能：プレイヤーの描画
+//機能：四角ゲージの描画
 //
 //引数：なし
 //
@@ -16,16 +17,22 @@ void SQUAREGAUGE::Draw(void)
 {
     //---各種宣言---//
     LPDIRECT3DDEVICE9 pDevice;
+    std::shared_ptr<TEXTURE> pMemoryTexture;
 
     //---初期化処理---//
     pDevice = GetDevice();
+    pMemoryTexture = MemoryTexture.lock();
+    if (!pMemoryTexture)
+    {
+        MessageBox(nullptr, TEXT("ゲージメモリのテクスチャが存在しません"), TEXT("描画エラー"), MB_OK);
+    }
 
     //---描画---//
     Back.Draw();
 
     //---書式設定---//
-    pDevice->SetFVF(FVF_VERTEX_2D);         //フォーマット設定
-    pDevice->SetTexture(0, *MemoryTexture); //テクスチャ設定
+    pDevice->SetFVF(FVF_VERTEX_2D);                //フォーマット設定
+    pDevice->SetTexture(0, pMemoryTexture->Image); //テクスチャ設定
 
     //---頂点バッファによる背景描画---//
     pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &MemoryVertex, sizeof(VERTEX_2D));
@@ -34,9 +41,9 @@ void SQUAREGAUGE::Draw(void)
 /////////////////////////////////////////////
 //関数名：Initialize
 //
-//機能：プレイヤーの初期化
+//機能：四角ゲージの初期化
 //
-//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)背景テクスチャ名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
@@ -49,7 +56,6 @@ HRESULT SQUAREGAUGE::Initialize(LPCTSTR background, LPCTSTR gauge, D3DXVECTOR2 p
     //---初期化処理---//
     Percent = 0.5F;
     Size = size;
-    MemoryTexture.reset(new LPDIRECT3DTEXTURE9);
 
     //背景
     hResult = Back.Initialize(background, position, size);
@@ -62,7 +68,7 @@ HRESULT SQUAREGAUGE::Initialize(LPCTSTR background, LPCTSTR gauge, D3DXVECTOR2 p
 
     //ゲージメモリ
     //---テクスチャの読み込み---//
-    hResult = TEXTUREMANAGER::GetTexture(gauge, *MemoryTexture);
+    hResult = TEXTUREMANAGER::GetTexture(gauge, MemoryTexture);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("スプライトのテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -88,7 +94,7 @@ HRESULT SQUAREGAUGE::Initialize(LPCTSTR background, LPCTSTR gauge, D3DXVECTOR2 p
 /////////////////////////////////////////////
 //関数名：Uninitialize
 //
-//機能：プレイヤーの終了
+//機能：四角ゲージの終了
 //
 //引数：なし
 //
@@ -97,13 +103,13 @@ HRESULT SQUAREGAUGE::Initialize(LPCTSTR background, LPCTSTR gauge, D3DXVECTOR2 p
 void SQUAREGAUGE::Uninitialize(void)
 {
     Back.Uninitialize();
-    MemoryTexture.reset(nullptr);
+    MemoryTexture.reset();
 }
 
 /////////////////////////////////////////////
 //関数名：Update
 //
-//機能：プレイヤーの更新
+//機能：四角ゲージの更新
 //
 //引数：なし
 //

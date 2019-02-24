@@ -5,7 +5,7 @@
 #include <array>
 #include <memory>
 #include <vector>
-#include "BackGround.h"
+#include "BackImage.h"
 #include "Main.h"
 #include "WordPlate.h"
 
@@ -16,7 +16,7 @@
 class WORDLIST
 {
     private:
-        BACKGROUND Back;
+        BACKIMAGE Back;
         int SelectNumber;
         std::array<WORDPLATE, DISPLAY_VALUE> WordPlate;
         std::vector<tstring> WordList;
@@ -29,7 +29,7 @@ class WORDLIST
         void ResetTexture(void);
         void Update(void);
 
-        tstring GetSelectWord(void) { return WordList.at(SelectNumber); }
+        LPCTSTR GetSelectWord(void) { return WordList.at(SelectNumber).data(); }
         HRESULT ResetWordNumber(tstring);
 };
 

@@ -17,7 +17,7 @@
 #define GRAVITY 0.18F
 #define JUMP 5.0F
 
-//
+//＝＝＝列挙型定義＝＝＝//
 enum
 {
     STATE_WAIT,
@@ -29,6 +29,7 @@ enum
     STATE_DAMAGE
 };
 
+//＝＝＝グローバル宣言＝＝＝//
 int hp;
 D3DXVECTOR3 pos;
 D3DXVECTOR3 rot;
@@ -70,7 +71,7 @@ void PLAYER::Draw(void)
     Transform.MakeWorldMatrix(mtxWorld);
 
     //---描画---//
-    Model.Draw(mtxWorld, true);
+    Model.Draw(mtxWorld, Gray);
 }
 
 /////////////////////////////////////////////
@@ -95,6 +96,7 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     //Transform.Scale = D3DXVECTOR3(0.1F, 0.1F, 0.1F);
     HP = MAX_PLAYER_HP;
     State = STATE_WAIT;
+    Gray = false;
     Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
     Tag = TEXT("Player");
 
@@ -177,6 +179,16 @@ void PLAYER::Update(void)
 
     //---初期化処理---//
     Move.x = 0.0F;
+
+    //---フリーズ判定---//
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    {
+        Gray = !Gray;
+    }
+    if (Gray)
+    {
+        return;
+    }
 
     //---移動処理---//
 	//カメラの向き取得

@@ -10,12 +10,12 @@
 class BUTTON : protected SPRITE
 {
 	protected:
-        virtual void Behavior(void) = 0;
+        virtual void Behavior(void) PURE;
 
 	public:
-        void Draw(void);
-		HRESULT Initialize(LPCTSTR, D3DXVECTOR2, D3DXVECTOR2);
-		void Uninitialize(void);
+        void Draw(void) override;
+		HRESULT Initialize(LPCTSTR, D3DXVECTOR2, D3DXVECTOR2) override;
+		void Uninitialize(void) override;
 		void Update(void);
 };
 

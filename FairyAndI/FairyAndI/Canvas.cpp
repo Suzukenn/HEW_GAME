@@ -161,6 +161,6 @@ void CANVAS::Update(void)
 
     Menu.Update();
     SkillBox.Update();
-    if (Mode)Skill.SetTexture(WORDMENU::NotificationAdjective() + WORDMENU::NotificationNoun());
+    if (Mode)Skill.SetTexture(tstring(WORDMENU::NotificationAdjective() + WORDMENU::NotificationNoun()).data());
     TimeGauge.Update();
 }

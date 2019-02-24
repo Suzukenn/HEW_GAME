@@ -244,11 +244,11 @@ void MODELMANAGER::Uninitialize(void)
 //
 //機能：テクスチャの取得
 //
-//引数：(tstring)テクスチャ名,(MODEL*)格納アドレス
+//引数：(LPCTSTR)テクスチャ名,(MODEL*)格納アドレス
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT MODELMANAGER::GetModel(tstring modelname, std::weak_ptr<MODEL>& address)
+HRESULT MODELMANAGER::GetModel(LPCTSTR modelname, std::weak_ptr<MODEL>& address)
 {
     try
     {
