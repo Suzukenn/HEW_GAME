@@ -9,13 +9,13 @@
 //ƒNƒ‰ƒXéŒ¾//
 class BACKGROUND final : protected BILLBOARD 
 {
+    private:
+
 	public:
 		void Draw(void);
         void Uninitialize(void);
-        HRESULT Initialize(LPCTSTR, D3DXVECTOR3 position = D3DXVECTOR3(0.0F, 0.0F, 0.0F), D3DXVECTOR3 size = D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 0.0F));
+        HRESULT Initialize(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);
         void Update(void);
-		int CreateBillboard(LPD3DXVECTOR3 pos, LPD3DXVECTOR3 vel);
-		void ReleaseBillboard(int nBillboard);
 };
 
 #endif

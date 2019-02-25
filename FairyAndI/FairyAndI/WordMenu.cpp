@@ -141,10 +141,10 @@ HRESULT WORDMENU::Initialize(void)
 HRESULT WORDMENU::Load(std::vector<std::vector<tstring>>& list)
 {
     //---各種宣言---//
-    std::string szAdjective;
-    std::string szNoun;
-    std::wstring wszAdjective;
-    std::wstring wszNoun;
+    std::string strWorkAdjective;
+    std::string strWorkNoun;
+    std::wstring strAdjective;
+    std::wstring strNoun;
     std::ifstream file;
 
     //---初期化処理---//
@@ -162,19 +162,14 @@ HRESULT WORDMENU::Load(std::vector<std::vector<tstring>>& list)
     //---データの抽出---//
     while (!file.eof())
     {
-        file >> szNoun >> szAdjective;
+        //データの読み取り
+        file >> strWorkNoun >> strWorkAdjective;
 
-#ifdef _UNICODE
-        wszNoun = std::wstring(szNoun.begin(), szNoun.end());
-        wszNoun.shrink_to_fit();
-        wszAdjective = std::wstring(szAdjective.begin(), szAdjective.end());
-        wszAdjective.shrink_to_fit();
-        list.at(0).emplace_back(wszAdjective);
-        list.at(1).emplace_back(wszNoun);
-#else
-        list.at(0).emplace_back(szNoun);
-        list.at(1).emplace_back(szAdjective);
-#endif
+        //格納
+        strNoun = tstring(strWorkNoun.begin(), strWorkNoun.end());
+        strAdjective = tstring(strWorkAdjective.begin(), strWorkAdjective.end());
+        list.at(0).emplace_back(strAdjective);
+        list.at(1).emplace_back(strNoun);
     }
 
     return S_OK;

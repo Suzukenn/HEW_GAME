@@ -108,7 +108,7 @@ HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 positio
     }
 
     //---ìñÇΩÇËîªíËÇÃïtó^---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(D3DXVECTOR3(Transform.Position.x + 0.0F, Transform.Position.y + 0.0F, Transform.Position.z + 0.0F), 20.0F, TEXT("Object"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Object"), this);
 
 	//èâä˙âª
     Name = modelname;

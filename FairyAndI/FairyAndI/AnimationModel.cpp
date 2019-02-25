@@ -126,7 +126,7 @@ HRESULT ANIMATIONMODEL::AllocateBoneMatrix(LPD3DXMESHCONTAINER meshcontainer)
 void ANIMATIONMODEL::ChangeAnimation(DWORD animationnumber)
 {
     //指定値の境界チェック
-    if (animationnumber > AnimationData.size())
+    if (animationnumber >= AnimationData.size())
     {
         return;
     }
@@ -163,7 +163,7 @@ void ANIMATIONMODEL::Draw(D3DXMATRIX worldmatrix, bool effect)
     if (AnimationController)
     {
         //アニメーション時間データの更新
-        if (FAILED(AnimationController->AdvanceTime(PlaySpeed, nullptr)))
+        if (FAILED(AnimationController->AdvanceTime(SKIN_ANIME_SPEED * PlaySpeed, nullptr)))
         {
             MessageBox(nullptr, TEXT("メッシュアニメーションの再生に失敗しました"), TEXT("描画エラー"), MB_ICONSTOP | MB_OK);
             exit(EXIT_FAILURE);
@@ -240,7 +240,7 @@ HRESULT ANIMATIONMODEL::Initialize(LPCTSTR filename, float speed)
     TCHAR szWork[_MAX_DIR];
 
     //---初期化処理---//
-    PlaySpeed = SKIN_ANIME_SPEED * speed;
+    PlaySpeed = speed;
     CurrentTrack = 0;
     CurrentTrackDescription = { D3DXPRIORITY_LOW, 1.0F, 1.0F, 0.0, TRUE };
     AnimationData.clear();

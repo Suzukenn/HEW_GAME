@@ -78,8 +78,8 @@ void SELECTMARKER::Update(void)
 
         for (nCounter = 0; nCounter < 4; ++nCounter)
         {
-            Vertex.at(nCounter).Position.x = vecPosition[nPositionNumber].x + Vertex.at(nCounter).U * Size.x;
-            Vertex.at(nCounter).Position.y = vecPosition[nPositionNumber].y + Vertex.at(nCounter).V * Size.y;
+            Vertex.at(nCounter).Position.x = vecPosition[nPositionNumber].x + (nCounter & 1) * Size.x;
+            Vertex.at(nCounter).Position.y = vecPosition[nPositionNumber].y + ((nCounter >> 1) & 1) * Size.y;
         }
     }
 }
