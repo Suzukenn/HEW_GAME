@@ -24,8 +24,6 @@ HRESULT TEXTUREMANAGER::Create(const FILEPARAMETER& data)
     //---各種宣言---//
     TEXTURE tTexture;
 
-    //---初期化処理---//
-
     //---データの展開---//
     //ファイルの指定確認
     if (!data.FileName.data())
@@ -104,15 +102,16 @@ HRESULT TEXTUREMANAGER::Load(std::vector<FILEPARAMETER>& list, LPCTSTR filename)
 {
     //---各種宣言---//
     int nCounter;
-    std::string szFileName;
-    std::string szKeyName;
-    std::ifstream file(filename);
+    std::string strFileName;
+    std::string strKeyName;
+    std::ifstream file;
 
     //---初期化処理---//
     nCounter = 0;
     list.resize(999);
 
     //---ファイルの読み込み---//
+    file.open(filename);
     if (file.fail())
     {
         MessageBox(nullptr, TEXT("テクスチャリストを開けませんでした"), filename, MB_ICONSTOP | MB_OK);
@@ -123,17 +122,12 @@ HRESULT TEXTUREMANAGER::Load(std::vector<FILEPARAMETER>& list, LPCTSTR filename)
     //---データの抽出---//
     while (!file.eof())
     {
-        file >> szFileName >> szKeyName;
+        //データ読み取り
+        file >> strFileName >> strKeyName;
 
-#ifdef _UNICODE
-        list.at(nCounter).FileName.resize(szFileName.size());
-        list.at(nCounter).FileName = std::wstring(szFileName.begin(), szFileName.end());
-        list.at(nCounter).CallKey.resize(szKeyName.size());
-        list.at(nCounter).CallKey = std::wstring(szKeyName.begin(), szKeyName.end());
-#else
-        list.at(nCounter).FileName = szFileName;
-        list.at(nCounter).CallKey = szKeyName;
-#endif
+        //格納
+        list.at(nCounter).FileName = tstring(strFileName.begin(), strFileName.end());
+        list.at(nCounter).CallKey = tstring(strKeyName.begin(), strKeyName.end());
 
         ++nCounter;
     }

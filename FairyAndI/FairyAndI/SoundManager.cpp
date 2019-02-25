@@ -140,16 +140,17 @@ HRESULT SOUNDMANAGER::Load(std::vector<SOUNDPARAMETER>& list)
 {
     //---各種宣言---//
     int nCounter;
-    std::string szFileName;
-    std::string szKeyName;
+    std::string strFileName;
+    std::string strKeyName;
     UINT32 nLoop;
-    std::ifstream file(TEXT("Data/Sound/tracklist.txt"));
+    std::ifstream file;
 
     //---初期化処理---//
     nCounter = 0;
     list.resize(999);
 
     //---ファイルの読み込み---//
+    file.open(TEXT("Data/Sound/tracklist.txt"));
     if (file.fail())
     {
         MessageBox(nullptr, TEXT("トラックリストを開けませんでした"), TEXT("Data/Sound/tracklist.txt"), MB_ICONSTOP | MB_OK);
@@ -159,23 +160,18 @@ HRESULT SOUNDMANAGER::Load(std::vector<SOUNDPARAMETER>& list)
     //---データの抽出---//
     while (!file.eof())
     {
-        file >> szFileName >> nLoop >> szKeyName;
+        //データ読み取り
+        file >> strFileName >> nLoop >> strKeyName;
 
-#ifdef _UNICODE
-        list.at(nCounter).FileName.resize(szFileName.size());
-        list.at(nCounter).FileName = std::wstring(szFileName.begin(), szFileName.end());
+        //格納
+        list.at(nCounter).FileName = tstring(strFileName.begin(), strFileName.end());
         list.at(nCounter).LoopCount = nLoop;
-        list.at(nCounter).CallKey.resize(szKeyName.size());
-        list.at(nCounter).CallKey = std::wstring(szKeyName.begin(), szKeyName.end());
-#else
-        list.at(nCounter).FileName = szFileName;
-        list.at(nCounter).LoopCount = nLoop;
-        list.at(nCounter).CallKey = szKeyName;
-#endif
+        list.at(nCounter).CallKey = tstring(strKeyName.begin(), strKeyName.end());
 
         ++nCounter;
     }
     list.resize(nCounter);
+    list.shrink_to_fit();
 
     return S_OK;
 }

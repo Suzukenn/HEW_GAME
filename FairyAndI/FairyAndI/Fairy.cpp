@@ -82,7 +82,7 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 r
     hResult = Model.Initialize(modelfile, 1.0F);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("プレイヤーのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("フェアリーのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
         return hResult;
     }
@@ -92,7 +92,7 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 r
     }
 
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(D3DXVECTOR3(Transform.Position.x + 0.0F, Transform.Position.y + 10.0F, Transform.Position.z + 0.0F), 5.0F, TEXT("Character"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Character"), this);
 
 	return hResult;
 }
@@ -111,8 +111,8 @@ void FAIRY::OnCollision(COLLISION* opponent)
     //プレイヤーの後ろにつく
     if (opponent->Owner->GetTag() == TEXT("Player"))
     {
-        //Move.x = 0.0F;
-        //Move.z = 0.0F;
+        Move.x = 0.0F;
+        Move.z = 0.0F;
     }
     else if (opponent->Owner->GetTag() == TEXT("Element"))
     {
@@ -194,12 +194,9 @@ void FAIRY::Update(void)
 {	
     //---各種宣言---//
     D3DXVECTOR3 vecFairyDistance;
+    static int nFrameCount = 0;
 
-    //---初期化処理---//
-    //Transform.Rotation = PLAYER::GetPlayerRotation();
-
-    static int nFrameCount;
-
+    //フレーム数のカウント
     if (++nFrameCount > 120)
     {
         nFrameCount = 0;
@@ -247,22 +244,22 @@ void FAIRY::Update(void)
         Transform.Rotation.y = 90.0F * ((PLAYER::GetPlayerPosition().x > Transform.Position.x) - (PLAYER::GetPlayerPosition().x < Transform.Position.x));
     }
 
-	//弾の発射角度取得し移動量設定
+	//移動量設定
     if (vecFairyDistance.x <= 0.1F && vecFairyDistance.y <= 0.1F)
     {
-        vecFairyDistance.x += 0.00001F; //atan2エラー防止
+        vecFairyDistance.x = 0.00001F; //atan2エラー防止
     }
         
     ToTargetAngle = atan2f(vecFairyDistance.y, vecFairyDistance.x);
 
 	//移動量格納
 	Move.x = cosf(ToTargetAngle) * VALUE_MOVE_FAIRY;
-    Move.y = sinf(ToTargetAngle) * VALUE_MOVE_FAIRY + (sinf(-D3DX_PI * 0.5F + D3DX_PI / 60.0F * nFrameCount) + 1.0F) * 0.5F;
-    if (Transform.Rotation.y == SIDEVIEWCAMERA::GetRotation().y - D3DX_PI * 0.5F && Transform.Position.x > PLAYER::GetPlayerPosition().x - 20.0F && Transform.Position.x < PLAYER::GetPlayerPosition().x + 20.0F)
+    Move.y = sinf(ToTargetAngle) * VALUE_MOVE_FAIRY + (sinf(D3DXToRadian(-180.0F) + D3DX_PI / 60.0F * nFrameCount) + 1.0F) * 0.5F;
+    if (Transform.Rotation.y == SIDEVIEWCAMERA::GetRotation().y - D3DXToRadian(180.0F) && Transform.Position.x > PLAYER::GetPlayerPosition().x - 20.0F && Transform.Position.x < PLAYER::GetPlayerPosition().x + 20.0F)
     {
         Move.x = 0.0F;
     }
-    else if (Transform.Rotation.y == SIDEVIEWCAMERA::GetRotation().y + D3DX_PI * 0.5F && Transform.Position.x < PLAYER::GetPlayerPosition().x + 20.0F && Transform.Position.x > PLAYER::GetPlayerPosition().x - 20.0F)
+    else if (Transform.Rotation.y == SIDEVIEWCAMERA::GetRotation().y + D3DXToRadian(180.0F) && Transform.Position.x < PLAYER::GetPlayerPosition().x + 20.0F && Transform.Position.x > PLAYER::GetPlayerPosition().x - 20.0F)
     {
         Move.x = 0.0F;
     }
@@ -295,9 +292,4 @@ void FAIRY::Update(void)
   //          }
 		//	return;
 		//}
-}
-
-D3DXVECTOR3 FAIRY::GetPos(void)
-{
-	return Transform.Position;
 }

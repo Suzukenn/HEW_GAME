@@ -2,7 +2,7 @@
 #define _GAMECLEAR_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include "BackGround.h"
+#include "BackImage.h"
 #include "BaseScene.h"
 #include "Main.h"
 
@@ -10,7 +10,7 @@
 class GAMECLEAR final : public BASE_SCENE
 {
     private:
-        BACKGROUND Back;
+        BACKIMAGE Back;
 
     public:
         void Draw(void);

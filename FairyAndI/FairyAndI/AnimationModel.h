@@ -14,7 +14,7 @@ class ANIMATIONMODELCONTAINER;
 class ANIMATIONMODEL
 {
     private:
-        float PlaySpeed;                        //アニメーションスピード
+        double PlaySpeed;                        //アニメーションスピード
         DWORD CurrentTrack;                     //現在のアニメーショントラック
         D3DXTRACK_DESC CurrentTrackDescription; //現在のアニメーションデータトラック
         UINT AnimationSetValue;                 //アニメーションセット
@@ -37,6 +37,7 @@ class ANIMATIONMODEL
         void ChangeAnimation(DWORD);
         void Draw(D3DXMATRIX, bool);
         HRESULT Initialize(LPCTSTR, float);
+        void SetSpeed(double speed) { PlaySpeed = speed; }
         void Uninitialize(void);
 };
 

@@ -135,6 +135,7 @@ void ACTORMANAGER::Update(void)
             //”pŠüƒŠƒXƒg‚ÆÆ‡
             if (*itrObject == *itrDestroy)
             {
+                (*itrObject)->Uninitialize();
                 itrObject = GameObject.erase(itrObject);
                 DestroyObject.remove(*itrDestroy);
                 bDestroy = true;

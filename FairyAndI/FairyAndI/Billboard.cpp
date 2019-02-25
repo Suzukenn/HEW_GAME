@@ -16,7 +16,6 @@
 /////////////////////////////////////////////
 void BILLBOARD::Draw(void)
 {
-    return;
     //---各種宣言---//
     D3DXMATRIX mtxView;
     D3DXMATRIX mtxWorld;
@@ -88,7 +87,7 @@ HRESULT BILLBOARD::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVEC
     hResult = TEXTUREMANAGER::GetTexture(texturename, Texture);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("プレイヤーのテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("ビルボードのテクスチャの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
         return hResult;
     }
@@ -96,8 +95,8 @@ HRESULT BILLBOARD::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVEC
     //---ビルボードの作成---//
     for (nCounter = 0; nCounter < 4; ++nCounter)
     {
-        Vertex.at(nCounter).Vertex.x = nCounter >> 1 ? 5.0F : -5.0F;
-        Vertex.at(nCounter).Vertex.y = nCounter & 1 ? 5.0F : -5.0F;
+        Vertex.at(nCounter).Vertex.x = Transform.Position.x + Transform.Scale.x * (nCounter >> 1);
+        Vertex.at(nCounter).Vertex.y = Transform.Position.y + Transform.Scale.y * (nCounter & 1);
         Vertex.at(nCounter).Vertex.z = 0.0F;
         Vertex.at(nCounter).Normal = D3DXVECTOR3(0.0F, 0.0F, -1.0F);
         Vertex.at(nCounter).Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);

@@ -40,7 +40,7 @@ void OBJECTFACTORY::InstantiateGoal(D3DXVECTOR3 position)
 /////////////////////////////////////////////
 //関数名：InstantiateIceElement
 //
-//機能：弾の生成
+//機能：氷のエレメントの生成
 //
 //引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
 //
@@ -55,7 +55,7 @@ void OBJECTFACTORY::InstantiateIceElement(D3DXVECTOR3 position)
 /////////////////////////////////////////////
 //関数名：InstantiateRockElement
 //
-//機能：弾の生成
+//機能：岩のエレメントの生成
 //
 //引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
 //

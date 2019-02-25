@@ -1,9 +1,37 @@
-﻿  AnimationModelHierarchy.cpp
+﻿  ActorManager.cpp
+  AnimationModel.cpp
+  AnimationModelHierarchy.cpp
+  BackGround.cpp
+  BatteryCannon.cpp
+  BatteryGimmick.cpp
+  Billboard.cpp
+  Bullet.cpp
+  Canvas.cpp
   CharacterFactory.cpp
+  Element.cpp
+  Enemy.cpp
+  Fairy.cpp
+  GameClear.cpp
+  GameOver.cpp
+  GameScene.cpp
+  ModelManager.cpp
+  ObjectFactory.cpp
+  Player.cpp
+  SceneManager.cpp
+  コンパイル中...
+  SelectMarker.cpp
+  SelectScene.cpp
+  SideViewCamera.cpp
+  SoundManager.cpp
+  TextureManager.cpp
+  TrainingScene.cpp
+  Trap.cpp
+  WordManager.cpp
+  WordMenu.cpp
   コード生成しています。
-  148 of 4590 functions ( 3.2%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    37 functions had inline decision re-evaluated but remain unchanged
+  240 of 4561 functions ( 5.3%) were compiled, the rest were copied from previous compilation.
+    6 functions were new in current compilation
+    154 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)

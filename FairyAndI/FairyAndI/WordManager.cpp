@@ -22,10 +22,10 @@ std::unordered_map<tstring, tstring> WORDMANAGER::NounToAdjective;
 HRESULT WORDMANAGER::CreateWord(void)
 {
     //---各種宣言---//
-    std::string szAdjective;
-    std::string szNoun;
-    std::wstring wszAdjective;
-    std::wstring wszNoun;
+    std::string strWorkAdjective;
+    std::string strWorkNoun;
+    std::wstring strAdjective;
+    std::wstring strNoun;
     std::ifstream file;
 
     //---初期化処理---//
@@ -44,25 +44,16 @@ HRESULT WORDMANAGER::CreateWord(void)
     while (!file.eof())
     {
         //データの読み取り
-        file >> szNoun >> szAdjective;
+        file >> strWorkNoun >> strWorkAdjective;
 
-        //データの作成
-#ifdef _UNICODE
-        wszNoun = std::wstring(szNoun.begin(), szNoun.end());
-        wszNoun.shrink_to_fit();
-        wszAdjective = std::wstring(szAdjective.begin(), szAdjective.end());
-        wszAdjective.shrink_to_fit();
+        //格納
+        strNoun = tstring(strWorkNoun.begin(), strWorkNoun.end());
+        strAdjective = tstring(strWorkAdjective.begin(), strWorkAdjective.end());
 
-        NounToAdjective.emplace(std::make_pair(wszNoun, wszAdjective));
-        NounLock.insert(std::make_pair(wszNoun, false));
-        AdjectiveLock.insert(std::make_pair(wszAdjective, false));
-
-#else
-        NounToAdjective.emplace(std::make_pair(szNoun, szAdjective));
-        NounLock.insert(std::make_pair(szNoun, false));
-        AdjectiveLock.insert(std::make_pair(szAdjective, false));
-#endif
-
+        //その他データの格納
+        NounToAdjective.emplace(std::make_pair(strNoun, strAdjective));
+        NounLock.insert(std::make_pair(strNoun, false));
+        AdjectiveLock.insert(std::make_pair(strAdjective, false));
     }
 
     file.close();

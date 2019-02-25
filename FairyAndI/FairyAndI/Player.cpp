@@ -93,7 +93,6 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     Transform.Position = position;
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(100.0F, 100.0F, 100.0F);
-    //Transform.Scale = D3DXVECTOR3(0.1F, 0.1F, 0.1F);
     HP = MAX_PLAYER_HP;
     State = STATE_WAIT;
     Gray = false;
@@ -110,7 +109,7 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     }
     else
     {
-        Model.ChangeAnimation(0);
+        Model.ChangeAnimation(State);
     }
 
     //---“–‚½‚è”»’è‚Ì•t—^---//
@@ -187,7 +186,12 @@ void PLAYER::Update(void)
     }
     if (Gray)
     {
+        Model.SetSpeed(0.0);
         return;
+    }
+    else
+    {
+        Model.SetSpeed(1.0);
     }
 
     //---ˆÚ“®ˆ—---//
@@ -209,7 +213,14 @@ void PLAYER::Update(void)
     if (vecStickVector != D3DXVECTOR2(0.0F, 0.0F))
     {
         //ˆÚ“®
-        Move.x += VALUE_MOVE_PLAYER * vecStickVector.x;
+        if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_LEFT_SHOULDER, HOLD))
+        {
+            Move.x += VALUE_MOVE_PLAYER * vecStickVector.x * 3.0F;
+        }
+        else
+        {
+            Move.x += VALUE_MOVE_PLAYER * vecStickVector.x;
+        }
 
         //‰ñ“]
         Transform.Rotation.y = 90.0F * ((vecStickVector.x > 0.0F) - (vecStickVector.x < 0.0F));
@@ -255,19 +266,20 @@ void PLAYER::Update(void)
     pos = Transform.Position;
     rot = Transform.Rotation;
 
-    //if (Move.x)
-    //{
-    //    Model.ChangeAnimation(1);
-    //}
-    //else
-    //{
-    //    Model.ChangeAnimation(0);
-    //}
+    if (Move.x)
+    {
+        State = STATE_WALK;
+    }
+    else
+    {
+        State = STATE_WAIT;
+    }
 
-    //if (Move.y != 0.0F)
-    //{
-    //    Model.ChangeAnimation(2);
-    //}
+    if (Move.y != 0.0F)
+    {
+        State = STATE_DAMAGE - 1;
+    }
+    Model.ChangeAnimation(State);
 
 }
 
