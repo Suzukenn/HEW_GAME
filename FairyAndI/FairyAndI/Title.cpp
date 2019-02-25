@@ -20,7 +20,10 @@ void TITLE::Draw(void)
 {
     //---オブジェクトの描画処理---//
     Back.Draw();
-    StartButton.Draw();
+	if (dwTicks & dwMask)
+	{
+		StartButton.Draw();
+	}
     TrainingButton.Draw();
 }
 
@@ -38,6 +41,9 @@ HRESULT TITLE::Initialize(void)
     //---各種宣言---//
     HRESULT hResult;
 
+	dwTicks = 0;
+	dwMask = 8;
+
     //---テクスチャの読み込み---//
     hResult = TEXTUREMANAGER::Initialize(TEXT("Data/Title/TextureList.txt"));
     if (FAILED(hResult))
@@ -47,7 +53,7 @@ HRESULT TITLE::Initialize(void)
 
     //---オブジェクトの初期化処理---//
     //背景
-    hResult = Back.Initialize((TEXT("BACKGROUND")));
+    hResult = Back.Initialize(TEXT("BACKGROUND"));
     if (FAILED(hResult))
     {
         return E_FAIL;
@@ -112,6 +118,8 @@ void TITLE::Update(void)
 {
 	static int Mood;
 
+	dwTicks++;
+
     //---オブジェクトの更新処理---//
     Back.Update();
     StartButton.Update();
@@ -122,12 +130,14 @@ void TITLE::Update(void)
 	{
 		if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
 		{
+			dwMask = 2;
 			FADE::SetFade(FADE_OUT);
 			//SCENEMANAGER::SetScene(SCENE_SELECT);
 			Mood = 1;
 		}
 		else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_START, TRIGGER))
 		{
+			dwMask = 2;
 			FADE::SetFade(FADE_OUT);
 			//SCENEMANAGER::SetScene(SCENE_TRAINING);
 			Mood = 2;

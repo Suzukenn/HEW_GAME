@@ -2,36 +2,75 @@
   AnimationModel.cpp
   AnimationModelHierarchy.cpp
   BackGround.cpp
+  BackImage.cpp
   BatteryCannon.cpp
   BatteryGimmick.cpp
   Billboard.cpp
   Bullet.cpp
+  Button.cpp
   Canvas.cpp
   CharacterFactory.cpp
+  Collision.cpp
+  CollisionManager.cpp
   Element.cpp
   Enemy.cpp
-  Fairy.cpp
+  Fade.cpp
+  FireGimmick.cpp
   GameClear.cpp
-  GameOver.cpp
-  GameScene.cpp
+  GimmickFactory.cpp
+  コンパイル中...
+  Goal.cpp
+  Grenade.cpp
+  Ground.cpp
+  Heart.cpp
+  IceGimmick.cpp
+  Model.cpp
+  SkillBox.cpp
   ModelManager.cpp
+  OBB.cpp
   ObjectFactory.cpp
+  SelectScene.cpp
+  SkillFactory.cpp
+  Sphere.cpp
+  SquareGauge.cpp
+  Timer.cpp
+  Trap.cpp
+  Wall.cpp
+  WoodGimmick.cpp
+  WordManager.cpp
+  SideViewCamera.cpp
+  コンパイル中...
+  Fairy.cpp
+  FlexibleCamera.cpp
+  DirectionalLight.cpp
+  Field.cpp
   Player.cpp
+  SelectMarker.cpp
+  WordList.cpp
+  WordMenu.cpp
+  Sprite.cpp
+  TextureManager.cpp
+  TrainingButton.cpp
+  TrainingScene.cpp
+  GameOver.cpp
+  GamePad.cpp
+  GameScene.cpp
+  InputManager.cpp
+  Keyboard.cpp
+  Main.cpp
+  Mouse.cpp
   SceneManager.cpp
   コンパイル中...
-  SelectMarker.cpp
-  SelectScene.cpp
-  SideViewCamera.cpp
   SoundManager.cpp
-  TextureManager.cpp
-  TrainingScene.cpp
-  Trap.cpp
-  WordManager.cpp
-  WordMenu.cpp
+  AnimationSprite.cpp
+  StartButton.cpp
+  Title.cpp
+  WavController.cpp
+  WordPlate.cpp
   コード生成しています。
-  240 of 4561 functions ( 5.3%) were compiled, the rest were copied from previous compilation.
-    6 functions were new in current compilation
-    154 functions had inline decision re-evaluated but remain unchanged
+  4559 of 4561 functions (100.0%) were compiled, the rest were copied from previous compilation.
+    60 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
-  FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
-  FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)
+  FairyAndI.vcxproj -> C:\Users\tsuyoshi\Documents\GitHub\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
+  FairyAndI.vcxproj -> C:\Users\tsuyoshi\Documents\GitHub\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)

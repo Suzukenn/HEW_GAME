@@ -13,9 +13,13 @@
 class TITLE final : public BASE_SCENE
 {
     private:
-        BACKIMAGE Back;
+		BACKIMAGE Back;
         STARTBUTTON StartButton;
         TRAININGBUTTON TrainingButton;
+
+		// ì_ñ≈êßå‰óp
+		DWORD dwTicks;
+		DWORD dwMask;
 
     public:
         void Draw(void);
