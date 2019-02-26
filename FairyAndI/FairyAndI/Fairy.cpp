@@ -68,8 +68,8 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 r
 
     //---初期化処理---//
 	//初期設定
-	Transform.Position = D3DXVECTOR3(0.0F, 20.0F, 0.0F);
-    Transform.Rotation = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
+	Transform.Position = position;
+    Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(100.0F, 100.0F, 100.0F);
 	Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
     Tag = TEXT("Fairy");
@@ -191,7 +191,7 @@ void FAIRY::Uninitialize(void)
 //戻り値：なし
 /////////////////////////////////////////////
 void FAIRY::Update(void)
-{	
+{
     //---各種宣言---//
     D3DXVECTOR3 vecFairyDistance;
     static int nFrameCount = 0;
@@ -222,6 +222,7 @@ void FAIRY::Update(void)
 
         Model.ChangeAnimation((DWORD)State);
     }
+    return;
 
 	//ボタンを押したらアイテムを取りに行く
 	if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P,XINPUT_GAMEPAD_X, TRIGGER))
