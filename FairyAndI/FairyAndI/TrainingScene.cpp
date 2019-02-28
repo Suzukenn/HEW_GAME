@@ -11,7 +11,6 @@
 #include "InputManager.h"
 #include "ModelManager.h"
 #include "ObjectFactory.h"
-#include "Player.h"
 #include "SceneManager.h"
 #include "SideViewCamera.h"
 #include "SoundManager.h"
@@ -35,8 +34,8 @@ void TRAINING::Draw(void)
     ACTORMANAGER::Draw();
     Field.Draw();
     Ground.Draw();
-    Canvas.Draw();
     Back.Draw();
+    Canvas.Draw();
 }
 
 /////////////////////////////////////////////
@@ -197,7 +196,6 @@ void TRAINING::Update(void)
 {
     //---各種宣言---//
     static bool bCameraMode = false;
-
 
     //---オブジェクトの更新処理---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_START, TRIGGER))
