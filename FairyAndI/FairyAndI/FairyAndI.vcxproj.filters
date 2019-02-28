@@ -522,4 +522,9 @@
       <Filter>リソース</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Data\GameScene\Gray.fx">
+      <Filter>リソース</Filter>
+    </FxCompile>
+  </ItemGroup>
 </Project>
