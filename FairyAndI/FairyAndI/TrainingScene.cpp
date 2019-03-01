@@ -112,7 +112,7 @@ HRESULT TRAINING::Initialize(void)
     {
         return hResult;
     }
-    hResult = Back.Initialize(TEXT("BACKGROUND"), D3DXVECTOR3(0.0F, 0.0F, 100.0F), D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 1.0F));
+    hResult = Back.Initialize(TEXT("BACKGROUND"), D3DXVECTOR3(0.0F, 0.0F, 100.0F), D3DXVECTOR3(100.0F, 100.0F, 1.0F));
     if (FAILED(hResult))
     {
         return hResult;

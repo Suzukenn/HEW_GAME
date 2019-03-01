@@ -68,5 +68,5 @@ void BACKGROUND::Uninitialize(void)
 /////////////////////////////////////////////
 void BACKGROUND::Update(void)
 {
-
+    BILLBOARD::Update();
 }

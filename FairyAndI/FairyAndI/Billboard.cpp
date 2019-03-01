@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "Billboard.h"
+#include "InputManager.h"
 #include "SideViewCamera.h"
 #include "Texture.h"
 #include "TextureManager.h"
@@ -17,11 +18,23 @@
 void BILLBOARD::Draw(void)
 {
     //---各種宣言---//
+    HRESULT hResult;
+    D3DXMATRIX mtxProjection;
     D3DXMATRIX mtxView;
     D3DXMATRIX mtxWorld;
+    D3DXMATRIX mtxWVP;
 
     LPDIRECT3DDEVICE9 pDevice;
     std::shared_ptr<TEXTURE> pTexture;
+
+    LPDIRECT3DVERTEXDECLARATION9 pVertexDeclaration; //頂点シェーダの頂点定義
+
+    //パイプラインに渡す頂点データの構造を定義
+    D3DVERTEXELEMENT9 decl[] = {{ 0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0 }, //位置
+                                { 0, 12, D3DDECLTYPE_D3DCOLOR, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_COLOR, 0 },  //色
+                                { 0, 16, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 }, //テクスチャ座標
+                                D3DDECL_END() //最後に必ずD3DDECL_END()をつける
+                               };
 
     //---初期化処理---//
     pDevice = GetDevice();
@@ -32,8 +45,17 @@ void BILLBOARD::Draw(void)
         MessageBox(nullptr, TEXT("描画対象のテクスチャが存在しません"), TEXT("描画エラー"), MB_OK);
     }
 
+    //頂点の定義オブジェクトを作成する
+    hResult = pDevice->CreateVertexDeclaration(decl, &pVertexDeclaration);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("頂点情報の定義に失敗しました"), TEXT("描画エラー"), MB_OK);
+    }
+    //頂点定義をセット
+    hResult = pDevice->SetVertexDeclaration(pVertexDeclaration);
+
     //---方向設定---//
-    SIDEVIEWCAMERA::GetViewMtx(&mtxView);
+    SIDEVIEWCAMERA::GetViewMatrix(&mtxView);
     mtxWorld._11 = mtxView._11;
     mtxWorld._12 = mtxView._21;
     mtxWorld._13 = mtxView._31;
@@ -46,8 +68,8 @@ void BILLBOARD::Draw(void)
 
     //---書式設定---//
     // 頂点バッファをレンダリングパイプラインに設定
-    pDevice->SetFVF(FVF_VERTEX_3D);            //フォーマット設定
-    pDevice->SetTexture(0, pTexture->Image);   //テクスチャ設定
+    //pDevice->SetFVF(FVF_VERTEX_3D);            //フォーマット設定
+    //pDevice->SetTexture(0, pTexture->Image);   //テクスチャ設定
 
     //---頂点バッファによる描画---//
     // 移動を反映
@@ -55,11 +77,57 @@ void BILLBOARD::Draw(void)
     mtxWorld._42 = Transform.Position.y;
     mtxWorld._43 = Transform.Position.z;
 
-    // ワールドマトリックスの設定
-    pDevice->SetTransform(D3DTS_WORLD, &mtxWorld);
+    SIDEVIEWCAMERA::GetProjectionMatrix(&mtxProjection);
+    mtxWVP = mtxWorld * mtxView * mtxProjection;
 
-    // ポリゴンの描画
-    pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &Vertex, sizeof(VERTEX_3D));
+    hResult = Effect->SetTechnique("Gray");	//引数は任意のテクニックの名称
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("テクニックの設定に失敗しました"), TEXT("描画エラー"), MB_OK);
+    }
+
+    hResult = Effect->SetMatrix("WorldViewProjection", &mtxWVP);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("マトリクスの設定に失敗しました"), TEXT("描画エラー"), MB_OK);
+    }
+
+    hResult = Effect->SetTexture("g_Texture", pTexture->Image);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("テクスチャの設定に失敗しました"), TEXT("描画エラー"), MB_OK);
+    }
+
+    hResult = Effect->Begin(nullptr, 0);	//第一引数ではパスの数を取得できる
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("テクニックの適用を開始できませんでした"), TEXT("描画エラー"), MB_OK);
+    }
+
+    hResult = Effect->BeginPass(UINT(Gray));
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("テクニックの適用パスの設定に失敗しました"), TEXT("描画エラー"), MB_OK);
+    }
+
+    //ポリゴンの描画
+    hResult = pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 4, &Vertex, sizeof(CUSTOMVERTEX));
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("ポリゴンの描画に失敗しました"), TEXT("描画エラー"), MB_OK);
+    }
+
+    hResult = Effect->EndPass();//パス終了
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("テクニックの適用パスの終了に失敗しました"), TEXT("描画エラー"), MB_OK);
+    }
+
+    hResult = Effect->End();//エフェクト終了
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("テクニックの適用の終了に失敗しました"), TEXT("描画エラー"), MB_OK);
+    }
 }
 
 /////////////////////////////////////////////
@@ -77,11 +145,14 @@ HRESULT BILLBOARD::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVEC
     int nCounter;
     HRESULT hResult;
 
+    LPD3DXBUFFER pErrMessage;
+
     //---初期化処理---//
     Transform.Position = position;
     Transform.Rotation = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
     Transform.Scale = scale;
     UV = uv;
+    Gray = false;
 
     //---テクスチャの読み込み---//
     hResult = TEXTUREMANAGER::GetTexture(texturename, Texture);
@@ -95,13 +166,22 @@ HRESULT BILLBOARD::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVEC
     //---ビルボードの作成---//
     for (nCounter = 0; nCounter < 4; ++nCounter)
     {
-        Vertex.at(nCounter).Vertex.x = Transform.Position.x + Transform.Scale.x * (nCounter >> 1);
-        Vertex.at(nCounter).Vertex.y = Transform.Position.y + Transform.Scale.y * (nCounter & 1);
-        Vertex.at(nCounter).Vertex.z = 0.0F;
-        Vertex.at(nCounter).Normal = D3DXVECTOR3(0.0F, 0.0F, -1.0F);
-        Vertex.at(nCounter).Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);
-        Vertex.at(nCounter).Texture.x = (float)(nCounter & 1);
-        Vertex.at(nCounter).Texture.y = (float)((nCounter >> 1) & 1);
+        Vertex.at(nCounter).Position.x = Transform.Position.x + Transform.Scale.x * (nCounter >> 1);
+        Vertex.at(nCounter).Position.y = Transform.Position.y + Transform.Scale.y * (nCounter & 1);
+        Vertex.at(nCounter).Position.z = 0.0F;
+        Vertex.at(nCounter).Color = D3DCOLOR_ARGB(255, 255, 255, 255);
+        Vertex.at(nCounter).Texture.x = (float)(nCounter >> 1);
+        Vertex.at(nCounter).Texture.y = (float)!(nCounter & 1);
+    }
+
+    //---エフェクトの作成---//
+    hResult = D3DXCreateEffectFromFile(GetDevice(), TEXT("Data/GameScene/Gray.fx"), nullptr, nullptr, 0, nullptr, &Effect, &pErrMessage);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, (LPCTSTR)pErrMessage->GetBufferPointer(), TEXT("初期化エラー"), MB_OK);
+        pErrMessage->Release();
+        Uninitialize();
+        return hResult;
     }
 
     return hResult;
@@ -119,6 +199,7 @@ HRESULT BILLBOARD::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVEC
 void BILLBOARD::Uninitialize(void)
 {
     Texture.reset();
+    SAFE_RELEASE(Effect);
 }
 
 /////////////////////////////////////////////
@@ -130,21 +211,26 @@ void BILLBOARD::Uninitialize(void)
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void BILLBOARD::Update(DWORD number)
+void BILLBOARD::Update(void)
 {
-    //---各種宣言---//
-    int nCounter;       //カウンター
-    float fU;           //U値
-    float fV;           //V値
+    ////---各種宣言---//
+    //int nCounter;       //カウンター
+    //float fU;           //U値
+    //float fV;           //V値
 
-    //---値算出---//
-    fU = (number % UV.x) * (1.0F / UV.x);
-    fV = (number / UV.x) * (1.0F / UV.y);
+    ////---値算出---//
+    //fU = (number % UV.x) * (1.0F / UV.x);
+    //fV = (number / UV.x) * (1.0F / UV.y);
 
-    //---値更新---//
-    for (nCounter = 0; nCounter < 4; ++nCounter)
+    ////---値更新---//
+    //for (nCounter = 0; nCounter < 4; ++nCounter)
+    //{
+    //    Vertex.at(nCounter).Texture.x = fU + (nCounter % 2) * (1.0F / UV.x);
+    //    Vertex.at(nCounter).Texture.y = fV + (nCounter / 2) * (1.0F / UV.y);
+    //}
+
+    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
-        Vertex.at(nCounter).Texture.x = fU + (nCounter % 2) * (1.0F / UV.x);
-        Vertex.at(nCounter).Texture.y = fV + (nCounter / 2) * (1.0F / UV.y);
+        Gray = Gray ? false : true;
     }
 }

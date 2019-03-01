@@ -1,91 +1,130 @@
 //＝＝＝グローバル宣言＝＝＝//
-float4x4 g_mWorldViewProjection; //座標変換行列
-texture  g_Texture;              //テクスチャ
+float4x4 WorldViewProjection; //座標変換行列
+texture  g_Texture;           //テクスチャ
 
+//＝＝＝サンプラー定義＝＝＝//
 //テクスチャのサンプリング方法
 sampler MeshTextureSampler =
 sampler_state
 {
-    Texture = < g_Texture > //対象のテクスチャ(外部から受け取ります)
+    Texture = < g_Texture >;//対象のテクスチャ(外部から受け取ります)  
     MinFilter = LINEAR;     //縮小時のサンプリング(LINEAR→線形補完)
+
     MagFilter = LINEAR;     //拡大時
     MipFilter = NONE;       //ミップマップ
 
     //テクスチャアドレッシングモード
-    AddressU = Clamp;	            //Clanp→0～1以外の座標の時に端っこのピクセルをひきのばす）
+    AddressU = Clamp;	//（Clanp→0～1以外の座標の時に端っこのピクセルをひきのばす）
     AddressV = Clamp;
 };
 
+//＝＝＝構造体定義＝＝＝//
 //頂点シェーダの出力出力定義
-struct VS_OUTPUT
+struct VERTEX_INPUT
 {
-    float4 Pos : POSITION;
+    float4 Position : POSITION0;
     float4 Diffuse : COLOR0;
-    float2 TexUV : TEXCOORD0;
+    float2 Texture : TEXCOORD0;
+};
+
+//頂点シェーダの出力出力定義
+struct VERTEX_OUTPUT
+{
+    float4 Position : POSITION0;
+    float4 Diffuse : COLOR0;
+    float2 Texture : TEXCOORD0;
 };
 
 //ピクセルシェーダ出力定義
-struct PS_OUTPUT
+struct PIXEL_OUTPUT
 {
-    float4 RGB : COLOR0;
+    float4 Color : COLOR0;
 };
 
-//頂点シェーダ処理（主に座標変換）
-VS_OUTPUT RenderSceneVS(float4 Pos : POSITION, float4 aDiffuse : COLOR0, float2 vTexCoord0 : TEXCOORD0)
+//＝＝＝シェーダ定義＝＝＝//
+/////////////////////////////////////////////
+//関数名：DefaultVertexShader
+//
+//機能：通常の頂点シェーダ
+//
+//引数：(float3)位置
+//
+//戻り値：(float4)処理の成否
+/////////////////////////////////////////////
+VERTEX_OUTPUT DefaultVertexShader(VERTEX_INPUT input)
 {
-    VS_OUTPUT Out;
+    //---各種宣言---//
+    VERTEX_OUTPUT output;
 
-    Out.Pos = mul(Pos, g_mWorldViewProjection);
-    Out.TexUV = vTexCoord0;
-    Out.Diffuse = aDiffuse;
+    //---データの代入---//
+    output.Position = mul(input.Position, WorldViewProjection);
+    output.Diffuse = input.Diffuse;
+    output.Texture = input.Texture;
 
-    return Out;
+    return output;
 }
 
-//ピクセルシェーダ処理（テクスチャ色に頂点色を合成）
-PS_OUTPUT RenderScenePS(VS_OUTPUT In)
+/////////////////////////////////////////////
+//関数名：DefaultPixelShader
+//
+//機能：通常のピクセルシェーダ
+//
+//引数：(float3)位置
+//
+//戻り値：(float4)処理の成否
+/////////////////////////////////////////////
+PIXEL_OUTPUT DefaultPixelShader(VERTEX_OUTPUT input)
 {
-    PS_OUTPUT Out;
+    //---各種宣言---//
+    PIXEL_OUTPUT output;
 
-    Out.RGB = tex2D(MeshTextureSampler, In.TexUV) * In.Diffuse;
+    //---データの代入---//
+    output.Color = tex2D(MeshTextureSampler, input.Texture) * input.Diffuse;
 
-    return Out;
+    return output;
 }
 
-//ピクセルシェーダ処理(テクスチャ色に頂点色を合成してモノクロ化)
-PS_OUTPUT RenderScenePSMono(VS_OUTPUT In)
+/////////////////////////////////////////////
+//関数名：PixelToMono
+//
+//機能：モノクロ化
+//
+//引数：(float3)位置
+//
+//戻り値：(float4)処理の成否
+/////////////////////////////////////////////
+PIXEL_OUTPUT PixelToMono(VERTEX_OUTPUT input)
 {
-    PS_OUTPUT Out;
+    PIXEL_OUTPUT output;
 
     //テクスチャのピクセル色に頂点色を合成した色
-    float4 color = tex2D(MeshTextureSampler, In.TexUV) * In.Diffuse;
+    float4 color = tex2D(MeshTextureSampler, input.Texture) * input.Diffuse;
+    //float4 color = float4(0.0F, 0.0F, 0.0F, 1.0F);
 
     //モノクロ化にするときのRGBの分担割合。
-    float4 tomono = float4(0.298912, 0.586611, 0.114478, 0.0);
+    float4 tomono = float4(0.298912F, 0.586611F, 0.114478F, 0.0F);
 
     //テクスチャのピクセル色に頂点色を合成する
-    Out.RGB = dot(color, tomono);
+    output.Color = dot(color, tomono);
 
     //アルファ値だけは元のテクスチャに戻す
-    Out.RGB.w = color.w;
+    output.Color.w = color.w;
 
-    return Out;
+    return output;
 }
 
-//テクニックとパス
-//複数のテクニックやパスを定義すしてシェーダプログラムや引数を切り替えることができます。
-technique RenderScene
+//＝＝＝シェーダ呼び出し＝＝＝//
+technique Gray
 {
-    //カラー表示の場合
-    pass P0
+    pass Pass0
     {
-        VertexShader = compile vs_2_0 RenderSceneVS();
-        PixelShader = compile ps_2_0 RenderScenePS();
+        VertexShader = compile vs_2_0 DefaultVertexShader();
+        PixelShader = compile ps_2_0 DefaultPixelShader();
     }
-    //モノクロ表示の場合
-    pass P1
+
+    pass Pass1
     {
-        VertexShader = compile vs_2_0 RenderSceneVS();
-        PixelShader = compile ps_2_0 RenderScenePSMono();
+        VertexShader = compile vs_2_0 DefaultVertexShader();
+        PixelShader = compile ps_2_0 PixelToMono();
     }
 }

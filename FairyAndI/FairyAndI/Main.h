@@ -41,12 +41,6 @@ typedef std::basic_string<TCHAR> tstring;
 //＝＝＝構造体定義＝＝＝//
 typedef struct
 {
-    int Frame; //パターン番号
-    int Count; //フレーム数
-} MOTION;
-
-typedef struct
-{
     D3DXVECTOR3 Position;	//スクリーン座標
     float RHW;			    //RHW(常に1.0F)
     D3DCOLOR Diffuse;	    //頂点カラー(拡散反射色=物体本来の色)
