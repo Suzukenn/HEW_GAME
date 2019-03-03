@@ -1,0 +1,3 @@
+Data/GameScene/Shader/Gray.fx GRAY
+Data/GameScene/Shader/Model.fx MODEL
+Data/GameScene/Shader/Sprite.fx SPRITE

@@ -64,6 +64,7 @@ HRESULT TEXTUREMANAGER::Initialize(LPCTSTR filename)
     std::vector<FILEPARAMETER> conList;
 
     //---初期化処理---//
+    Texture.clear();
 
     //---オブジェクト準備---//
     //ファイルの設定

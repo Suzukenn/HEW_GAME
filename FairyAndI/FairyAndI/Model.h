@@ -7,6 +7,7 @@
 
 //‘O•ûéŒ¾//
 class MODELMANAGER;
+class SHADER;
 
 //ƒNƒ‰ƒXéŒ¾//
 class MODEL
@@ -24,6 +25,7 @@ class MODEL
 
     public:
         void Draw(bool);
+        void MODEL::Draw(std::weak_ptr<SHADER>&, LPCTSTR, UINT, D3DXMATRIX&);
 
         friend MODELMANAGER;
 };

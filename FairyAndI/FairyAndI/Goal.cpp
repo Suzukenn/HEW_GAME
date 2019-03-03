@@ -5,8 +5,12 @@
 #include "Fade.h"
 #include "Goal.h"
 #include "InputManager.h"
+#include "Model.h"
 #include "ModelManager.h"
+#include "Shader.h"
+#include "ShaderManager.h"
 #include "SceneManager.h"
+#include "SideViewCamera.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -50,6 +54,9 @@ void GOAL::Draw(void)
 {
     //---各種宣言---//
     D3DXMATRIX mtxWorld;
+    D3DXMATRIX mtxView;
+    D3DXMATRIX mtxProjection;
+    D3DXMATRIX mtxWorldViewProjection;
 
     std::shared_ptr<MODEL> pModel;
 
@@ -59,7 +66,7 @@ void GOAL::Draw(void)
 
     //設定
     Transform.MakeWorldMatrix(mtxWorld);
-    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
+    //GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---描画---//
     //描画対象チェック
@@ -71,7 +78,8 @@ void GOAL::Draw(void)
     }
 
     //描画
-    pModel->Draw(Gray);
+    //pModel->Draw(Gray);
+    pModel->Draw(Shader, TEXT("NonTextureModel"), (UINT)Gray, mtxWorld);
 }
 
 /////////////////////////////////////////////
@@ -102,6 +110,15 @@ HRESULT GOAL::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVECTOR3 ro
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("ゴールのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
+        return hResult;
+    }
+
+    //---シェーダーの取得---//
+    hResult = SHADERMANAGER::GetShader(TEXT("MODEL"), Shader);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("ゴール描画用のシェーダーの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
         return hResult;
     }

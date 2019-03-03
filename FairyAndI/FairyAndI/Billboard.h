@@ -8,13 +8,13 @@
 #include "Transform.h"
 
 //＝＝＝前方宣言＝＝＝//
+class SHADER;
 class TEXTURE;
 
 //＝＝＝構造体定義＝＝＝//
 typedef struct 
 {
     D3DVECTOR	Position;	//頂点の位置
-    D3DCOLOR	Color;	    //頂点の色
     D3DXVECTOR2 Texture;    //テクスチャ
 }CUSTOMVERTEX;
 
@@ -28,8 +28,8 @@ class BILLBOARD
 
         std::array<CUSTOMVERTEX, 4> Vertex;        //頂点バッファ
 
-        LPD3DXEFFECT Effect;
-        std::weak_ptr<TEXTURE> Texture;		    //テクスチャへのポインタ
+        std::weak_ptr<SHADER> Shader;
+        std::weak_ptr<TEXTURE> Texture;
 
     public:
         void Draw(void);

@@ -2,6 +2,8 @@
 #include "Billboard.h"
 #include "InputManager.h"
 #include "SideViewCamera.h"
+#include "Shader.h"
+#include "ShaderManager.h"
 #include "Texture.h"
 #include "TextureManager.h"
 
@@ -25,14 +27,14 @@ void BILLBOARD::Draw(void)
     D3DXMATRIX mtxWVP;
 
     LPDIRECT3DDEVICE9 pDevice;
+    std::shared_ptr<SHADER> pShader;
     std::shared_ptr<TEXTURE> pTexture;
 
     LPDIRECT3DVERTEXDECLARATION9 pVertexDeclaration; //頂点シェーダの頂点定義
 
     //パイプラインに渡す頂点データの構造を定義
     D3DVERTEXELEMENT9 decl[] = {{ 0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0 }, //位置
-                                { 0, 12, D3DDECLTYPE_D3DCOLOR, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_COLOR, 0 },  //色
-                                { 0, 16, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 }, //テクスチャ座標
+                                { 0, 12, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 }, //テクスチャ座標
                                 D3DDECL_END() //最後に必ずD3DDECL_END()をつける
                                };
 
@@ -45,6 +47,25 @@ void BILLBOARD::Draw(void)
         MessageBox(nullptr, TEXT("描画対象のテクスチャが存在しません"), TEXT("描画エラー"), MB_OK);
     }
 
+    pShader = Shader.lock();
+    if (!pShader)
+    {
+        MessageBox(nullptr, TEXT("描画に使用するシェーダーが存在しません"), TEXT("描画エラー"), MB_OK);
+    }
+
+    //---方向設定---//
+    SIDEVIEWCAMERA::GetViewMatrix(&mtxView);
+    D3DXMatrixInverse(&mtxWorld, nullptr, &mtxView);
+
+    //移動を反映
+    mtxWorld._41 = Transform.Position.x;
+    mtxWorld._42 = Transform.Position.y;
+    mtxWorld._43 = Transform.Position.z;
+
+    SIDEVIEWCAMERA::GetProjectionMatrix(&mtxProjection);
+    mtxWVP = mtxWorld * mtxView * mtxProjection;
+
+    //---書式設定---//
     //頂点の定義オブジェクトを作成する
     hResult = pDevice->CreateVertexDeclaration(decl, &pVertexDeclaration);
     if (FAILED(hResult))
@@ -53,77 +74,56 @@ void BILLBOARD::Draw(void)
     }
     //頂点定義をセット
     hResult = pDevice->SetVertexDeclaration(pVertexDeclaration);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("頂点情報の設定に失敗しました"), TEXT("描画エラー"), MB_OK);
+    }
 
-    //---方向設定---//
-    SIDEVIEWCAMERA::GetViewMatrix(&mtxView);
-    mtxWorld._11 = mtxView._11;
-    mtxWorld._12 = mtxView._21;
-    mtxWorld._13 = mtxView._31;
-    mtxWorld._21 = mtxView._12;
-    mtxWorld._22 = mtxView._22;
-    mtxWorld._23 = mtxView._32;
-    mtxWorld._31 = mtxView._13;
-    mtxWorld._32 = mtxView._23;
-    mtxWorld._33 = mtxView._33;
-
-    //---書式設定---//
-    // 頂点バッファをレンダリングパイプラインに設定
-    //pDevice->SetFVF(FVF_VERTEX_3D);            //フォーマット設定
-    //pDevice->SetTexture(0, pTexture->Image);   //テクスチャ設定
-
-    //---頂点バッファによる描画---//
-    // 移動を反映
-    mtxWorld._41 = Transform.Position.x;
-    mtxWorld._42 = Transform.Position.y;
-    mtxWorld._43 = Transform.Position.z;
-
-    SIDEVIEWCAMERA::GetProjectionMatrix(&mtxProjection);
-    mtxWVP = mtxWorld * mtxView * mtxProjection;
-
-    hResult = Effect->SetTechnique("Gray");	//引数は任意のテクニックの名称
+    //---エフェクトの適用---//
+    hResult = pShader->Effect->SetTechnique("Gray");
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("テクニックの設定に失敗しました"), TEXT("描画エラー"), MB_OK);
     }
 
-    hResult = Effect->SetMatrix("WorldViewProjection", &mtxWVP);
+    hResult = pShader->Effect->SetMatrix("WorldViewProjection", &mtxWVP);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("マトリクスの設定に失敗しました"), TEXT("描画エラー"), MB_OK);
     }
 
-    hResult = Effect->SetTexture("g_Texture", pTexture->Image);
+    hResult = pShader->Effect->SetTexture("Texture", pTexture->Image);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("テクスチャの設定に失敗しました"), TEXT("描画エラー"), MB_OK);
     }
 
-    hResult = Effect->Begin(nullptr, 0);	//第一引数ではパスの数を取得できる
+    hResult = pShader->Effect->Begin(nullptr, 0);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("テクニックの適用を開始できませんでした"), TEXT("描画エラー"), MB_OK);
     }
 
-    hResult = Effect->BeginPass(UINT(Gray));
+    hResult = pShader->Effect->BeginPass(UINT(Gray));
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("テクニックの適用パスの設定に失敗しました"), TEXT("描画エラー"), MB_OK);
     }
 
-    //ポリゴンの描画
+    //---描画---//
     hResult = pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 4, &Vertex, sizeof(CUSTOMVERTEX));
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("ポリゴンの描画に失敗しました"), TEXT("描画エラー"), MB_OK);
     }
 
-    hResult = Effect->EndPass();//パス終了
+    hResult = pShader->Effect->EndPass();
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("テクニックの適用パスの終了に失敗しました"), TEXT("描画エラー"), MB_OK);
     }
 
-    hResult = Effect->End();//エフェクト終了
+    hResult = pShader->Effect->End();
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("テクニックの適用の終了に失敗しました"), TEXT("描画エラー"), MB_OK);
@@ -144,8 +144,6 @@ HRESULT BILLBOARD::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVEC
     //---各種宣言---//
     int nCounter;
     HRESULT hResult;
-
-    LPD3DXBUFFER pErrMessage;
 
     //---初期化処理---//
     Transform.Position = position;
@@ -169,17 +167,16 @@ HRESULT BILLBOARD::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVEC
         Vertex.at(nCounter).Position.x = Transform.Position.x + Transform.Scale.x * (nCounter >> 1);
         Vertex.at(nCounter).Position.y = Transform.Position.y + Transform.Scale.y * (nCounter & 1);
         Vertex.at(nCounter).Position.z = 0.0F;
-        Vertex.at(nCounter).Color = D3DCOLOR_ARGB(255, 255, 255, 255);
         Vertex.at(nCounter).Texture.x = (float)(nCounter >> 1);
         Vertex.at(nCounter).Texture.y = (float)!(nCounter & 1);
     }
 
     //---エフェクトの作成---//
-    hResult = D3DXCreateEffectFromFile(GetDevice(), TEXT("Data/GameScene/Gray.fx"), nullptr, nullptr, 0, nullptr, &Effect, &pErrMessage);
+    hResult = SHADERMANAGER::GetShader(TEXT("GRAY"), Shader);
+    //hResult = D3DXCreateEffectFromFile(GetDevice(), TEXT("Data/GameScene/Gray.fx"), nullptr, nullptr, 0, nullptr, &Effect, &pErrMessage);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, (LPCTSTR)pErrMessage->GetBufferPointer(), TEXT("初期化エラー"), MB_OK);
-        pErrMessage->Release();
+        MessageBox(nullptr, TEXT("ビルボードのシェーダーの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
         return hResult;
     }
@@ -199,7 +196,7 @@ HRESULT BILLBOARD::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVEC
 void BILLBOARD::Uninitialize(void)
 {
     Texture.reset();
-    SAFE_RELEASE(Effect);
+    Shader.reset();
 }
 
 /////////////////////////////////////////////

@@ -85,6 +85,8 @@ HRESULT SOUNDMANAGER::Initialize(void)
     //---初期化処理---//
     Manager.reset(new IXAudio2*);
     MasterVoice.reset(new IXAudio2MasteringVoice*);
+    SourceVoice.clear();
+    WaveSound.clear();
 
     //---オブジェクト準備---//
     //XAudio2オブジェクトの作成

@@ -145,6 +145,8 @@
     <ClCompile Include="Heart.cpp" />
     <ClCompile Include="IceGimmick.cpp" />
     <ClCompile Include="Model.cpp" />
+    <ClCompile Include="Shader.cpp" />
+    <ClCompile Include="ShaderManager.cpp" />
     <ClCompile Include="SkillBox.cpp" />
     <ClCompile Include="ModelManager.cpp" />
     <ClCompile Include="OBB.cpp" />
@@ -213,6 +215,8 @@
     <ClInclude Include="Ground.h" />
     <ClInclude Include="Heart.h" />
     <ClInclude Include="IceGimmick.h" />
+    <ClInclude Include="Shader.h" />
+    <ClInclude Include="ShaderManager.h" />
     <ClInclude Include="SkillBox.h" />
     <ClInclude Include="Model.h" />
     <ClInclude Include="BaseScene.h" />
@@ -271,19 +275,17 @@
     <ResourceCompile Include="FairyAndI.rc" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Data\GameScene\Gray.fx">
+    <FxCompile Include="Data\GameScene\Shader\Model.fx">
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
       <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
       <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">2.0</ShaderModel>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </ExcludedFromBuild>
-      <CompileD2DCustomEffect Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-      </CompileD2DCustomEffect>
-      <CompileD2DCustomEffect Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-      </CompileD2DCustomEffect>
+    </FxCompile>
+    <FxCompile Include="Data\GameScene\Shader\Sprite.fx">
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">2.0</ShaderModel>
+      <ShaderType Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Effect</ShaderType>
+      <ShaderModel Condition="'$(Configuration)|$(Platform)'=='Release|x64'">2.0</ShaderModel>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -11,6 +11,7 @@
 #include "InputManager.h"
 #include "ModelManager.h"
 #include "ObjectFactory.h"
+#include "ShaderManager.h"
 #include "SceneManager.h"
 #include "SideViewCamera.h"
 #include "SoundManager.h"
@@ -62,6 +63,12 @@ HRESULT TRAINING::Initialize(void)
     }
 
     hResult = MODELMANAGER::Initialize(TEXT("Data/GameScene/Model/ModelList.txt"));
+    if (FAILED(hResult))
+    {
+        return hResult;
+    }
+
+    hResult = SHADERMANAGER::Initialize(TEXT("Data/GameScene/ShaderList.txt"));
     if (FAILED(hResult))
     {
         return hResult;
@@ -175,6 +182,7 @@ void TRAINING::Uninitialize(void)
     ACTORMANAGER::Uninitialize();
     COLLISIONMANAGER::Uninitialize();
     WORDMANAGER::Uninitialize();
+    SHADERMANAGER::Uninitialize();
 
     //---テクスチャの削除---//
     TEXTUREMANAGER::Uninitialize();
