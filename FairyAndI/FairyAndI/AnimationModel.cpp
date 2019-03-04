@@ -376,7 +376,7 @@ void ANIMATIONMODEL::RenderMeshContainer(LPD3DXMESHCONTAINER meshcontainer, LPD3
                 if (dwMatrixID != UINT_MAX)
                 {
                     //行列スタックに格納
-                    hResult = pDevice->SetTransform(D3DTS_WORLDMATRIX(dwWeightCounter), &(pMeshContainer->BoneOffsetMatrix[dwMatrixID] * (*pMeshContainer->BoneMatrix[dwMatrixID])));
+                    hResult = pDevice->SetTransform(D3DTS_WORLDMATRIX(dwWeightCounter), &(pMeshContainer->BoneOffsetMatrix.at(dwMatrixID) * (*pMeshContainer->BoneMatrix.at(dwMatrixID))));
                     if (FAILED(hResult))
                     {
                         MessageBox(nullptr, TEXT("行列スタックへの格納に失敗しました"), TEXT("描画エラー"), MB_ICONSTOP | MB_OK);
