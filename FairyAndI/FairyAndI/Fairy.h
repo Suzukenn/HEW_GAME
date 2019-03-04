@@ -8,14 +8,13 @@
 #include "Main.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
-#define	VALUE_MOVE_FAIRY 2.0F   // 移動速度
+#define	VALUE_MOVE_FAIRY 1.0F   // 移動速度
 
 //＝＝＝列挙型定義＝＝＝//
 typedef enum
 {
-    STATE_WAIT,
-    STATE_MOVE,
-    STATE_THINK,
+    STATE_CHASE,
+    STATE_SYNTHIESIS,
     STATE_MAX
 } STATE;
 
