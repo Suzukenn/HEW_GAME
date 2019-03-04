@@ -68,19 +68,19 @@ void BUTTON::Uninitialize(void)
 /////////////////////////////////////////////
 void BUTTON::Update(void)
 {
-    //---ŠeíéŒ¾---//
-    D3DXVECTOR2 vecCursorPoition;
+    ////---ŠeíéŒ¾---//
+    //D3DXVECTOR2 vecCursorPoition;
 
-    //---‰Šú‰»ˆ—---//
-    vecCursorPoition.x = (FLOAT)INPUTMANAGER::GetMousePosition().x;
-    vecCursorPoition.y = (FLOAT)INPUTMANAGER::GetMousePosition().y;
+    ////---‰Šú‰»ˆ—---//
+    //vecCursorPoition.x = (FLOAT)INPUTMANAGER::GetMousePosition().x;
+    //vecCursorPoition.y = (FLOAT)INPUTMANAGER::GetMousePosition().y;
 
-    //---”»’è---//
-    if (Position.x < vecCursorPoition.x && vecCursorPoition.x < (Position.x + Size.x))
-    {
-        if (Position.y < vecCursorPoition.y && vecCursorPoition.y < (Position.y + Size.y))
-        {
+    ////---”»’è---//
+    //if (Position.x < vecCursorPoition.x && vecCursorPoition.x < (Position.x + Size.x))
+    //{
+    //    if (Position.y < vecCursorPoition.y && vecCursorPoition.y < (Position.y + Size.y))
+    //    {
             Behavior();
-        }
-    }
+    //    }
+    //}
 }

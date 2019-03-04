@@ -1,13 +1,85 @@
 ﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
   
-  compilation object save succeeded; see D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\Model.cso
+  compilation object save succeeded; see C:\Users\tsuyoshi\Documents\GitHub\HEW_GAME\FairyAndI\x64\Release\Model.cso
+FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see C:\Users\tsuyoshi\Documents\GitHub\HEW_GAME\FairyAndI\x64\Release\Sprite.cso
+  ActorManager.cpp
+  AnimationModel.cpp
+  AnimationModelHierarchy.cpp
+  BackGround.cpp
+  BackImage.cpp
+  BatteryCannon.cpp
+  BatteryGimmick.cpp
+  Billboard.cpp
+  Bullet.cpp
+  Button.cpp
+  Canvas.cpp
+  CharacterFactory.cpp
+  Collision.cpp
+  CollisionManager.cpp
+  Element.cpp
+  Enemy.cpp
+  Fade.cpp
+  FireGimmick.cpp
+  GameClear.cpp
+  GimmickFactory.cpp
+  コンパイル中...
   Goal.cpp
+  Grenade.cpp
+  Ground.cpp
+  Heart.cpp
+  IceGimmick.cpp
   Model.cpp
+  Shader.cpp
   ShaderManager.cpp
+  SkillBox.cpp
+  ModelManager.cpp
+  OBB.cpp
+  ObjectFactory.cpp
+  SelectScene.cpp
+  SkillFactory.cpp
+  Sphere.cpp
+  SquareGauge.cpp
+  StageButton.cpp
+  Timer.cpp
+  Trap.cpp
+  Wall.cpp
+  コンパイル中...
+  WoodGimmick.cpp
+  WordManager.cpp
+  SideViewCamera.cpp
+  Fairy.cpp
+  FlexibleCamera.cpp
+  DirectionalLight.cpp
+  Field.cpp
+  Player.cpp
+  SelectMarker.cpp
+  WordList.cpp
+  WordMenu.cpp
+  Sprite.cpp
+  TextureManager.cpp
+  TrainingButton.cpp
+  TrainingScene.cpp
+  GameOver.cpp
+  GamePad.cpp
+  GameScene.cpp
+  InputManager.cpp
+  Keyboard.cpp
+  コンパイル中...
+  Main.cpp
+  Mouse.cpp
+  SceneManager.cpp
+  SoundManager.cpp
+  AnimationSprite.cpp
+  StartButton.cpp
+  Title.cpp
+  WavController.cpp
+  WordPlate.cpp
   コード生成しています。
-  148 of 5414 functions ( 2.7%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    43 functions had inline decision re-evaluated but remain unchanged
+  5417 of 5419 functions (100.0%) were compiled, the rest were copied from previous compilation.
+    72 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
-  FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
-  FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)
+  FairyAndI.vcxproj -> C:\Users\tsuyoshi\Documents\GitHub\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
+  FairyAndI.vcxproj -> C:\Users\tsuyoshi\Documents\GitHub\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)
