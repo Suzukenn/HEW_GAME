@@ -85,6 +85,8 @@ HRESULT SOUNDMANAGER::Initialize(void)
     //---初期化処理---//
     Manager.reset(new IXAudio2*);
     MasterVoice.reset(new IXAudio2MasteringVoice*);
+    SourceVoice.clear();
+    WaveSound.clear();
 
     //---オブジェクト準備---//
     //XAudio2オブジェクトの作成
@@ -216,7 +218,6 @@ void SOUNDMANAGER::Uninitialize(void)
 void SOUNDMANAGER::Play(tstring label)
 {
     //---各種宣言---//
-    XAUDIO2_VOICE_STATE sState;
     XAUDIO2_BUFFER bBuffer;
 
     //---バッファの値設定---//
@@ -225,19 +226,6 @@ void SOUNDMANAGER::Play(tstring label)
     bBuffer.pAudioData = &WaveSound.at(label).GetWaveData();
     bBuffer.Flags = XAUDIO2_END_OF_STREAM;
     bBuffer.LoopCount = XAUDIO2_LOOP_INFINITE * WaveSound.at(label).GetLoop();
-
-    //---状態取得---//
-    SourceVoice.at(label)->GetState(&sState);
-
-    //---再生判定---//
-    if (sState.BuffersQueued)
-    {
-        //一時停止
-        SourceVoice.at(label)->Stop(0);
-
-        //オーディオバッファの削除
-        SourceVoice.at(label)->FlushSourceBuffers();
-    }
 
     //---オーディオバッファの登録---//
     SourceVoice.at(label)->SubmitSourceBuffer(&bBuffer);

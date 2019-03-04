@@ -65,7 +65,7 @@ HRESULT WORDMENU::Initialize(void)
     int nCounter;
     HRESULT hResult;
 
-    const D3DXVECTOR2 vecListPosition[2] = { D3DXVECTOR2(50.0F, 500.0F), D3DXVECTOR2(750.0F, 500.0F) };
+    const D3DXVECTOR2 vecListPosition[2] = { D3DXVECTOR2(50.0F, 450.0F), D3DXVECTOR2(750.0F, 450.0F) };
     const D3DXVECTOR2 vecPanelPosition[2] = { D3DXVECTOR2(400.0F, 130.0F), D3DXVECTOR2(750.0F, 130.0F) };
     const LPCTSTR strWord[2] = { TEXT("ADJECTIVELIST"), TEXT("NOUNLIST") };
     std::vector<std::vector<tstring>> conList;
@@ -117,7 +117,7 @@ HRESULT WORDMENU::Initialize(void)
     //ワードリスト
     for (nCounter = 0; nCounter < 2; ++nCounter)
     {
-        hResult = List.at(nCounter).Initialize(strWord[nCounter], conList.at(nCounter), vecListPosition[nCounter], D3DXVECTOR2(500.0F, 200.0F));
+        hResult = List.at(nCounter).Initialize(strWord[nCounter], conList.at(nCounter), vecListPosition[nCounter], D3DXVECTOR2(500.0F, 250.0F));
         if (FAILED(hResult))
         {
             MessageBox(nullptr, TEXT("ワードリストの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -260,12 +260,20 @@ void WORDMENU::Update(void)
             {
                 if (FAILED(WORDMANAGER::GetWordLock(List.at(0).GetSelectWord(), bCheck)))
                 {
-                    MessageBox(nullptr, TEXT("単語が見つかりませんでした"), TEXT("エラー"), MB_ICONSTOP | MB_OK);
+                    MessageBox(nullptr, TEXT("単語が見つかりませんでした"), List.at(0).GetSelectWord(), MB_ICONSTOP | MB_OK);
                     Uninitialize();
                     exit(EXIT_FAILURE);
                 }
 
-                bCheck ? State = SETTING_STATE_SELECT : SOUNDMANAGER::Play(TEXT("SE_SHOT"));
+                if (bCheck)
+                {
+                    State = SETTING_STATE_SELECT;
+                }
+                else
+                {
+                    SOUNDMANAGER::Stop(TEXT("SE_SHOT"));
+                    SOUNDMANAGER::Play(TEXT("SE_SHOT"));
+                }
             }
             else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
             {
@@ -286,12 +294,20 @@ void WORDMENU::Update(void)
             {
                 if (FAILED(WORDMANAGER::GetWordLock(List.at(1).GetSelectWord(), bCheck)))
                 {
-                    MessageBox(nullptr, TEXT("単語が見つかりませんでした"), TEXT("エラー"), MB_ICONSTOP | MB_OK);
+                    MessageBox(nullptr, TEXT("単語が見つかりませんでした"), List.at(1).GetSelectWord(), MB_ICONSTOP | MB_OK);
                     Uninitialize();
                     exit(EXIT_FAILURE);
                 }
 
-                bCheck ? State = SETTING_STATE_SELECT : SOUNDMANAGER::Play(TEXT("SE_SHOT"));
+                if (bCheck)
+                {
+                    State = SETTING_STATE_SELECT;
+                }
+                else
+                {
+                    SOUNDMANAGER::Stop(TEXT("SE_SHOT"));
+                    SOUNDMANAGER::Play(TEXT("SE_SHOT"));
+                }
             }
             else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
             {

@@ -75,7 +75,7 @@ HRESULT CANVAS::Initialize(void)
     //ハート
     for (nCounter = 0; nCounter < MAX_PLAYER_HP; ++nCounter)
     {
-        hResult = Heart.at(nCounter).Initialize(TEXT("HEART"), D3DXVECTOR2(10.0F + 60.0F * nCounter, 10.0F), D3DXVECTOR2(50.0F, 50.0F));
+        hResult = Heart.at(nCounter).Initialize(TEXT("HEART"), D3DXVECTOR2(10.0F + 60.0F * nCounter, 10.0F), D3DXVECTOR2(90.0F, 70.0F));
         if (FAILED(hResult))
         {
             MessageBox(nullptr, TEXT("ハートの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -84,7 +84,7 @@ HRESULT CANVAS::Initialize(void)
     }
 
     //タイムゲージ
-    hResult = TimeGauge.Initialize(TEXT("GAUGEBACK"), TEXT("GAUGEMEMORY"), D3DXVECTOR2(400.0F, 10.0F), D3DXVECTOR2(200.0F, 50.0F));
+    hResult = TimeGauge.Initialize(TEXT("GAUGEBACK"), TEXT("GAUGEMEMORY"), D3DXVECTOR2(720.0F, -10.0F), D3DXVECTOR2(300.0F, 120.0F));
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("タイムゲージの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -92,7 +92,7 @@ HRESULT CANVAS::Initialize(void)
     }
 
     //タイマー
-	hResult = Timer.Initialize(TEXT("TIMER"), D3DXVECTOR2(SCREEN_CENTER_X, 35.0F), D3DXVECTOR2(17.0F, 35.0F), 10);
+	hResult = Timer.Initialize(TEXT("TIMER"), D3DXVECTOR2(580.0F, 30.0F), D3DXVECTOR2(30.0F, 60.0F), 10);
 	if (FAILED(hResult))
 	{
 		MessageBox(nullptr, TEXT("アイテムの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);

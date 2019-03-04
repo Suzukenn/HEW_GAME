@@ -11,7 +11,7 @@
 #include "InputManager.h"
 #include "ModelManager.h"
 #include "ObjectFactory.h"
-#include "Player.h"
+#include "ShaderManager.h"
 #include "SceneManager.h"
 #include "SideViewCamera.h"
 #include "SoundManager.h"
@@ -35,8 +35,8 @@ void TRAINING::Draw(void)
     ACTORMANAGER::Draw();
     Field.Draw();
     Ground.Draw();
-    Canvas.Draw();
     Back.Draw();
+    Canvas.Draw();
 }
 
 /////////////////////////////////////////////
@@ -63,6 +63,12 @@ HRESULT TRAINING::Initialize(void)
     }
 
     hResult = MODELMANAGER::Initialize(TEXT("Data/GameScene/Model/ModelList.txt"));
+    if (FAILED(hResult))
+    {
+        return hResult;
+    }
+
+    hResult = SHADERMANAGER::Initialize(TEXT("Data/GameScene/ShaderList.txt"));
     if (FAILED(hResult))
     {
         return hResult;
@@ -113,7 +119,7 @@ HRESULT TRAINING::Initialize(void)
     {
         return hResult;
     }
-    hResult = Back.Initialize(TEXT("BACKGROUND"), D3DXVECTOR3(0.0F, 0.0F, 100.0F), D3DXVECTOR3(SCREEN_WIDTH, SCREEN_HEIGHT, 1.0F));
+    hResult = Back.Initialize(TEXT("BACKGROUND"), D3DXVECTOR3(0.0F, 0.0F, 100.0F), D3DXVECTOR3(100.0F, 100.0F, 1.0F));
     if (FAILED(hResult))
     {
         return hResult;
@@ -176,6 +182,7 @@ void TRAINING::Uninitialize(void)
     ACTORMANAGER::Uninitialize();
     COLLISIONMANAGER::Uninitialize();
     WORDMANAGER::Uninitialize();
+    SHADERMANAGER::Uninitialize();
 
     //---テクスチャの削除---//
     TEXTUREMANAGER::Uninitialize();
@@ -197,7 +204,6 @@ void TRAINING::Update(void)
 {
     //---各種宣言---//
     static bool bCameraMode = false;
-
 
     //---オブジェクトの更新処理---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_START, TRIGGER))

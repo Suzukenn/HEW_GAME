@@ -1,37 +1,13 @@
-﻿  ActorManager.cpp
-  AnimationModel.cpp
-  AnimationModelHierarchy.cpp
-  BackGround.cpp
-  BatteryCannon.cpp
-  BatteryGimmick.cpp
-  Billboard.cpp
-  Bullet.cpp
-  Canvas.cpp
-  CharacterFactory.cpp
-  Element.cpp
-  Enemy.cpp
-  Fairy.cpp
-  GameClear.cpp
-  GameOver.cpp
-  GameScene.cpp
-  ModelManager.cpp
-  ObjectFactory.cpp
-  Player.cpp
-  SceneManager.cpp
-  コンパイル中...
-  SelectMarker.cpp
-  SelectScene.cpp
-  SideViewCamera.cpp
-  SoundManager.cpp
-  TextureManager.cpp
-  TrainingScene.cpp
-  Trap.cpp
-  WordManager.cpp
-  WordMenu.cpp
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\Model.cso
+  Goal.cpp
+  Model.cpp
+  ShaderManager.cpp
   コード生成しています。
-  240 of 4561 functions ( 5.3%) were compiled, the rest were copied from previous compilation.
-    6 functions were new in current compilation
-    154 functions had inline decision re-evaluated but remain unchanged
+  148 of 5414 functions ( 2.7%) were compiled, the rest were copied from previous compilation.
+    1 functions were new in current compilation
+    43 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)

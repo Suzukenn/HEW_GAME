@@ -197,6 +197,12 @@
     <ClCompile Include="Model.cpp">
       <Filter>ソースコード\Parts\3D</Filter>
     </ClCompile>
+    <ClCompile Include="ShaderManager.cpp">
+      <Filter>ソースコード\System\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Shader.cpp">
+      <Filter>ソースコード\System\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -425,6 +431,12 @@
     <ClInclude Include="Texture.h">
       <Filter>ソースコード\Parts\2D</Filter>
     </ClInclude>
+    <ClInclude Include="ShaderManager.h">
+      <Filter>ソースコード\System\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader.h">
+      <Filter>ソースコード\System\Shader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="ソースコード">
@@ -511,6 +523,9 @@
     <Filter Include="ソースコード\System\Parameter">
       <UniqueIdentifier>{0db597a0-282e-4dc2-a2b7-362c31e9754b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ソースコード\System\Shader">
+      <UniqueIdentifier>{df7cd741-75d6-448f-8110-2831c6512da6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="FairyAndI.APS">
@@ -521,5 +536,13 @@
     <ResourceCompile Include="FairyAndI.rc">
       <Filter>リソース</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Data\GameScene\Shader\Model.fx">
+      <Filter>ソースコード\System\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Data\GameScene\Shader\Sprite.fx">
+      <Filter>ソースコード\System\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

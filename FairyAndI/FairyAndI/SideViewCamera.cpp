@@ -3,7 +3,6 @@
 #include "Player.h"
 #include "SideViewCamera.h"
 
-
 //＝＝＝定数・マクロ定義＝＝＝//
 #define	CAM_POS_P_X			(0.0f)					// カメラの視点初期位置(X座標)
 #define	CAM_POS_P_Y			(100.0f)				// カメラの視点初期位置(Y座標)
@@ -23,6 +22,7 @@ D3DXVECTOR3	SIDEVIEWCAMERA::ReversoPoint;
 D3DXVECTOR3 SIDEVIEWCAMERA::UpVector;
 float SIDEVIEWCAMERA::Interval;
 D3DXMATRIX SIDEVIEWCAMERA::ViewMatrix;
+D3DXMATRIX SIDEVIEWCAMERA::ProjectionMatrix;
 bool SIDEVIEWCAMERA::PositionPlace;
 
 /////////////////////////////////////////////
@@ -66,8 +66,6 @@ HRESULT SIDEVIEWCAMERA::SetCamera(void)
 {
     //---各種宣言---//
     HRESULT hResult;
-    D3DXMATRIX mtxView;
-    D3DXMATRIX mtxProjection;
     LPDIRECT3DDEVICE9 pDevice;
 
     //---初期化処理---//
@@ -75,13 +73,13 @@ HRESULT SIDEVIEWCAMERA::SetCamera(void)
 
     //---ビューマトリクスの設定---//
     //初期化
-    D3DXMatrixIdentity(&mtxView);
+    D3DXMatrixIdentity(&ViewMatrix);
 
     //作成
-    D3DXMatrixLookAtLH(&mtxView, &Position, &ReversoPoint, &UpVector);
+    D3DXMatrixLookAtLH(&ViewMatrix, &Position, &ReversoPoint, &UpVector);
 
     //設定
-    hResult = pDevice->SetTransform(D3DTS_VIEW, &mtxView);
+    hResult = pDevice->SetTransform(D3DTS_VIEW, &ViewMatrix);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("サイドビューカメラのビューマトリクスの設定に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -90,20 +88,18 @@ HRESULT SIDEVIEWCAMERA::SetCamera(void)
 
     //---プロジェクションマトリックス設定---//
     //初期化
-    D3DXMatrixIdentity(&mtxProjection);
+    D3DXMatrixIdentity(&ProjectionMatrix);
 
     //作成
-    D3DXMatrixPerspectiveFovLH(&mtxProjection, D3DXToRadian(45.0F), SCREEN_WIDTH / SCREEN_HEIGHT, 10.0F, 1000.0F);
+    D3DXMatrixPerspectiveFovLH(&ProjectionMatrix, D3DXToRadian(45.0F), SCREEN_WIDTH / SCREEN_HEIGHT, 10.0F, 1000.0F);
 
     //設定
-    hResult = pDevice->SetTransform(D3DTS_PROJECTION, &mtxProjection);
+    hResult = pDevice->SetTransform(D3DTS_PROJECTION, &ProjectionMatrix);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("サイドビューカメラのプロジェクションマトリクスの設定に失敗しました"), TEXT("初期化エラー"), MB_OK);
         return hResult;
     }
-
-    ViewMatrix = mtxView;
 
     return hResult;
 }
@@ -193,7 +189,28 @@ D3DXVECTOR3 SIDEVIEWCAMERA::GetRotation(void)
 }
 
 /////////////////////////////////////////////
-//関数名：GetViewMtx
+//関数名：GetProjectionMatrix
+//
+//機能：カメラのプロジェクションマトリクスの取得
+//
+//引数：(LPD3DXMATRIX)格納マトリクス
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void SIDEVIEWCAMERA::GetProjectionMatrix(LPD3DXMATRIX projectionmatrix)
+{
+    if (projectionmatrix)
+    {
+        *projectionmatrix = ProjectionMatrix;
+    }
+    else
+    {
+        projectionmatrix = nullptr;
+    }
+}
+
+/////////////////////////////////////////////
+//関数名：GetViewMatrix
 //
 //機能：カメラのビューマトリクスの取得
 //
@@ -201,14 +218,14 @@ D3DXVECTOR3 SIDEVIEWCAMERA::GetRotation(void)
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void SIDEVIEWCAMERA::GetViewMtx(LPD3DXMATRIX pMtxView)
+void SIDEVIEWCAMERA::GetViewMatrix(LPD3DXMATRIX viewmatrix)
 {
-    if (pMtxView)
+    if (viewmatrix)
     {
-        *pMtxView = ViewMatrix;
+        *viewmatrix = ViewMatrix;
     }
     else
     {
-        pMtxView = nullptr;
+        viewmatrix = nullptr;
     }
 }

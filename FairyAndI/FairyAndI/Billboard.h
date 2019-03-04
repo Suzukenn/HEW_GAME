@@ -8,24 +8,34 @@
 #include "Transform.h"
 
 //＝＝＝前方宣言＝＝＝//
+class SHADER;
 class TEXTURE;
+
+//＝＝＝構造体定義＝＝＝//
+typedef struct 
+{
+    D3DVECTOR	Position;	//頂点の位置
+    D3DXVECTOR2 Texture;    //テクスチャ
+}CUSTOMVERTEX;
 
 //＝＝＝クラス宣言＝＝＝//
 class BILLBOARD
 {
     protected:
+        bool Gray;
         TRANSFORM Transform;
         POINT UV;
 
-        std::array<VERTEX_3D, 4> Vertex;        //頂点バッファ
+        std::array<CUSTOMVERTEX, 4> Vertex;        //頂点バッファ
 
-        std::weak_ptr<TEXTURE> Texture;		    //テクスチャへのポインタ
+        std::weak_ptr<SHADER> Shader;
+        std::weak_ptr<TEXTURE> Texture;
 
     public:
         void Draw(void);
         HRESULT Initialize(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3, POINT uv = { 1, 1 });
         void Uninitialize(void);
-        void Update(DWORD);
+        void Update(void);
 };
 
 #endif

@@ -251,7 +251,7 @@ HRESULT MODELMANAGER::GetModel(LPCTSTR modelname, std::weak_ptr<MODEL>& address)
     }
     catch (const std::out_of_range&)
     {
-        MessageBox(nullptr, TEXT("モデルが存在しません"), TEXT("エラー"), MB_ICONSTOP | MB_OK);
+        MessageBox(nullptr, TEXT("モデルが存在しません"), modelname, MB_ICONSTOP | MB_OK);
         return E_FAIL;
     }
     return S_OK;

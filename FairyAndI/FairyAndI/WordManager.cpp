@@ -28,9 +28,6 @@ HRESULT WORDMANAGER::CreateWord(void)
     std::wstring strNoun;
     std::ifstream file;
 
-    //---初期化処理---//
-    NounToAdjective.clear();
-
     //---ファイルの読み込み---//
     file.open("Data/GameScene/Word/WordPair.txt");
     if (file.fail())
@@ -76,6 +73,12 @@ HRESULT WORDMANAGER::Initialize(void)
     HRESULT hResult;
 
     std::vector<FILEPARAMETER> conList;
+
+    //---初期化処理---//
+    NounLock.clear();
+    AdjectiveLock.clear();
+    SkillLock.clear();
+    NounToAdjective.clear();
 
     //---オブジェクト準備---//
     //ワードの準備

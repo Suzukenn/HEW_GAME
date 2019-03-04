@@ -8,13 +8,14 @@
 class SIDEVIEWCAMERA
 {
 	private:
-        static D3DXVECTOR3 Position;					//位置
-        static D3DXVECTOR3 Rotation;					//向き
-        static D3DXVECTOR3 ReversoPoint;				//カメラの注視点
-        static D3DXVECTOR3 UpVector;				    //カメラの上方向
-        static float Interval;                         //視点と注視点の距離
+        static D3DXVECTOR3 Position;			//位置
+        static D3DXVECTOR3 Rotation;			//向き
+        static D3DXVECTOR3 ReversoPoint;		//カメラの注視点
+        static D3DXVECTOR3 UpVector;			//カメラの上方向
+        static float Interval;                  //視点と注視点の距離
 
-        static D3DXMATRIX ViewMatrix;				//ビューマトリックス
+        static D3DXMATRIX ViewMatrix;			//ビューマトリックス
+        static D3DXMATRIX ProjectionMatrix;		//プロジェクションマトリックス
         static bool PositionPlace;				//左右判定(?)	右true	左false
 
 	public:
@@ -25,7 +26,8 @@ class SIDEVIEWCAMERA
         static HRESULT SetCamera(void);
 
         static D3DXVECTOR3 GetRotation(void);
-        static void GetViewMtx(LPD3DXMATRIX);
+        static void GetViewMatrix(LPD3DXMATRIX);
+        static void GetProjectionMatrix(LPD3DXMATRIX);
 };
 
 #endif

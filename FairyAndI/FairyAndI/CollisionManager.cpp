@@ -43,8 +43,6 @@ void COLLISIONMANAGER::Destroy(COLLISION* collision)
 HRESULT COLLISIONMANAGER::Initialize(void)
 {
     //---äeéÌêÈåæ---//
-    HRESULT hResult;
-
     std::unordered_map<tstring, bool>conWork;
 
     //---èâä˙âªèàóù---//
@@ -52,7 +50,6 @@ HRESULT COLLISIONMANAGER::Initialize(void)
     DestroyCollision.clear();
     HitList.clear();
     HitOpponent.clear();
-    hResult = S_OK;
 
     //---è’ìÀÉåÉCÉÑÅ[ÇÃê›íË---//
     conWork.emplace(TEXT("Character"), true);
@@ -85,7 +82,7 @@ HRESULT COLLISIONMANAGER::Initialize(void)
     conWork.emplace(TEXT("Object"), true);
     CollsitionLayer.emplace(TEXT("Object"), conWork);
 
-    return hResult;
+    return S_OK;
 }
 
 /////////////////////////////////////////////

@@ -1,3 +1,5 @@
-﻿  TrainingScene.cpp
+﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
+  
+  compilation object save succeeded; see D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Debug\Model.cso
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.exe
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.pdb (Partial PDB)

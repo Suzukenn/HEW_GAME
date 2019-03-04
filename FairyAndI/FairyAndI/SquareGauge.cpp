@@ -28,14 +28,17 @@ void SQUAREGAUGE::Draw(void)
     }
 
     //---•`‰æ---//
-    Back.Draw();
 
+    //ƒƒ‚ƒŠ
     //---‘Ž®Ý’è---//
     pDevice->SetFVF(FVF_VERTEX_2D);                //ƒtƒH[ƒ}ƒbƒgÝ’è
     pDevice->SetTexture(0, pMemoryTexture->Image); //ƒeƒNƒXƒ`ƒƒÝ’è
 
     //---’¸“_ƒoƒbƒtƒ@‚É‚æ‚é”wŒi•`‰æ---//
     pDevice->DrawPrimitiveUP(D3DPT_TRIANGLESTRIP, 2, &MemoryVertex, sizeof(VERTEX_2D));
+
+    //”wŒi
+    Back.Draw();
 }
 
 /////////////////////////////////////////////
@@ -55,7 +58,9 @@ HRESULT SQUAREGAUGE::Initialize(LPCTSTR background, LPCTSTR gauge, D3DXVECTOR2 p
 
     //---‰Šú‰»ˆ—---//
     Percent = 0.5F;
-    Size = size;
+    Size.x = 207.0F;
+    Size.y = 30.0F;
+    Percent = 0.5F;
 
     //”wŒi
     hResult = Back.Initialize(background, position, size);
@@ -81,8 +86,8 @@ HRESULT SQUAREGAUGE::Initialize(LPCTSTR background, LPCTSTR gauge, D3DXVECTOR2 p
     {
         MemoryVertex.at(nCounter).U = (float)(nCounter & 1);
         MemoryVertex.at(nCounter).V = (float)((nCounter >> 1) & 1);
-        MemoryVertex.at(nCounter).Position.x = position.x + MemoryVertex.at(nCounter).U * Size.x;
-        MemoryVertex.at(nCounter).Position.y = position.y + MemoryVertex.at(nCounter).V * Size.y;
+        MemoryVertex.at(nCounter).Position.x = position.x + 25.0F + MemoryVertex.at(nCounter).U * Size.x;
+        MemoryVertex.at(nCounter).Position.y = position.y + 73.0F + MemoryVertex.at(nCounter).V * Size.y;
         MemoryVertex.at(nCounter).Position.z = 0.0F;
         MemoryVertex.at(nCounter).RHW = 1.0F;
         MemoryVertex.at(nCounter).Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);

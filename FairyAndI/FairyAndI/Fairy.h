@@ -13,8 +13,9 @@
 //—ñ‹“Œ^’è‹`//
 typedef enum
 {
-    STATE_CHASE,
-    STATE_SYNTHIESIS,
+    STATE_WAIT,
+    STATE_MOVE,
+    STATE_THINK,
     STATE_MAX
 } STATE;
 
