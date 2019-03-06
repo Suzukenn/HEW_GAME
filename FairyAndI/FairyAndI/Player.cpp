@@ -11,6 +11,7 @@
 #include "SideViewCamera.h"
 #include "SkillFactory.h"
 #include "Sphere.h"
+#include "SquareGauge.h"
 #include "WordMenu.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
@@ -180,10 +181,13 @@ void PLAYER::Update(void)
     Move.x = 0.0F;
 
     //---フリーズ判定---//
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    /*if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Gray = !Gray;
-    }
+    }*/
+
+	Gray = SQUAREGAUGE::GetFairyTime();
+
     if (Gray)
     {
         Model.SetSpeed(0.0);

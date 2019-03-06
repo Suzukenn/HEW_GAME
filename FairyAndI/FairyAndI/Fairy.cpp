@@ -8,6 +8,7 @@
 #include "Player.h"
 #include "SideViewCamera.h"
 #include "Sphere.h"
+#include "SquareGauge.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
 #define	VALUE_ROTATE_FAIRY	(D3DX_PI * 0.02F)		// 回転速度
@@ -111,8 +112,8 @@ void FAIRY::OnCollision(COLLISION* opponent)
     //プレイヤーの後ろにつく
     if (opponent->Owner->GetTag() == TEXT("Player"))
     {
-        Move.x = 0.0F;
-        Move.y = 0.0F;
+       /* Move.x = 0.0F;
+        Move.y = 0.0F;*/
     }
     else if (opponent->Owner->GetTag() == TEXT("Element"))
     {
@@ -213,6 +214,11 @@ void FAIRY::Update(void)
         bThink = !bThink;
         Model.ChangeAnimation(bThink ? STATE_THINK : (DWORD)State);
     }
+	else if (SQUAREGAUGE::GetFairyTime() == false)
+	{
+		bThink = false;
+		Model.ChangeAnimation(bThink ? STATE_THINK : (DWORD)State);
+	}
 
     //ボタンを押したらアイテムを取りに行く
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_X, TRIGGER))
@@ -236,44 +242,35 @@ void FAIRY::Update(void)
     }
 
     //移動量設定
-    if (vecFairyDistance.x < 0.1F && vecFairyDistance.y < 0.1F)
+    if (vecFairyDistance.x == 0.1F && vecFairyDistance.y == 0.1F)
     {
-        vecFairyDistance.x = 0.0001F; //atan2エラー防止
+        vecFairyDistance.x += 0.0001F; //atan2エラー防止
     }
 
     ToTargetAngle = atan2f(vecFairyDistance.y, vecFairyDistance.x);
 
     //移動量格納
-    //Move.x = cosf(ToTargetAngle) * VALUE_MOVE_FAIRY;
-    //Move.y = sinf(ToTargetAngle) * VALUE_MOVE_FAIRY + (sinf(D3DXToRadian(-180.0F) + D3DX_PI / 60.0F * nFrameCount) + 1.0F) * 0.5F;
+    Move.x = cosf(ToTargetAngle) * VALUE_MOVE_FAIRY;
+    Move.y = sinf(ToTargetAngle) * VALUE_MOVE_FAIRY + (sinf(D3DXToRadian(-180.0F) + D3DX_PI / 60.0F * nFrameCount) + 1.0F) * 0.5F;
 
     if (!Collection)
     {
-        if (Transform.Position.x >= PLAYER::GetPlayerPosition().x - 20.0F && Transform.Position.x <= PLAYER::GetPlayerPosition().x + 20.0F)
+        if (Transform.Position.x >= PLAYER::GetPlayerPosition().x - 5.0F && Transform.Position.x <= PLAYER::GetPlayerPosition().x + 5.0F)
         {
-            if (Transform.Position.y >= PLAYER::GetPlayerPosition().y - 20.0F && Transform.Position.y <= PLAYER::GetPlayerPosition().y + 20.0F)
+			Transform.Rotation.y = PLAYER::GetPlayerRotation().y;
+			Move.x = 0.0F;
+            if (Transform.Position.y >= PLAYER::GetPlayerPosition().y - 5.0F && Transform.Position.y <= PLAYER::GetPlayerPosition().y + 5.0F)
             {
-                Move.x = cosf(ToTargetAngle) * VALUE_MOVE_FAIRY;
-                Move.y = sinf(ToTargetAngle) * VALUE_MOVE_FAIRY + (sinf(D3DXToRadian(-180.0F) + D3DX_PI / 60.0F * nFrameCount) + 1.0F) * 0.5F;
+				Move.y = (sinf(D3DXToRadian(-180.0F) + D3DX_PI / 60.0F * nFrameCount) + 1.0F) * 0.5F;
             }
-        }
-        else if (Transform.Position.x <= PLAYER::GetPlayerPosition().x + 20.0F && Transform.Position.x >= PLAYER::GetPlayerPosition().x - 20.0F)
-        {
-            if (Transform.Position.y <= PLAYER::GetPlayerPosition().y + 20.0F && Transform.Position.y >= PLAYER::GetPlayerPosition().y - 20.0F)
-            {
-                Move.x = -cosf(ToTargetAngle) * VALUE_MOVE_FAIRY;
-                Move.y = -sinf(ToTargetAngle) * VALUE_MOVE_FAIRY + (sinf(D3DXToRadian(-180.0F) + D3DX_PI / 60.0F * nFrameCount) + 1.0F) * 0.5F;
-            }
-        }
-        else
-        {
-            Move.x = 0.0F;
-            Move.y = 0.0F;
         }
     }
     //アニメーションの変更
-    State = Move == D3DXVECTOR3(0.0F, 0.0F, 0.0F) ? STATE_WAIT : STATE_MOVE;
-    Model.ChangeAnimation((DWORD)State);
+	if (!bThink)
+	{
+		State = Move.x == 0.0F ? STATE_WAIT : STATE_MOVE;
+		Model.ChangeAnimation((DWORD)State);
+	}
 
     //プレイヤーとの当たり判定
 		//if (CollisionBall(&Position, &playerPos, 15.0F, 15.0F))

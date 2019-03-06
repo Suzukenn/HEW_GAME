@@ -1,7 +1,10 @@
 //ÅÅÅÅÅÅÉwÉbÉ_ÉtÉ@ÉCÉãì«Ç›çûÇ›ÅÅÅÅÅÅ//
+#include "InputManager.h"
 #include "SquareGauge.h"
 #include "Texture.h"
 #include "TextureManager.h"
+
+bool SQUAREGAUGE::FairyTime;
 
 //ÅÅÅÅÅÅä÷êîíËã`ÅÅÅÅÅÅ//
 /////////////////////////////////////////////
@@ -61,6 +64,7 @@ HRESULT SQUAREGAUGE::Initialize(LPCTSTR background, LPCTSTR gauge, D3DXVECTOR2 p
     Size.x = 207.0F;
     Size.y = 30.0F;
     Percent = 0.5F;
+	FairyTime = false;
 
     //îwåi
     hResult = Back.Initialize(background, position, size);
@@ -122,6 +126,47 @@ void SQUAREGAUGE::Uninitialize(void)
 /////////////////////////////////////////////
 void SQUAREGAUGE::Update(void)
 {
+	static int GaugeCnt;	//ÉQÅ[ÉWÇÃëùå∏ÇÃïbêîÉJÉEÉìÉg
+
+	if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+	{
+		FairyTime = FairyTime ? false : true;
+	}
+
+	++GaugeCnt;
+
+	if (FairyTime)
+	{
+		//ÉQÅ[ÉWå∏è≠
+		if (GaugeCnt > 60 / 10)
+		{
+			GaugeCnt = 0;
+			Percent -= 0.01F;
+		}
+		//å¿äEílï‚ê≥
+		if (Percent < 0.0F)
+		{
+			FairyTime = false;
+			Percent = 0.0F;
+		}
+
+	}
+	else
+	{
+		//ÉQÅ[ÉWëùâ¡
+		if (GaugeCnt > 60 / 10)
+		{
+			GaugeCnt = 0;
+			Percent += 0.01F;
+		}
+		//å¿äEílï‚ê≥
+		if (Percent > 1.0F)
+		{
+			Percent = 1.0F;
+		}
+	}
+
+	//ÉQÅ[ÉWîΩâf
     MemoryVertex.at(1).Position.x = MemoryVertex.at(0).Position.x + Size.x * Percent;
     MemoryVertex.at(3).Position.x = MemoryVertex.at(2).Position.x + Size.x * Percent;
 }

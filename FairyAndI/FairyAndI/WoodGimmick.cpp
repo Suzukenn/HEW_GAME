@@ -4,6 +4,7 @@
 #include "CollisionManager.h"
 #include "InputManager.h"
 #include "ModelManager.h"
+#include "SquareGauge.h"
 #include "WoodGimmick.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
@@ -163,8 +164,9 @@ void WOODGIMMICK::Uninitialize(void)
 /////////////////////////////////////////////
 void WOODGIMMICK::Update(void)
 {	
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+  /*  if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Gray = !Gray;
-    }
+    }*/
+	Gray = SQUAREGAUGE::GetFairyTime();
 }

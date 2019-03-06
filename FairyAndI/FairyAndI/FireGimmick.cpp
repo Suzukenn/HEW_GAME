@@ -6,6 +6,7 @@
 #include "InputManager.h"
 #include "ModelManager.h"
 #include "Skill.h"
+#include "SquareGauge.h"
 
 //ÅÅÅÅÅÅä÷êîíËã`ÅÅÅÅÅÅ//
 /////////////////////////////////////////////
@@ -176,8 +177,11 @@ void FIREGIMMICK::Uninitialize(void)
 /////////////////////////////////////////////
 void FIREGIMMICK::Update(void)
 {	
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    /*if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Gray = !Gray;
-    }
+    }*/
+
+	Gray = SQUAREGAUGE::GetFairyTime();
+
 }
