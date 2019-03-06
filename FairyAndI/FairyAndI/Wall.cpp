@@ -2,6 +2,7 @@
 #include "CollisionManager.h"
 #include "InputManager.h"
 #include "ModelManager.h"
+#include "SquareGauge.h"
 #include "Wall.h"
 
 //ŠÖ”’è‹`//
@@ -155,8 +156,9 @@ void WALL::Uninitialize(void)
 /////////////////////////////////////////////
 void WALL::Update(void)
 {
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+  /*  if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Gray = !Gray;
-    }
+    }*/
+	Gray = SQUAREGAUGE::GetFairyTime();
 }

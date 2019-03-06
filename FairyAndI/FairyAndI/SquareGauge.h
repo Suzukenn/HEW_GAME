@@ -18,6 +18,7 @@ class SQUAREGAUGE
         std::array<VERTEX_2D, 4> MemoryVertex;                //頂点バッファ
         std::weak_ptr<TEXTURE> MemoryTexture;    //テクスチャへのポインタ
         SPRITE Back;
+		static bool FairyTime;
 
     public:
         void Draw(void);
@@ -27,6 +28,7 @@ class SQUAREGAUGE
 
         float GetPercent(void) { return Percent; }
         void SetPercent(float percent) { Percent = percent; }
+		static bool GetFairyTime(void) { return FairyTime; }
 };
 
 #endif

@@ -203,6 +203,9 @@
     <ClCompile Include="Shader.cpp">
       <Filter>ソースコード\System\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="StageButton.cpp">
+      <Filter>ソースコード\UI\Button</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -436,6 +439,9 @@
     </ClInclude>
     <ClInclude Include="Shader.h">
       <Filter>ソースコード\System\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="StageButton.h">
+      <Filter>ソースコード\UI\Button</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

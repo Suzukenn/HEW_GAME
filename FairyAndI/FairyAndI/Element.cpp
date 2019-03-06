@@ -5,6 +5,7 @@
 #include "Element.h"
 #include "InputManager.h"
 #include "ModelManager.h"
+#include "SquareGauge.h"
 #include "WordManager.h"
 
 //ŠÖ”’è‹`//
@@ -163,8 +164,10 @@ void ELEMENT::Uninitialize(void)
 /////////////////////////////////////////////
 void ELEMENT::Update(void)
 {
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+   /* if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Gray = !Gray;
-    }
+    }*/
+	Gray = SQUAREGAUGE::GetFairyTime();
+
 }

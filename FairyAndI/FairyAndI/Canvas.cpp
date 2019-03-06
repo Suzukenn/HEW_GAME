@@ -147,10 +147,11 @@ void CANVAS::Update(void)
     int nCounter;
 
     //---ï\é¶ÉÇÅ[ÉhêÿÇËë÷Ç¶---//
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+  /*  if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Mode = !Mode;
-    }
+    }*/
+	Mode = SQUAREGAUGE::GetFairyTime();
 
     for (nCounter = 0; nCounter < MAX_PLAYER_HP; ++nCounter)
     {

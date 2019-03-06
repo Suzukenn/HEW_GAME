@@ -4,6 +4,7 @@
 #include "SideViewCamera.h"
 #include "Shader.h"
 #include "ShaderManager.h"
+#include "SquareGauge.h"
 #include "Texture.h"
 #include "TextureManager.h"
 
@@ -226,8 +227,9 @@ void BILLBOARD::Update(void)
     //    Vertex.at(nCounter).Texture.y = fV + (nCounter / 2) * (1.0F / UV.y);
     //}
 
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+   /* if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Gray = Gray ? false : true;
-    }
+    }*/
+	Gray = SQUAREGAUGE::GetFairyTime();
 }

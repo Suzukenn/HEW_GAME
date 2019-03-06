@@ -11,6 +11,7 @@
 #include "ShaderManager.h"
 #include "SceneManager.h"
 #include "SideViewCamera.h"
+#include "SquareGauge.h"
 
 //ÅÅÅÅÅÅä÷êîíËã`ÅÅÅÅÅÅ//
 /////////////////////////////////////////////
@@ -179,10 +180,12 @@ void GOAL::Uninitialize(void)
 /////////////////////////////////////////////
 void GOAL::Update(void)
 {
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    /*if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Gray = !Gray;
-    }
+    }*/
+
+	Gray = SQUAREGAUGE::GetFairyTime();
 
     if (!Gray)
     {

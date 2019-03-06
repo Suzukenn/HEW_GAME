@@ -6,6 +6,7 @@
 #include "Model.h"
 #include "ModelManager.h"
 #include "Sphere.h"
+#include "SquareGauge.h"
 #include "Player.h"
 
 //ÅÅÅÅÅÅä÷êîíËã`ÅÅÅÅÅÅ//
@@ -189,10 +190,12 @@ void BULLET::Uninitialize(void)
 /////////////////////////////////////////////
 void BULLET::Update(void)
 {
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    /*if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Gray = !Gray;
-    }
+    }*/
+
+	Gray = SQUAREGAUGE::GetFairyTime();
 
     if (!Gray)
     {

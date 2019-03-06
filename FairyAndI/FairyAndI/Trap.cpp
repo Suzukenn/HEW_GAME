@@ -6,6 +6,7 @@
 #include "ModelManager.h"
 #include "Player.h"
 #include "Sphere.h"
+#include "SquareGauge.h"
 #include "Trap.h"
 
 //ŠÖ”’è‹`//
@@ -160,8 +161,10 @@ void TRAP::Uninitialize(void)
 /////////////////////////////////////////////
 void TRAP::Update(void)
 {
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    /*if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Gray = !Gray;
-    }
+    }*/
+
+	Gray = SQUAREGAUGE::GetFairyTime();
 }

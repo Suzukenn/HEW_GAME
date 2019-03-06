@@ -4,6 +4,7 @@
 #include "Main.h"
 #include "InputManager.h"
 #include "SoundManager.h"
+#include "SquareGauge.h"
 #include "WordMenu.h"
 #include "WordManager.h"
 
@@ -224,6 +225,9 @@ void WORDMENU::Update(void)
     {
         Control = !Control;
     }
+
+	Control = SQUAREGAUGE::GetFairyTime();
+
     if (Control)
     {
         SelectWord.at(0).SetTexture(List.at(0).GetSelectWord());

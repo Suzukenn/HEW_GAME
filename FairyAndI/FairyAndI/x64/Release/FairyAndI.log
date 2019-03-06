@@ -1,13 +1,10 @@
-﻿FXC : warning X4717: Effects deprecated for D3DCompiler_47
-  
-  compilation object save succeeded; see D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\Model.cso
-  Goal.cpp
-  Model.cpp
-  ShaderManager.cpp
+﻿  Button.cpp
+  SceneManager.cpp
+  SelectScene.cpp
   コード生成しています。
-  148 of 5414 functions ( 2.7%) were compiled, the rest were copied from previous compilation.
-    1 functions were new in current compilation
-    43 functions had inline decision re-evaluated but remain unchanged
+  169 of 5420 functions ( 3.1%) were compiled, the rest were copied from previous compilation.
+    7 functions were new in current compilation
+    49 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
-  FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
-  FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)
+  FairyAndI.vcxproj -> C:\Users\tsuyoshi\Documents\GitHub\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
+  FairyAndI.vcxproj -> C:\Users\tsuyoshi\Documents\GitHub\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)
