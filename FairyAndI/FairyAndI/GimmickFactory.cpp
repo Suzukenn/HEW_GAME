@@ -26,7 +26,7 @@ void GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3 position, D3DXVECTOR3
 }
 
 /////////////////////////////////////////////
-//関数名：InstantiateBulletGimmick
+//関数名：InstantiateBatteryCannon
 //
 //機能：砲台の弾の生成
 //
@@ -34,7 +34,7 @@ void GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3 position, D3DXVECTOR3
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void GIMMICKFACTORY::InstantiateBulletGimmick(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+void GIMMICKFACTORY::InstantiateBatteryCannon(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
 	//---生成---//
 	ACTORMANAGER::GameObject.emplace_back(new BATTERYCANNON(TEXT("ICE"), position, rotation));
@@ -67,7 +67,7 @@ void GIMMICKFACTORY::InstantiateFireGimmick(D3DXVECTOR3 position, D3DXVECTOR3 ro
 void GIMMICKFACTORY::InstantiateGimmick(tstring gameobject, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
-    std::unordered_map<tstring, std::function< void(D3DXVECTOR3, D3DXVECTOR3) >> Function = { { TEXT("BATTERYGIMMCK"), InstantiateBatteryGimmick },{ TEXT("ICE"), InstantiateBulletGimmick },{ TEXT("FIREGIMMCK"), InstantiateFireGimmick },{ TEXT("ICEGIMMICK"), InstantiateIceGimmick },{ TEXT("WOODGIMMICK"), InstantiateWoodGimmick } };
+    std::unordered_map<tstring, std::function< void(D3DXVECTOR3, D3DXVECTOR3) >> Function = { { TEXT("BATTERYGIMMCK"), InstantiateBatteryGimmick },{ TEXT("ICE"), InstantiateBatteryCannon },{ TEXT("FIREGIMMCK"), InstantiateFireGimmick },{ TEXT("ICEGIMMICK"), InstantiateIceGimmick },{ TEXT("WOODGIMMICK"), InstantiateWoodGimmick } };
 
     //---生成---//
     for (auto& data : Function)

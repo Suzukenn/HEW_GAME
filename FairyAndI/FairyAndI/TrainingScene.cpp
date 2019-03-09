@@ -32,10 +32,10 @@
 void TRAINING::Draw(void)
 {
     //---オブジェクトの描画処理---//
-    ACTORMANAGER::Draw();
     Field.Draw();
     Ground.Draw();
     Back.Draw();
+    ACTORMANAGER::Draw();
     Canvas.Draw();
 }
 
@@ -119,7 +119,7 @@ HRESULT TRAINING::Initialize(void)
     {
         return hResult;
     }
-    hResult = Back.Initialize(TEXT("BACKGROUND"), D3DXVECTOR3(0.0F, 0.0F, 100.0F), D3DXVECTOR3(100.0F, 100.0F, 1.0F));
+    hResult = Back.Initialize(TEXT("SKILL_HOTFIRE"), D3DXVECTOR3(0.0F, 0.0F, 100.0F), D3DXVECTOR2(100.0F, 100.0F));
     if (FAILED(hResult))
     {
         return hResult;

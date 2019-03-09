@@ -14,8 +14,8 @@ sampler_state
     MipFilter = NONE;       //ミップマップ
 
     //テクスチャアドレッシングモード
-    AddressU = Clamp;	//（Clanp→0～1以外の座標の時に端っこのピクセルをひきのばす）
-    AddressV = Clamp;
+    AddressU = Wrap;
+    AddressV = Wrap;
 };
 
 //＝＝＝構造体定義＝＝＝//

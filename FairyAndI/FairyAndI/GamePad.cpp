@@ -252,3 +252,49 @@ bool GAMEPAD::GetTrigger(DWORD number, DWORD button)
     //---データ取得---//
     return Trigger.at(number) & button ? true : false;
 }
+
+/////////////////////////////////////////////
+//関数名：PlayVibration
+//
+//機能：ゲームパッドの振動
+//
+//引数：(DWORD)ゲームパッド番号,(float)左の振動スピード,(float)右の振動スピード
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void GAMEPAD::PlayVibration(DWORD number, float LMotorSpeed, float RMotorSpeed)
+{
+	//---接続チェック---//
+	if (number >= Current.size())
+	{
+		return;
+	}
+
+    //---振動量の設定---//
+	Vibration.wLeftMotorSpeed = (WORD)(65535.0F * LMotorSpeed);
+	Vibration.wRightMotorSpeed = (WORD)(65535.0F * RMotorSpeed);
+	XInputSetState(number, &Vibration);
+}
+
+/////////////////////////////////////////////
+//関数名：StopVibration
+//
+//機能：ゲームパッドの振動を止める
+//
+//引数：(DWORD)ゲームパッド番号
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void GAMEPAD::StopVibration(DWORD number)
+{
+	//---接続チェック---//
+	if (number >= Current.size())
+	{
+		return;
+	}
+
+    //---振動量の設定---//
+	Vibration.wLeftMotorSpeed = 0;
+	Vibration.wRightMotorSpeed = 0;
+	XInputSetState(number, &Vibration);
+}

@@ -62,7 +62,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     g_pD3DDevice.reset(new LPDIRECT3DDEVICE9);
 
 #ifdef _DEBUG
-    g_pD3DXFont.reset(new LPD3DXFONT());
+    g_pD3DXFont.reset(new LPD3DXFONT);
 #endif
 
     //乱数シード値の初期化
@@ -122,6 +122,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		{
 			if (msgMsg.message == WM_QUIT)
 			{
+                PostQuitMessage(0);
 				break;
 			}
 			else

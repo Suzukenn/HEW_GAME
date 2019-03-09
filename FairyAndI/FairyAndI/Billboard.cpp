@@ -14,11 +14,11 @@
 //
 //機能：ビルボードの描画
 //
-//引数：なし
+//引数：(D3DXVECTOR3)描画位置
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void BILLBOARD::Draw(void)
+void BILLBOARD::Draw(D3DXVECTOR3 position)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -31,12 +31,12 @@ void BILLBOARD::Draw(void)
     std::shared_ptr<SHADER> pShader;
     std::shared_ptr<TEXTURE> pTexture;
 
-    LPDIRECT3DVERTEXDECLARATION9 pVertexDeclaration; //頂点シェーダの頂点定義
+    LPDIRECT3DVERTEXDECLARATION9 pVertexDeclaration;
 
     //パイプラインに渡す頂点データの構造を定義
     D3DVERTEXELEMENT9 decl[] = {{ 0, 0, D3DDECLTYPE_FLOAT3, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_POSITION, 0 }, //位置
                                 { 0, 12, D3DDECLTYPE_FLOAT2, D3DDECLMETHOD_DEFAULT, D3DDECLUSAGE_TEXCOORD, 0 }, //テクスチャ座標
-                                D3DDECL_END() //最後に必ずD3DDECL_END()をつける
+                                  D3DDECL_END()
                                };
 
     //---初期化処理---//
@@ -59,9 +59,9 @@ void BILLBOARD::Draw(void)
     D3DXMatrixInverse(&mtxWorld, nullptr, &mtxView);
 
     //移動を反映
-    mtxWorld._41 = Transform.Position.x;
-    mtxWorld._42 = Transform.Position.y;
-    mtxWorld._43 = Transform.Position.z;
+    mtxWorld._41 = position.x;
+    mtxWorld._42 = position.y + Scale.y;
+    mtxWorld._43 = position.z;
 
     SIDEVIEWCAMERA::GetProjectionMatrix(&mtxProjection);
     mtxWVP = mtxWorld * mtxView * mtxProjection;
@@ -136,22 +136,22 @@ void BILLBOARD::Draw(void)
 //
 //機能：ビルボードの初期化
 //
-//引数：(LPCTSTR)テクスチャ,(D3DXVECTOR3)位置,(D3DXVECTOR3)大きさ,(POINT)UV分割値
+//引数：(LPCTSTR)テクスチャ,(D3DXVECTOR3)位置,(D3DXVECTOR3)大きさ,(bool)反転,(POINT)UV分割値
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT BILLBOARD::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVECTOR3 scale, POINT uv)
+HRESULT BILLBOARD::Initialize(LPCTSTR texturename, D3DXVECTOR2 scale, bool inverted, POINT uv)
 {
     //---各種宣言---//
     int nCounter;
     HRESULT hResult;
+    D3DXVECTOR2 vecScale;
 
     //---初期化処理---//
-    Transform.Position = position;
-    Transform.Rotation = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
-    Transform.Scale = scale;
+    Scale = scale / 2.0F;
     UV = uv;
     Gray = false;
+    Inverted = inverted;
 
     //---テクスチャの読み込み---//
     hResult = TEXTUREMANAGER::GetTexture(texturename, Texture);
@@ -165,16 +165,14 @@ HRESULT BILLBOARD::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVEC
     //---ビルボードの作成---//
     for (nCounter = 0; nCounter < 4; ++nCounter)
     {
-        Vertex.at(nCounter).Position.x = Transform.Position.x + Transform.Scale.x * (nCounter >> 1);
-        Vertex.at(nCounter).Position.y = Transform.Position.y + Transform.Scale.y * (nCounter & 1);
+        Vertex.at(nCounter).Position.x = nCounter & 1 ? Scale.x : -Scale.x;
+        Vertex.at(nCounter).Position.y = nCounter >> 1 ? -Scale.y : Scale.y;
         Vertex.at(nCounter).Position.z = 0.0F;
-        Vertex.at(nCounter).Texture.x = (float)(nCounter >> 1);
-        Vertex.at(nCounter).Texture.y = (float)!(nCounter & 1);
     }
+    SetUV(1);
 
     //---エフェクトの作成---//
     hResult = SHADERMANAGER::GetShader(TEXT("GRAY"), Shader);
-    //hResult = D3DXCreateEffectFromFile(GetDevice(), TEXT("Data/GameScene/Gray.fx"), nullptr, nullptr, 0, nullptr, &Effect, &pErrMessage);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("ビルボードのシェーダーの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -183,6 +181,41 @@ HRESULT BILLBOARD::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVEC
     }
 
     return hResult;
+}
+
+/////////////////////////////////////////////
+//関数名：SetUV
+//
+//機能：ビルボードのUVの設定
+//
+//引数：(int)設定UV
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void BILLBOARD::SetUV(int number)
+{
+    //---各種宣言---//
+    int nCounter;       //カウンター
+    float fU;           //U値
+    float fV;           //V値
+
+    //---値算出---//
+    fU = (number % UV.x) * (1.0F / UV.x);
+    fV = (number / UV.x) * (1.0F / UV.y);
+
+    //---値更新---//
+    for (nCounter = 0; nCounter < 4; ++nCounter)
+    {
+        Vertex.at(nCounter).Texture.x = fU + (nCounter % 2) * (1.0F / UV.x);
+        Vertex.at(nCounter).Texture.y = fV + (nCounter / 2) * (1.0F / UV.y);
+    }
+
+    if (Inverted)
+    {
+        using std::swap;
+        swap(Vertex.at(0).Texture.x, Vertex.at(1).Texture.x);
+        swap(Vertex.at(2).Texture.x, Vertex.at(3).Texture.x);
+    }
 }
 
 /////////////////////////////////////////////
@@ -211,25 +244,5 @@ void BILLBOARD::Uninitialize(void)
 /////////////////////////////////////////////
 void BILLBOARD::Update(void)
 {
-    ////---各種宣言---//
-    //int nCounter;       //カウンター
-    //float fU;           //U値
-    //float fV;           //V値
-
-    ////---値算出---//
-    //fU = (number % UV.x) * (1.0F / UV.x);
-    //fV = (number / UV.x) * (1.0F / UV.y);
-
-    ////---値更新---//
-    //for (nCounter = 0; nCounter < 4; ++nCounter)
-    //{
-    //    Vertex.at(nCounter).Texture.x = fU + (nCounter % 2) * (1.0F / UV.x);
-    //    Vertex.at(nCounter).Texture.y = fV + (nCounter / 2) * (1.0F / UV.y);
-    //}
-
-   /* if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
-    {
-        Gray = Gray ? false : true;
-    }*/
 	Gray = SQUAREGAUGE::GetFairyTime();
 }

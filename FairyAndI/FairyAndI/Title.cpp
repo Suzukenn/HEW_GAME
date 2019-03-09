@@ -68,7 +68,7 @@ HRESULT TITLE::Initialize(void)
     }
 
     //---BGM再生---//
-    SOUNDMANAGER::Play(TEXT("BGM_OPENING"));
+    SOUNDMANAGER::Play(TEXT("BGM_TITLE"));
 
 	//フェード開始
 	FADE::SetFade(FADE_IN);
@@ -96,7 +96,7 @@ void TITLE::Uninitialize(void)
     TEXTUREMANAGER::Uninitialize();
 
     //---BGM停止---//
-    SOUNDMANAGER::Stop(TEXT("BGM_OPENING"));
+    SOUNDMANAGER::Stop(TEXT("BGM_TITLE"));
 }
 
 /////////////////////////////////////////////

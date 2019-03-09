@@ -13,6 +13,9 @@ sampler_state
     MagFilter = LINEAR;     //拡大時
     MinFilter = LINEAR;     //縮小時
     MipFilter = LINEAR;     //ミップマップ
+
+    AddressU = Wrap;
+    AddressV = Wrap;
 };
 
 //＝＝＝構造体定義＝＝＝//
@@ -49,7 +52,7 @@ struct PIXEL_OUTPUT
 VERTEX_OUTPUT DefaultVertexShader(VERTEX_INPUT input)
 {
     //---各種宣言---//
-    VERTEX_OUTPUT output = (VERTEX_OUTPUT)0;
+    VERTEX_OUTPUT output;
 
     //---データの代入---//
     output.Position = mul(float4(input.Position, 1.0F), WorldViewProjection);
@@ -70,10 +73,15 @@ VERTEX_OUTPUT DefaultVertexShader(VERTEX_INPUT input)
 PIXEL_OUTPUT DefaultPixelShader(VERTEX_OUTPUT input)
 {
     //---各種宣言---//
-    PIXEL_OUTPUT output = (PIXEL_OUTPUT)0;
+    PIXEL_OUTPUT output;
 
     //---データの代入---//
     output.Color = tex2D(MeshTextureSampler, input.Texture);
+
+    if (output.Color.a <= 0.0F)
+    {
+        discard;
+    }
 
     return output;
 }
@@ -89,7 +97,7 @@ PIXEL_OUTPUT DefaultPixelShader(VERTEX_OUTPUT input)
 /////////////////////////////////////////////
 PIXEL_OUTPUT PixelToMono(VERTEX_OUTPUT input)
 {
-    PIXEL_OUTPUT output = (PIXEL_OUTPUT)0;
+    PIXEL_OUTPUT output;
     float4 color;
 
     //テクスチャのピクセル色に頂点色を合成した色
@@ -99,7 +107,12 @@ PIXEL_OUTPUT PixelToMono(VERTEX_OUTPUT input)
     output.Color = dot(color, float4(0.298912F, 0.586611F, 0.114478F, 0.0F));
 
     //アルファ値だけは元のテクスチャに戻す
-    output.Color.w = color.w;
+    output.Color.a = color.a;
+
+    if (output.Color.a <= 0.0F)
+    {
+        discard;
+    }
 
     return output;
 }
