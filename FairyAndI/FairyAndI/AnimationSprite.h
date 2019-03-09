@@ -24,6 +24,7 @@ class ANIMATIONSPRITE
     public:
         virtual void Draw(void);
         virtual HRESULT Initialize(LPCTSTR, D3DXVECTOR2, D3DXVECTOR2, POINT uv = { 1, 1 });
+		void SetPosition(D3DXVECTOR2);
         void SetSpriteUV(int);
         virtual void Uninitialize(void);
 };

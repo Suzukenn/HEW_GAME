@@ -8,6 +8,53 @@
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
+//関数名：ChooseStage
+//
+//機能：ステージの選択
+//
+//引数：なし
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void TITLE::ChooseStage(void)
+{
+	//---各種宣言---//
+	D3DXVECTOR2 vecStickVector;
+	static int IntervalCnt;
+
+	vecStickVector = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT);
+
+	++IntervalCnt;
+	if (IntervalCnt > 60 / 3)
+	{
+		IntervalCnt = 60 / 3;
+		//右にスティックを入力
+		if (vecStickVector.y > 0.0F)
+		{
+			IntervalCnt = 0;
+			--Select;
+			CursorPos.y -= 100.0F;
+			if (Select < 0)
+			{
+				Select = 0;
+				CursorPos.y = 450.0F;
+			}
+		}
+		//左にスティックを入力
+		else if (vecStickVector.y < 0.0F)
+		{
+			IntervalCnt = 0;
+			++Select;
+			CursorPos.y += 100.0F;
+			if (Select > TITLE_BUTTON - 1)
+			{
+				Select = TITLE_BUTTON - 1;
+				CursorPos.y = 550.0F;
+			}
+		}
+	}
+}
+/////////////////////////////////////////////
 //関数名：Draw
 //
 //機能：タイトルの描画
@@ -18,12 +65,34 @@
 /////////////////////////////////////////////
 void TITLE::Draw(void)
 {
+	int nConter;
+
     //---オブジェクトの描画処理---//
     AnimationBack.Draw();
     Back.Draw();
     Logo.Draw();
-    StartButton.Draw();
-    TrainingButton.Draw();
+
+	switch (Mode)
+	{
+		case MODE_FIRST:
+			if (dwTicks & dwMask)
+			{
+				FirstButton.Draw();
+			}
+			break;
+
+		case MODE_SELECT:
+			for (nConter = 0; nConter < TITLE_BUTTON; ++nConter)
+			{
+				SelectButton.at(nConter).Draw();
+			}
+			Cursor.Draw();
+			break;
+		case MODE_MANUAL:
+			break;
+		default:
+			break;
+	}
 }
 
 /////////////////////////////////////////////
@@ -39,6 +108,14 @@ HRESULT TITLE::Initialize(void)
 {
     //---各種宣言---//
     HRESULT hResult;
+
+	//---各種初期化---//
+	dwTicks = 0;
+	dwMask = 8;
+	Select = 0;
+	CursorPos = D3DXVECTOR2(350.0F, 450.0F);
+	Mode = MODE_FIRST;
+	LogoAlpha = 0;
 
     //---テクスチャの読み込み---//
     hResult = TEXTUREMANAGER::Initialize(TEXT("Data/Title/TextureList.txt"));
@@ -69,19 +146,32 @@ HRESULT TITLE::Initialize(void)
         return hResult;
     }
 
-    //スタートボタン
-    hResult = StartButton.Initialize(TEXT("START_BUTTON"), D3DXVECTOR2(500.0F, 500.0F), D3DXVECTOR2(200.0F, 50.0F));
-    if (FAILED(hResult))
-    {
-        return hResult;
-    }
+	//最初のボタン
+	hResult = FirstButton.Initialize(TEXT("PUSHBUTTON"), D3DXVECTOR2(450.0F, 500.0F), D3DXVECTOR2(400.0F, 200.0F));
+	if (FAILED(hResult))
+	{
+		return hResult;
+	}
 
-    //トレーニングボタン
-    hResult = FAILED(TrainingButton.Initialize(TEXT("TRAINING_BUTTON"), D3DXVECTOR2(800.0F, 500.0F), D3DXVECTOR2(200.0F, 50.0F)));
+    //スタート
+    hResult = SelectButton.at(0).Initialize(TEXT("GAMESTART"), D3DXVECTOR2(450.0F, 400.0F), D3DXVECTOR2(400.0F, 200.0F));
     if (FAILED(hResult))
     {
         return hResult;
     }
+	//マニュアル
+	hResult = SelectButton.at(1).Initialize(TEXT("MANUAL"), D3DXVECTOR2(450.0F, 500.0F), D3DXVECTOR2(400.0F, 200.0F));
+	if (FAILED(hResult))
+	{
+		return hResult;
+	}
+
+	//カーソル
+	hResult = Cursor.Initialize(TEXT("CURSOR"), CursorPos, D3DXVECTOR2(100.0F, 100.0F));
+	if (FAILED(hResult))
+	{
+		return hResult;
+	}
 
     //---BGM再生---//
     SOUNDMANAGER::Play(TEXT("BGM_TITLE"));
@@ -103,12 +193,18 @@ HRESULT TITLE::Initialize(void)
 /////////////////////////////////////////////
 void TITLE::Uninitialize(void)
 {
+	int nConter;
+
     //---オブジェクトの終了処理---//
     AnimationBack.Uninitialize();
     Back.Uninitialize();
     Logo.Uninitialize();
-    StartButton.Uninitialize();
-    TrainingButton.Uninitialize();
+	FirstButton.Uninitialize();
+	for (nConter = 0; nConter < TITLE_BUTTON; ++nConter)
+	{
+		SelectButton.at(nConter).Uninitialize();
+	}
+	Cursor.Uninitialize();
 
     //---テクスチャの削除---//
     TEXTUREMANAGER::Uninitialize();
@@ -128,46 +224,60 @@ void TITLE::Uninitialize(void)
 /////////////////////////////////////////////
 void TITLE::Update(void)
 {
-	static int Mood;
-    static unsigned char LogoAlpha = 0;
-
-    //---オブジェクトの更新処理---//
+	//---オブジェクトの更新処理---//
     AnimationBack.MoveTexture();
     Back.Update();
     Logo.Update();
-    if (++LogoAlpha > 255)
-    {
-        Logo.SetAlpha(LogoAlpha);
-    }
-    StartButton.Update();
-    TrainingButton.Update();
+	FirstButton.Update();
+	Logo.SetAlpha((unsigned char)LogoAlpha);
 
 	//フェードインが終わっていたら
 	if (FADE::CheckFadeEnd(FADE_IN))
 	{
-		if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
+		LogoAlpha += 1;
+		if (LogoAlpha >= 255)
 		{
-			FADE::SetFade(FADE_OUT);
-			//SCENEMANAGER::SetScene(SCENE_SELECT);
-			Mood = 1;
+			LogoAlpha = 255 - 1;
+			++dwTicks;
 		}
-		else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_START, TRIGGER))
+
+		switch (Mode)
 		{
-			FADE::SetFade(FADE_OUT);
-			//SCENEMANAGER::SetScene(SCENE_TRAINING);
-			Mood = 2;
+			case MODE_FIRST:
+				if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
+				{
+					Mode = MODE_SELECT;
+				}
+				break;
+			case MODE_SELECT:
+
+				ChooseStage();
+				Cursor.SetPosition(CursorPos);
+				if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
+				{
+					if (Select == 0)
+					{
+						FADE::SetFade(FADE_OUT);
+					}
+					else
+					{
+						Mode = MODE_MANUAL;
+					}
+				}
+				else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
+				{
+					Mode = MODE_FIRST;
+				}
+				break;
+			case MODE_MANUAL:
+				break;
+			default:
+				break;
 		}
 	}
 	//フェードアウトが終わっていたら
 	if (FADE::CheckFadeEnd(FADE_OUT))
 	{
-		if (Mood == 1)
-		{
-			SCENEMANAGER::SetScene(SCENE_SELECT);
-		}
-		else if(Mood == 2)
-		{
-			SCENEMANAGER::SetScene(SCENE_TRAINING);
-		}
+		SCENEMANAGER::SetScene(SCENE_SELECT);
 	}
 }
