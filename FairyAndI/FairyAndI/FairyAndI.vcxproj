@@ -134,6 +134,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ActorManager.cpp" />
+    <ClCompile Include="AnimationBackImage.cpp" />
     <ClCompile Include="AnimationModel.cpp" />
     <ClCompile Include="AnimationModelHierarchy.cpp" />
     <ClCompile Include="BackGround.cpp" />
@@ -204,6 +205,7 @@
     <ClCompile Include="WordPlate.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AnimationbackImage.h" />
     <ClInclude Include="AnimationModel.h" />
     <ClInclude Include="AnimationModelContainer.h" />
     <ClInclude Include="AnimationModelFrame.h" />

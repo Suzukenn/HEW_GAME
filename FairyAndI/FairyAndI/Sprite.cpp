@@ -125,17 +125,3 @@ void SPRITE::Uninitialize(void)
     SAFE_RELEASE((*VertexBuffer));
     Texture.reset();
 }
-
-/////////////////////////////////////////////
-//関数名：SetAlpha
-//
-//機能：背景の更新
-//
-//引数：なし
-//
-//戻り値：なし
-/////////////////////////////////////////////
-void SPRITE::SetAlpha(D3DCOLOR color)
-{
-	
-}

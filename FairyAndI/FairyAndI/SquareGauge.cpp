@@ -126,11 +126,13 @@ void SQUAREGAUGE::Uninitialize(void)
 /////////////////////////////////////////////
 void SQUAREGAUGE::Update(void)
 {
+	//---各種宣言---//
+	int nCounter;
 	static int GaugeCnt;	//ゲージの増減の秒数カウント
 
 	if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
 	{
-        FairyTime = !FairyTime;
+		FairyTime = FairyTime ? false : Percent >= 1.0F;
 	}
 
 	++GaugeCnt;
@@ -154,8 +156,12 @@ void SQUAREGAUGE::Update(void)
 	else
 	{
 		//ゲージ増加
-		if (GaugeCnt > 60 / 10)
+		if (GaugeCnt > 60 / 20)
 		{
+			for (nCounter = 0; nCounter < 4; ++nCounter)
+			{
+				MemoryVertex.at(nCounter).Diffuse = D3DCOLOR_ARGB(255, 128, 128, 128);
+			}
 			GaugeCnt = 0;
 			Percent += 0.01F;
 		}
@@ -163,6 +169,10 @@ void SQUAREGAUGE::Update(void)
 		if (Percent > 1.0F)
 		{
 			Percent = 1.0F;
+			for (nCounter = 0; nCounter < 4; ++nCounter)
+			{
+				MemoryVertex.at(nCounter).Diffuse = D3DCOLOR_ARGB(255, 255, 255, 255);
+			}
 		}
 	}
 
