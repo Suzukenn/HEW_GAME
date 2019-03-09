@@ -2,7 +2,6 @@
 #define _TEXTURE_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include <memory>
 #include "Main.h"
 
 //＝＝＝クラス宣言＝＝＝//

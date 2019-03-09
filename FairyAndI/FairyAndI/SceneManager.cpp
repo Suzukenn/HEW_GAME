@@ -137,6 +137,7 @@ void SCENEMANAGER::Update(void)
         if (FAILED(Scene->Initialize()))
         {
             MessageBox(nullptr, TEXT("シーンの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
+            Scene->Uninitialize();
             exit(EXIT_FAILURE);
         }
         CurrentScene = NextScene;

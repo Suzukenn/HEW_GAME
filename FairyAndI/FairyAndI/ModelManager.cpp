@@ -81,16 +81,16 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
     mModel.Texture.resize(mModel.MaterialValue);
     for (nCounter = 0; nCounter < mModel.MaterialValue; ++nCounter)
     {
-        mModel.Material[nCounter] = pMaterial[nCounter].MatD3D;
-        mModel.Material[nCounter].Ambient = mModel.Material[nCounter].Diffuse;
-        mModel.Texture[nCounter] = nullptr;
+        mModel.Material.at(nCounter) = pMaterial[nCounter].MatD3D;
+        mModel.Material.at(nCounter).Ambient = mModel.Material.at(nCounter).Diffuse;
+        mModel.Texture.at(nCounter) = nullptr;
         if (pMaterial[nCounter].pTextureFilename && pMaterial[nCounter].pTextureFilename[0])
         {
             // テクスチャファイルを読み込む
             hResult = D3DXCreateTextureFromFile(pDevice, (LPCTSTR)pMaterial[nCounter].pTextureFilename, &mModel.Texture[nCounter]);
             if (FAILED(hResult))
             {
-                mModel.Texture[nCounter] = nullptr;
+                mModel.Texture.at(nCounter) = nullptr;
                 Uninitialize();
                 return hResult;
             }
@@ -173,8 +173,8 @@ HRESULT MODELMANAGER::Load(std::vector<FILEPARAMETER>& list, LPCTSTR filename)
 {
     //---各種宣言---//
     int nCounter;
-    std::string szFileName;
-    std::string szKeyName;
+    std::string strFileName;
+    std::string strKeyName;
     std::ifstream file;
 
     //---初期化処理---//
@@ -193,17 +193,12 @@ HRESULT MODELMANAGER::Load(std::vector<FILEPARAMETER>& list, LPCTSTR filename)
     //---データの抽出---//
     while (!file.eof())
     {
-        file >> szFileName >> szKeyName;
+        //データ読み取り
+        file >> strFileName >> strKeyName;
 
-#ifdef _UNICODE
-        list.at(nCounter).FileName.resize(szFileName.size());
-        list.at(nCounter).FileName = std::wstring(szFileName.begin(), szFileName.end());
-        list.at(nCounter).CallKey.resize(szKeyName.size());
-        list.at(nCounter).CallKey = std::wstring(szKeyName.begin(), szKeyName.end());
-#else
-        list.at(nCounter).FileName = szFileName;
-        list.at(nCounter).CallKey = szKeyName;
-#endif
+        //格納
+        list.at(nCounter).FileName = tstring(strFileName.begin(), strFileName.end());
+        list.at(nCounter).CallKey = tstring(strKeyName.begin(), strKeyName.end());
 
         ++nCounter;
     }
@@ -256,7 +251,7 @@ HRESULT MODELMANAGER::GetModel(LPCTSTR modelname, std::weak_ptr<MODEL>& address)
     }
     catch (const std::out_of_range&)
     {
-        MessageBox(nullptr, TEXT("モデルが存在しません"), TEXT("エラー"), MB_ICONSTOP | MB_OK);
+        MessageBox(nullptr, TEXT("モデルが存在しません"), modelname, MB_ICONSTOP | MB_OK);
         return E_FAIL;
     }
     return S_OK;

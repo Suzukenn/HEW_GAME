@@ -11,6 +11,7 @@
 #include "SideViewCamera.h"
 #include "SkillFactory.h"
 #include "Sphere.h"
+#include "SquareGauge.h"
 #include "WordMenu.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
@@ -93,7 +94,6 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     Transform.Position = position;
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(100.0F, 100.0F, 100.0F);
-    //Transform.Scale = D3DXVECTOR3(0.1F, 0.1F, 0.1F);
     HP = MAX_PLAYER_HP;
     State = STATE_WAIT;
     Gray = false;
@@ -110,7 +110,7 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     }
     else
     {
-        Model.ChangeAnimation(0);
+        Model.ChangeAnimation(State);
     }
 
     //---当たり判定の付与---//
@@ -181,13 +181,21 @@ void PLAYER::Update(void)
     Move.x = 0.0F;
 
     //---フリーズ判定---//
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    /*if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Gray = !Gray;
-    }
+    }*/
+
+	Gray = SQUAREGAUGE::GetFairyTime();
+
     if (Gray)
     {
+        Model.SetSpeed(0.0);
         return;
+    }
+    else
+    {
+        Model.SetSpeed(1.0);
     }
 
     //---移動処理---//
@@ -255,19 +263,20 @@ void PLAYER::Update(void)
     pos = Transform.Position;
     rot = Transform.Rotation;
 
-    //if (Move.x)
-    //{
-    //    Model.ChangeAnimation(1);
-    //}
-    //else
-    //{
-    //    Model.ChangeAnimation(0);
-    //}
+    if (Move.x)
+    {
+        State = STATE_WALK;
+    }
+    else
+    {
+        State = STATE_WAIT;
+    }
 
-    //if (Move.y != 0.0F)
-    //{
-    //    Model.ChangeAnimation(2);
-    //}
+    if (Move.y != 0.0F)
+    {
+        State = STATE_WAIT;
+    }
+    Model.ChangeAnimation(State);
 
 }
 

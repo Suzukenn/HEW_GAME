@@ -18,7 +18,7 @@
 #pragma comment (lib, "Xinput")
 
 //＝＝＝定数・マクロ定義＝＝＝//
-#define FVF_VERTEX_2D D3DFVF_XYZRHW | D3DFVF_TEX1 | D3DFVF_DIFFUSE              //2Dテクスチャのフォーマット
+#define FVF_VERTEX_2D D3DFVF_XYZRHW | D3DFVF_DIFFUSE | D3DFVF_TEX1              //2Dテクスチャのフォーマット
 #define	FVF_VERTEX_3D D3DFVF_XYZ | D3DFVF_NORMAL | D3DFVF_DIFFUSE | D3DFVF_TEX1 //3Dテクスチャのフォーマット
 #define SCREEN_HEIGHT 720.0F                                                    //ウインドウの高さ
 #define SCREEN_WIDTH 1280.0F  		                                            //ウインドウの幅
@@ -39,12 +39,6 @@
 typedef std::basic_string<TCHAR> tstring;
 
 //＝＝＝構造体定義＝＝＝//
-typedef struct
-{
-    int Frame; //パターン番号
-    int Count; //フレーム数
-} MOTION;
-
 typedef struct
 {
     D3DXVECTOR3 Position;	//スクリーン座標

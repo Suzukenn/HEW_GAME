@@ -3,10 +3,10 @@
 #include "Bullet.h"
 #include "CollisionManager.h"
 #include "InputManager.h"
-#include "Model.h"
-#include "ModelManager.h"
 #include "Sphere.h"
-#include "Player.h"
+#include "SquareGauge.h"
+#include "Texture.h"
+#include "TextureManager.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -48,30 +48,7 @@ BULLET::~BULLET(void)
 /////////////////////////////////////////////
 void BULLET::Draw(void)
 {
-    //---各種宣言---//
-    D3DXMATRIX mtxWorld;
-
-    std::shared_ptr<MODEL> pModel;
-
-    //---ワールドマトリクスの設定---//
-    //初期化
-    D3DXMatrixIdentity(&mtxWorld);
-
-    //設定
-    Transform.MakeWorldMatrix(mtxWorld);
-    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
-
-    //---描画---//
-    //描画対象チェック
-    pModel = Model.lock();
-    if (!pModel)
-    {
-        MessageBox(nullptr, TEXT("弾丸のモデル情報の取得に失敗しました"), TEXT("描画エラー"), MB_OK);
-        return;
-    }
-
-    //描画
-    pModel->Draw(Gray);
+    BillBoard.Draw(Transform.Position);
 }
 
 /////////////////////////////////////////////
@@ -79,31 +56,24 @@ void BULLET::Draw(void)
 //
 //機能：弾丸の初期化
 //
-//引数：(LPCTSTR)モデル名,(tstirng)生成属性,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(LPCTSTR)テクスチャ名,(tstirng)生成属性,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT BULLET::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT BULLET::Initialize(LPCTSTR texturename, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
 
     //---初期化処理---//
-    Transform.Position = position;
     Transform.Rotation = rotation;
-    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
-    BornTime = 0;
-	Move = D3DXVECTOR3(sinf(Transform.Rotation.y) * 1.5F, 0.0F, 0.0F);//-cosf(Transform.Rotation.y) * 1.5F);
-    Gray = false;
-    Tag = TEXT("Bullet");
-    Type = type;
+    Move = D3DXVECTOR3(sinf(Transform.Rotation.y) * 1.5F, 0.0F, 0.0F);//-cosf(Transform.Rotation.y) * 1.5F);
 
-    //---モデルの読み込み---//
-    hResult = MODELMANAGER::GetModel(modelname, Model);
+    //---ビルボードの作成---//
+    hResult = BillBoard.Initialize(texturename, D3DXVECTOR2(50.0F, 50.0F), Transform.Rotation.y > 0.0F);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("弾丸のモデルの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
-        Uninitialize();
+        MessageBox(nullptr, TEXT("弾の初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
         return hResult;
     }
 
@@ -124,33 +94,6 @@ HRESULT BULLET::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position
 /////////////////////////////////////////////
 void BULLET::OnCollision(COLLISION* opponent)
 {
-	if (opponent->Owner->GetTag() == TEXT("Element") ||
-		opponent->Owner->GetTag() == TEXT("Player") ||
-		opponent->Owner->GetTag() == TEXT("Fairy"))
-	{
-		return;
-	}
-
-	//砲台が出して跳ね返してない弾の挙動
-	if (opponent->Owner->GetTag() == TEXT("Battery") &&
-		Type == TEXT("BATTERY"))
-	{
-		return;
-	}
-
-	//跳ね返った動き
-	if (opponent->Owner->GetTag() == TEXT("Trap"))
-	{
-		if (Type == TEXT("BATTERY") ||
-			Type == TEXT("RETURN"))
-		{
-			Type = TEXT("RETURN");
-			Move.x *= -1;
-			Move.y *= -1;
-		}
-		return;
-	}
-
 	ACTORMANAGER::Destroy(this);
 	COLLISIONMANAGER::Destroy((COLLISION*)Collision);
 }
@@ -167,10 +110,7 @@ void BULLET::OnCollision(COLLISION* opponent)
 void BULLET::Uninitialize(void)
 {
     //---開放---//
-    if (Model._Get())
-    {
-        Model.reset();
-    }
+    BillBoard.Uninitialize();
     if (Collision)
     {
         COLLISIONMANAGER::Destroy((COLLISION*)Collision);
@@ -189,12 +129,15 @@ void BULLET::Uninitialize(void)
 /////////////////////////////////////////////
 void BULLET::Update(void)
 {
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    /*if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Gray = !Gray;
-    }
+    }*/
 
-    if (!Gray)
+	Gray = SQUAREGAUGE::GetFairyTime();
+    BillBoard.Update();
+
+    if (Gray)
     {
         return;
     }

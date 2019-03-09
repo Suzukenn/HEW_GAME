@@ -5,9 +5,10 @@
 #include <memory>
 #include "GameObject.h"
 #include "Main.h"
-#include "Model.h"
 
 //‘O•ûéŒ¾//
+class MODEL;
+class SHADER;
 class SPHERE;
 
 //ƒNƒ‰ƒXéŒ¾//
@@ -17,6 +18,7 @@ class GOAL final : public GAMEOBJECT
         bool Gray;
 
         std::weak_ptr<MODEL> Model;
+        std::weak_ptr<SHADER> Shader;
         SPHERE* Collision;
 
 		int Goal;

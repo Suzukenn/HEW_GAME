@@ -7,6 +7,50 @@
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
+//関数名：ChooseStage
+//
+//機能：ステージの選択
+//
+//引数：なし
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void SELECTSCENE::ChooseStage(void)
+{
+	//---各種宣言---//
+	D3DXVECTOR2 vecStickVector;
+	static int IntervalCnt;
+
+	vecStickVector = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT);
+
+	++IntervalCnt;
+	if (IntervalCnt > 60 / 3)
+	{
+		IntervalCnt = 60 / 3;
+		//右にスティックを入力
+		if (vecStickVector.x > 0.0F)
+		{
+			IntervalCnt = 0;
+			++Select;
+			if (Select > MAX_SELECTBUTTON - 1)
+			{
+				Select = MAX_SELECTBUTTON - 1;
+			}
+		}
+		//左にスティックを入力
+		else if (vecStickVector.x < 0.0F)
+		{
+			IntervalCnt = 0;
+			--Select;
+			if (Select < 0)
+			{
+				Select = 0;
+			}
+		}
+	}
+}
+
+/////////////////////////////////////////////
 //関数名：Draw
 //
 //機能：タイトルの描画
@@ -17,7 +61,20 @@
 /////////////////////////////////////////////
 void SELECTSCENE::Draw(void)
 {
-    Back.Draw();
+	Back.Draw();
+
+	for (int nConter = 0; nConter < 3; ++nConter)
+	{
+		if (Select == nConter)
+		{
+			if (dwTicks & dwMask)
+			{
+				Button.at(nConter).Draw();
+			}
+			continue;
+		}
+		Button.at(nConter).Draw();
+	}
 }
 
 /////////////////////////////////////////////
@@ -31,29 +88,51 @@ void SELECTSCENE::Draw(void)
 /////////////////////////////////////////////
 HRESULT SELECTSCENE::Initialize(void)
 {
-    //---各種宣言---//
-    HRESULT hResult;
+	//---各種宣言---//
+	HRESULT hResult;
+	D3DXVECTOR2 ButtonPos;
 
-    //---テクスチャの読み込み---//
-    hResult = TEXTUREMANAGER::Initialize(TEXT("Data/SelectScene/TextureList.txt"));
-    if (FAILED(hResult))
-    {
-        return E_FAIL;
-    }
+	ButtonPos = D3DXVECTOR2(200.0F, 500.0F);
+	dwTicks = 0;
+	dwMask = 8;
+	Select = 0;
 
-    //---オブジェクトの初期化---//
-    hResult = Back.Initialize(TEXT("BACKGROUND"));
-    if (FAILED(hResult))
-    {
-        return E_FAIL;
-    }
+	//各ボタンの行き先
+	Button.at(0).SetSelectStage(SCENE_TRAINING);
+	Button.at(1).SetSelectStage(SCENE_TITLE);
+	Button.at(2).SetSelectStage(SCENE_GAMECLEAR);
+
+	//---テクスチャの読み込み---//
+	hResult = TEXTUREMANAGER::Initialize(TEXT("Data/SelectScene/TextureList.txt"));
+	if (FAILED(hResult))
+	{
+		return E_FAIL;
+	}
+
+	//---オブジェクトの初期化---//
+	hResult = Back.Initialize(TEXT("BACKGROUND"));
+	if (FAILED(hResult))
+	{
+		return E_FAIL;
+	}
+
+	for (int nConter = 0; nConter < 3; ++nConter)
+	{
+		hResult = Button.at(nConter).Initialize(TEXT("BACKGROUND"), ButtonPos, D3DXVECTOR2(200.0F, 50.0F));
+		if (FAILED(hResult))
+		{
+			return E_FAIL;
+		}
+
+		ButtonPos.x += 300.0F;
+	}
 
 	FADE::SetFade(FADE_IN);
 
-    //---BGM再生---//
-    SOUNDMANAGER::Play(TEXT("BGM_SELECT"));
+	//---BGM再生---//
+	SOUNDMANAGER::Play(TEXT("BGM_SELECT"));
 
-    return hResult;
+	return hResult;
 }
 
 /////////////////////////////////////////////
@@ -67,13 +146,18 @@ HRESULT SELECTSCENE::Initialize(void)
 /////////////////////////////////////////////
 void SELECTSCENE::Uninitialize(void)
 {
-    //---解放---//
-    Back.Uninitialize();
+	//---解放---//
+	Back.Uninitialize();
 
-    TEXTUREMANAGER::Uninitialize();
+	for (int nConter = 0; nConter < 3; ++nConter)
+	{
+		Button.at(nConter).Uninitialize();
+	}
 
-    //---BGM停止---//
-    SOUNDMANAGER::Stop(TEXT("BGM_SELECT"));
+	TEXTUREMANAGER::Uninitialize();
+
+	//---BGM停止---//
+	SOUNDMANAGER::Stop(TEXT("BGM_SELECT"));
 }
 
 /////////////////////////////////////////////
@@ -87,15 +171,25 @@ void SELECTSCENE::Uninitialize(void)
 /////////////////////////////////////////////
 void SELECTSCENE::Update(void)
 {
-    //---オブジェクトの更新---//
-    Back.Update();
+	++dwTicks;
 
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
-    {
-        SCENEMANAGER::SetScene(SCENE_GAME);
-    }
-    else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
-    {
-        SCENEMANAGER::SetScene(SCENE_TITLE);
-    }
+	//---オブジェクトの更新---//
+	Back.Update();
+	for (int nConter = 0; nConter < 3; ++nConter)
+	{
+		if (Select == nConter)
+		{
+			Button.at(nConter).Update();
+		}
+	}
+
+	if (FADE::CheckFadeEnd(FADE_IN))
+	{
+		ChooseStage();
+
+		if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
+		{
+			SCENEMANAGER::SetScene(SCENE_TITLE);
+		}
+	}
 }

@@ -234,3 +234,31 @@ POINT INPUTMANAGER::GetMousePosition(void)
 {
     return Mouse.GetCursor();
 }
+
+/////////////////////////////////////////////
+//関数名：PlayGamePadVibration
+//
+//機能：ゲームパッドの振動
+//
+//引数：(DWORD)ゲームパッド番号,(WORD)左の振動スピード,(WORD)右の振動スピード
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void INPUTMANAGER::PlayGamePadVibration(DWORD number, float LMotorSpeed, float RMotorSpeed)
+{
+	GamePad.PlayVibration(number, LMotorSpeed, RMotorSpeed);
+}
+
+/////////////////////////////////////////////
+//関数名：StopGamePadVibration
+//
+//機能：ゲームパッドの振動を止める
+//
+//引数：(DWORD)ゲームパッド番号
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void INPUTMANAGER::StopGamePadVibration(DWORD number)
+{
+	GamePad.StopVibration(number);
+}

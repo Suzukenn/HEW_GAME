@@ -5,6 +5,7 @@
 #include "IceGimmick.h"
 #include "InputManager.h"
 #include "ModelManager.h"
+#include "SquareGauge.h"
 
 //ÅÅÅÅÅÅä÷êîíËã`ÅÅÅÅÅÅ//
 /////////////////////////////////////////////
@@ -161,8 +162,9 @@ void ICEGIMMICK::Uninitialize(void)
 /////////////////////////////////////////////
 void ICEGIMMICK::Update(void)
 {	
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+   /* if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Gray = !Gray;
-    }
+    }*/
+	Gray = SQUAREGAUGE::GetFairyTime();
 }

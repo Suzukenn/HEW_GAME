@@ -177,7 +177,6 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3
                 if (FAILED(hResult))
                 {
                     MessageBox(nullptr, TEXT("メッシュのテクスチャの読み込みに失敗しました"), TEXT("初期化エラー"), MB_OK);
-                    pMeshContainer->Texture.at(dwMaterial) = nullptr;
                     return hResult;
                 }
             }
@@ -304,20 +303,9 @@ HRESULT ANIMATIONMODELHIERARCHY::DestroyMeshContainer(LPD3DXMESHCONTAINER pMeshC
     SAFE_RELEASE(pMeshContainer->pSkinInfo);
     SAFE_DELETE_ARRAY(pMeshContainer->pAdjacency);
     SAFE_DELETE_ARRAY(pMeshContainer->pMaterials);
-    for (auto& data : pMeshContainer->BoneMatrix)
-    {
-        SAFE_DELETE(data);
-    }
     pMeshContainer->BoneMatrix.clear();
 
     //テクスチャ解放
-    if (!pMeshContainer->Texture.empty())
-    {
-        for (auto& data : pMeshContainer->Texture)
-        {
-            SAFE_RELEASE(data);
-        }
-    }
     pMeshContainer->Texture.clear();
     SAFE_RELEASE(pMeshContainer->MeshData.pMesh);
 

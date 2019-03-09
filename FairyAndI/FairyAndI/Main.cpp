@@ -62,7 +62,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     g_pD3DDevice.reset(new LPDIRECT3DDEVICE9);
 
 #ifdef _DEBUG
-    g_pD3DXFont.reset(new LPD3DXFONT());
+    g_pD3DXFont.reset(new LPD3DXFONT);
 #endif
 
     //乱数シード値の初期化
@@ -122,6 +122,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 		{
 			if (msgMsg.message == WM_QUIT)
 			{
+                PostQuitMessage(0);
 				break;
 			}
 			else
@@ -323,6 +324,8 @@ void OnCreate(HWND handle, LPCREATESTRUCT lpcs)
 HRESULT SetupEnvironment(HWND handle)
 {
     //---各種宣言---//
+    HRESULT hResult;
+    D3DCAPS9 d3dcaps;
     D3DDISPLAYMODE d3ddm;
     D3DPRESENT_PARAMETERS d3dpp;
 
@@ -334,9 +337,11 @@ HRESULT SetupEnvironment(HWND handle)
     }
 
     //---現在のディスプレイモードを取得---//
-    if (FAILED((*g_pD3D)->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm)))
+    hResult = (*g_pD3D)->GetAdapterDisplayMode(D3DADAPTER_DEFAULT, &d3ddm);
+    if (FAILED(hResult))
     {
-        return E_FAIL;
+        MessageBox(handle, TEXT("ディスプレイモードの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        return hResult;
     }
 
     //---デバイスのプレゼンテーションパラメータの設定---//
@@ -354,45 +359,62 @@ HRESULT SetupEnvironment(HWND handle)
 
     //---デバイスオブジェクトの生成---//
     //[デバイス作成制御]<描画>と<頂点処理>をハードウェアで行なう
-    if (FAILED((*g_pD3D)->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, handle, D3DCREATE_HARDWARE_VERTEXPROCESSING, &d3dpp, g_pD3DDevice.get())))
+    hResult = (*g_pD3D)->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, handle, D3DCREATE_HARDWARE_VERTEXPROCESSING, &d3dpp, g_pD3DDevice.get());
+    if (FAILED(hResult))
     {
         //上記の設定が失敗したら[デバイス作成制御]<描画>をハードウェアで行い、<頂点処理>はCPUで行なう
-        if (FAILED((*g_pD3D)->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, handle, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, g_pD3DDevice.get())))
+        hResult = (*g_pD3D)->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_HAL, handle, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, g_pD3DDevice.get());
+        if (FAILED(hResult))
         {
             //上記の設定が失敗したら[デバイス作成制御]<描画>と<頂点処理>をCPUで行なう
-            if (FAILED((*g_pD3D)->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_REF, handle, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, g_pD3DDevice.get())))
+            hResult = (*g_pD3D)->CreateDevice(D3DADAPTER_DEFAULT, D3DDEVTYPE_REF, handle, D3DCREATE_SOFTWARE_VERTEXPROCESSING, &d3dpp, g_pD3DDevice.get());
+            if (FAILED(hResult))
             {
                 //初期化失敗
                 MessageBox(handle, TEXT("デバイスオブジェクトの作成に失敗しました"), TEXT("初期化エラー"), MB_OK);
-                return E_FAIL;
+                return hResult;
             }
         }
     }
 
+    //---シェーダーバージョンの確認---//
+    hResult = (*g_pD3DDevice)->GetDeviceCaps(&d3dcaps);
+    if (FAILED(hResult))
+    {
+        MessageBox(handle, TEXT("シェーダーバージョンの確認に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        return hResult;
+    }
+
+    if ((d3dcaps.VertexShaderVersion < D3DVS_VERSION(2, 0)) || (d3dcaps.PixelShaderVersion < D3DPS_VERSION(2, 0)))
+    {
+        MessageBox(nullptr, TEXT("プログラマブルシェーダの機能に対応していません。"), TEXT("初期化エラー"), MB_OK);
+        return E_FAIL;
+    }
+
     //---レンダーステートパラメータの設定---//
-    (*g_pD3DDevice)->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);			//裏面のカリング
-    (*g_pD3DDevice)->SetRenderState(D3DRS_ZENABLE, TRUE);					//Zバッファを使用
-    (*g_pD3DDevice)->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);			//アルファブレンドを行う
-    (*g_pD3DDevice)->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		//アルファソースカラーの指定
-    (*g_pD3DDevice)->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	//アルファデスティネーションカラーの指定
+    hResult = (*g_pD3DDevice)->SetRenderState(D3DRS_CULLMODE, D3DCULL_CCW);			    //裏面のカリング
+    hResult = (*g_pD3DDevice)->SetRenderState(D3DRS_ZENABLE, TRUE);					    //Zバッファを使用
+    hResult = (*g_pD3DDevice)->SetRenderState(D3DRS_ALPHABLENDENABLE, TRUE);			//アルファブレンドを行う
+    hResult = (*g_pD3DDevice)->SetRenderState(D3DRS_SRCBLEND, D3DBLEND_SRCALPHA);		//アルファソースカラーの指定
+    hResult = (*g_pD3DDevice)->SetRenderState(D3DRS_DESTBLEND, D3DBLEND_INVSRCALPHA);	//アルファデスティネーションカラーの指定
 
     //---サンプラーステートパラメータの設定---//
-    (*g_pD3DDevice)->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);	//テクスチャアドレッシング方法(U値)を設定
-    (*g_pD3DDevice)->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);	//テクスチャアドレッシング方法(V値)を設定
-    (*g_pD3DDevice)->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);	    //テクスチャ拡大フィルタモードを設定
-    (*g_pD3DDevice)->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);	    //テクスチャ縮小フィルタモードを設定
+    hResult = (*g_pD3DDevice)->SetSamplerState(0, D3DSAMP_ADDRESSU, D3DTADDRESS_WRAP);	//テクスチャアドレッシング方法(U値)を設定
+    hResult = (*g_pD3DDevice)->SetSamplerState(0, D3DSAMP_ADDRESSV, D3DTADDRESS_WRAP);	//テクスチャアドレッシング方法(V値)を設定
+    hResult = (*g_pD3DDevice)->SetSamplerState(0, D3DSAMP_MAGFILTER, D3DTEXF_LINEAR);	//テクスチャ拡大フィルタモードを設定
+    hResult = (*g_pD3DDevice)->SetSamplerState(0, D3DSAMP_MINFILTER, D3DTEXF_LINEAR);	//テクスチャ縮小フィルタモードを設定
 
     //---テクスチャステージステートの設定---//
-    (*g_pD3DDevice)->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	//アルファブレンディング処理
-    (*g_pD3DDevice)->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	//最初のアルファ引数
-    (*g_pD3DDevice)->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);	//２番目のアルファ引数
+    hResult = (*g_pD3DDevice)->SetTextureStageState(0, D3DTSS_ALPHAOP, D3DTOP_MODULATE);	//アルファブレンディング処理
+    hResult = (*g_pD3DDevice)->SetTextureStageState(0, D3DTSS_ALPHAARG1, D3DTA_TEXTURE);	//最初のアルファ引数
+    hResult = (*g_pD3DDevice)->SetTextureStageState(0, D3DTSS_ALPHAARG2, D3DTA_CURRENT);	//２番目のアルファ引数
 
 #ifdef _DEBUG
     //---情報表示用フォントを設定---//
-    D3DXCreateFont((*g_pD3DDevice), 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, TEXT("Terminal"), g_pD3DXFont.get());
+    hResult = D3DXCreateFont(*g_pD3DDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, TEXT("Terminal"), g_pD3DXFont.get());
 #endif
 
-    return S_OK;
+    return hResult;
 }
 
 /////////////////////////////////////////////

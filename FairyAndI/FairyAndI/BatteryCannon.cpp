@@ -6,6 +6,7 @@
 #include "Model.h"
 #include "ModelManager.h"
 #include "Sphere.h"
+#include "SquareGauge.h"
 #include "Player.h"
 
 //ŠÖ”’è‹`//
@@ -122,8 +123,16 @@ HRESULT BATTERYCANNON::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXV
 /////////////////////////////////////////////
 void BATTERYCANNON::OnCollision(COLLISION* opponent)
 {
-    ACTORMANAGER::Destroy(this);
-    COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+    //’µ‚Ë•Ô‚Á‚½“®‚«
+    if (opponent->Owner->GetTag() == TEXT("Wall"))
+    {
+        Move.x = -Move.x;
+    }
+    else
+    {
+        ACTORMANAGER::Destroy(this);
+        COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+    }
 }
 
 /////////////////////////////////////////////
@@ -160,10 +169,12 @@ void BATTERYCANNON::Uninitialize(void)
 /////////////////////////////////////////////
 void BATTERYCANNON::Update(void)
 {
-    if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+ /*   if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         Gray = !Gray;
-    }
+    }*/
+
+	Gray = SQUAREGAUGE::GetFairyTime();
 
     if (!Gray)
     {

@@ -43,7 +43,7 @@ HRESULT BACKIMAGE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVEC
 }
 
 /////////////////////////////////////////////
-//関数名：Draw
+//関数名：Uninitialize
 //
 //機能：背景の終了
 //
@@ -57,7 +57,7 @@ void BACKIMAGE::Uninitialize(void)
 }
 
 /////////////////////////////////////////////
-//関数名：Draw
+//関数名：Update
 //
 //機能：背景の更新
 //

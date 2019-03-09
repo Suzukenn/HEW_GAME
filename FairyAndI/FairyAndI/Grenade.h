@@ -14,15 +14,13 @@ class SPHERE;
 //ƒNƒ‰ƒXéŒ¾//
 class GRENADE final : public SKILL
 {
-	public:
-        bool Gray;
-        bool	Throw;		//Å‰‚Éã‚Éã‚°‚é‚æ‚¤
+    private:
         DWORD BornTime;
 		D3DXVECTOR3 Move;
 
-		std::weak_ptr<MODEL> Model;
 		SPHERE* Collision;
 
+    public:
 		GRENADE(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
 		~GRENADE(void);
 

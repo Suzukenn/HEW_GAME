@@ -38,11 +38,13 @@ HRESULT WORDLIST::Initialize(LPCTSTR texturename, std::vector<tstring>& list, D3
     //---各種宣言---//
     int nCounter;
     HRESULT hResult;
-    D3DXVECTOR2 vecPanelPosition;
+    D3DXVECTOR2 vecPanelPosition[DISPLAY_VALUE] = { D3DXVECTOR2(position.x + 31.0F, position.y + 106.0F),
+                                                    D3DXVECTOR2(position.x + 176.0F, position.y + 70.0F),
+                                                    D3DXVECTOR2(position.x + 372.0F, position.y + 106.0F)
+                                                  };
 
     //---初期化処理---//
     SelectNumber = 0;
-    vecPanelPosition = D3DXVECTOR2(position.x + 20.0F, position.y + 30.0F);
     WordList.clear();
 
     for (auto& data : list)
@@ -63,7 +65,7 @@ HRESULT WORDLIST::Initialize(LPCTSTR texturename, std::vector<tstring>& list, D3
     //ワードパネル
     for (nCounter = 0; nCounter < DISPLAY_VALUE; ++nCounter)
     {
-        hResult = WordPlate.at(nCounter).Initialize(WordList.at(nCounter).data(), D3DXVECTOR2(vecPanelPosition.x + 160.0F * nCounter, vecPanelPosition.y + 30.0F));
+        hResult = WordPlate.at(nCounter).Initialize(WordList.at(nCounter).data(), vecPanelPosition[nCounter], nCounter % 2 ? D3DXVECTOR2(147.0F, 147.0F) : D3DXVECTOR2(98.0F, 98.0F));
         if (FAILED(hResult))
         {
             MessageBox(nullptr, TEXT("ワードリスト内のワードパネルの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);

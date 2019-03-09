@@ -11,7 +11,7 @@
 #include "InputManager.h"
 #include "ModelManager.h"
 #include "ObjectFactory.h"
-#include "Player.h"
+#include "ShaderManager.h"
 #include "SceneManager.h"
 #include "SideViewCamera.h"
 #include "SoundManager.h"
@@ -32,11 +32,11 @@
 void TRAINING::Draw(void)
 {
     //---オブジェクトの描画処理---//
-    ACTORMANAGER::Draw();
     Field.Draw();
     Ground.Draw();
-    Canvas.Draw();
     Back.Draw();
+    ACTORMANAGER::Draw();
+    Canvas.Draw();
 }
 
 /////////////////////////////////////////////
@@ -59,37 +59,43 @@ HRESULT TRAINING::Initialize(void)
     hResult = TEXTUREMANAGER::Initialize(TEXT("Data/GameScene/TextureList.txt"));
     if (FAILED(hResult))
     {
-        return E_FAIL;
+        return hResult;
     }
 
     hResult = MODELMANAGER::Initialize(TEXT("Data/GameScene/Model/ModelList.txt"));
     if (FAILED(hResult))
     {
-        return E_FAIL;
+        return hResult;
+    }
+
+    hResult = SHADERMANAGER::Initialize(TEXT("Data/GameScene/ShaderList.txt"));
+    if (FAILED(hResult))
+    {
+        return hResult;
     }
 
     hResult = WORDMANAGER::Initialize();
     if (FAILED(hResult))
     {
-        return E_FAIL;
+        return hResult;
     }
 
     hResult = ACTORMANAGER::Initialize();
     if (FAILED(hResult))
     {
-        return E_FAIL;
+        return hResult;
     }
 
     hResult = COLLISIONMANAGER::Initialize();
     if (FAILED(hResult))
     {
-        return E_FAIL;
+        return hResult;
     }
 
     //---オブジェクトの初期化処理---//
 
     //キャラクター
-    CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(-20.0F, 50.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+    CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(-20.0F, 50.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
     CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
 
     //エレメント
@@ -105,45 +111,45 @@ HRESULT TRAINING::Initialize(void)
     hResult = Field.Initialize(TEXT("Data/GameScene/Model/Field/Field.x"), TEXT("Field"), D3DXVECTOR3(0.0F, -10.0F, 0.0F), D3DXVECTOR3(1.0F, 20.0F, 1.0F));
     if (FAILED(hResult))
     {
-        return E_FAIL;
+        return hResult;
     }
 
     hResult = Ground.Initialize(TEXT("FIELD"), 40, 40, 8.0F, 8.0F);
     if (FAILED(hResult))
     {
-        return E_FAIL;
+        return hResult;
     }
-    hResult = Back.Initialize(TEXT("BACKGROUND"));
+    hResult = Back.Initialize(TEXT("SKILL_HOTFIRE"), D3DXVECTOR3(0.0F, 0.0F, 100.0F), D3DXVECTOR2(100.0F, 100.0F));
     if (FAILED(hResult))
     {
-        return E_FAIL;
+        return hResult;
     }
     //フレキシブルカメラ
     hResult = FlexibleCamera.Initialize(D3DXVECTOR3(0.0F, 100.0F, -200.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
     if (FAILED(hResult))
     {
-        return E_FAIL;
+        return hResult;
     }
 
     //サイドビューカメラ
     hResult = SIDEVIEWCAMERA::Initialize(D3DXVECTOR3(0.0F, 20.0F, -150.0F), PLAYER::GetPlayerPosition());
     if (FAILED(hResult))
     {
-        return E_FAIL;
+        return hResult;
     }
 
     //ディレクショナルライト
     hResult = DIRECTIONALLIGHT::Initialize();
     if (FAILED(hResult))
     {
-        return E_FAIL;
+        return hResult;
     }
 
     //UIキャンバス
     hResult = Canvas.Initialize();
     if (FAILED(hResult))
     {
-        return E_FAIL;
+        return hResult;
     }
 
     FADE::SetFade(FADE_IN);
@@ -151,7 +157,7 @@ HRESULT TRAINING::Initialize(void)
     //---BGM再生---//
     SOUNDMANAGER::Play(TEXT("BGM_TRAINING"));
 
-    return S_OK;
+    return hResult;
 }
 
 /////////////////////////////////////////////
@@ -166,6 +172,7 @@ HRESULT TRAINING::Initialize(void)
 void TRAINING::Uninitialize(void)
 {
     //---オブジェクトの終了処理---//
+    Back.Uninitialize();
     Canvas.Uninitialize();
     FlexibleCamera.Uninitialize();
     Field.Uninitialize();
@@ -175,6 +182,7 @@ void TRAINING::Uninitialize(void)
     ACTORMANAGER::Uninitialize();
     COLLISIONMANAGER::Uninitialize();
     WORDMANAGER::Uninitialize();
+    SHADERMANAGER::Uninitialize();
 
     //---テクスチャの削除---//
     TEXTUREMANAGER::Uninitialize();
@@ -196,7 +204,6 @@ void TRAINING::Update(void)
 {
     //---各種宣言---//
     static bool bCameraMode = false;
-
 
     //---オブジェクトの更新処理---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_START, TRIGGER))
@@ -236,6 +243,7 @@ void TRAINING::Update(void)
     }
 
     Canvas.Update();
+    Back.Update();
 
     //---画面遷移---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_BACK, TRIGGER))
