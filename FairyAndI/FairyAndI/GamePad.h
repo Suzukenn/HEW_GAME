@@ -31,12 +31,14 @@ class GAMEPAD
         std::vector<WORD> Preview;	       //前回の状態
         std::vector<WORD> Trigger;	       //トリガ状態
         std::vector<WORD> Release;	       //リリース状態
+		XINPUT_VIBRATION Vibration;		   //振動
 
     public:
         HRESULT Initialize(void);
         void Uninitialize(void);
         void Update(void);
 
+		
         D3DXVECTOR2 GetLeftStick(DWORD);
         float GetLeftTrigger(DWORD);
         bool GetHold(DWORD, DWORD);
@@ -44,6 +46,9 @@ class GAMEPAD
         D3DXVECTOR2 GetRightStick(DWORD);
         float GetRightTrigger(DWORD);
         bool GetTrigger(DWORD, DWORD);
+
+		void PlayVibration(DWORD, float, float);
+		void StopVibration(DWORD);
 };
 
 #endif

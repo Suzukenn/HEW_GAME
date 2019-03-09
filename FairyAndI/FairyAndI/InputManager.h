@@ -38,6 +38,9 @@ class INPUTMANAGER
         static bool GetKey(DWORD, PUSHTYPE);
         static bool GetMouseButton(MOUSEBUTTON, PUSHTYPE);
         static POINT GetMousePosition(void);
+
+		static void PlayGamePadVibration(DWORD, float, float);
+		static void StopGamePadVibration(DWORD);
 };
 
 #endif

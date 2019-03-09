@@ -5,17 +5,22 @@
 #include <memory>
 #include "Billboard.h"
 #include "Main.h"
+#include "Transform.h"
 
 //ƒNƒ‰ƒXéŒ¾//
-class BACKGROUND final : protected BILLBOARD 
+class BACKGROUND
 {
     private:
+        D3DXVECTOR3 Position;
+        BILLBOARD Billboard;
 
 	public:
 		void Draw(void);
         void Uninitialize(void);
-        HRESULT Initialize(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);
+        HRESULT Initialize(LPCTSTR, D3DXVECTOR3, D3DXVECTOR2);
         void Update(void);
+
+        virtual void OnCollision(COLLISION*) = delete;
 };
 
 #endif

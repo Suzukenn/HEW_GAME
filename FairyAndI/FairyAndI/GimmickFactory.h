@@ -9,7 +9,7 @@ class GIMMICKFACTORY
 {
     public:
 		static void InstantiateBatteryGimmick(D3DXVECTOR3, D3DXVECTOR3);
-		static void InstantiateBulletGimmick(D3DXVECTOR3, D3DXVECTOR3);
+		static void InstantiateBatteryCannon(D3DXVECTOR3, D3DXVECTOR3);
         static void InstantiateFireGimmick(D3DXVECTOR3, D3DXVECTOR3);
         static void InstantiateGimmick(tstring, D3DXVECTOR3, D3DXVECTOR3);
         static void InstantiateIceGimmick(D3DXVECTOR3, D3DXVECTOR3);

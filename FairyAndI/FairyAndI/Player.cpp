@@ -217,14 +217,7 @@ void PLAYER::Update(void)
     if (vecStickVector != D3DXVECTOR2(0.0F, 0.0F))
     {
         //ˆÚ“®
-        if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_LEFT_SHOULDER, HOLD))
-        {
-            Move.x += VALUE_MOVE_PLAYER * vecStickVector.x * 3.0F;
-        }
-        else
-        {
-            Move.x += VALUE_MOVE_PLAYER * vecStickVector.x;
-        }
+        Move.x += VALUE_MOVE_PLAYER * vecStickVector.x;
 
         //‰ñ“]
         Transform.Rotation.y = 90.0F * ((vecStickVector.x > 0.0F) - (vecStickVector.x < 0.0F));
@@ -281,7 +274,7 @@ void PLAYER::Update(void)
 
     if (Move.y != 0.0F)
     {
-        State = STATE_DAMAGE - 1;
+        State = STATE_WAIT;
     }
     Model.ChangeAnimation(State);
 

@@ -3,10 +3,10 @@
 #include "BatteryGimmick.h"
 #include "Collision.h"
 #include "CollisionManager.h"
+#include "GimmickFactory.h"
 #include "ModelManager.h"
 #include "Player.h"
 #include "Skill.h"
-#include "SkillFactory.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -123,17 +123,10 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DX
 /////////////////////////////////////////////
 void BATTERYGIMMICK::OnCollision(COLLISION* opponent)
 {
-    if (opponent->Owner->GetTag() == TEXT("Bullet"))
+    if (opponent->Owner->GetTag() == TEXT("BatteryCannon"))
     {
-        SKILL* Skill = dynamic_cast<SKILL*>(opponent->Owner);
-        if (Skill)
-        {
-            if (Skill->GetType() == TEXT("RETURN"))
-            {
-                ACTORMANAGER::Destroy(this);
-                COLLISIONMANAGER::Destroy((COLLISION*)Collision);
-            }
-        }
+        ACTORMANAGER::Destroy(this);
+        COLLISIONMANAGER::Destroy((COLLISION*)Collision);
     }
 }
 
@@ -189,7 +182,8 @@ void BATTERYGIMMICK::Update(void)
 		}
 
 		//弾発射
-		SKILLFACTORY::InstantiateSkill(TEXT("BATTERY"), TEXT("ICE"), BulletPosition, Transform.Rotation);
+		GIMMICKFACTORY::InstantiateBatteryCannon(BulletPosition, Transform.Rotation);
+
 		//リセット
 		Count = 0;
 	}

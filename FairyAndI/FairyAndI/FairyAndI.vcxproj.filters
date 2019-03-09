@@ -550,5 +550,16 @@
     <FxCompile Include="Data\GameScene\Shader\Sprite.fx">
       <Filter>ソースコード\System\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Data\GameScene\Shader\Gray.fx">
+      <Filter>ソースコード\System\Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Data\Resource\Application.ico">
+      <Filter>リソース</Filter>
+    </Image>
+    <Image Include="Data\Resource\Application_small.ico">
+      <Filter>リソース</Filter>
+    </Image>
   </ItemGroup>
 </Project>

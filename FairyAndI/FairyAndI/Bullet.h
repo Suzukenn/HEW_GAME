@@ -13,15 +13,13 @@ class SPHERE;
 //ƒNƒ‰ƒXéŒ¾//
 class BULLET final : public SKILL
 {
-    public:
-        bool Gray;
-
+    private:
         D3DXVECTOR3 Move;
         DWORD BornTime;
 
-        std::weak_ptr<MODEL> Model;
         SPHERE* Collision;
 
+    public:
         BULLET(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
         ~BULLET(void);
 

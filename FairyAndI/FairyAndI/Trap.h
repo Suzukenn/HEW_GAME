@@ -14,12 +14,10 @@ class SPHERE;
 //ƒNƒ‰ƒXéŒ¾//
 class TRAP final : public SKILL
 {
-    public:
-        bool Gray;
-
-	    std::weak_ptr<MODEL> Model;
+    private:
 	    SPHERE* Collision;
 
+    public:
 	    TRAP(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
 	    ~TRAP(void);
 

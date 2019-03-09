@@ -23,7 +23,6 @@ class GAMEOBJECT
         virtual void Uninitialize(void) PURE;
         virtual void Update(void) PURE;
 
-
         D3DXVECTOR3 GetPosition(void) { return Transform.Position; }
         tstring GetTag(void) { return Tag; }
 };

@@ -130,7 +130,7 @@ void SQUAREGAUGE::Update(void)
 
 	if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
 	{
-		FairyTime = FairyTime ? false : true;
+        FairyTime = !FairyTime;
 	}
 
 	++GaugeCnt;

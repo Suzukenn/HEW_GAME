@@ -15,7 +15,7 @@
 /////////////////////////////////////////////
 void BACKGROUND::Draw(void)
 {
-    BILLBOARD::Draw();
+    Billboard.Draw(Position);
 }
 
 /////////////////////////////////////////////
@@ -23,17 +23,19 @@ void BACKGROUND::Draw(void)
 //
 //機能：背景の初期化
 //
-//引数：(LPCTSTR)テクスチャ名,(D3DXVECTOR3)位置,(D3DXVECTOR3)大きさ
+//引数：(LPCTSTR)テクスチャ名,(D3DXVECTOR3)位置,(D3DXVECTOR2)大きさ
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT BACKGROUND::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVECTOR3 scale)
+HRESULT BACKGROUND::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVECTOR2 scale)
 {
     //---各種宣言---//
     HRESULT hResult;
 
     //---初期化処理---//
-    hResult = BILLBOARD::Initialize(texturename, position, scale);
+    Position = position;
+
+    hResult = Billboard.Initialize(texturename, scale);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("背景の初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -54,7 +56,7 @@ HRESULT BACKGROUND::Initialize(LPCTSTR texturename, D3DXVECTOR3 position, D3DXVE
 /////////////////////////////////////////////
 void BACKGROUND::Uninitialize(void)
 {
-    BILLBOARD::Uninitialize();
+    Billboard.Uninitialize();
 }
 
 /////////////////////////////////////////////
@@ -68,5 +70,5 @@ void BACKGROUND::Uninitialize(void)
 /////////////////////////////////////////////
 void BACKGROUND::Update(void)
 {
-    BILLBOARD::Update();
+    Billboard.Update();
 }

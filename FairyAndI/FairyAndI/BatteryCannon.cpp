@@ -123,8 +123,16 @@ HRESULT BATTERYCANNON::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXV
 /////////////////////////////////////////////
 void BATTERYCANNON::OnCollision(COLLISION* opponent)
 {
-    ACTORMANAGER::Destroy(this);
-    COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+    //’µ‚Ë•Ô‚Á‚½“®‚«
+    if (opponent->Owner->GetTag() == TEXT("Wall"))
+    {
+        Move.x = -Move.x;
+    }
+    else
+    {
+        ACTORMANAGER::Destroy(this);
+        COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+    }
 }
 
 /////////////////////////////////////////////
