@@ -79,6 +79,28 @@ HRESULT ANIMATIONSPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D
 }
 
 /////////////////////////////////////////////
+//関数名：SetPosition
+//
+//機能：位置をセット
+//
+//引数：(D3DXVECTOR2)位置
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void ANIMATIONSPRITE::SetPosition(D3DXVECTOR2 position)
+{
+	//---各種宣言---//
+	int nCounter;       //カウンター
+
+	//---値更新---//
+	for (nCounter = 0; nCounter < 4; ++nCounter)
+	{
+		Vertex.at(nCounter).Position.x = position.x + (nCounter & 1) * Size.x;
+		Vertex.at(nCounter).Position.y = position.y + ((nCounter >> 1) & 1) * Size.y;
+	}
+}
+
+/////////////////////////////////////////////
 //関数名：SetSpriteUV
 //
 //機能：アニメーションの更新
