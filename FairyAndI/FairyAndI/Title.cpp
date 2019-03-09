@@ -244,7 +244,7 @@ void TITLE::Update(void)
 		switch (Mode)
 		{
 			case MODE_FIRST:
-				if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
+				if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, 0xFFFF, TRIGGER))
 				{
 					Mode = MODE_SELECT;
 				}
@@ -270,7 +270,8 @@ void TITLE::Update(void)
 				}
 				break;
 			case MODE_MANUAL:
-				break;
+                SCENEMANAGER::SetScene(SCENE_TRAINING);
+                break;
 			default:
 				break;
 		}

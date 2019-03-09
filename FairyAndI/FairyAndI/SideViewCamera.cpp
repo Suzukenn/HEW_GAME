@@ -5,15 +5,13 @@
 
 //＝＝＝定数・マクロ定義＝＝＝//
 #define	CAM_POS_P_X			(0.0f)					// カメラの視点初期位置(X座標)
-#define	CAM_POS_P_Y			(100.0f)				// カメラの視点初期位置(Y座標)
-#define	CAM_POS_P_Z			(-150.0f)				// カメラの視点初期位置(Z座標)
+#define	CAM_POS_P_Y			(10.0f)				// カメラの視点初期位置(Y座標)
+#define	CAM_POS_P_Z			(-100.0f)				// カメラの視点初期位置(Z座標)
 #define	CAM_POS_R_X			(0.0f)					// カメラの注視点初期位置(X座標)
 #define	CAM_POS_R_Y			(50.0f)					// カメラの注視点初期位置(Y座標)
 #define	CAM_POS_R_Z			(0.0f)					// カメラの注視点初期位置(Z座標)
-#define	VALUE_MOVE_CAMERA	(2.0f)					// カメラの移動量
-#define	VALUE_ROTATE_CAMERA	(D3DX_PI * 0.01f)		// カメラの回転量
-#define CAM_MAX_WID			(1400)
-#define CAM_MIN_WID			(-1400)
+#define CAM_MAX_WID			1400.0F
+#define CAM_MIN_WID			-1400.F
 
 //＝＝＝グローバル宣言＝＝＝//
 D3DXVECTOR3 SIDEVIEWCAMERA::Position;
@@ -149,15 +147,17 @@ void SIDEVIEWCAMERA::Update(D3DXVECTOR3 player)
 	if(!PositionPlace)
 	{
 		//プレイヤーを真ん中にして追いかける処理
-        Position = D3DXVECTOR3(CAM_POS_P_X + player.x, CAM_POS_P_Y, CAM_POS_P_Z);
-		ReversoPoint = D3DXVECTOR3(CAM_POS_R_X + player.x, CAM_POS_R_Y, CAM_POS_R_Z);
+        Position.x = player.x;// D3DXVECTOR3(player.x, player.y, );
+		ReversoPoint = player;
+        ReversoPoint.y += 10.0F;
 	}
 	else
 	{
         //スクロール処理
         Position.x += VALUE_MOVE_PLAYER * fStickVector;
-        ReversoPoint.x += VALUE_MOVE_PLAYER * fStickVector;
-	}
+        ReversoPoint = player;
+        ReversoPoint.y += 10.0F;
+    }
 
 	//カメラの移動制限
 	if (Position.x > CAM_MAX_WID)

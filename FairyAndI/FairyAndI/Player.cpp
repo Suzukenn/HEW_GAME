@@ -90,13 +90,13 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     HRESULT hResult;
 
     //---初期化処理---//
-    //位置・向きの初期設定
     Transform.Position = position;
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(100.0F, 100.0F, 100.0F);
     HP = MAX_PLAYER_HP;
     State = STATE_WAIT;
     Gray = false;
+    Vibration = 0;
     Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
     Tag = TEXT("Player");
 
@@ -176,6 +176,7 @@ void PLAYER::Update(void)
     D3DXVECTOR3 vecInstancePosition;
     D3DXVECTOR2 vecStickVector;
     D3DXVECTOR3 vecCameraRotation;
+    static D3DXVECTOR2 vecVibration;
 
     //---初期化処理---//
     Move.x = 0.0F;
@@ -191,11 +192,21 @@ void PLAYER::Update(void)
     if (Gray)
     {
         Model.SetSpeed(0.0);
+        INPUTMANAGER::StopGamePadVibration(GAMEPADNUMBER_1P);
         return;
     }
     else
     {
         Model.SetSpeed(1.0);
+        INPUTMANAGER::PlayGamePadVibration(GAMEPADNUMBER_1P, vecVibration.x, vecVibration.y);
+    }
+
+    //---バイブレーション---//
+    if (--Vibration <= 0)
+    {
+        INPUTMANAGER::StopGamePadVibration(GAMEPADNUMBER_1P);
+        vecVibration = D3DXVECTOR2(0.0F, 0.0F);
+        Vibration = 0;
     }
 
     //---移動処理---//
@@ -257,6 +268,9 @@ void PLAYER::Update(void)
         vecInstancePosition.z = 0.0F;
 
         SKILLFACTORY::InstantiateSkill(WORDMENU::NotificationAdjective(), WORDMENU::NotificationNoun(), vecInstancePosition, Transform.Rotation);
+        vecVibration = D3DXVECTOR2(0.5F, 0.5F);
+        INPUTMANAGER::PlayGamePadVibration(GAMEPADNUMBER_1P, vecVibration.x, vecVibration.y);
+        Vibration = 100;
     }
 
     hp = HP;

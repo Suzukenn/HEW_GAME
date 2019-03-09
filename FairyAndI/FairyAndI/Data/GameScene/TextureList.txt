@@ -1,4 +1,5 @@
-Data/GameScene/Texture/Field.jpg BACKGROUND
+Data/GameScene/Texture/Background_Front.png BACKGROUND_FRONT
+Data/GameScene/Texture/Background_Back.png BACKGROUND_BACK
 Data/GameScene/Texture/Field.jpg FIELD
 Data/GameScene/Texture/HotFire.png SKILL_HOTFIRE
 Data/GameScene/Texture/HotIce.png SKILL_HOTICE
