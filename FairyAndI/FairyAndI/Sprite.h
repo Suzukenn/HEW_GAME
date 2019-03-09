@@ -22,7 +22,6 @@ class SPRITE
         virtual void Draw(void);
         virtual HRESULT Initialize(LPCTSTR, D3DXVECTOR2, D3DXVECTOR2);
         virtual void Uninitialize(void);
-		virtual void SetAlpha(D3DCOLOR);
 };
 
 #endif
