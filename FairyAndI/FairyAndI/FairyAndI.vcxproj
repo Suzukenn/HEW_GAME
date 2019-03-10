@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="ActorManager.cpp" />
     <ClCompile Include="AnimationBackImage.cpp" />
+    <ClCompile Include="AnimationModelManager.cpp" />
     <ClCompile Include="AnimationModel.cpp" />
     <ClCompile Include="AnimationModelHierarchy.cpp" />
     <ClCompile Include="BackGround.cpp" />
@@ -169,12 +170,14 @@
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="SkillFactory.cpp" />
+    <ClCompile Include="Slime.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="SquareGauge.cpp" />
     <ClCompile Include="StageButton.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Trap.cpp" />
     <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="Wood.cpp" />
     <ClCompile Include="WoodGimmick.cpp" />
     <ClCompile Include="WordManager.cpp" />
     <ClCompile Include="SideViewCamera.cpp" />
@@ -211,6 +214,7 @@
     <ClInclude Include="AnimationModelContainer.h" />
     <ClInclude Include="AnimationModelFrame.h" />
     <ClInclude Include="AnimationModelHierarchy.h" />
+    <ClInclude Include="AnimationModelManager.h" />
     <ClInclude Include="BackImage.h" />
     <ClInclude Include="BatteryCannon.h" />
     <ClInclude Include="BatteryGimmick.h" />
@@ -247,6 +251,7 @@
     <ClInclude Include="SelectScene.h" />
     <ClInclude Include="Skill.h" />
     <ClInclude Include="SkillFactory.h" />
+    <ClInclude Include="Slime.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="SquareGauge.h" />
     <ClInclude Include="StageButton.h" />
@@ -255,6 +260,7 @@
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Trap.h" />
     <ClInclude Include="Wall.h" />
+    <ClInclude Include="Wood.h" />
     <ClInclude Include="WoodGimmick.h" />
     <ClInclude Include="WordManager.h" />
     <ClInclude Include="SideViewCamera.h" />

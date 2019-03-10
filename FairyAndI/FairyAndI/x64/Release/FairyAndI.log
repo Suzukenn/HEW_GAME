@@ -1,8 +1,5 @@
-﻿  SquareGauge.cpp
-  コード生成しています。
-  160 of 5714 functions ( 2.8%) were compiled, the rest were copied from previous compilation.
-    0 functions were new in current compilation
-    29 functions had inline decision re-evaluated but remain unchanged
-  コード生成が終了しました。
-  FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
-  FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)
+﻿  BackGround.cpp
+  BatteryGimmick.cpp
+  Billboard.cpp
+  Bullet.cpp
+  CharacterFactory.cpp

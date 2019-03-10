@@ -2,6 +2,7 @@
 #define _PLAYER_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
+#include <memory>
 #include "AnimationModel.h"
 #include "GameObject.h"
 #include "Main.h"
@@ -22,15 +23,15 @@ class PLAYER final : public GAMEOBJECT
         int Vibration;
         bool Gray;
         D3DXVECTOR3 Move;
-        ANIMATIONMODEL Model;
+        std::shared_ptr<ANIMATIONMODEL> Model;
 
         SPHERE* Collision;
 
 	public:
-        PLAYER(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);
+        PLAYER(D3DXVECTOR3, D3DXVECTOR3);
 
         void Draw(void);
-		HRESULT Initialize(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);
+		HRESULT Initialize(D3DXVECTOR3, D3DXVECTOR3);
 		void Uninitialize(void);
 		void Update(void);
 

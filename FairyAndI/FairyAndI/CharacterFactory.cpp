@@ -1,9 +1,10 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
 #include "CharacterFactory.h"
-#include "Enemy.h"
 #include "Fairy.h"
 #include "Player.h"
+#include "Slime.h"
+#include "Wood.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -17,21 +18,7 @@
 /////////////////////////////////////////////
 void CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    ACTORMANAGER::GameObject.emplace_back(new FAIRY(TEXT("Data/GameScene/Model/Character/Fairy.x"), position, rotation));
-}
-
-/////////////////////////////////////////////
-//関数名：InstantiatePlant
-//
-//機能：プラントの生成
-//
-//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
-//
-//戻り値：なし
-/////////////////////////////////////////////
-void CHARACTERFACTORY::InstantiatePlant(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
-{
-    ACTORMANAGER::GameObject.emplace_back(new ENEMY(TEXT("Data/GameScene/Model/Character/Wait.x"), TEXT("Plant"), position, rotation));
+    ACTORMANAGER::GameObject.emplace_back(new FAIRY(position, rotation));
 }
 
 /////////////////////////////////////////////
@@ -45,7 +32,7 @@ void CHARACTERFACTORY::InstantiatePlant(D3DXVECTOR3 position, D3DXVECTOR3 rotati
 /////////////////////////////////////////////
 void CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    ACTORMANAGER::GameObject.emplace_back(new PLAYER(TEXT("Data/GameScene/Model/Character/Player.x"), position, rotation));
+    ACTORMANAGER::GameObject.emplace_back(new PLAYER(position, rotation));
 }
 
 /////////////////////////////////////////////
@@ -59,5 +46,19 @@ void CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3 position, D3DXVECTOR3 rotat
 /////////////////////////////////////////////
 void CHARACTERFACTORY::InstantiateSlime(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    ACTORMANAGER::GameObject.emplace_back(new ENEMY(TEXT("Data/GameScene/Model/Character/Wait.x"), TEXT("Slime"), position, rotation));
+    ACTORMANAGER::GameObject.emplace_back(new SLIME(TEXT("Slime"), position, rotation));
+}
+
+/////////////////////////////////////////////
+//関数名：InstantiateWood
+//
+//機能：木のオバケの生成
+//
+//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void CHARACTERFACTORY::InstantiateWood(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+{
+    ACTORMANAGER::GameObject.emplace_back(new WOOD(TEXT("Wood"), position, rotation));
 }

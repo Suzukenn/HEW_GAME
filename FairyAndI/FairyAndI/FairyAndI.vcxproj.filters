@@ -212,6 +212,15 @@
     <ClCompile Include="FirstButton.cpp">
       <Filter>ソースコード\UI\Button</Filter>
     </ClCompile>
+    <ClCompile Include="Slime.cpp">
+      <Filter>ソースコード\Actor\Character\EnemySide</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationModelManager.cpp">
+      <Filter>ソースコード\System\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Wood.cpp">
+      <Filter>ソースコード\Actor\Character\EnemySide</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -454,6 +463,15 @@
     </ClInclude>
     <ClInclude Include="FirstButton.h">
       <Filter>ソースコード\UI\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="Slime.h">
+      <Filter>ソースコード\Actor\Character\EnemySide</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationModelManager.h">
+      <Filter>ソースコード\System\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Wood.h">
+      <Filter>ソースコード\Actor\Character\EnemySide</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

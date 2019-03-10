@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
+#include "AnimationModelManager.h"
 #include "BackGround.h"
 #include "Canvas.h"
 #include "CharacterFactory.h"
@@ -68,6 +69,12 @@ HRESULT TRAINING::Initialize(void)
         return hResult;
     }
 
+    hResult = ANIMATIONMODELMANAGER::Initialize(TEXT("Data/GameScene/Model/AnimationModelList.txt"));
+    if (FAILED(hResult))
+    {
+        return hResult;
+    }
+
     hResult = SHADERMANAGER::Initialize(TEXT("Data/GameScene/ShaderList.txt"));
     if (FAILED(hResult))
     {
@@ -98,6 +105,10 @@ HRESULT TRAINING::Initialize(void)
     CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(-20.0F, 50.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
     CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
 
+    //敵
+    //CHARACTERFACTORY::InstantiateSlime(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
+    CHARACTERFACTORY::InstantiateWood(D3DXVECTOR3(150.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
+
     //エレメント
     OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3(100.0F, 0.0F, 0.0F));
     OBJECTFACTORY::InstantiateIceElement(D3DXVECTOR3(-50.0F, 0.0F, 0.0F));
@@ -105,6 +116,8 @@ HRESULT TRAINING::Initialize(void)
     //ギミック
     GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(50.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
 	OBJECTFACTORY::InstantiateGoal(D3DXVECTOR3(150.0F, 10.0F, 0.0F));
+
+
 
     //地形
     //hResult = Field.Initialize(TEXT("Data/Common/Model/Field/Field.x"), TEXT("Field"), D3DXVECTOR3(0.0F, -10.0F, 0.0F), D3DXVECTOR3(20.0F, 20.0F, 20.0F));
@@ -183,6 +196,8 @@ void TRAINING::Uninitialize(void)
     COLLISIONMANAGER::Uninitialize();
     WORDMANAGER::Uninitialize();
     SHADERMANAGER::Uninitialize();
+    MODELMANAGER::Uninitialize();
+    ANIMATIONMODELMANAGER::Uninitialize();
 
     //---テクスチャの削除---//
     TEXTUREMANAGER::Uninitialize();
@@ -241,6 +256,11 @@ void TRAINING::Update(void)
     {
         WORDMANAGER::UnLockWord(TEXT("RICECAKE"));
     }
+    if (INPUTMANAGER::GetKey(DIK_B, TRIGGER))
+    {
+        CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(-20.0F, 50.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
+    }
+
 
     Canvas.Update();
     Back.Update();
