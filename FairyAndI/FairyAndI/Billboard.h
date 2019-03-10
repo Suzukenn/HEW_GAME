@@ -36,6 +36,7 @@ class BILLBOARD
     public:
         void Draw(D3DXVECTOR3);
         HRESULT Initialize(LPCTSTR, D3DXVECTOR2, bool inverted = false, POINT uv = { 1, 1 });
+        void MoveTexture(float);
         void SetUV(int);
         void Uninitialize(void);
         void Update(void);

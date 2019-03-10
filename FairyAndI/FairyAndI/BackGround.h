@@ -18,7 +18,7 @@ class BACKGROUND
 		void Draw(void);
         void Uninitialize(void);
         HRESULT Initialize(LPCTSTR, D3DXVECTOR3, D3DXVECTOR2);
-        void Update(void);
+        void Update(float value = 0.0F);
 
         virtual void OnCollision(COLLISION*) = delete;
 };

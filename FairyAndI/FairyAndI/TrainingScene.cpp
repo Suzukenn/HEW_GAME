@@ -243,7 +243,7 @@ void TRAINING::Update(void)
     }
 
     Canvas.Update();
-    Back.Update();
+    Back.Update(0.0075F);
 
     //---‰æ–Ê‘JˆÚ---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_BACK, TRIGGER))

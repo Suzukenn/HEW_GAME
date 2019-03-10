@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "BackGround.h"
+#include "InputManager.h"
 #include "TextureManager.h"
 #include "SideViewCamera.h"
 
@@ -68,7 +69,15 @@ void BACKGROUND::Uninitialize(void)
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void BACKGROUND::Update(void)
+void BACKGROUND::Update(float value)
 {
+    //---各種宣言---//
+    D3DXVECTOR2 vecStick;
+
+    //---初期化処理---//
+    vecStick = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT);
+
+    Position.x += vecStick.x;
+    Billboard.MoveTexture(value * -vecStick.x);
     Billboard.Update();
 }
