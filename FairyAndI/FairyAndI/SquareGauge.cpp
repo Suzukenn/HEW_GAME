@@ -63,7 +63,7 @@ HRESULT SQUAREGAUGE::Initialize(LPCTSTR background, LPCTSTR gauge, D3DXVECTOR2 p
     Percent = 0.5F;
     Size.x = 207.0F;
     Size.y = 30.0F;
-    Percent = 0.5F;
+    Percent = 1.0F;
 	FairyTime = false;
 
     //îwåi
@@ -178,5 +178,7 @@ void SQUAREGAUGE::Update(void)
 
 	//ÉQÅ[ÉWîΩâf
     MemoryVertex.at(1).Position.x = MemoryVertex.at(0).Position.x + Size.x * Percent;
+    MemoryVertex.at(1).U = Percent;
     MemoryVertex.at(3).Position.x = MemoryVertex.at(2).Position.x + Size.x * Percent;
+    MemoryVertex.at(3).U = MemoryVertex.at(1).U;
 }

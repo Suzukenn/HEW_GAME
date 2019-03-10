@@ -132,7 +132,7 @@ HRESULT TRAINING::Initialize(void)
     }
 
     //サイドビューカメラ
-    hResult = SIDEVIEWCAMERA::Initialize(D3DXVECTOR3(0.0F, 20.0F, -150.0F), PLAYER::GetPlayerPosition());
+    hResult = SIDEVIEWCAMERA::Initialize(D3DXVECTOR3(0.0F, 20.0F, -50.0F), PLAYER::GetPlayerPosition());
     if (FAILED(hResult))
     {
         return hResult;

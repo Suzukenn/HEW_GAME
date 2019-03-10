@@ -19,6 +19,7 @@ class PLAYER final : public GAMEOBJECT
 	private:
         int HP;
         int State;
+        int Vibration;
         bool Gray;
         D3DXVECTOR3 Move;
         ANIMATIONMODEL Model;

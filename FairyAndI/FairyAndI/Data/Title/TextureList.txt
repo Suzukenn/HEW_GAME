@@ -1,5 +1,7 @@
 Data/Title/TitleLogo.png TITLE_LOGO
 Data/Title/Background_Back.png TITLE_BACK
 Data/Title/Background_Front.png TITLE_FRONT
-Data/Title/GameStartButton.png START_BUTTON
-Data/Title/Training.tga TRAINING_BUTTON
+Data/Title/Cursor.png CURSOR
+Data/Title/PushButton.png PUSHBUTTON
+Data/Title/GameStart.png GAMESTART
+Data/Title/ControlManual.png MANUAL

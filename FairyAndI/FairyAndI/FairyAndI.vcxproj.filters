@@ -209,6 +209,9 @@
     <ClCompile Include="AnimationBackImage.cpp">
       <Filter>ソースコード\Actor\Object\2D</Filter>
     </ClCompile>
+    <ClCompile Include="FirstButton.cpp">
+      <Filter>ソースコード\UI\Button</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -448,6 +451,9 @@
     </ClInclude>
     <ClInclude Include="AnimationbackImage.h">
       <Filter>ソースコード\Actor\Object\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="FirstButton.h">
+      <Filter>ソースコード\UI\Button</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
