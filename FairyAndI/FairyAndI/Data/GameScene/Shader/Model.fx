@@ -54,10 +54,6 @@ VERTEX_OUTPUT DefaultVertexShader(VERTEX_INPUT input)
     //---各種宣言---//
     VERTEX_OUTPUT output;
 
-    float4 normL = normalize(float4(0.0F, -0.6F, 1.0F, 1.0F));  //光源ベクトル(単位ベクトル)
-    float4 normN = normalize(float4(input.Normal, 1.0F));       //法線ベクトル(単位ベクトル)
-    float  L = dot(normN, normL);                               //光の強さ
-
     //---データの代入---//
     output.Position = mul(float4(input.Position, 1.0F), WorldViewProjection);
     output.Diffuse = Diffuse;
@@ -87,7 +83,7 @@ PIXEL_OUTPUT DefaultNonTexturePixelShader(VERTEX_OUTPUT input)
 }
 
 /////////////////////////////////////////////
-//関数名：DefaultNonTexturePixelShaderToMono
+//関数名：NonTexturePixelShaderToMono
 //
 //機能：モノクロのテクスチャなしピクセルシェーダ
 //
@@ -95,7 +91,7 @@ PIXEL_OUTPUT DefaultNonTexturePixelShader(VERTEX_OUTPUT input)
 //
 //戻り値：(float4)処理の成否
 /////////////////////////////////////////////
-PIXEL_OUTPUT DefaultNonTexturePixelShaderToMono(VERTEX_OUTPUT input)
+PIXEL_OUTPUT NonTexturePixelShaderToMono(VERTEX_OUTPUT input)
 {
     //---各種宣言---//
     PIXEL_OUTPUT output;
@@ -127,7 +123,7 @@ PIXEL_OUTPUT DefaultTexturePixelShader(VERTEX_OUTPUT input)
 }
 
 /////////////////////////////////////////////
-//関数名：PixelToMono
+//関数名：TexturePixelShaderToMono
 //
 //機能：モノクロ化
 //
@@ -135,7 +131,7 @@ PIXEL_OUTPUT DefaultTexturePixelShader(VERTEX_OUTPUT input)
 //
 //戻り値：(float4)処理の成否
 /////////////////////////////////////////////
-PIXEL_OUTPUT PixelToMono(VERTEX_OUTPUT input)
+PIXEL_OUTPUT TexturePixelShaderToMono(VERTEX_OUTPUT input)
 {
     PIXEL_OUTPUT output;
 
@@ -163,7 +159,7 @@ technique NonTextureModel
     pass Pass1
     {
         VertexShader = compile vs_2_0 DefaultVertexShader();
-        PixelShader = compile ps_2_0 DefaultNonTexturePixelShaderToMono();
+        PixelShader = compile ps_2_0 NonTexturePixelShaderToMono();
     }
 }
 
@@ -175,9 +171,9 @@ technique TextureModel
         PixelShader = compile ps_2_0 DefaultTexturePixelShader();
     }
 
-    //pass Pass1
-    //{
-    //    VertexShader = compile vs_2_0 DefaultVertexShader();
-    //    PixelShader = compile ps_2_0 PixelToMono();
-    //}
+    pass Pass1
+    {
+        VertexShader = compile vs_2_0 DefaultVertexShader();
+        PixelShader = compile ps_2_0 TexturePixelShaderToMono();
+    }
 }

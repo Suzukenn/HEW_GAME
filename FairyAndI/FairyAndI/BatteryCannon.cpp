@@ -2,12 +2,10 @@
 #include "ActorManager.h"
 #include "BatteryCannon.h"
 #include "CollisionManager.h"
-#include "InputManager.h"
 #include "Model.h"
 #include "ModelManager.h"
 #include "Sphere.h"
 #include "SquareGauge.h"
-#include "Player.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -41,7 +39,7 @@ BATTERYCANNON::~BATTERYCANNON(void)
 /////////////////////////////////////////////
 //関数名：Draw
 //
-//機能：弾丸の描画
+//機能：砲弾の描画
 //
 //引数：なし
 //
@@ -78,7 +76,7 @@ void BATTERYCANNON::Draw(void)
 /////////////////////////////////////////////
 //関数名：Initialize
 //
-//機能：弾丸の初期化
+//機能：砲弾の初期化
 //
 //引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
@@ -138,7 +136,7 @@ void BATTERYCANNON::OnCollision(COLLISION* opponent)
 /////////////////////////////////////////////
 //関数名：Uninitialize
 //
-//機能：弾丸の終了
+//機能：砲弾の終了
 //
 //引数：なし
 //
@@ -161,7 +159,7 @@ void BATTERYCANNON::Uninitialize(void)
 /////////////////////////////////////////////
 //関数名：Update
 //
-//機能：弾丸の更新
+//機能：砲弾の更新
 //
 //引数：なし
 //
@@ -169,11 +167,6 @@ void BATTERYCANNON::Uninitialize(void)
 /////////////////////////////////////////////
 void BATTERYCANNON::Update(void)
 {
- /*   if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
-    {
-        Gray = !Gray;
-    }*/
-
 	Gray = SQUAREGAUGE::GetFairyTime();
 
     if (Gray)

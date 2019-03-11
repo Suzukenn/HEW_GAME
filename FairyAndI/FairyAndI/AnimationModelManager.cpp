@@ -34,7 +34,7 @@ HRESULT ANIMATIONMODELMANAGER::Create(const FILEPARAMETER& data)
     }
     else
     {
-        MessageBox(nullptr, TEXT("モデルの作成に失敗しました"), data.FileName.data(), MB_ICONSTOP | MB_OK);
+        MessageBox(nullptr, TEXT("アニメーションモデルの作成に失敗しました"), data.FileName.data(), MB_ICONSTOP | MB_OK);
     }
 
     return hResult;
@@ -64,7 +64,7 @@ HRESULT ANIMATIONMODELMANAGER::Initialize(LPCTSTR filename)
     hResult = Load(conList, filename);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("オブジェクトリストの読み込みに失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
+        MessageBox(nullptr, TEXT("アニメーションモデルリストの読み込みに失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
         Uninitialize();
         return hResult;
     }
@@ -74,7 +74,7 @@ HRESULT ANIMATIONMODELMANAGER::Initialize(LPCTSTR filename)
     {
         if (FAILED(Create(data)))
         {
-            MessageBox(nullptr, TEXT("オブジェクトデータの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
+            MessageBox(nullptr, TEXT("アニメーションモデルデータの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
             Uninitialize();
             return hResult;
         }
@@ -108,7 +108,7 @@ HRESULT ANIMATIONMODELMANAGER::Load(std::vector<FILEPARAMETER>& list, LPCTSTR fi
     file.open(filename);
     if (file.fail())
     {
-        MessageBox(nullptr, TEXT("モデルリストを開けませんでした"), filename, MB_ICONSTOP | MB_OK);
+        MessageBox(nullptr, TEXT("アニメーションモデルリストを開けませんでした"), filename, MB_ICONSTOP | MB_OK);
         Uninitialize();
         return E_FAIL;
     }
@@ -169,7 +169,7 @@ HRESULT ANIMATIONMODELMANAGER::GetModel(LPCTSTR modelname, std::shared_ptr<ANIMA
     }
     catch (const std::out_of_range&)
     {
-        MessageBox(nullptr, TEXT("モデルが存在しません"), modelname, MB_ICONSTOP | MB_OK);
+        MessageBox(nullptr, TEXT("アニメーションモデルが存在しません"), modelname, MB_ICONSTOP | MB_OK);
         return E_FAIL;
     }
     return S_OK;

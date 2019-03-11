@@ -66,7 +66,7 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3
     DWORD dwMaterial;
     DWORD dwBoneValue;
     std::string strTexturePath;
-    std::wstring strTexturePathW;
+    std::wstring strTexturePathT;
 
     TCHAR szCurrentDirectory[_MAX_PATH];
     char szTexturePath[_MAX_DIR];
@@ -170,10 +170,10 @@ HRESULT ANIMATIONMODELHIERARCHY::CreateMeshContainer(THIS_ LPCSTR Name, CONST D3
                 //テクスチャのファイルパスを保存(再読み込み時に必要)
                 _splitpath(pMeshContainer->pMaterials[dwMaterial].pTextureFilename, nullptr, szTexturePath, nullptr, nullptr);
                 strTexturePath = pMeshContainer->pMaterials[dwMaterial].pTextureFilename;
-                strTexturePathW = std::wstring(strTexturePath.begin(), strTexturePath.end());
+                strTexturePathT = tstring(strTexturePath.begin(), strTexturePath.end());
 
                 //テクスチャ情報の読み込み
-                hResult = D3DXCreateTextureFromFile(pDevice, strTexturePathW.data(), &pMeshContainer->Texture.at(dwMaterial));
+                hResult = D3DXCreateTextureFromFile(pDevice, strTexturePathT.data(), &pMeshContainer->Texture.at(dwMaterial));
                 if (FAILED(hResult))
                 {
                     MessageBox(nullptr, TEXT("メッシュのテクスチャの読み込みに失敗しました"), TEXT("初期化エラー"), MB_OK);

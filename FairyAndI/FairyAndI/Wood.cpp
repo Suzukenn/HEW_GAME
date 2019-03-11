@@ -68,7 +68,7 @@ HRESULT WOOD::Initialize(tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation
     HRESULT hResult;
 
     //---初期化処理---//
-    hResult = ENEMY::Initialize(TEXT("WOOD"), tag, position, rotation, D3DXVECTOR3(400.0F, 400.0F, 400.0F));
+    hResult = ENEMY::Initialize(TEXT("WOOD"), tag, position, rotation, D3DXVECTOR3(300.0F, 300.0F, 300.0F));
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("木のオバケの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -142,14 +142,16 @@ void WOOD::Update(void)
     switch (State)
     {
         case WOODSTATE_WAIT:
+
+            if (AttackCool)
+            {
+                --AttackCool;
+            }
+
             //---敵の索敵---//
             if (ENEMY::SearchTarget(PlayerPosition, VISIBILITY))
             {
-                if (AttackCool)
-                {
-                    --AttackCool;
-                }
-                else
+                if (!AttackCool)
                 {
                     State = WOODSTATE_ATTACK;
                 }

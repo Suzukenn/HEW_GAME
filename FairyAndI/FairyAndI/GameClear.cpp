@@ -31,6 +31,9 @@ void GAMECLEAR::ChooseButton(void)
 		//右にスティックを入力
 		if (vecStickVector.y > 0.0F)
 		{
+            SOUNDMANAGER::Stop(TEXT("SE_CURSOR"));
+            SOUNDMANAGER::Play(TEXT("SE_CURSOR"));
+
 			IntervalCnt = 0;
 			--Select;
 			CursorPos.y -= 100.0F;
@@ -43,6 +46,9 @@ void GAMECLEAR::ChooseButton(void)
 		//左にスティックを入力
 		else if (vecStickVector.y < 0.0F)
 		{
+            SOUNDMANAGER::Stop(TEXT("SE_CURSOR"));
+            SOUNDMANAGER::Play(TEXT("SE_CURSOR"));
+
 			IntervalCnt = 0;
 			++Select;
 			CursorPos.y += 100.0F;
@@ -86,45 +92,53 @@ void GAMECLEAR::Draw(void)
 /////////////////////////////////////////////
 HRESULT GAMECLEAR::Initialize(void)
 {
+    //---各種宣言---//
+    HRESULT hResult;
+
 	//---各種初期---//
 	CursorPos = D3DXVECTOR2(350.0F, 400.0F);
 	Select = 0;
 
-    if (FAILED(TEXTUREMANAGER::Initialize(TEXT("Data/GameClear/TextureList.txt"))))
+    hResult = TEXTUREMANAGER::Initialize(TEXT("Data/GameClear/TextureList.txt"));
+    if (FAILED(hResult))
     {
-        return E_FAIL;
+        return hResult;
     }
 
     //---オブジェクトの初期化処理---//
-    if (FAILED(Back.Initialize(TEXT("BACKGROUND"))))
+    hResult = Back.Initialize(TEXT("BACKGROUND"));
+    if (FAILED(hResult))
     {
-        return E_FAIL;
+        return hResult;
     }
 
 	//セレクトシーン行きのボタン
-	if (FAILED(SelectButton.at(0).Initialize((TEXT("SELECT_STAGE")), D3DXVECTOR2(500.0F, 400.0F), D3DXVECTOR2(300.0F, 100.0F))))
-	{
-		return E_FAIL;
-	}
+    hResult = SelectButton.at(0).Initialize((TEXT("SELECT_STAGE")), D3DXVECTOR2(500.0F, 400.0F), D3DXVECTOR2(300.0F, 100.0F));
+    if (FAILED(hResult))
+    {
+        return hResult;
+    }
 
 	//タイトル行きのボタン
-	if (FAILED(SelectButton.at(1).Initialize((TEXT("RETURN_TITLE")), D3DXVECTOR2(500.0F, 500.0F), D3DXVECTOR2(300.0F, 100.0F))))
-	{
-		return E_FAIL;
-	}
+    hResult = SelectButton.at(1).Initialize((TEXT("RETURN_TITLE")), D3DXVECTOR2(500.0F, 500.0F), D3DXVECTOR2(300.0F, 100.0F));
+    if (FAILED(hResult))
+    {
+        return hResult;
+    }
 
 	//カーソル
-	if (FAILED(Cursor.Initialize(TEXT("CURSOR"), CursorPos, D3DXVECTOR2(100.0F, 100.0F))))
-	{
-		return E_FAIL;
-	}
+    hResult = Cursor.Initialize(TEXT("CURSOR"), CursorPos, D3DXVECTOR2(100.0F, 100.0F));
+    if (FAILED(hResult))
+    {
+        return hResult;
+    }
 
 	FADE::SetFade(FADE_IN);
 
     //---BGM再生---//
-    //SOUNDMANAGER::Play(TEXT("BGM_GAMEOVER"));
+    SOUNDMANAGER::Play(TEXT("BGM_GAMEOVER"));
 
-    return S_OK;
+    return hResult;
 }
 
 /////////////////////////////////////////////
@@ -150,7 +164,7 @@ void GAMECLEAR::Uninitialize(void)
     TEXTUREMANAGER::Uninitialize();
 
     //---BGM停止---//
-    //SOUNDMANAGER::Stop(TEXT("BGM_GAMEOVER"));
+    SOUNDMANAGER::Stop(TEXT("BGM_GAMEOVER"));
 }
 
 /////////////////////////////////////////////
@@ -175,6 +189,9 @@ void GAMECLEAR::Update(void)
 		//---画面遷移---//
 		if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
 		{
+            SOUNDMANAGER::Stop(TEXT("SE_ENTER"));
+            SOUNDMANAGER::Play(TEXT("SE_ENTER"));
+
 			FADE::SetFade(FADE_OUT);
 		}
 

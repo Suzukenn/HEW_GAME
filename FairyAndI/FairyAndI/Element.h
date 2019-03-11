@@ -18,15 +18,16 @@ class ELEMENT final : public GAMEOBJECT
         tstring Type;
 
         std::weak_ptr<MODEL> Model;
+        std::weak_ptr<SHADER> Shader;
         SPHERE* Collision;
         LPCTSTR Name;
 
 	public:
-        ELEMENT(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
+        ELEMENT(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3, D3DXVECTOR3);
         ~ELEMENT(void);
 
         void Draw(void);
-		HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
+		HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3, D3DXVECTOR3);
 		void Uninitialize(void);
 		void Update(void);
 

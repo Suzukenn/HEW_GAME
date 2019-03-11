@@ -1,5 +1,5 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
-#include "GameScene.h"
+#include "GameScene03.h"
 #include "InputManager.h"
 #include "SceneManager.h"
 #include "SoundManager.h"
@@ -15,7 +15,7 @@
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void GAME::Draw(void)
+void GAME03::Draw(void)
 {
     //---オブジェクトの描画処理---//
     //Back.Draw();
@@ -30,7 +30,7 @@ void GAME::Draw(void)
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT GAME::Initialize(void)
+HRESULT GAME03::Initialize(void)
 {
     if (FAILED(TEXTUREMANAGER::Initialize(TEXT("Data/GameScene/TextureList.txt"))))
     {
@@ -58,7 +58,7 @@ HRESULT GAME::Initialize(void)
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void GAME::Uninitialize(void)
+void GAME03::Uninitialize(void)
 {
     //---オブジェクトの終了処理---//
     Back.Uninitialize();
@@ -79,7 +79,7 @@ void GAME::Uninitialize(void)
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void GAME::Update(void)
+void GAME03::Update(void)
 {
     //---オブジェクトの更新処理---//
     Back.Update();

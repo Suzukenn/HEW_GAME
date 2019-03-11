@@ -9,6 +9,7 @@ Data/Sound/SE/System/Enter.wav 0 SE_ENTER
 Data/Sound/SE/System/TitleToGame.wav 0 SE_TITLETOGAME
 Data/Sound/SE/Game/Fairy/BootTime.wav 0 SE_FAIRY_BOOTTIME
 Data/Sound/SE/Game/Fairy/ExitTime.wav 0 SE_FAIRY_EXITTIME
+Data/Sound/SE/Game/Fairy/FairyCancel.wav 0 SE_FAIRYCANCEL
 Data/Sound/SE/Game/Fairy/FairyTime.wav 0 SE_FAIRY_TIME
 Data/Sound/SE/Game/Fairy/GetElement.wav 0 SE_FAIRY_GETELEMENT
 Data/Sound/SE/Game/Skill/HitTrap.wav 0 SE_SKILL_HITTRAP

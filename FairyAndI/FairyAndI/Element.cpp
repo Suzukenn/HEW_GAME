@@ -3,8 +3,8 @@
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "Element.h"
-#include "InputManager.h"
 #include "ModelManager.h"
+#include "ShaderManager.h"
 #include "SquareGauge.h"
 #include "WordManager.h"
 
@@ -14,13 +14,13 @@
 //
 //機能：コンストラクタ
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タイプ,(D3DXVECTOR3)位置,(D3DXVECTOR3)大きさ
+//引数：(LPCTSTR)モデル名,(tstirng)タイプ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き(D3DXVECTOR3)大きさ
 //
 //戻り値：なし
 /////////////////////////////////////////////
-ELEMENT::ELEMENT(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+ELEMENT::ELEMENT(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation, D3DXVECTOR3 scale)
 {
-    Initialize(modelname, type, position, rotation);
+    Initialize(modelname, type, position, rotation, scale);
 }
 
 /////////////////////////////////////////////
@@ -59,19 +59,19 @@ void ELEMENT::Draw(void)
 
     //設定
     Transform.MakeWorldMatrix(mtxWorld);
-    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---描画---//
     //描画対象チェック
     pModel = Model.lock();
     if (!pModel)
     {
-        MessageBox(nullptr, TEXT("弾丸のモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("エレメントのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         return;
     }
 
     //描画
-    pModel->Draw(Gray);
+    //pModel->Draw(Gray);
+    pModel->Draw(Shader, Name == TEXT("Fire") ? TEXT("TextureModel") : TEXT("NonTextureModel"), (UINT)Gray, mtxWorld);
 }
 
 /////////////////////////////////////////////
@@ -79,11 +79,11 @@ void ELEMENT::Draw(void)
 //
 //機能：エレメントの初期化
 //
-//引数：(LPCTSTR)モデル名,(tstirng)タイプ,(D3DXVECTOR3)位置,(D3DXVECTOR3)大きさ
+//引数：(LPCTSTR)モデル名,(tstirng)タイプ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き,(D3DXVECTOR3)大きさ
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 position, D3DXVECTOR3 rotation, D3DXVECTOR3 scale)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -94,7 +94,7 @@ HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 positio
     // 位置・向きの初期設定
     Transform.Position = position;
     Transform.Rotation = rotation;
-    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
+    Transform.Scale = scale;
     Gray = false;
     Type = type;
     Tag = TEXT("Element");
@@ -104,6 +104,15 @@ HRESULT ELEMENT::Initialize(LPCTSTR modelname, tstring type, D3DXVECTOR3 positio
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("エレメントのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
+        return hResult;
+    }
+
+    //---シェーダーの取得---//
+    hResult = SHADERMANAGER::GetShader(TEXT("MODEL"), Shader);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("エレメント描画用のシェーダーの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
         return hResult;
     }
@@ -164,10 +173,5 @@ void ELEMENT::Uninitialize(void)
 /////////////////////////////////////////////
 void ELEMENT::Update(void)
 {
-   /* if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
-    {
-        Gray = !Gray;
-    }*/
 	Gray = SQUAREGAUGE::GetFairyTime();
-
 }

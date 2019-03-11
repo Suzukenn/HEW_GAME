@@ -102,7 +102,7 @@ HRESULT GOAL::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVECTOR3 ro
     // à íuÅEå¸Ç´ÇÃèâä˙ê›íË
     Transform.Position = position;
     Transform.Rotation = rotation;
-    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
+    Transform.Scale = D3DXVECTOR3(200.0F, 200.0F, 200.0F);
     Gray = false;
     Tag = TEXT("Goal");
 
@@ -187,7 +187,7 @@ void GOAL::Update(void)
 
 	Gray = SQUAREGAUGE::GetFairyTime();
 
-    if (!Gray)
+    if (Gray)
     {
         return;
     }

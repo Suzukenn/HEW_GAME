@@ -103,20 +103,23 @@ HRESULT TRAINING::Initialize(void)
     //---オブジェクトの初期化処理---//
 
     //キャラクター
-    CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(-20.0F, 50.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
+    CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(0.0F, 50.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
     CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
 
     //敵
     //CHARACTERFACTORY::InstantiateSlime(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
-    //CHARACTERFACTORY::InstantiateWood(D3DXVECTOR3(150.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
+    //CHARACTERFACTORY::InstantiateWood(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+    //CHARACTERFACTORY::InstantiateWood(D3DXVECTOR3(150.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
 
     //エレメント
     OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3(100.0F, 0.0F, 0.0F));
     OBJECTFACTORY::InstantiateIceElement(D3DXVECTOR3(-50.0F, 0.0F, 0.0F));
+    OBJECTFACTORY::InstantiateRockElement(D3DXVECTOR3(-100.0F, 0.0F, 0.0F));
+    OBJECTFACTORY::InstantiateRiceCakeElement(D3DXVECTOR3(50.0F, 0.0F, 0.0F));
 
     //ギミック
-    GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(50.0F, 0.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
-	OBJECTFACTORY::InstantiateGoal(D3DXVECTOR3(150.0F, 10.0F, 0.0F));
+    GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(50.0F, 0.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
+	OBJECTFACTORY::InstantiateGoal(D3DXVECTOR3(150.0F, 0.0F, 0.0F));
 
     //地形
     //hResult = Field.Initialize(TEXT("Data/Common/Model/Field/Field.x"), TEXT("Field"), D3DXVECTOR3(0.0F, -10.0F, 0.0F), D3DXVECTOR3(20.0F, 20.0F, 20.0F));
@@ -235,12 +238,11 @@ void TRAINING::Update(void)
     bCameraMode ? FlexibleCamera.Update() : SIDEVIEWCAMERA::Update(PLAYER::GetPlayerPosition());
 
     ACTORMANAGER::Update();
-
-    Field.Update();
-
     DIRECTIONALLIGHT::Update();
-
     COLLISIONMANAGER::Update();
+    Back.Update(0.0075F);
+    Back_Front.Update(0.015F);
+    Canvas.Update();
 
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
@@ -263,15 +265,8 @@ void TRAINING::Update(void)
     {
         WORDMANAGER::UnLockWord(TEXT("RICECAKE"));
     }
-    if (INPUTMANAGER::GetKey(DIK_B, TRIGGER))
-    {
-        CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(-20.0F, 50.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
-    }
 
 
-    Canvas.Update();
-    Back.Update(0.0075F);
-    Back_Front.Update(0.015F);
 
     //---画面遷移---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_BACK, TRIGGER))
