@@ -31,7 +31,7 @@ class FAIRY final : public GAMEOBJECT
 		bool Collection;	        //âÒé˚èÛë‘
         STATE State;
 		float ToTargetAngle;
-        ANIMATIONMODEL Model;
+        std::shared_ptr<ANIMATIONMODEL> Model;
 
         std::vector<GAMEOBJECT*> Element;
         SPHERE* Collision;
@@ -39,9 +39,9 @@ class FAIRY final : public GAMEOBJECT
         bool SearchElement(D3DXVECTOR3&);
 
 	public:
-        FAIRY(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);
+        FAIRY(D3DXVECTOR3, D3DXVECTOR3);
 
-		HRESULT Initialize(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);
+		HRESULT Initialize(D3DXVECTOR3, D3DXVECTOR3);
 		void Uninitialize(void);
 		void Update(void);
 		void Draw(void);

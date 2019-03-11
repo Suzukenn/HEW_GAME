@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
+#include "AnimationModelManager.h"
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "Fade.h"
@@ -40,13 +41,13 @@ D3DXVECTOR3 rot;
 //
 //機能：コンストラクタ
 //
-//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：なし
 /////////////////////////////////////////////
-PLAYER::PLAYER(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+PLAYER::PLAYER(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(modelname, position, rotation);
+    Initialize(position, rotation);
 }
 
 //＝＝＝関数定義＝＝＝//
@@ -72,7 +73,7 @@ void PLAYER::Draw(void)
     Transform.MakeWorldMatrix(mtxWorld);
 
     //---描画---//
-    Model.Draw(mtxWorld, Gray);
+    Model->Draw(mtxWorld, Gray);
 }
 
 /////////////////////////////////////////////
@@ -80,11 +81,11 @@ void PLAYER::Draw(void)
 //
 //機能：プレイヤーの初期化
 //
-//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：((D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT PLAYER::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -101,7 +102,7 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     Tag = TEXT("Player");
 
     //---モデルの読み込み---//
-    hResult = Model.Initialize(modelfile, 1.0F);
+    hResult = ANIMATIONMODELMANAGER::GetModel(TEXT("PLAYER"), Model);
     if(FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("プレイヤーのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -110,7 +111,7 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     }
     else
     {
-        Model.ChangeAnimation(State);
+        Model->ChangeAnimation(State);
     }
 
     //---当たり判定の付与---//
@@ -149,7 +150,7 @@ void PLAYER::OnCollision(COLLISION* opponent)
 /////////////////////////////////////////////
 void PLAYER::Uninitialize(void)
 {
-    Model.Uninitialize();
+    Model->Uninitialize();
 
     ACTORMANAGER::Destroy(this);
 
@@ -188,16 +189,19 @@ void PLAYER::Update(void)
     }*/
 
 	Gray = SQUAREGAUGE::GetFairyTime();
+    if (INPUTMANAGER::GetKey(DIK_H, TRIGGER))
+    {
 
+    }
     if (Gray)
     {
-        Model.SetSpeed(0.0);
+        Model->SetSpeed(0.0);
         INPUTMANAGER::StopGamePadVibration(GAMEPADNUMBER_1P);
         return;
     }
     else
     {
-        Model.SetSpeed(1.0);
+        Model->SetSpeed(1.0);
         INPUTMANAGER::PlayGamePadVibration(GAMEPADNUMBER_1P, vecVibration.x, vecVibration.y);
     }
 
@@ -290,7 +294,7 @@ void PLAYER::Update(void)
     {
         State = STATE_WAIT;
     }
-    Model.ChangeAnimation(State);
+    Model->ChangeAnimation(State);
 
 }
 

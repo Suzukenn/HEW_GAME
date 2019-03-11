@@ -9,9 +9,9 @@ class CHARACTERFACTORY
 {
     public:
         static void InstantiateFairy(D3DXVECTOR3, D3DXVECTOR3);
-        static void InstantiatePlant(D3DXVECTOR3, D3DXVECTOR3);
         static void InstantiatePlayer(D3DXVECTOR3, D3DXVECTOR3);
         static void InstantiateSlime(D3DXVECTOR3, D3DXVECTOR3);
+        static void InstantiateWood(D3DXVECTOR3, D3DXVECTOR3);
 
     friend ACTORMANAGER;
 };

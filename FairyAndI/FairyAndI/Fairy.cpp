@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
+#include "AnimationModelManager.h"
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "Fairy.h"
@@ -23,9 +24,9 @@
 //
 //戻り値：なし
 /////////////////////////////////////////////
-FAIRY::FAIRY(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+FAIRY::FAIRY(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(modelname, position, rotation);
+    Initialize(position, rotation);
 }
 
 /////////////////////////////////////////////
@@ -50,7 +51,7 @@ void FAIRY::Draw(void)
     Transform.MakeWorldMatrix(mtxWorld);
 
     //---描画---//
-    Model.Draw(mtxWorld, false);
+    Model->Draw(mtxWorld, false);
 }
 
 /////////////////////////////////////////////
@@ -62,7 +63,7 @@ void FAIRY::Draw(void)
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT FAIRY::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT FAIRY::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -80,7 +81,7 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 r
     State = STATE_WAIT;
 
     //---モデルの読み込み---//
-    hResult = Model.Initialize(modelfile, 1.0F);
+    hResult = ANIMATIONMODELMANAGER::GetModel(TEXT("FAIRY"), Model);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("フェアリーのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -89,7 +90,7 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 r
     }
     else
     {
-        Model.ChangeAnimation(STATE_WAIT);
+        Model->ChangeAnimation(STATE_WAIT);
     }
 
     //---当たり判定の付与---//
@@ -179,7 +180,7 @@ bool FAIRY::SearchElement(D3DXVECTOR3& destination)
 /////////////////////////////////////////////
 void FAIRY::Uninitialize(void)
 {
-    Model.Uninitialize();
+    Model->Uninitialize();
 }
 
 /////////////////////////////////////////////
@@ -212,12 +213,12 @@ void FAIRY::Update(void)
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
         bThink = !bThink;
-        Model.ChangeAnimation(bThink ? STATE_THINK : (DWORD)State);
+        Model->ChangeAnimation(bThink ? STATE_THINK : (DWORD)State);
     }
 	else if (SQUAREGAUGE::GetFairyTime() == false)
 	{
 		bThink = false;
-		Model.ChangeAnimation(bThink ? STATE_THINK : (DWORD)State);
+		Model->ChangeAnimation(bThink ? STATE_THINK : (DWORD)State);
 	}
 
     //ボタンを押したらアイテムを取りに行く
@@ -269,35 +270,6 @@ void FAIRY::Update(void)
 	if (!bThink)
 	{
 		State = Move.x == 0.0F ? STATE_WAIT : STATE_MOVE;
-		Model.ChangeAnimation((DWORD)State);
+		Model->ChangeAnimation((DWORD)State);
 	}
-
-    //プレイヤーとの当たり判定
-		//if (CollisionBall(&Position, &playerPos, 15.0F, 15.0F))
-		//{
-  //          //右向き
-		//	if (Rotation.y == rotCamera.y - D3DX_PI * 0.5F)
-		//	{
-  //              if (Position.x > playerPos.x - 15.0F)
-  //              {
-  //                  Move.x = -(VALUE_MOVE_FAIRY) / 3.0F;
-  //              }
-  //              else
-  //              {
-  //                  Move.x = 0.0F;
-  //              }
-		//	}
-		//	else if (Rotation.y == rotCamera.y + D3DX_PI * 0.5F)
-		//	{
-  //              if (Position.x < playerPos.x + 15.0F)
-  //              {
-  //                  Move.x = VALUE_MOVE_FAIRY / 3.0F;
-  //              }
-  //              else
-  //              {
-  //                  Move.x = 0.0F;
-  //              }
-  //          }
-		//	return;
-		//}
 }
