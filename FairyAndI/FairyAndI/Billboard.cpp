@@ -200,10 +200,6 @@ void BILLBOARD::MoveTexture(float value)
     for (nCounter = 0; nCounter < 4; ++nCounter)
     {
         Vertex.at(nCounter).Texture.x += value;
-        if (Vertex.at(nCounter).Texture.x > 2.0F)
-        {
-            Vertex.at(nCounter).Texture.x = 0.0F;
-        }
     }
 }
 
