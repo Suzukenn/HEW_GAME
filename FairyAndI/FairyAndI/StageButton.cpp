@@ -2,6 +2,7 @@
 #include "Fade.h"
 #include "InputManager.h"
 #include "SceneManager.h"
+#include "SoundManager.h"
 #include "StageButton.h"
 
 //＝＝＝関数定義＝＝＝//
@@ -20,7 +21,10 @@ void STAGEBUTTON::Behavior(void)
 	{
 		if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
 		{
-			FADE::SetFade(FADE_OUT);
+            SOUNDMANAGER::Stop(TEXT("SE_ENTER"));
+            SOUNDMANAGER::Play(TEXT("SE_ENTER"));
+
+            FADE::SetFade(FADE_OUT);
 		}
 	}
 	//フェードアウトが終わっていたら

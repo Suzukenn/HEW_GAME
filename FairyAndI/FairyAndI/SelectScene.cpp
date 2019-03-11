@@ -30,6 +30,9 @@ void SELECTSCENE::ChooseStage(void)
 		//右にスティックを入力
 		if (vecStickVector.x > 0.0F)
 		{
+            SOUNDMANAGER::Stop(TEXT("SE_CURSOR"));
+            SOUNDMANAGER::Play(TEXT("SE_CURSOR"));
+
 			IntervalCnt = 0;
 			++Select;
 			if (Select > MAX_SELECTBUTTON - 1)
@@ -40,6 +43,9 @@ void SELECTSCENE::ChooseStage(void)
 		//左にスティックを入力
 		else if (vecStickVector.x < 0.0F)
 		{
+            SOUNDMANAGER::Stop(TEXT("SE_CURSOR"));
+            SOUNDMANAGER::Play(TEXT("SE_CURSOR"));
+
 			IntervalCnt = 0;
 			--Select;
 			if (Select < 0)
@@ -189,6 +195,9 @@ void SELECTSCENE::Update(void)
 
 		if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
 		{
+            SOUNDMANAGER::Stop(TEXT("SE_CANCEL"));
+            SOUNDMANAGER::Play(TEXT("SE_CANCEL"));
+
 			SCENEMANAGER::SetScene(SCENE_TITLE);
 		}
 	}

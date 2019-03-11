@@ -1,5 +1,5 @@
-#ifndef _GAME_SCENE_H_
-#define _GAME_SCENE_H_
+#ifndef _GAME_SCENE_02_H_
+#define _GAME_SCENE_02_H_
 
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "BackGround.h"
@@ -7,7 +7,7 @@
 #include "Main.h"
 
 //＝＝＝クラス宣言＝＝＝//
-class GAME final : public BASE_SCENE
+class GAME02 final : public BASE_SCENE
 {
     private:
         BACKGROUND Back;

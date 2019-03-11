@@ -182,17 +182,3 @@ void FIELD::Uninitialize(void)
     SAFE_RELEASE(Mesh);
     SAFE_RELEASE(Texture);
 }
-
-/////////////////////////////////////////////
-//関数名：Update
-//
-//機能：地形の更新
-//
-//引数：なし
-//
-//戻り値：なし
-/////////////////////////////////////////////
-void FIELD::Update(void)
-{
-
-}

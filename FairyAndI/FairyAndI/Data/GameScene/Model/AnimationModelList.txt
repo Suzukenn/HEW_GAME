@@ -2,4 +2,4 @@ Data/GameScene/Model/Character/Player.x PLAYER
 Data/GameScene/Model/Character/Fairy.x FAIRY
 Data/GameScene/Model/Enemy/Slime.x SLIME
 Data/GameScene/Model/Enemy/Wood.x WOOD
-Data/GameScene/Model/Gimmick/FireWall.x FIREGIMMICK
+Data/GameScene/Model/Gimmick/FireWall.x FIREWALL

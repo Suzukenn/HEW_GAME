@@ -177,7 +177,7 @@ void BATTERYGIMMICK::Uninitialize(void)
 void BATTERYGIMMICK::Update(void)
 {	
 	static int Count;	//íeÇèoÇ∑ä‘äuïbêî
-	D3DXVECTOR3 BulletPosition = D3DXVECTOR3(10.0F, 0.0F, 0.0F);
+	D3DXVECTOR3 BulletPosition;
 
     Gray = SQUAREGAUGE::GetFairyTime();
 
@@ -186,7 +186,8 @@ void BATTERYGIMMICK::Update(void)
         return;
     }
 
-	//2ïbåoÇ¡ÇΩÇÁ
+    BulletPosition = Transform.Position;
+
 	if (PLAYER::GetPlayerPosition().x < Transform.Position.x)
 	{
         Transform.Rotation.y = -180.0F;
@@ -194,14 +195,15 @@ void BATTERYGIMMICK::Update(void)
 	}
 	else if (PLAYER::GetPlayerPosition().x > Transform.Position.x)
 	{
-        Transform.Rotation.y = +180.0F;
+        Transform.Rotation.y += 180.0F;
 		BulletPosition.x = Transform.Position.x + 10.0F;
 	}
 
+    //2ïbåoÇ¡ÇΩÇÁ
     if (++Count > 120)
     {
 		//íeî≠éÀ
-		GIMMICKFACTORY::InstantiateBatteryCannon(Transform.Position + BulletPosition, Transform.Rotation);
+		//GIMMICKFACTORY::InstantiateBatteryCannon(BulletPosition, Transform.Rotation);
 
 		//ÉäÉZÉbÉg
 		Count = 0;
