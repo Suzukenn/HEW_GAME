@@ -6,7 +6,8 @@
 #include "GimmickFactory.h"
 #include "ModelManager.h"
 #include "Player.h"
-#include "Skill.h"
+#include "ShaderManager.h"
+#include "SquareGauge.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -59,7 +60,7 @@ void BATTERYGIMMICK::Draw(void)
 
     //設定
     Transform.MakeWorldMatrix(mtxWorld);
-    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
+    //GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---描画---//
     //描画対象チェック
@@ -71,7 +72,8 @@ void BATTERYGIMMICK::Draw(void)
     }
 
     //描画
-    pModel->Draw(Gray);
+    pModel->Draw(Shader, TEXT("NonTextureModel"), (UINT)Gray, mtxWorld);
+
 }
 
 /////////////////////////////////////////////
@@ -92,7 +94,7 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DX
 	//初期設定
     Transform.Position = position;
     Transform.Rotation = rotation;
-    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
+    Transform.Scale = D3DXVECTOR3(5.0F, 5.0F, 5.0F);
     Gray = false;
 	Tag = TEXT("Battery");
 
@@ -105,9 +107,19 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DX
 		return hResult;
 	}
 
+    //---シェーダーの取得---//
+    hResult = SHADERMANAGER::GetShader(TEXT("MODEL"), Shader);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("砲台描画用のシェーダーの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
+        return hResult;
+    }
+
+
     //---当たり判定の付与---//
 	//Collision = COLLISIONMANAGER::InstantiateToOBB(Position, Rotation, TEXT("Object"), this);
-	Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Object"), this);
+	//Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Object"), this);
 
 	return hResult;
 }
@@ -165,24 +177,31 @@ void BATTERYGIMMICK::Uninitialize(void)
 void BATTERYGIMMICK::Update(void)
 {	
 	static int Count;	//弾を出す間隔秒数
-	D3DXVECTOR3 BulletPosition = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
+	D3DXVECTOR3 BulletPosition = D3DXVECTOR3(10.0F, 0.0F, 0.0F);
+
+    Gray = SQUAREGAUGE::GetFairyTime();
+
+    if (Gray)
+    {
+        return;
+    }
 
 	//2秒経ったら
-	if (++Count > 120)
+	if (PLAYER::GetPlayerPosition().x < Transform.Position.x)
 	{
-		if (PLAYER::GetPlayerPosition().x < Transform.Position.x)
-		{
-            Transform.Rotation.y = -180.0F;
-			BulletPosition.x = Transform.Position.x - 10.0F;
-		}
-		else if (PLAYER::GetPlayerPosition().x > Transform.Position.x)
-		{
-            Transform.Rotation.y = 180.0F;
-			BulletPosition.x = Transform.Position.x + 10.0F;
-		}
+        Transform.Rotation.y = -180.0F;
+		BulletPosition.x = Transform.Position.x - 10.0F;
+	}
+	else if (PLAYER::GetPlayerPosition().x > Transform.Position.x)
+	{
+        Transform.Rotation.y = +180.0F;
+		BulletPosition.x = Transform.Position.x + 10.0F;
+	}
 
+    if (++Count > 120)
+    {
 		//弾発射
-		GIMMICKFACTORY::InstantiateBatteryCannon(BulletPosition, Transform.Rotation);
+		GIMMICKFACTORY::InstantiateBatteryCannon(Transform.Position + BulletPosition, Transform.Rotation);
 
 		//リセット
 		Count = 0;

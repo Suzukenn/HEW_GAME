@@ -15,6 +15,7 @@ class TRAINING final : public BASE_SCENE
 {
     private:
         BACKGROUND Back;
+        BACKGROUND Back_Front;
         CANVAS Canvas;
         FIELD Field;
         GROUND Ground;

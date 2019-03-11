@@ -94,7 +94,7 @@ HRESULT BATTERYCANNON::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXV
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
     BornTime = 0;
-    Move = D3DXVECTOR3(-sinf(Transform.Rotation.y) * 1.5F, 0.0F, -cosf(Transform.Rotation.y) * 1.5F);
+    Move = D3DXVECTOR3(-sinf(Transform.Rotation.y) * 1.5F, 0.0F, 0.0F);
     Tag = TEXT("BatteryCannon");
 
     //---ÉÇÉfÉãÇÃì«Ç›çûÇ›---//
@@ -176,7 +176,7 @@ void BATTERYCANNON::Update(void)
 
 	Gray = SQUAREGAUGE::GetFairyTime();
 
-    if (!Gray)
+    if (Gray)
     {
         return;
     }

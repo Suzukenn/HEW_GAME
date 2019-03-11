@@ -17,6 +17,7 @@ class BATTERYGIMMICK final : public GAMEOBJECT
         bool Gray;
 
 		std::weak_ptr<MODEL> Model;
+        std::weak_ptr<SHADER> Shader;
 		SPHERE* Collision;
 		//OBB* Collision;
 

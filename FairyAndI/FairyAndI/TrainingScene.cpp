@@ -33,9 +33,10 @@
 void TRAINING::Draw(void)
 {
     //---オブジェクトの描画処理---//
-    Field.Draw();
+    //Field.Draw();
     Ground.Draw();
     Back.Draw();
+    Back_Front.Draw();
     ACTORMANAGER::Draw();
     Canvas.Draw();
 }
@@ -107,21 +108,19 @@ HRESULT TRAINING::Initialize(void)
 
     //敵
     //CHARACTERFACTORY::InstantiateSlime(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
-    CHARACTERFACTORY::InstantiateWood(D3DXVECTOR3(150.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
+    //CHARACTERFACTORY::InstantiateWood(D3DXVECTOR3(150.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
 
     //エレメント
     OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3(100.0F, 0.0F, 0.0F));
     OBJECTFACTORY::InstantiateIceElement(D3DXVECTOR3(-50.0F, 0.0F, 0.0F));
 
     //ギミック
-    GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(50.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+    GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(50.0F, 0.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
 	OBJECTFACTORY::InstantiateGoal(D3DXVECTOR3(150.0F, 10.0F, 0.0F));
-
-
 
     //地形
     //hResult = Field.Initialize(TEXT("Data/Common/Model/Field/Field.x"), TEXT("Field"), D3DXVECTOR3(0.0F, -10.0F, 0.0F), D3DXVECTOR3(20.0F, 20.0F, 20.0F));
-    hResult = Field.Initialize(TEXT("Data/GameScene/Model/Field/Stage01.x"), TEXT("Field"), D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(200.0F, 10.0F, 1.0F));
+    //hResult = Field.Initialize(TEXT("Data/GameScene/Model/Field/Stage01.x"), TEXT("Field"), D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(200.0F, 10.0F, 1.0F));
     if (FAILED(hResult))
     {
         return hResult;
@@ -132,7 +131,14 @@ HRESULT TRAINING::Initialize(void)
     {
         return hResult;
     }
-    hResult = Back.Initialize(TEXT("SKILL_HOTFIRE"), D3DXVECTOR3(0.0F, 0.0F, 100.0F), D3DXVECTOR2(100.0F, 100.0F));
+
+    //背景
+    hResult = Back.Initialize(TEXT("BACKGROUND_BACK"), D3DXVECTOR3(0.0F, 0.0F, 100.0F), D3DXVECTOR2(100.0F, 100.0F));
+    if (FAILED(hResult))
+    {
+        return hResult;
+    }
+    hResult = Back_Front.Initialize(TEXT("BACKGROUND_FRONT"), D3DXVECTOR3(0.0F, 0.0F, 100.0F), D3DXVECTOR2(100.0F, 100.0F));
     if (FAILED(hResult))
     {
         return hResult;
@@ -186,6 +192,7 @@ void TRAINING::Uninitialize(void)
 {
     //---オブジェクトの終了処理---//
     Back.Uninitialize();
+    Back_Front.Uninitialize();
     Canvas.Uninitialize();
     FlexibleCamera.Uninitialize();
     Field.Uninitialize();
@@ -264,6 +271,7 @@ void TRAINING::Update(void)
 
     Canvas.Update();
     Back.Update(0.0075F);
+    Back_Front.Update(0.015F);
 
     //---画面遷移---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_BACK, TRIGGER))

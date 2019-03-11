@@ -22,7 +22,7 @@
 void GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
 	//---ê∂ê¨---//
-	ACTORMANAGER::GameObject.emplace_back(new BATTERYGIMMICK(TEXT("FIRE"), position, rotation));
+	ACTORMANAGER::GameObject.emplace_back(new BATTERYGIMMICK(TEXT("BATTERYGIMMICK"), position, rotation));
 }
 
 /////////////////////////////////////////////
@@ -37,7 +37,7 @@ void GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3 position, D3DXVECTOR3
 void GIMMICKFACTORY::InstantiateBatteryCannon(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
 	//---ê∂ê¨---//
-	ACTORMANAGER::GameObject.emplace_back(new BATTERYCANNON(TEXT("ICE"), position, rotation));
+	ACTORMANAGER::GameObject.emplace_back(new BATTERYCANNON(TEXT("BATTERYCANNON"), position, rotation));
 }
 
 /////////////////////////////////////////////
