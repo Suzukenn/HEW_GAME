@@ -1,1 +1,5 @@
-Data/GameOver/BackGround/GameOver.png BACKGROUND
+Data/GameOver/BackGround/BG_GameOver.png BACKGROUND
+Data/GameOver/BackGround/GameOver.png GAMEOVER
+Data/GameOver/BackGround/ReturnTitle.png RETURN_TITLE
+Data/GameOver/BackGround/Retry.png RETRY
+Data/GameOver/BackGround/Cursor.png CURSOR

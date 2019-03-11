@@ -1,1 +1,4 @@
-Data/GameClear/BackGround/GameClear.png BACKGROUND
+Data/GameClear/BackGround/BG_GameClear.png BACKGROUND
+Data/GameClear/BackGround/ReturnTitle.png RETURN_TITLE
+Data/GameClear/BackGround/SelectStage.png SELECT_STAGE
+Data/GameClear/BackGround/Cursor.png CURSOR

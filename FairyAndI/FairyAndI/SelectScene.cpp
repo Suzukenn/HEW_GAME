@@ -98,7 +98,7 @@ HRESULT SELECTSCENE::Initialize(void)
 	Select = 0;
 
 	//各ボタンの行き先
-	Button.at(0).SetSelectStage(SCENE_TRAINING);
+	Button.at(0).SetSelectStage(SCENE_GAMEOVER);
 	Button.at(1).SetSelectStage(SCENE_TITLE);
 	Button.at(2).SetSelectStage(SCENE_GAMECLEAR);
 
