@@ -14,6 +14,9 @@
 //＝＝＝定数・マクロ定義＝＝＝//
 #define	VALUE_ROTATE_FAIRY	(D3DX_PI * 0.02F)		// 回転速度
 
+//＝＝＝グローバル宣言＝＝＝//
+static D3DXVECTOR3 FairyPosition;
+
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
 //関数名：FAIRY
@@ -267,9 +270,30 @@ void FAIRY::Update(void)
         }
     }
     //アニメーションの変更
-	if (!bThink)
+	if (bThink)
 	{
-		State = Move.x == 0.0F ? STATE_WAIT : STATE_MOVE;
-		Model->ChangeAnimation((DWORD)State);
+        Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
+        Transform.Rotation.y = 180.0F;
 	}
+    else
+    {
+        State = Move.x == 0.0F ? STATE_WAIT : STATE_MOVE;
+        Model->ChangeAnimation((DWORD)State);
+    }
+
+    FairyPosition = Transform.Position;
+}
+
+/////////////////////////////////////////////
+//関数名：GetFairyPosition
+//
+//機能：フェアリーの位置の取得
+//
+//引数：なし
+//
+//戻り値：(D#DXVECTOR3)位置
+/////////////////////////////////////////////
+D3DXVECTOR3 FAIRY::GetFairyPosition(void)
+{
+    return FairyPosition;
 }

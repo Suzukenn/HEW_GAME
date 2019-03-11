@@ -17,6 +17,7 @@ Data/GameScene/Texture/SoftFire.png SKILL_SOFTFIRE
 Data/GameScene/Texture/SoftIce.png SKILL_SOFTICE
 Data/GameScene/Texture/SoftRock.png SKILL_SOFTROCK
 Data/GameScene/Texture/RiceCake.png SKILL_SOFTRICECAKE
+Data/GameScene/Texture/SkillEffect.png SKILLEFFECT
 Data/GameScene/UI/AdjectiveList.png ADJECTIVELIST
 Data/GameScene/UI/NounList.png NOUNLIST
 Data/GameScene/UI/Balloon.png BALLOON

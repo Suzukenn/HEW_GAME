@@ -48,7 +48,7 @@ class FAIRY final : public GAMEOBJECT
 
         void OnCollision(COLLISION*);
 
-		D3DXVECTOR3 GetPos(void);
+		static D3DXVECTOR3 GetFairyPosition(void);
 };
 
 #endif
