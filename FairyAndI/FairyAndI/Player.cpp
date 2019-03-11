@@ -3,6 +3,7 @@
 #include "AnimationModelManager.h"
 #include "Collision.h"
 #include "CollisionManager.h"
+#include "EffectFactory.h"
 #include "Fade.h"
 #include "Field.h"
 #include "InputManager.h"
@@ -272,6 +273,7 @@ void PLAYER::Update(void)
         vecInstancePosition.z = 0.0F;
 
         SKILLFACTORY::InstantiateSkill(WORDMENU::NotificationAdjective(), WORDMENU::NotificationNoun(), vecInstancePosition, Transform.Rotation);
+        EFFECTFACTORY::InstantiateSkillEffect(vecInstancePosition, D3DXVECTOR2(10.0F, 10.0F), false);
         vecVibration = D3DXVECTOR2(0.5F, 0.5F);
         INPUTMANAGER::PlayGamePadVibration(GAMEPADNUMBER_1P, vecVibration.x, vecVibration.y);
         Vibration = 100;

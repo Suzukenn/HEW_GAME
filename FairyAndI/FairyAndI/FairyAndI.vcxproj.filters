@@ -221,6 +221,12 @@
     <ClCompile Include="Wood.cpp">
       <Filter>ソースコード\Actor\Character\EnemySide</Filter>
     </ClCompile>
+    <ClCompile Include="EffectFactory.cpp">
+      <Filter>ソースコード\System\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>ソースコード\Actor\Object\2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -472,6 +478,12 @@
     </ClInclude>
     <ClInclude Include="Wood.h">
       <Filter>ソースコード\Actor\Character\EnemySide</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectFactory.h">
+      <Filter>ソースコード\System\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>ソースコード\Actor\Object\2D</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
