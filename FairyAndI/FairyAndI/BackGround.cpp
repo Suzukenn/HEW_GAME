@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "BackGround.h"
+#include "InputManager.h"
 #include "TextureManager.h"
 #include "SideViewCamera.h"
 
@@ -64,11 +65,18 @@ void BACKGROUND::Uninitialize(void)
 //
 //機能：背景の更新
 //
-//引数：なし
+//引数：(float)移動量
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void BACKGROUND::Update(void)
+void BACKGROUND::Update(float value)
 {
+    //---各種宣言---//
+    float Stick;
+
+    Stick = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT).x;
+
+    Position.x += 1.0F * Stick;
+    Billboard.MoveTexture(value * -Stick);
     Billboard.Update();
 }

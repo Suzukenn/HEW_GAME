@@ -1,7 +1,9 @@
 //＝＝＝ヘッダファイル読み込＝＝＝//
+#include "Fairy.h"
 #include "InputManager.h"
 #include "Player.h"
 #include "SideViewCamera.h"
+#include "SquareGauge.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
 #define	CAM_POS_P_X			(0.0f)					// カメラの視点初期位置(X座標)
@@ -128,48 +130,66 @@ void SIDEVIEWCAMERA::Update(D3DXVECTOR3 player)
 {
     //---各種宣言---//
     float fStickVector;
+    static bool Mode;
+    D3DXVECTOR3 FairyPosition;
+
+    FairyPosition = FAIRY::GetFairyPosition();
+    Mode = SQUAREGAUGE::GetFairyTime();
 
     //---移動処理---//
     //カメラの向き取得
     fStickVector = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT).x;
 
-	//端にいるかの判定判定
-	if (player.x >= Position.x && Position.x >= CAM_MAX_WID || player.x <= Position.x && Position.x <= CAM_MIN_WID)
-	{
+    //端にいるかの判定判定
+    if (player.x >= Position.x && Position.x >= CAM_MAX_WID || player.x <= Position.x && Position.x <= CAM_MIN_WID)
+    {
         PositionPlace = true;
-	}
-	//原点より右にいてプレイヤーがカメラpos以下になる、または原点より左にいてプレイヤーがカメラpos以上になったら
-	else if(player.x < Position.x && Position.x > 0.0F || player.x > Position.x && Position.x < 0.0F)
-	{
+    }
+    //原点より右にいてプレイヤーがカメラpos以下になる、または原点より左にいてプレイヤーがカメラpos以上になったら
+    else if (player.x < Position.x && Position.x > 0.0F || player.x > Position.x && Position.x < 0.0F)
+    {
         PositionPlace = false;
-	}
-
-	if(!PositionPlace)
-	{
-		//プレイヤーを真ん中にして追いかける処理
-        Position.x = player.x;// D3DXVECTOR3(player.x, player.y, );
-		ReversoPoint = player;
-        ReversoPoint.y += 10.0F;
-	}
-	else
-	{
-        //スクロール処理
-        Position.x += VALUE_MOVE_PLAYER * fStickVector;
-        ReversoPoint = player;
-        ReversoPoint.y += 10.0F;
     }
 
-	//カメラの移動制限
-	if (Position.x > CAM_MAX_WID)
-	{
+    /*if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    {
+    Mode = !Mode;
+    }
+    else if (SQUAREGAUGE::GetFairyTime() == false)
+    {
+    Mode = false;
+    }*/
+
+    if (!PositionPlace)
+    {
+        //プレイヤーを真ん中にして追いかける処理
+        Position = D3DXVECTOR3(player.x, 60.0F, player.z - 100.0F);
+        ReversoPoint = D3DXVECTOR3(player.x, 30.0F, player.z);
+    }
+    else
+    {
+        //スクロール処理
+        Position.x += VALUE_MOVE_PLAYER * fStickVector * 0.5F;
+        ReversoPoint = D3DXVECTOR3(Position.x, 30.0F, player.z);
+    }
+
+    if (Mode)
+    {
+        Position = D3DXVECTOR3(FairyPosition.x, FairyPosition.y + 10.0F, FairyPosition.z - 50.0F);
+        ReversoPoint = D3DXVECTOR3(FairyPosition.x, FairyPosition.y + 10.0F, FairyPosition.z);
+    }
+
+    //カメラの移動制限
+    if (Position.x > CAM_MAX_WID)
+    {
         Position.x = CAM_MAX_WID;
         ReversoPoint.x = CAM_MAX_WID;
-	}
-	if (Position.x < CAM_MIN_WID)
-	{
+    }
+    if (Position.x < CAM_MIN_WID)
+    {
         Position.x = CAM_MIN_WID;
         ReversoPoint.x = CAM_MIN_WID;
-	}
+    }
 
     SetCamera();
 }
