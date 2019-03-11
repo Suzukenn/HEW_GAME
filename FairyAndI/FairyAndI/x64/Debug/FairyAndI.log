@@ -1,10 +1,3 @@
-﻿  Player.cpp
-  コードを生成中...
-  コンパイル中...
-  Effect.cpp
-d:\documents\hal課題\2年\he\hew_game\fairyandi\fairyandi\effect.cpp(95): warning C4101: 'nCounter': ローカル変数は 1 度も使われていません。
-  コードを生成中...
-  スキップ中... (関連する変更は検出されませんでした)
-  EffectFactory.cpp
+﻿  Billboard.cpp
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.exe
   FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Debug\FairyAndI.pdb (Partial PDB)
