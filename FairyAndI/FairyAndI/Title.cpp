@@ -246,7 +246,14 @@ void TITLE::Update(void)
 			case MODE_FIRST:
 				if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, 0xFFFF, TRIGGER))
 				{
-					Mode = MODE_SELECT;
+					if (LogoAlpha == 255 - 1)
+					{
+						Mode = MODE_SELECT;
+					}
+					else
+					{
+						LogoAlpha = 255 - 1;
+					}
 				}
 				break;
 			case MODE_SELECT:
