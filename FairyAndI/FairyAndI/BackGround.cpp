@@ -78,7 +78,7 @@ void BACKGROUND::Update(float value)
 
     if (Stick)
     {
-        Position.x += 1.0F * Stick;
+        Position.x += 0.5F * Stick;
         Billboard.MoveTexture(value * Stick);
     }
     else

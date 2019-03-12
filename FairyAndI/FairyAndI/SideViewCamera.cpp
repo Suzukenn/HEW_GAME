@@ -13,7 +13,7 @@
 #define	CAM_POS_R_Y			(50.0f)					// カメラの注視点初期位置(Y座標)
 #define	CAM_POS_R_Z			(0.0f)					// カメラの注視点初期位置(Z座標)
 #define CAM_MAX_WID			1400.0F
-#define CAM_MIN_WID			-1400.F
+#define CAM_MIN_WID			0.0F
 
 //＝＝＝グローバル宣言＝＝＝//
 D3DXVECTOR3 SIDEVIEWCAMERA::Position;
@@ -154,14 +154,14 @@ void SIDEVIEWCAMERA::Update(D3DXVECTOR3 player)
     if (!PositionPlace)
     {
         //プレイヤーを真ん中にして追いかける処理
-        Position = D3DXVECTOR3(player.x, player.y, player.z - 70.0F);
-        ReversoPoint = D3DXVECTOR3(player.x, 20.0F, player.z);
+        Position = D3DXVECTOR3(player.x, 30.0F, player.z - 70.0F);
+        ReversoPoint = D3DXVECTOR3(player.x, 30.0F, player.z);
     }
     else
     {
         //スクロール処理
         Position.x += VALUE_MOVE_PLAYER * fStickVector * 0.5F;
-        ReversoPoint = D3DXVECTOR3(Position.x, 20.0F, player.z);
+        ReversoPoint = D3DXVECTOR3(Position.x, player.y, player.z);
     }
 
     if (Mode)

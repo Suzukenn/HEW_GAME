@@ -22,6 +22,8 @@ class PLAYER final : public GAMEOBJECT
         int State;
         int Vibration;
         bool Gray;
+        bool Jump;
+        bool IsGround;
         D3DXVECTOR3 Move;
         std::shared_ptr<ANIMATIONMODEL> Model;
 
