@@ -18,7 +18,7 @@
 
 //＝＝＝定数・マクロ定義＝＝＝//
 #define GRAVITY 0.18F
-#define JUMP 5.0F
+#define JUMP 3.0F
 
 //＝＝＝列挙型定義＝＝＝//
 enum
@@ -98,6 +98,8 @@ HRESULT PLAYER::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
     HP = MAX_PLAYER_HP;
     State = STATE_WAIT;
     Gray = false;
+    Jump = false;
+    IsGround = true;
     Vibration = 0;
     Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
     Tag = TEXT("Player");
@@ -184,16 +186,7 @@ void PLAYER::Update(void)
     Move.x = 0.0F;
 
     //---フリーズ判定---//
-    /*if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
-    {
-        Gray = !Gray;
-    }*/
-
 	Gray = SQUAREGAUGE::GetFairyTime();
-    if (INPUTMANAGER::GetKey(DIK_H, TRIGGER))
-    {
-
-    }
     if (Gray)
     {
         Model->SetSpeed(0.0);
@@ -220,14 +213,25 @@ void PLAYER::Update(void)
     vecStickVector = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT);
 
 	//重力加算
-	Move.y -= GRAVITY;
+    if (!IsGround)
+    {
+        Move.y -= GRAVITY;
+    }
 
     //着地判定
-    if (FIELD::CheckField(&D3DXVECTOR3(Transform.Position.x, Transform.Position.y - 5.0F, Transform.Position.z), &D3DXVECTOR3(0.0F, 1.0F, 0.0F), fAfterYPosition))
+    if (FIELD::CheckField(&D3DXVECTOR3(Transform.Position.x, Transform.Position.y - 10.8F, Transform.Position.z), &D3DXVECTOR3(0.0F, 1.0F, 0.0F), fAfterYPosition))
     {
-        Transform.Position.y = fAfterYPosition + 5.0F;
+        Transform.Position.y = fAfterYPosition + 10.8F;
         Move.y = 0.0F;
+        Jump = false;
+        IsGround = true;
     }
+    else
+    {
+        IsGround = false;
+    }
+
+
 
     //モデル操作
     if (vecStickVector != D3DXVECTOR2(0.0F, 0.0F))
@@ -240,11 +244,16 @@ void PLAYER::Update(void)
     }
 
 	//ジャンプ
-	if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
-	{
-        //ジャンプ力の付与
-        Move.y += JUMP;
-	}
+    if (!Jump)
+    {
+        if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
+        {
+            //ジャンプ力の付与
+            Move.y += JUMP;
+            Jump = true;
+            IsGround = false;
+        }
+    }
 
 	//---位置情報更新---//
     Transform.Position += Move;
