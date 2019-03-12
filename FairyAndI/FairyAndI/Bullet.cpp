@@ -66,6 +66,7 @@ HRESULT BULLET::Initialize(LPCTSTR texturename, tstring type, D3DXVECTOR3 positi
     HRESULT hResult;
 
     //---èâä˙âªèàóù---//
+    Transform.Position = position;
     Transform.Rotation = rotation;
     Move = D3DXVECTOR3(sinf(Transform.Rotation.y) * 1.5F, 0.0F, 0.0F);//-cosf(Transform.Rotation.y) * 1.5F);
 

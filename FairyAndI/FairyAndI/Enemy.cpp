@@ -86,16 +86,16 @@ HRESULT ENEMY::Initialize(LPCTSTR modelname, tstring tag, D3DXVECTOR3 position, 
 /////////////////////////////////////////////
 bool ENEMY::SearchTarget(D3DXVECTOR3 target, float visibility)
 {
-    if (target.x < Transform.Position.x + visibility)
+    if (target.x < Transform.Position.x + visibility && target > Transform.Position)
     {
         if (Transform.Rotation.y == 90.0F)
         {
             return true;
         }
     }
-    else if (target.x > Transform.Position.x - visibility)
+    else if (target.x > Transform.Position.x - visibility && target < Transform.Position)
     {
-        if (Transform.Rotation.y == -90.0F)
+        if (Transform.Rotation.y == 270.0F)
         {
             return true;
         }
@@ -261,5 +261,8 @@ void ENEMY::Update(void)
 	//}
 
     Gray = SQUAREGAUGE::GetFairyTime();
-	Collision->Position = Transform.Position;
+    if (Gray)
+    {
+        return;
+    }
 }

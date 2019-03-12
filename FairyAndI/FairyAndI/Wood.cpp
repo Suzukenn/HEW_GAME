@@ -2,6 +2,7 @@
 #include "ActorManager.h"
 #include "Collision.h"
 #include "CollisionManager.h"
+#include "ObjectFactory.h"
 #include "Player.h"
 #include "Skill.h"
 #include "Sphere.h"
@@ -16,13 +17,13 @@
 //
 //機能：コンストラクタ
 //
-//引数：(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：なし
 /////////////////////////////////////////////
-WOOD::WOOD(tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+WOOD::WOOD(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(tag, position, rotation);
+    Initialize(position, rotation);
 }
 
 /////////////////////////////////////////////
@@ -58,17 +59,17 @@ void WOOD::Draw(void)
 //
 //機能：木のオバケの初期化
 //
-//引数：(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT WOOD::Initialize(tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT WOOD::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
 
     //---初期化処理---//
-    hResult = ENEMY::Initialize(TEXT("WOOD"), tag, position, rotation, D3DXVECTOR3(300.0F, 300.0F, 300.0F));
+    hResult = ENEMY::Initialize(TEXT("WOOD"), TEXT("Wood"), position, rotation, D3DXVECTOR3(300.0F, 300.0F, 300.0F));
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("木のオバケの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -79,7 +80,7 @@ HRESULT WOOD::Initialize(tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation
     State = WOODSTATE_WAIT;
 
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Character"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Enemy"), this);
 
     return hResult;
 }
@@ -139,6 +140,8 @@ void WOOD::Update(void)
     //---初期化処理---//
     PlayerPosition = PLAYER::GetPlayerPosition();
 
+    ENEMY::Update();
+
     switch (State)
     {
         case WOODSTATE_WAIT:
@@ -163,7 +166,7 @@ void WOOD::Update(void)
             if (++nAttackCount > 60)
             {
                 //攻撃
-            
+                OBJECTFACTORY::InstantiateWoodBullet(Transform.Position, Transform.Rotation);
                 Model->ChangeAnimation(WOODSTATE_WAIT);
                 AttackCool = 120;
                 State = WOODSTATE_WAIT;
@@ -173,6 +176,4 @@ void WOOD::Update(void)
         default:
             break;
     }
-
-    ENEMY::Update();
 }

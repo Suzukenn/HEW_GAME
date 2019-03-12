@@ -116,7 +116,7 @@ HRESULT PLAYER::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
     }
 
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Character"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Player"), this);
 
 	return hResult;
 }
@@ -268,8 +268,8 @@ void PLAYER::Update(void)
     //---アイテム生成---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
     {
-        vecInstancePosition.x = Transform.Position.x + sinf(D3DXToRadian(Transform.Rotation.y)) * 10.0F + cosf(D3DXToRadian(Transform.Rotation.y)) * 8.0F;
-        vecInstancePosition.y = Transform.Position.y + 21.0F;
+        vecInstancePosition.x = Transform.Position.x + sinf(D3DXToRadian(Transform.Rotation.y)) + cosf(D3DXToRadian(Transform.Rotation.y));
+        vecInstancePosition.y = Transform.Position.y + 10.0F;
         vecInstancePosition.z = 0.0F;
 
         SKILLFACTORY::InstantiateSkill(WORDMENU::NotificationAdjective(), WORDMENU::NotificationNoun(), vecInstancePosition, Transform.Rotation);

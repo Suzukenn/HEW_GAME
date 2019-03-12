@@ -97,7 +97,7 @@ HRESULT FAIRY::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
     }
 
     //---“–‚½‚è”»’è‚Ì•t—^---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Character"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Fairy"), this);
 
 	return hResult;
 }
@@ -240,8 +240,8 @@ void FAIRY::Update(void)
     else
     {
         //—d¸‚ÆƒvƒŒƒCƒ„[‚Ì‹——£‚ÌŽZo
-        vecFairyDistance.x = PLAYER::GetPlayerPosition().x - Transform.Position.x;
-        vecFairyDistance.y = PLAYER::GetPlayerPosition().y + 20.0F - Transform.Position.y;
+        vecFairyDistance.x = PLAYER::GetPlayerPosition().x + 15.0F - Transform.Position.x;
+        vecFairyDistance.y = PLAYER::GetPlayerPosition().y + 15.0F - Transform.Position.y;
         Transform.Rotation.y = 90.0F * ((PLAYER::GetPlayerPosition().x > Transform.Position.x) - (PLAYER::GetPlayerPosition().x < Transform.Position.x));
     }
 
@@ -255,7 +255,7 @@ void FAIRY::Update(void)
 
     //ˆÚ“®—ÊŠi”[
     Move.x = cosf(ToTargetAngle) * VALUE_MOVE_FAIRY;
-    Move.y = sinf(ToTargetAngle) * VALUE_MOVE_FAIRY + (sinf(D3DXToRadian(-180.0F) + D3DX_PI / 60.0F * nFrameCount) + 1.0F) * 0.5F;
+    Move.y = sinf(ToTargetAngle) * VALUE_MOVE_FAIRY + (sinf(D3DXToRadian(-180.0F) + D3DX_PI / 60.0F * nFrameCount) + 1.0F) * 0.2F;
 
     if (!Collection)
     {

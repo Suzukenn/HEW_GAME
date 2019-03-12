@@ -92,7 +92,7 @@ HRESULT ENEMYBULLET::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVEC
     //---初期化処理---//
     Transform.Position = position;
     Transform.Rotation = rotation;
-    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
+    Transform.Scale = D3DXVECTOR3(10.0F, 10.0F, 10.0F);
     BornTime = 0;
     Move = D3DXVECTOR3(-sinf(Transform.Rotation.y) * 1.5F, 0.0F, 0.0F);
     Gray = false;
@@ -111,13 +111,13 @@ HRESULT ENEMYBULLET::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVEC
     hResult = SHADERMANAGER::GetShader(TEXT("MODEL"), Shader);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("ゴール描画用のシェーダーの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("敵弾描画用のシェーダーの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
         return hResult;
     }
 
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.5F, TEXT("Object"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.5F, TEXT("EnemyBullet"), this);
 
     return hResult;
 }

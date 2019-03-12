@@ -1,4 +1,5 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
+#include "ActorManager.h"
 #include "CollisionManager.h"
 #include "InputManager.h"
 #include "ModelManager.h"
@@ -63,8 +64,9 @@ HRESULT WALL::Initialize(LPCTSTR texturename, tstring type, D3DXVECTOR3 position
     HRESULT hResult;
 
     //---初期化処理---//
+    Transform.Position = position;
     Transform.Rotation = rotation;
-
+    BornTime = 0;
     //---ビルボードの作成---//
     hResult = BillBoard.Initialize(texturename, D3DXVECTOR2(50.0F, 50.0F), Transform.Rotation.y > 0.0F);
     if (FAILED(hResult))
@@ -75,7 +77,7 @@ HRESULT WALL::Initialize(LPCTSTR texturename, tstring type, D3DXVECTOR3 position
 
 
     //---当たり判定の付与---//
-    //Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.5F, TEXT("Skill"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.5F, TEXT("Wall"), this);
 
     return hResult;
 }
@@ -125,11 +127,15 @@ void WALL::Uninitialize(void)
 /////////////////////////////////////////////
 void WALL::Update(void)
 {
-  /*  if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
-    {
-        Gray = !Gray;
-    }*/
 	Gray = SQUAREGAUGE::GetFairyTime();
+    if (Gray)
+    {
+        return;
+    }
 
+    if (++BornTime > 60)
+    {
+        ACTORMANAGER::Destroy(this);
+    }
     BillBoard.Update();
 }

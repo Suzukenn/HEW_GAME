@@ -2,6 +2,7 @@
 #include "ActorManager.h"
 #include "Collision.h"
 #include "CollisionManager.h"
+#include "ObjectFactory.h"
 #include "Player.h"
 #include "Skill.h"
 #include "Slime.h"
@@ -16,13 +17,13 @@
 //
 //機能：コンストラクタ
 //
-//引数：(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：なし
 /////////////////////////////////////////////
-SLIME::SLIME(tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+SLIME::SLIME(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(tag, position, rotation);
+    Initialize(position, rotation);
 }
 
 /////////////////////////////////////////////
@@ -71,18 +72,18 @@ void SLIME::Draw(void)
 //
 //機能：敵の初期化
 //
-//引数：(tstirng)タグ,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT SLIME::Initialize(tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT SLIME::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
 
     //---初期化処理---//
     //初期設定
-    hResult = ENEMY::Initialize(TEXT("SLIME"), tag, position, rotation, D3DXVECTOR3(450.0F, 450.0F, 450.0F));
+    hResult = ENEMY::Initialize(TEXT("SLIME"), TEXT("Slime"), position, rotation, D3DXVECTOR3(450.0F, 450.0F, 450.0F));
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("スライムの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -90,11 +91,11 @@ HRESULT SLIME::Initialize(tstring tag, D3DXVECTOR3 position, D3DXVECTOR3 rotatio
         return hResult;
     }
 
-    InitialPosition = Transform.Position;
-    Move = D3DXVECTOR3(1.0F, 0.0F, 0.0F);
+    InitialPosition = position;
+    Move = D3DXVECTOR3(-0.1F, 0.0F, 0.0F);
 
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Character"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Enemy"), this);
 
     return hResult;
 }
@@ -154,7 +155,6 @@ void SLIME::Update(void)
 
     //---初期化処理---//
     PlayerPosition = PLAYER::GetPlayerPosition();
-    Transform.Position += Move;
 
     switch (State)
     {
@@ -169,6 +169,11 @@ void SLIME::Update(void)
                     Move.x = -Move.x;
                     nStopCount = 0;
                 }
+            }
+            else
+            {
+                Transform.Position += Move;
+                Collision->Position = Transform.Position;
             }
 
             //---敵の索敵---//
@@ -186,15 +191,16 @@ void SLIME::Update(void)
             break;
 
         case SLIMESTATE_ATTACK:
+
             //---視程内なら攻撃、そうでなければ徘徊を再開する---//
-            Move.x = 0.0F;
             Model->ChangeAnimation(SLIMESTATE_ATTACK);
             if (++nAttackCount > 60)
             {
                 //攻撃
-
+                OBJECTFACTORY::InstantiateSlimeBullet(Transform.Position, Transform.Rotation);
                 Model->ChangeAnimation(SLIMESTATE_MOVE);
                 AttackCool = 120;
+                nAttackCount = 0;
                 State = SLIMESTATE_MOVE;
             }
             break;

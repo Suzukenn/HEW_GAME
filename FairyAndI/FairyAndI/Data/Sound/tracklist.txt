@@ -1,3 +1,4 @@
+Data/Sound/BGM/GameClear.wav 1 BGM_CLEAR
 Data/Sound/BGM/GameScene.wav 1 BGM_GAME
 Data/Sound/BGM/GameOver.wav 0 BGM_GAMEOVER
 Data/Sound/BGM/Title.wav 1 BGM_TITLE

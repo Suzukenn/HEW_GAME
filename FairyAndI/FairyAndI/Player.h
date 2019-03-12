@@ -9,7 +9,7 @@
 
 //---定数・マクロ定義---//
 #define MAX_PLAYER_HP 5
-#define	VALUE_MOVE_PLAYER 1.0F
+#define	VALUE_MOVE_PLAYER 0.5F
 
 //＝＝＝前方宣言＝＝＝//
 class SPHERE;

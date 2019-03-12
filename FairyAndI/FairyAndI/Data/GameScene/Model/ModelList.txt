@@ -5,4 +5,7 @@ Data/GameScene/Model/Element/Ice.x ICE
 Data/GameScene/Model/Gimmick/Battery.x BATTERYGIMMICK
 Data/GameScene/Model/Gimmick/IceWall.x ICEGIMMICK
 Data/GameScene/Model/Gimmick/Wood.x WOODGIMMICK
+Data/GameScene/Model/Object/BatteryCannon.x BATTERYCANNON
 Data/GameScene/Model/Object/Goal.x GOAL
+Data/GameScene/Model/Object/SlimeBullet.x SLIMEBULLET
+Data/GameScene/Model/Object/WoodBullet.x WOODBULLET
