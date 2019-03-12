@@ -15,6 +15,8 @@ class SPHERE;
 class TRAP final : public SKILL
 {
     private:
+        DWORD BornTime;
+
 	    SPHERE* Collision;
 
     public:

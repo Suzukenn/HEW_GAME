@@ -136,7 +136,7 @@ HRESULT GAMECLEAR::Initialize(void)
 	FADE::SetFade(FADE_IN);
 
     //---BGMçƒê∂---//
-    SOUNDMANAGER::Play(TEXT("BGM_GAMEOVER"));
+    SOUNDMANAGER::Play(TEXT("BGM_CLEAR"));
 
     return hResult;
 }
@@ -164,7 +164,7 @@ void GAMECLEAR::Uninitialize(void)
     TEXTUREMANAGER::Uninitialize();
 
     //---BGMí‚é~---//
-    SOUNDMANAGER::Stop(TEXT("BGM_GAMEOVER"));
+    SOUNDMANAGER::Stop(TEXT("BGM_CLEAR"));
 }
 
 /////////////////////////////////////////////

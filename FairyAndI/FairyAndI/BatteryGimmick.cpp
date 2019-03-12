@@ -118,8 +118,7 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DX
 
 
     //---“–‚½‚è”»’è‚Ì•t—^---//
-	//Collision = COLLISIONMANAGER::InstantiateToOBB(Position, Rotation, TEXT("Object"), this);
-	//Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Object"), this);
+	Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Battery"), this);
 
 	return hResult;
 }
@@ -190,20 +189,20 @@ void BATTERYGIMMICK::Update(void)
 
 	if (PLAYER::GetPlayerPosition().x < Transform.Position.x)
 	{
-        Transform.Rotation.y = -180.0F;
-		BulletPosition.x = Transform.Position.x - 10.0F;
+        Transform.Rotation.y = 270.0F;
+        BulletPosition.x -= 10.0F;
 	}
 	else if (PLAYER::GetPlayerPosition().x > Transform.Position.x)
 	{
-        Transform.Rotation.y += 180.0F;
-		BulletPosition.x = Transform.Position.x + 10.0F;
+        Transform.Rotation.y = 90.0F;
+		BulletPosition.x += 10.0F;
 	}
 
     //2•bŒo‚Á‚½‚ç
     if (++Count > 120)
     {
 		//’e”­ŽË
-		//GIMMICKFACTORY::InstantiateBatteryCannon(BulletPosition, Transform.Rotation);
+		GIMMICKFACTORY::InstantiateBatteryCannon(BulletPosition, Transform.Rotation);
 
 		//ƒŠƒZƒbƒg
 		Count = 0;

@@ -76,7 +76,14 @@ void BACKGROUND::Update(float value)
 
     Stick = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT).x;
 
-    Position.x += 1.0F * Stick;
-    Billboard.MoveTexture(value * -Stick);
+    if (Stick)
+    {
+        Position.x += 1.0F * Stick;
+        Billboard.MoveTexture(value * Stick);
+    }
+    else
+    {
+        Billboard.MoveTexture(value);
+    }
     Billboard.Update();
 }

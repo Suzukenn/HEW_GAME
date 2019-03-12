@@ -46,7 +46,7 @@ void CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3 position, D3DXVECTOR3 rotat
 /////////////////////////////////////////////
 void CHARACTERFACTORY::InstantiateSlime(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    ACTORMANAGER::GameObject.emplace_back(new SLIME(TEXT("Slime"), position, rotation));
+    ACTORMANAGER::GameObject.emplace_back(new SLIME(position, rotation));
 }
 
 /////////////////////////////////////////////
@@ -60,5 +60,5 @@ void CHARACTERFACTORY::InstantiateSlime(D3DXVECTOR3 position, D3DXVECTOR3 rotati
 /////////////////////////////////////////////
 void CHARACTERFACTORY::InstantiateWood(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    ACTORMANAGER::GameObject.emplace_back(new WOOD(TEXT("Wood"), position, rotation));
+    ACTORMANAGER::GameObject.emplace_back(new WOOD(position, rotation));
 }

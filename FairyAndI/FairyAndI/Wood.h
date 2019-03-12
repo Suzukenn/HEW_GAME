@@ -19,10 +19,10 @@ class WOOD final : public ENEMY
         WOODSTATE State;
 
     public:
-        WOOD(tstring, D3DXVECTOR3, D3DXVECTOR3);
+        WOOD(D3DXVECTOR3, D3DXVECTOR3);
         ~WOOD(void);
 
-        HRESULT Initialize(tstring, D3DXVECTOR3, D3DXVECTOR3);
+        HRESULT Initialize(D3DXVECTOR3, D3DXVECTOR3);
         void Uninitialize(void);
         void Update(void);
         void Draw(void);

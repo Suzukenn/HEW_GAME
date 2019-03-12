@@ -52,29 +52,99 @@ HRESULT COLLISIONMANAGER::Initialize(void)
     HitOpponent.clear();
 
     //---衝突レイヤーの設定---//
-    conWork.emplace(TEXT("Character"), true);
-    conWork.emplace(TEXT("Skill"), true);
-    conWork.emplace(TEXT("Field"), true);
-    conWork.emplace(TEXT("Object"), true);
-    CollsitionLayer.emplace(TEXT("Character"), conWork);
-
+    //プレイヤー
+    conWork.emplace(TEXT("Player"), false);
+    conWork.emplace(TEXT("Fairy"), false);
+    conWork.emplace(TEXT("Skill"), false);
+    conWork.emplace(TEXT("Wall"), true);
+    conWork.emplace(TEXT("Enemy"), true);
+    conWork.emplace(TEXT("EnemyBullet"), true);
+    conWork.emplace(TEXT("Battery"), true);
+    conWork.emplace(TEXT("BatteryCannon"), true);
+    conWork.emplace(TEXT("Gimmick"), true);
+    conWork.emplace(TEXT("Item"), false);
+    CollsitionLayer.emplace(TEXT("Player"), conWork);
     conWork.clear();
 
-    conWork.emplace(TEXT("Skill"), true);
-    conWork.emplace(TEXT("Field"), true);
-    conWork.emplace(TEXT("Object"), true);
+    //フェアリー
+    conWork.emplace(TEXT("Fairy"), false);
+    conWork.emplace(TEXT("Skill"), false);
+    conWork.emplace(TEXT("Wall"), false);
+    conWork.emplace(TEXT("Enemy"), false);
+    conWork.emplace(TEXT("EnemyBullet"), false);
+    conWork.emplace(TEXT("Battery"), false);
+    conWork.emplace(TEXT("BatteryCannon"), false);
+    conWork.emplace(TEXT("Gimmick"), false);
+    conWork.emplace(TEXT("Item"), true);
+    CollsitionLayer.emplace(TEXT("Fairy"), conWork);
+    conWork.clear();
+
+    //スキル
+    conWork.emplace(TEXT("Skill"), false);
+    conWork.emplace(TEXT("Wall"), true);
+    conWork.emplace(TEXT("Enemy"), true);
+    conWork.emplace(TEXT("EnemyBullet"), false);
+    conWork.emplace(TEXT("Battery"), true);
+    conWork.emplace(TEXT("BatteryCannon"), false);
+    conWork.emplace(TEXT("Gimmick"), true);
+    conWork.emplace(TEXT("Item"), false);
     CollsitionLayer.emplace(TEXT("Skill"), conWork);
-
     conWork.clear();
 
-    conWork.emplace(TEXT("Field"), true);
-    conWork.emplace(TEXT("Object"), true);
-    CollsitionLayer.emplace(TEXT("Field"), conWork);
-
+    //スキルの壁
+    conWork.emplace(TEXT("Wall"), true);
+    conWork.emplace(TEXT("Enemy"), true);
+    conWork.emplace(TEXT("EnemyBullet"), true);
+    conWork.emplace(TEXT("Battery"), true);
+    conWork.emplace(TEXT("BatteryCannon"), true);
+    conWork.emplace(TEXT("Gimmick"), true);
+    conWork.emplace(TEXT("Item"), false);
+    CollsitionLayer.emplace(TEXT("Wall"), conWork);
     conWork.clear();
 
-    conWork.emplace(TEXT("Object"), true);
-    CollsitionLayer.emplace(TEXT("Object"), conWork);
+    //敵
+    conWork.emplace(TEXT("Enemy"), false);
+    conWork.emplace(TEXT("EnemyBullet"), false);
+    conWork.emplace(TEXT("Battery"), true);
+    conWork.emplace(TEXT("BatteryCannon"), false);
+    conWork.emplace(TEXT("Gimmick"), true);
+    conWork.emplace(TEXT("Item"), false);
+    CollsitionLayer.emplace(TEXT("Enemy"), conWork);
+    conWork.clear();
+
+    //敵弾
+    conWork.emplace(TEXT("EnemyBullet"), false);
+    conWork.emplace(TEXT("Battery"), true);
+    conWork.emplace(TEXT("BatteryCannon"), false);
+    conWork.emplace(TEXT("Gimmick"), true);
+    conWork.emplace(TEXT("Item"), false);
+    CollsitionLayer.emplace(TEXT("EnemyBullet"), conWork);
+    conWork.clear();
+
+    //砲台
+    conWork.emplace(TEXT("Battery"), false);
+    conWork.emplace(TEXT("BatteryCannon"), true);
+    conWork.emplace(TEXT("Gimmick"), true);
+    conWork.emplace(TEXT("Item"), false);
+    CollsitionLayer.emplace(TEXT("Battery"), conWork);
+    conWork.clear();
+
+    //砲弾
+    conWork.emplace(TEXT("BatteryCannon"), false);
+    conWork.emplace(TEXT("Gimmick"), true);
+    conWork.emplace(TEXT("Item"), false);
+    CollsitionLayer.emplace(TEXT("BatteryCannon"), conWork);
+    conWork.clear();
+
+    //ギミック
+    conWork.emplace(TEXT("Gimmick"), false);
+    conWork.emplace(TEXT("Item"), false);
+    CollsitionLayer.emplace(TEXT("Gimmick"), conWork);
+    conWork.clear();
+
+    //アイテム
+    conWork.emplace(TEXT("Item"), false);
+    CollsitionLayer.emplace(TEXT("Item"), conWork);
 
     return S_OK;
 }

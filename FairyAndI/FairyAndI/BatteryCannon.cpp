@@ -92,7 +92,7 @@ HRESULT BATTERYCANNON::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXV
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
     BornTime = 0;
-    Move = D3DXVECTOR3(-sinf(Transform.Rotation.y) * 1.5F, 0.0F, 0.0F);
+    Move = D3DXVECTOR3(sinf(Transform.Rotation.y) * 1.5F, 0.0F, 0.0F);
     Tag = TEXT("BatteryCannon");
 
     //---ÉÇÉfÉãÇÃì«Ç›çûÇ›---//
@@ -105,7 +105,7 @@ HRESULT BATTERYCANNON::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXV
     }
 
     //---ìñÇΩÇËîªíËÇÃïtó^---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.5F, TEXT("Object"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.5F, TEXT("BatteryCannon"), this);
 
     return hResult;
 }

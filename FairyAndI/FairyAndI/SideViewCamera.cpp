@@ -151,26 +151,17 @@ void SIDEVIEWCAMERA::Update(D3DXVECTOR3 player)
         PositionPlace = false;
     }
 
-    /*if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
-    {
-    Mode = !Mode;
-    }
-    else if (SQUAREGAUGE::GetFairyTime() == false)
-    {
-    Mode = false;
-    }*/
-
     if (!PositionPlace)
     {
         //プレイヤーを真ん中にして追いかける処理
-        Position = D3DXVECTOR3(player.x, 60.0F, player.z - 100.0F);
-        ReversoPoint = player;// D3DXVECTOR3(player.x, 30.0F, player.z);
+        Position = D3DXVECTOR3(player.x, player.y, player.z - 70.0F);
+        ReversoPoint = D3DXVECTOR3(player.x, 20.0F, player.z);
     }
     else
     {
         //スクロール処理
         Position.x += VALUE_MOVE_PLAYER * fStickVector * 0.5F;
-        ReversoPoint = player;// D3DXVECTOR3(Position.x, 30.0F, player.z);
+        ReversoPoint = D3DXVECTOR3(Position.x, 20.0F, player.z);
     }
 
     if (Mode)

@@ -22,10 +22,10 @@ class SLIME final : public ENEMY
         SLIMESTATE State;
 
     public:
-        SLIME(tstring, D3DXVECTOR3, D3DXVECTOR3);
+        SLIME(D3DXVECTOR3, D3DXVECTOR3);
         ~SLIME(void);
 
-        HRESULT Initialize(tstring, D3DXVECTOR3, D3DXVECTOR3);
+        HRESULT Initialize(D3DXVECTOR3, D3DXVECTOR3);
         void Uninitialize(void);
         void Update(void);
         void Draw(void);

@@ -107,7 +107,7 @@ HRESULT WOODGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVEC
 	}
 
     //---“–‚½‚è”»’è‚Ì•t—^---//
-    Collision = COLLISIONMANAGER::InstantiateToOBB(Transform.Position, D3DXVECTOR3(3.0F, 3.0F, 3.0F), TEXT("Object"), this);
+    Collision = COLLISIONMANAGER::InstantiateToOBB(Transform.Position, D3DXVECTOR3(3.0F, 3.0F, 3.0F), TEXT("Gimmick"), this);
 
 	return hResult;
 }
