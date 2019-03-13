@@ -8,16 +8,18 @@
 #include "Model.h"
 
 //‘O•ûéŒ¾//
-class OBB;
+class SPHERE;
 
 //ƒNƒ‰ƒXéŒ¾//
 class FIREGIMMICK final : public GAMEOBJECT
 {
 	private:
         bool Gray;
+        bool Small;
 
+        std::weak_ptr<SHADER> Shader;
 		std::weak_ptr<MODEL> Model;
-        OBB* Collision;
+        SPHERE* Collision;
 
 	public:
 		FIREGIMMICK(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);

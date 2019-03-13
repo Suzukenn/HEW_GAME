@@ -33,6 +33,7 @@ class TITLE final : public BASE_SCENE
 		FIRSTBUTTON FirstButton;
 		std::array<SPRITE, TITLE_BUTTON> SelectButton;
 		ANIMATIONSPRITE Cursor;
+        ANIMATIONBACKIMAGE Config;
 
 		// ì_ñ≈êßå‰óp
 		DWORD dwTicks;

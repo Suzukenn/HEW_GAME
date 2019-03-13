@@ -1,52 +1,42 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
+#include "AnimationModelManager.h"
 #include "Collision.h"
 #include "CollisionManager.h"
-#include "Fade.h"
+#include "EffectFactory.h"
 #include "Field.h"
 #include "InputManager.h"
 #include "ModelManager.h"
 #include "Player.h"
-#include "SceneManager.h"
 #include "SideViewCamera.h"
 #include "SkillFactory.h"
+#include "SoundManager.h"
 #include "Sphere.h"
 #include "SquareGauge.h"
 #include "WordMenu.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
-#define GRAVITY 0.18F
-#define JUMP 5.0F
-
-//＝＝＝列挙型定義＝＝＝//
-enum
-{
-    STATE_WAIT,
-    STATE_WALK,
-    STATE_RUN,
-    STATE_JUMP,
-    STATE_FALL,
-    STATE_ATTACK,
-    STATE_DAMAGE
-};
+#define GRAVITY 0.018F
+#define JUMP 2.0F
 
 //＝＝＝グローバル宣言＝＝＝//
 int hp;
 D3DXVECTOR3 pos;
 D3DXVECTOR3 rot;
+PLAYERSTATE state;
 
 /////////////////////////////////////////////
 //関数名：PLAYER
 //
 //機能：コンストラクタ
 //
-//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：なし
 /////////////////////////////////////////////
-PLAYER::PLAYER(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+PLAYER::PLAYER(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(modelname, position, rotation);
+    Initialize(position, rotation);
 }
 
 //＝＝＝関数定義＝＝＝//
@@ -72,7 +62,7 @@ void PLAYER::Draw(void)
     Transform.MakeWorldMatrix(mtxWorld);
 
     //---描画---//
-    Model.Draw(mtxWorld, Gray);
+    Model->Draw(mtxWorld, Gray);
 }
 
 /////////////////////////////////////////////
@@ -80,11 +70,11 @@ void PLAYER::Draw(void)
 //
 //機能：プレイヤーの初期化
 //
-//引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
+//引数：((D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT PLAYER::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -94,14 +84,18 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(100.0F, 100.0F, 100.0F);
     HP = MAX_PLAYER_HP;
-    State = STATE_WAIT;
+    State = PLAYERSTATE_WAIT;
     Gray = false;
+    Jump = false;
+    IsGround = false;
     Vibration = 0;
+    AnimationTime = 0;
     Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
+    VibrationPower = D3DXVECTOR2(0.0F, 0.0F);
     Tag = TEXT("Player");
 
     //---モデルの読み込み---//
-    hResult = Model.Initialize(modelfile, 1.0F);
+    hResult = ANIMATIONMODELMANAGER::GetModel(TEXT("PLAYER"), Model);
     if(FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("プレイヤーのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -110,11 +104,11 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
     }
     else
     {
-        Model.ChangeAnimation(State);
+        Model->ChangeAnimation(State);
     }
 
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Character"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Player"), this);
 
 	return hResult;
 }
@@ -130,12 +124,12 @@ HRESULT PLAYER::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 
 /////////////////////////////////////////////
 void PLAYER::OnCollision(COLLISION* opponent)
 {
-	/*if (opponent->Owner->GetTag() == TEXT("Goal"))
+	if (opponent->Owner->GetTag() == TEXT("Enemy") || opponent->Owner->GetTag() == TEXT("EnemyBullet") || opponent->Owner->GetTag() == TEXT("FireGimmick"))
 	{
-		FADE::SetFade(FADE_OUT);
-		Goal = true;
-	}*/
-    //Position = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
+        Transform.Position.x -=5.0F;
+        Model->ChangeAnimation(PLAYERSTATE_DAMAGE);
+        --HP;
+    }
 }
 
 /////////////////////////////////////////////
@@ -149,7 +143,7 @@ void PLAYER::OnCollision(COLLISION* opponent)
 /////////////////////////////////////////////
 void PLAYER::Uninitialize(void)
 {
-    Model.Uninitialize();
+    Model->Uninitialize();
 
     ACTORMANAGER::Destroy(this);
 
@@ -176,36 +170,29 @@ void PLAYER::Update(void)
     D3DXVECTOR3 vecInstancePosition;
     D3DXVECTOR2 vecStickVector;
     D3DXVECTOR3 vecCameraRotation;
-    static D3DXVECTOR2 vecVibration;
 
     //---初期化処理---//
     Move.x = 0.0F;
 
     //---フリーズ判定---//
-    /*if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
-    {
-        Gray = !Gray;
-    }*/
-
 	Gray = SQUAREGAUGE::GetFairyTime();
-
     if (Gray)
     {
-        Model.SetSpeed(0.0);
+        Model->SetSpeed(0.0);
         INPUTMANAGER::StopGamePadVibration(GAMEPADNUMBER_1P);
         return;
     }
     else
     {
-        Model.SetSpeed(1.0);
-        INPUTMANAGER::PlayGamePadVibration(GAMEPADNUMBER_1P, vecVibration.x, vecVibration.y);
+        Model->SetSpeed(1.0);
+        INPUTMANAGER::PlayGamePadVibration(GAMEPADNUMBER_1P, VibrationPower.x, VibrationPower.y);
     }
 
     //---バイブレーション---//
     if (--Vibration <= 0)
     {
         INPUTMANAGER::StopGamePadVibration(GAMEPADNUMBER_1P);
-        vecVibration = D3DXVECTOR2(0.0F, 0.0F);
+        VibrationPower = D3DXVECTOR2(0.0F, 0.0F);
         Vibration = 0;
     }
 
@@ -215,33 +202,80 @@ void PLAYER::Update(void)
     vecStickVector = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT);
 
 	//重力加算
-	Move.y -= GRAVITY;
-
-    //着地判定
-    if (FIELD::CheckField(&D3DXVECTOR3(Transform.Position.x, Transform.Position.y - 5.0F, Transform.Position.z), &D3DXVECTOR3(0.0F, 1.0F, 0.0F), fAfterYPosition))
+    if (!IsGround)
     {
-        Transform.Position.y = fAfterYPosition + 5.0F;
-        Move.y = 0.0F;
+        Move.y -= GRAVITY;
+        if (State != PLAYERSTATE_JUMP)
+        {
+            State = PLAYERSTATE_FALL;
+        }
     }
 
-    //モデル操作
-    if (vecStickVector != D3DXVECTOR2(0.0F, 0.0F))
+    //着地判定
+    if (FIELD::CheckField(&D3DXVECTOR3(Transform.Position.x, Transform.Position.y - 11.0F, Transform.Position.z), &D3DXVECTOR3(0.0F, 1.0F, 0.0F), fAfterYPosition))
     {
-        //移動
+        Transform.Position.y = fAfterYPosition + 11.0F;
+        Move.y = 0.0F;
+        Jump = false;
+        IsGround = true;
+        if (State != PLAYERSTATE_ATTACK)
+        {
+            State = PLAYERSTATE_WAIT;
+        }
+    }
+    else
+    {
+        State = PLAYERSTATE_FALL;
+        IsGround = false;
+    }
+
+    //---モデル操作---//
+    //移動
+    if (State != PLAYERSTATE_ATTACK && vecStickVector != D3DXVECTOR2(0.0F, 0.0F))
+    {
         Move.x += VALUE_MOVE_PLAYER * vecStickVector.x;
 
-        //回転
+        //向きに応じて回転
         Transform.Rotation.y = 90.0F * ((vecStickVector.x > 0.0F) - (vecStickVector.x < 0.0F));
+
+        if (IsGround)
+        {
+            State = PLAYERSTATE_WALK;
+        }
+        if (!SOUNDMANAGER::CheckPlay(TEXT("SE_PLAYER_WALK")))
+        {
+            SOUNDMANAGER::Play(TEXT("SE_PLAYER_WALK"));
+        }
+    }
+    
+    else
+    {
+        SOUNDMANAGER::Stop(TEXT("SE_PLAYER_WALK"));
     }
 
 	//ジャンプ
-	if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
-	{
-        //ジャンプ力の付与
-        Move.y += JUMP;
-	}
+    if (!Jump && State != PLAYERSTATE_ATTACK)
+    {
+        if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
+        {
+            Move.y += JUMP;
+            Jump = true;
+            IsGround = false;
+            AnimationTime = 50;
+            State = PLAYERSTATE_JUMP;
+        }
+    }
+    if (State == PLAYERSTATE_JUMP)
+    {
+        if (!--AnimationTime)
+        {
+            State = PLAYERSTATE_FALL;
+        }
+    }
+
 
 	//---位置情報更新---//
+    //移動を反映
     Transform.Position += Move;
 	Collision->Position = Transform.Position;
 
@@ -255,43 +289,57 @@ void PLAYER::Update(void)
 	{
         Transform.Position.x = 1500.0F;
 	}
-	else if (Transform.Position.x < -1500.0F)
+	else if (Transform.Position.x < 50.0F)
 	{
-        Transform.Position.x = -1500.0F;
+        Transform.Position.x = 50.0F;
 	}
 
-    //---アイテム生成---//
+    //---スキル生成---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
     {
-        vecInstancePosition.x = Transform.Position.x + sinf(D3DXToRadian(Transform.Rotation.y)) * 10.0F + cosf(D3DXToRadian(Transform.Rotation.y)) * 8.0F;
-        vecInstancePosition.y = Transform.Position.y + 21.0F;
-        vecInstancePosition.z = 0.0F;
-
-        SKILLFACTORY::InstantiateSkill(WORDMENU::NotificationAdjective(), WORDMENU::NotificationNoun(), vecInstancePosition, Transform.Rotation);
-        vecVibration = D3DXVECTOR2(0.5F, 0.5F);
-        INPUTMANAGER::PlayGamePadVibration(GAMEPADNUMBER_1P, vecVibration.x, vecVibration.y);
-        Vibration = 100;
+        if (IsGround)
+        {
+           State = PLAYERSTATE_ATTACK;
+           AnimationTime = 130;
+        }
     }
+
+    //攻撃
+    if (State == PLAYERSTATE_ATTACK)
+    {
+        Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
+        --AnimationTime;
+
+        //ラスト30フレームでスキル・エフェクト生成
+        if (AnimationTime == 70)
+        {
+            vecInstancePosition.x = Transform.Position.x + sinf(D3DXToRadian(Transform.Rotation.y)) * 4.0F + cosf(D3DXToRadian(Transform.Rotation.y));
+            vecInstancePosition.y = Transform.Position.y + 5.0F;
+            vecInstancePosition.z = 0.0F;
+
+            SKILLFACTORY::InstantiateSkill(WORDMENU::NotificationAdjective(), WORDMENU::NotificationNoun(), vecInstancePosition, Transform.Rotation);
+            EFFECTFACTORY::InstantiateSkillEffect(vecInstancePosition, D3DXVECTOR2(5.0F, 5.0F), false);
+            VibrationPower = D3DXVECTOR2(0.4F, 0.4F);
+            INPUTMANAGER::PlayGamePadVibration(GAMEPADNUMBER_1P, VibrationPower.x, VibrationPower.y);
+            Vibration = 30;
+
+            SOUNDMANAGER::Stop(tstring(TEXT("SE_SKILL_TYPE") + WORDMENU::NotificationNoun()).data());
+            SOUNDMANAGER::Play(tstring(TEXT("SE_SKILL_TYPE") + WORDMENU::NotificationNoun()).data());
+        }
+
+        //0フレームで待機に移行
+        else if (!AnimationTime)
+        {
+            State = PLAYERSTATE_WAIT;
+        }
+    }
+
+    Model->ChangeAnimation(State);
 
     hp = HP;
     pos = Transform.Position;
     rot = Transform.Rotation;
-
-    if (Move.x)
-    {
-        State = STATE_WALK;
-    }
-    else
-    {
-        State = STATE_WAIT;
-    }
-
-    if (Move.y != 0.0F)
-    {
-        State = STATE_WAIT;
-    }
-    Model.ChangeAnimation(State);
-
+    state = State;
 }
 
 /////////////////////////////////////////////
@@ -308,14 +356,44 @@ int PLAYER::GetPlayerHP(void)
     return hp;
 }
 
-// モデル位置の取得
+/////////////////////////////////////////////
+//関数名：GetPlayerPosition
+//
+//機能：プレイヤーの位置の取得
+//
+//引数：なし
+//
+//戻り値：なし
+/////////////////////////////////////////////
 D3DXVECTOR3 PLAYER::GetPlayerPosition(void)
 {
 	return pos;
 }
 
-// モデル向きの取得
+/////////////////////////////////////////////
+//関数名：GetPlayerRotation
+//
+//機能：プレイヤーの向きの取得
+//
+//引数：なし
+//
+//戻り値：なし
+/////////////////////////////////////////////
 D3DXVECTOR3 PLAYER::GetPlayerRotation(void)
 {
 	return rot;
+}
+
+/////////////////////////////////////////////
+//関数名：GetPlayerState
+//
+//機能：プレイヤーのステートの取得
+//
+//引数：なし
+//
+//戻り値：なし
+/////////////////////////////////////////////
+PLAYERSTATE PLAYER::GetPlayerState(void)
+{
+    return state;
 }

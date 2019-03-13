@@ -135,6 +135,7 @@
   <ItemGroup>
     <ClCompile Include="ActorManager.cpp" />
     <ClCompile Include="AnimationBackImage.cpp" />
+    <ClCompile Include="AnimationModelManager.cpp" />
     <ClCompile Include="AnimationModel.cpp" />
     <ClCompile Include="AnimationModelHierarchy.cpp" />
     <ClCompile Include="BackGround.cpp" />
@@ -148,12 +149,18 @@
     <ClCompile Include="CharacterFactory.cpp" />
     <ClCompile Include="Collision.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
+    <ClCompile Include="Effect.cpp" />
+    <ClCompile Include="EffectFactory.cpp" />
     <ClCompile Include="Element.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyBullet.cpp" />
     <ClCompile Include="Fade.cpp" />
     <ClCompile Include="FireGimmick.cpp" />
     <ClCompile Include="FirstButton.cpp" />
     <ClCompile Include="GameClear.cpp" />
+    <ClCompile Include="GameScene01.cpp" />
+    <ClCompile Include="GameScene02.cpp" />
+    <ClCompile Include="GameScene03.cpp" />
     <ClCompile Include="GimmickFactory.cpp" />
     <ClCompile Include="Goal.cpp" />
     <ClCompile Include="Grenade.cpp" />
@@ -169,12 +176,14 @@
     <ClCompile Include="ObjectFactory.cpp" />
     <ClCompile Include="SelectScene.cpp" />
     <ClCompile Include="SkillFactory.cpp" />
+    <ClCompile Include="Slime.cpp" />
     <ClCompile Include="Sphere.cpp" />
     <ClCompile Include="SquareGauge.cpp" />
     <ClCompile Include="StageButton.cpp" />
     <ClCompile Include="Timer.cpp" />
     <ClCompile Include="Trap.cpp" />
     <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="Wood.cpp" />
     <ClCompile Include="WoodGimmick.cpp" />
     <ClCompile Include="WordManager.cpp" />
     <ClCompile Include="SideViewCamera.cpp" />
@@ -192,7 +201,6 @@
     <ClCompile Include="TrainingScene.cpp" />
     <ClCompile Include="GameOver.cpp" />
     <ClCompile Include="GamePad.cpp" />
-    <ClCompile Include="GameScene.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Keyboard.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -211,6 +219,7 @@
     <ClInclude Include="AnimationModelContainer.h" />
     <ClInclude Include="AnimationModelFrame.h" />
     <ClInclude Include="AnimationModelHierarchy.h" />
+    <ClInclude Include="AnimationModelManager.h" />
     <ClInclude Include="BackImage.h" />
     <ClInclude Include="BatteryCannon.h" />
     <ClInclude Include="BatteryGimmick.h" />
@@ -219,8 +228,11 @@
     <ClInclude Include="CharacterFactory.h" />
     <ClInclude Include="Collision.h" />
     <ClInclude Include="CollisionManager.h" />
+    <ClInclude Include="Effect.h" />
+    <ClInclude Include="EffectFactory.h" />
     <ClInclude Include="Element.h" />
     <ClInclude Include="Enemy.h" />
+    <ClInclude Include="EnemyBullet.h" />
     <ClInclude Include="Fade.h" />
     <ClInclude Include="FireGimmick.h" />
     <ClInclude Include="FirstButton.h" />
@@ -228,6 +240,9 @@
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="ActorManager.h" />
     <ClInclude Include="BackGround.h" />
+    <ClInclude Include="GameScene01.h" />
+    <ClInclude Include="GameScene02.h" />
+    <ClInclude Include="GameScene03.h" />
     <ClInclude Include="GimmickFactory.h" />
     <ClInclude Include="Goal.h" />
     <ClInclude Include="Grenade.h" />
@@ -247,6 +262,7 @@
     <ClInclude Include="SelectScene.h" />
     <ClInclude Include="Skill.h" />
     <ClInclude Include="SkillFactory.h" />
+    <ClInclude Include="Slime.h" />
     <ClInclude Include="Sphere.h" />
     <ClInclude Include="SquareGauge.h" />
     <ClInclude Include="StageButton.h" />
@@ -255,6 +271,7 @@
     <ClInclude Include="Transform.h" />
     <ClInclude Include="Trap.h" />
     <ClInclude Include="Wall.h" />
+    <ClInclude Include="Wood.h" />
     <ClInclude Include="WoodGimmick.h" />
     <ClInclude Include="WordManager.h" />
     <ClInclude Include="SideViewCamera.h" />
@@ -273,7 +290,6 @@
     <ClInclude Include="TrainingScene.h" />
     <ClInclude Include="GameOver.h" />
     <ClInclude Include="GamePad.h" />
-    <ClInclude Include="GameScene.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Keyboard.h" />
     <ClInclude Include="Main.h" />

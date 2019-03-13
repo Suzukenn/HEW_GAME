@@ -6,7 +6,8 @@
 #include "GimmickFactory.h"
 #include "ModelManager.h"
 #include "Player.h"
-#include "Skill.h"
+#include "ShaderManager.h"
+#include "SquareGauge.h"
 
 //ŠÖ”’è‹`//
 /////////////////////////////////////////////
@@ -59,7 +60,6 @@ void BATTERYGIMMICK::Draw(void)
 
     //Ý’è
     Transform.MakeWorldMatrix(mtxWorld);
-    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---•`‰æ---//
     //•`‰æ‘ÎÛƒ`ƒFƒbƒN
@@ -71,7 +71,8 @@ void BATTERYGIMMICK::Draw(void)
     }
 
     //•`‰æ
-    pModel->Draw(Gray);
+    pModel->Draw(Shader, TEXT("NonTextureModel"), (UINT)Gray, mtxWorld);
+
 }
 
 /////////////////////////////////////////////
@@ -92,7 +93,7 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DX
 	//‰ŠúÝ’è
     Transform.Position = position;
     Transform.Rotation = rotation;
-    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
+    Transform.Scale = D3DXVECTOR3(5.0F, 5.0F, 5.0F);
     Gray = false;
 	Tag = TEXT("Battery");
 
@@ -105,9 +106,17 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DX
 		return hResult;
 	}
 
+    //---ƒVƒF[ƒ_[‚ÌŽæ“¾---//
+    hResult = SHADERMANAGER::GetShader(TEXT("MODEL"), Shader);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("–C‘ä•`‰æ—p‚ÌƒVƒF[ƒ_[‚ÌŽæ“¾‚ÉŽ¸”s‚µ‚Ü‚µ‚½"), TEXT("‰Šú‰»ƒGƒ‰["), MB_OK);
+        Uninitialize();
+        return hResult;
+    }
+
     //---“–‚½‚è”»’è‚Ì•t—^---//
-	//Collision = COLLISIONMANAGER::InstantiateToOBB(Position, Rotation, TEXT("Object"), this);
-	Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Object"), this);
+	Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Battery"), this);
 
 	return hResult;
 }
@@ -165,22 +174,32 @@ void BATTERYGIMMICK::Uninitialize(void)
 void BATTERYGIMMICK::Update(void)
 {	
 	static int Count;	//’e‚ðo‚·ŠÔŠu•b”
-	D3DXVECTOR3 BulletPosition = D3DXVECTOR3(0.0F, 10.0F, 0.0F);
+	D3DXVECTOR3 BulletPosition;
 
-	//2•bŒo‚Á‚½‚ç
-	if (++Count > 120)
+    Gray = SQUAREGAUGE::GetFairyTime();
+
+    if (Gray)
+    {
+        return;
+    }
+
+    BulletPosition = Transform.Position;
+    Transform.Position.y += 10.0F;
+
+	if (PLAYER::GetPlayerPosition().x < Transform.Position.x)
 	{
-		if (PLAYER::GetPlayerPosition().x < Transform.Position.x)
-		{
-            Transform.Rotation.y = -180.0F;
-			BulletPosition.x = Transform.Position.x - 10.0F;
-		}
-		else if (PLAYER::GetPlayerPosition().x > Transform.Position.x)
-		{
-            Transform.Rotation.y = 180.0F;
-			BulletPosition.x = Transform.Position.x + 10.0F;
-		}
+        Transform.Rotation.y = 270.0F;
+        BulletPosition.x -= 20.0F;
+	}
+	else if (PLAYER::GetPlayerPosition().x > Transform.Position.x)
+	{
+        Transform.Rotation.y = 90.0F;
+		BulletPosition.x += 20.0F;
+	}
 
+    //2•bŒo‚Á‚½‚ç
+    if (++Count > 120)
+    {
 		//’e”­ŽË
 		GIMMICKFACTORY::InstantiateBatteryCannon(BulletPosition, Transform.Rotation);
 

@@ -184,6 +184,26 @@ HRESULT BILLBOARD::Initialize(LPCTSTR texturename, D3DXVECTOR2 scale, bool inver
 }
 
 /////////////////////////////////////////////
+//関数名：MoveTexture
+//
+//機能：テクスチャの移動
+//
+//引数：なし
+//
+//戻り値：なし
+/////////////////////////////////////////////
+void BILLBOARD::MoveTexture(float value)
+{
+    //---各種宣言---//
+    int nCounter;
+
+    for (nCounter = 0; nCounter < 4; ++nCounter)
+    {
+        Vertex.at(nCounter).Texture.x += value;
+    }
+}
+
+/////////////////////////////////////////////
 //関数名：SetUV
 //
 //機能：ビルボードのUVの設定

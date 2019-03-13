@@ -122,6 +122,5 @@ HRESULT SPRITE::Initialize(LPCTSTR texturename, D3DXVECTOR2 position, D3DXVECTOR
 void SPRITE::Uninitialize(void)
 {
     //---ŠJ•ú---//
-    SAFE_RELEASE((*VertexBuffer));
     Texture.reset();
 }

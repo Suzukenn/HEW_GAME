@@ -77,9 +77,6 @@
     <ClCompile Include="GameOver.cpp">
       <Filter>ソースコード\Scene</Filter>
     </ClCompile>
-    <ClCompile Include="GameScene.cpp">
-      <Filter>ソースコード\Scene</Filter>
-    </ClCompile>
     <ClCompile Include="GamePad.cpp">
       <Filter>ソースコード\System\Input</Filter>
     </ClCompile>
@@ -212,6 +209,33 @@
     <ClCompile Include="FirstButton.cpp">
       <Filter>ソースコード\UI\Button</Filter>
     </ClCompile>
+    <ClCompile Include="Slime.cpp">
+      <Filter>ソースコード\Actor\Character\EnemySide</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationModelManager.cpp">
+      <Filter>ソースコード\System\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Wood.cpp">
+      <Filter>ソースコード\Actor\Character\EnemySide</Filter>
+    </ClCompile>
+    <ClCompile Include="EffectFactory.cpp">
+      <Filter>ソースコード\System\Factory</Filter>
+    </ClCompile>
+    <ClCompile Include="Effect.cpp">
+      <Filter>ソースコード\Actor\Object\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyBullet.cpp">
+      <Filter>ソースコード\Actor\Object\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene01.cpp">
+      <Filter>ソースコード\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene02.cpp">
+      <Filter>ソースコード\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="GameScene03.cpp">
+      <Filter>ソースコード\Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Main.h" />
@@ -301,9 +325,6 @@
     </ClInclude>
     <ClInclude Include="GameObject.h">
       <Filter>ソースコード\Parts</Filter>
-    </ClInclude>
-    <ClInclude Include="GameScene.h">
-      <Filter>ソースコード\Scene</Filter>
     </ClInclude>
     <ClInclude Include="GamePad.h">
       <Filter>ソースコード\System\Input</Filter>
@@ -454,6 +475,33 @@
     </ClInclude>
     <ClInclude Include="FirstButton.h">
       <Filter>ソースコード\UI\Button</Filter>
+    </ClInclude>
+    <ClInclude Include="Slime.h">
+      <Filter>ソースコード\Actor\Character\EnemySide</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationModelManager.h">
+      <Filter>ソースコード\System\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Wood.h">
+      <Filter>ソースコード\Actor\Character\EnemySide</Filter>
+    </ClInclude>
+    <ClInclude Include="EffectFactory.h">
+      <Filter>ソースコード\System\Factory</Filter>
+    </ClInclude>
+    <ClInclude Include="Effect.h">
+      <Filter>ソースコード\Actor\Object\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyBullet.h">
+      <Filter>ソースコード\Actor\Object\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene01.h">
+      <Filter>ソースコード\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene02.h">
+      <Filter>ソースコード\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="GameScene03.h">
+      <Filter>ソースコード\Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

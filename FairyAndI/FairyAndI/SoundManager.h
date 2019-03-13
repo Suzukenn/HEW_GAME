@@ -22,6 +22,7 @@ class SOUNDMANAGER
         static HRESULT Load(std::vector<SOUNDPARAMETER>&);
 
     public:
+        static bool CheckPlay(tstring);
         static HRESULT Initialize(void);
         static void Play(tstring);
         static void Pause(tstring);

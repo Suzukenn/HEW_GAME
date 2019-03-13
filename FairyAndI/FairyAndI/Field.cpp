@@ -21,6 +21,7 @@ bool FIELD::CheckField(LPD3DXVECTOR3 rayposition, LPD3DXVECTOR3 raydirection, fl
     //---各種宣言---//
     int nCounter;
     BOOL bResult;
+    float fDistance;
     float fHitU;
     float fHitV;
     HRESULT hResult;
@@ -31,28 +32,26 @@ bool FIELD::CheckField(LPD3DXVECTOR3 rayposition, LPD3DXVECTOR3 raydirection, fl
     LPWORD pIndex;
     VERTEX_3D* pVertex;
 
-    //---初期化処理---//
-    dwHitIndex = -1;
-
+    //---判定処理---//
     //レイピッキング
-    hResult = D3DXIntersect(Mesh, rayposition, raydirection, &bResult, &dwHitIndex, &fHitU, &fHitV, nullptr, nullptr, nullptr);
+    hResult = D3DXIntersect(Mesh, rayposition, raydirection, &bResult, &dwHitIndex, &fHitU, &fHitV, &fDistance, nullptr, nullptr);
     if (SUCCEEDED(hResult) && bResult)
     {
         hResult = Mesh->LockIndexBuffer(0, (void**)&pIndex);
         if (FAILED(hResult))
         {
-            MessageBox(nullptr, TEXT("地形のモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+            MessageBox(nullptr, TEXT("地形のモデル情報の取得に失敗しました"), TEXT("判定エラー"), MB_OK);
             return false;
         }
         for (nCounter = 0; nCounter < 3; ++nCounter)
         {
-            dwHitVertexNo[nCounter] = pIndex[dwHitIndex * 3 + nCounter];
+            dwHitVertexNo[nCounter] = pIndex[dwHitIndex + nCounter];
         }
 
         hResult = Mesh->UnlockIndexBuffer();
         if (FAILED(hResult))
         {
-            MessageBox(nullptr, TEXT("地形のモデル情報の開放に失敗しました"), TEXT("初期化エラー"), MB_OK);
+            MessageBox(nullptr, TEXT("地形のモデル情報の開放に失敗しました"), TEXT("判定エラー"), MB_OK);
             return false;
         }
 
@@ -60,10 +59,9 @@ bool FIELD::CheckField(LPD3DXVECTOR3 rayposition, LPD3DXVECTOR3 raydirection, fl
         hResult = Mesh->LockVertexBuffer(0, (void**)&pVertex);
         if (FAILED(hResult))
         {
-            MessageBox(nullptr, TEXT("地形のモデルポリゴンの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+            MessageBox(nullptr, TEXT("地形のモデルポリゴンの取得に失敗しました"), TEXT("判定エラー"), MB_OK);
             return false;
         }
-
 
         //地面の高さに合わせる
         afterposition = pVertex[dwHitVertexNo[0]].Vertex.y + fHitU * (pVertex[dwHitVertexNo[1]].Vertex.y - pVertex[dwHitVertexNo[0]].Vertex.y) + fHitV * (pVertex[dwHitVertexNo[2]].Vertex.y - pVertex[dwHitVertexNo[0]].Vertex.y);
@@ -71,11 +69,11 @@ bool FIELD::CheckField(LPD3DXVECTOR3 rayposition, LPD3DXVECTOR3 raydirection, fl
         hResult = Mesh->UnlockVertexBuffer();
         if (FAILED(hResult))
         {
-            MessageBox(nullptr, TEXT("地形のモデルポリゴンの開放に失敗しました"), TEXT("初期化エラー"), MB_OK);
+            MessageBox(nullptr, TEXT("地形のモデルポリゴンの開放に失敗しました"), TEXT("判定エラー"), MB_OK);
             return false;
         }
 
-        return bResult ? true : false;
+        return true;
     }
     else
     {
@@ -181,18 +179,4 @@ void FIELD::Uninitialize(void)
     SAFE_RELEASE(MaterialBuffer);
     SAFE_RELEASE(Mesh);
     SAFE_RELEASE(Texture);
-}
-
-/////////////////////////////////////////////
-//関数名：Update
-//
-//機能：地形の更新
-//
-//引数：なし
-//
-//戻り値：なし
-/////////////////////////////////////////////
-void FIELD::Update(void)
-{
-
 }

@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
+#include "AnimationModelManager.h"
 #include "BackGround.h"
 #include "Canvas.h"
 #include "CharacterFactory.h"
@@ -33,8 +34,9 @@ void TRAINING::Draw(void)
 {
     //---オブジェクトの描画処理---//
     Field.Draw();
-    Ground.Draw();
+    //Ground.Draw();
     Back.Draw();
+    Back_Front.Draw();
     ACTORMANAGER::Draw();
     Canvas.Draw();
 }
@@ -68,6 +70,12 @@ HRESULT TRAINING::Initialize(void)
         return hResult;
     }
 
+    hResult = ANIMATIONMODELMANAGER::Initialize(TEXT("Data/GameScene/Model/AnimationModelList.txt"));
+    if (FAILED(hResult))
+    {
+        return hResult;
+    }
+
     hResult = SHADERMANAGER::Initialize(TEXT("Data/GameScene/ShaderList.txt"));
     if (FAILED(hResult))
     {
@@ -95,20 +103,31 @@ HRESULT TRAINING::Initialize(void)
     //---オブジェクトの初期化処理---//
 
     //キャラクター
-    CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(-20.0F, 50.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
-    CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
+    CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(50.0F, 50.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
+    CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3(50.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
+
+    //敵
+    //CHARACTERFACTORY::InstantiateSlime(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
+    //CHARACTERFACTORY::InstantiateWood(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+    //CHARACTERFACTORY::InstantiateWood(D3DXVECTOR3(150.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
 
     //エレメント
-    OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3(100.0F, 0.0F, 0.0F));
-    OBJECTFACTORY::InstantiateIceElement(D3DXVECTOR3(-50.0F, 0.0F, 0.0F));
+    //OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3(100.0F, 10.0F, 0.0F));
+    //OBJECTFACTORY::InstantiateIceElement(D3DXVECTOR3(100.0F, 10.0F, 0.0F));
+    //OBJECTFACTORY::InstantiateRockElement(D3DXVECTOR3(100.0F, 10.0F, 0.0F));
+    //OBJECTFACTORY::InstantiateRiceCakeElement(D3DXVECTOR3(100.0F, 10.0F, 0.0F));
 
     //ギミック
-    GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(50.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
-	OBJECTFACTORY::InstantiateGoal(D3DXVECTOR3(150.0F, 10.0F, 0.0F));
+    GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
+    //GIMMICKFACTORY::InstantiateFireGimmick(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
+    //GIMMICKFACTORY::InstantiateIceGimmick(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
+    //GIMMICKFACTORY::InstantiateWoodGimmick(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+    //OBJECTFACTORY::InstantiateGoal(D3DXVECTOR3(100.0F, 10.0F, 0.0F));
 
     //地形
     //hResult = Field.Initialize(TEXT("Data/Common/Model/Field/Field.x"), TEXT("Field"), D3DXVECTOR3(0.0F, -10.0F, 0.0F), D3DXVECTOR3(20.0F, 20.0F, 20.0F));
-    hResult = Field.Initialize(TEXT("Data/GameScene/Model/Field/Field.x"), TEXT("Field"), D3DXVECTOR3(0.0F, -10.0F, 0.0F), D3DXVECTOR3(1.0F, 20.0F, 1.0F));
+    //hResult = Field.Initialize(TEXT("Data/GameScene/Model/Field/Stage01.x"), TEXT("Field"), D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.1F, 1.0F, 1.0F));
+    hResult = Field.Initialize(TEXT("Data/GameScene/Model/Field/new Stage01.x"), TEXT("Field"), D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(1.0F, 1.0F, 1.0F));
     if (FAILED(hResult))
     {
         return hResult;
@@ -119,7 +138,14 @@ HRESULT TRAINING::Initialize(void)
     {
         return hResult;
     }
-    hResult = Back.Initialize(TEXT("SKILL_HOTFIRE"), D3DXVECTOR3(0.0F, 0.0F, 100.0F), D3DXVECTOR2(100.0F, 100.0F));
+
+    //背景
+    hResult = Back.Initialize(TEXT("BACKGROUND_BACK"), D3DXVECTOR3(0.0F, -12.0F, 80.0F), D3DXVECTOR2(321.0F, 120.0F));
+    if (FAILED(hResult))
+    {
+        return hResult;
+    }
+    hResult = Back_Front.Initialize(TEXT("BACKGROUND_FRONT"), D3DXVECTOR3(0.0F, -12.0F, 80.0F), D3DXVECTOR2(320.0F, 120.0F));
     if (FAILED(hResult))
     {
         return hResult;
@@ -132,7 +158,7 @@ HRESULT TRAINING::Initialize(void)
     }
 
     //サイドビューカメラ
-    hResult = SIDEVIEWCAMERA::Initialize(D3DXVECTOR3(0.0F, 20.0F, -50.0F), PLAYER::GetPlayerPosition());
+    hResult = SIDEVIEWCAMERA::Initialize(D3DXVECTOR3(50.0F, 20.0F, -50.0F), PLAYER::GetPlayerPosition());
     if (FAILED(hResult))
     {
         return hResult;
@@ -173,6 +199,7 @@ void TRAINING::Uninitialize(void)
 {
     //---オブジェクトの終了処理---//
     Back.Uninitialize();
+    Back_Front.Uninitialize();
     Canvas.Uninitialize();
     FlexibleCamera.Uninitialize();
     Field.Uninitialize();
@@ -183,6 +210,8 @@ void TRAINING::Uninitialize(void)
     COLLISIONMANAGER::Uninitialize();
     WORDMANAGER::Uninitialize();
     SHADERMANAGER::Uninitialize();
+    MODELMANAGER::Uninitialize();
+    ANIMATIONMODELMANAGER::Uninitialize();
 
     //---テクスチャの削除---//
     TEXTUREMANAGER::Uninitialize();
@@ -213,12 +242,11 @@ void TRAINING::Update(void)
     bCameraMode ? FlexibleCamera.Update() : SIDEVIEWCAMERA::Update(PLAYER::GetPlayerPosition());
 
     ACTORMANAGER::Update();
-
-    Field.Update();
-
     DIRECTIONALLIGHT::Update();
-
     COLLISIONMANAGER::Update();
+    Back.Update(0.00075F, true);
+    Back_Front.Update(0.0015F);
+    Canvas.Update();
 
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
@@ -242,8 +270,7 @@ void TRAINING::Update(void)
         WORDMANAGER::UnLockWord(TEXT("RICECAKE"));
     }
 
-    Canvas.Update();
-    Back.Update();
+
 
     //---画面遷移---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_BACK, TRIGGER))

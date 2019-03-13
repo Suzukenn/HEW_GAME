@@ -28,9 +28,11 @@ void TITLE::ChooseStage(void)
 	if (IntervalCnt > 60 / 3)
 	{
 		IntervalCnt = 60 / 3;
-		//右にスティックを入力
+		//上にスティックを入力
 		if (vecStickVector.y > 0.0F)
 		{
+            SOUNDMANAGER::Stop(TEXT("SE_CURSOR"));
+            SOUNDMANAGER::Play(TEXT("SE_CURSOR"));
 			IntervalCnt = 0;
 			--Select;
 			CursorPos.y -= 100.0F;
@@ -40,9 +42,11 @@ void TITLE::ChooseStage(void)
 				CursorPos.y = 450.0F;
 			}
 		}
-		//左にスティックを入力
+		//下にスティックを入力
 		else if (vecStickVector.y < 0.0F)
 		{
+            SOUNDMANAGER::Stop(TEXT("SE_CURSOR"));
+            SOUNDMANAGER::Play(TEXT("SE_CURSOR"));
 			IntervalCnt = 0;
 			++Select;
 			CursorPos.y += 100.0F;
@@ -88,8 +92,11 @@ void TITLE::Draw(void)
 			}
 			Cursor.Draw();
 			break;
+
 		case MODE_MANUAL:
+            Config.Draw();
 			break;
+
 		default:
 			break;
 	}
@@ -166,12 +173,23 @@ HRESULT TITLE::Initialize(void)
 		return hResult;
 	}
 
-	//カーソル
-	hResult = Cursor.Initialize(TEXT("CURSOR"), CursorPos, D3DXVECTOR2(100.0F, 100.0F));
-	if (FAILED(hResult))
-	{
-		return hResult;
-	}
+    //カーソル
+    hResult = Cursor.Initialize(TEXT("CURSOR"), CursorPos, D3DXVECTOR2(100.0F, 100.0F));
+    if (FAILED(hResult))
+    {
+        return hResult;
+    }
+
+    //キーコンフィグ
+    hResult = Config.Initialize(TEXT("CONFIG"));
+    if (FAILED(hResult))
+    {
+        return hResult;
+    }
+    else
+    {
+        Config.SetAlpha(0);
+    }
 
     //---BGM再生---//
     SOUNDMANAGER::Play(TEXT("BGM_TITLE"));
@@ -205,6 +223,7 @@ void TITLE::Uninitialize(void)
 		SelectButton.at(nConter).Uninitialize();
 	}
 	Cursor.Uninitialize();
+    Config.Uninitialize();
 
     //---テクスチャの削除---//
     TEXTUREMANAGER::Uninitialize();
@@ -234,10 +253,10 @@ void TITLE::Update(void)
 	//フェードインが終わっていたら
 	if (FADE::CheckFadeEnd(FADE_IN))
 	{
-		LogoAlpha += 1;
+		++LogoAlpha;
 		if (LogoAlpha >= 255)
 		{
-			LogoAlpha = 255 - 1;
+			LogoAlpha = 255;
 			++dwTicks;
 		}
 
@@ -246,16 +265,29 @@ void TITLE::Update(void)
 			case MODE_FIRST:
 				if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, 0xFFFF, TRIGGER))
 				{
-					Mode = MODE_SELECT;
+                    SOUNDMANAGER::Stop(TEXT("SE_ENTER"));
+                    SOUNDMANAGER::Play(TEXT("SE_ENTER"));
+
+					if (LogoAlpha == 255)
+					{
+						Mode = MODE_SELECT;
+					}
+					else
+					{
+						LogoAlpha = 255;
+					}
 				}
 				break;
-			case MODE_SELECT:
 
+			case MODE_SELECT:
 				ChooseStage();
 				Cursor.SetPosition(CursorPos);
 				if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
 				{
-					if (Select == 0)
+                    SOUNDMANAGER::Stop(TEXT("SE_ENTER"));
+                    SOUNDMANAGER::Play(TEXT("SE_ENTER"));
+
+					if (!Select)
 					{
 						FADE::SetFade(FADE_OUT);
 					}
@@ -266,16 +298,28 @@ void TITLE::Update(void)
 				}
 				else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
 				{
+                    SOUNDMANAGER::Stop(TEXT("SE_ENTER"));
+                    SOUNDMANAGER::Play(TEXT("SE_ENTER"));
+
 					Mode = MODE_FIRST;
 				}
 				break;
+
 			case MODE_MANUAL:
-                SCENEMANAGER::SetScene(SCENE_TRAINING);
+                Config.SetAlpha(255);
+                if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, 0xFFFF, TRIGGER))
+                {
+                    Mode = MODE_SELECT;
+                    SOUNDMANAGER::Stop(TEXT("SE_CANCEL"));
+                    SOUNDMANAGER::Play(TEXT("SE_CANCEL"));
+                }
                 break;
+
 			default:
 				break;
 		}
 	}
+
 	//フェードアウトが終わっていたら
 	if (FADE::CheckFadeEnd(FADE_OUT))
 	{

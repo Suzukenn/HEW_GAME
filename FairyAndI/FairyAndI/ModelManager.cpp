@@ -28,6 +28,9 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
     HRESULT hResult;
     DWORD nCounter;
     MODEL mModel;
+    std::string strDirectoryPath;
+    std::string strTexturePath;
+    tstring strTexturePathT;
 
     TCHAR szDirectory[_MAX_DIR];
     TCHAR szCurrentDirectory[_MAX_PATH];
@@ -56,17 +59,32 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
     hResult = D3DXLoadMeshFromX(data.FileName.data(), D3DXMESH_SYSTEMMEM, pDevice, nullptr, &mModel.MaterialBuffer, nullptr, &mModel.MaterialValue, &mModel.Mesh);
     if(FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("モデルの作成に失敗しました"), data.FileName.data(), MB_ICONSTOP | MB_OK);
-        Uninitialize();
+        MessageBox(nullptr, TEXT("モデルのメッシュの作成に失敗しました"), data.FileName.data(), MB_ICONSTOP | MB_OK);
         return hResult;
     }
 
     //属性テーブル取得
-    mModel.Mesh->OptimizeInplace(D3DXMESHOPT_COMPACT | D3DXMESHOPT_ATTRSORT, 0, 0, 0, 0);
+    hResult = mModel.Mesh->OptimizeInplace(D3DXMESHOPT_COMPACT | D3DXMESHOPT_ATTRSORT, 0, 0, 0, 0);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("モデルのメッシュデータの最適化に失敗しました"), data.FileName.data(), MB_ICONSTOP | MB_OK);
+        return hResult;
+    }
+
     mModel.AttributeValue = 0;
-    mModel.Mesh->GetAttributeTable(nullptr, &mModel.AttributeValue);
+    hResult = mModel.Mesh->GetAttributeTable(nullptr, &mModel.AttributeValue);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("モデルのメッシュデータのテーブルの取得に失敗しました"), data.FileName.data(), MB_ICONSTOP | MB_OK);
+        return hResult;
+    }
     mModel.Attribute.resize(mModel.AttributeValue);
-    mModel.Mesh->GetAttributeTable(mModel.Attribute.at(0), &mModel.AttributeValue);
+    hResult = mModel.Mesh->GetAttributeTable(mModel.Attribute.at(0), &mModel.AttributeValue);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("モデルのメッシュデータのテーブルの取得に失敗しました"), data.FileName.data(), MB_ICONSTOP | MB_OK);
+        return hResult;
+    }
 
     //カレントディレクトリを変更
     if (szDirectory[0])
@@ -84,14 +102,17 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
         mModel.Material.at(nCounter) = pMaterial[nCounter].MatD3D;
         mModel.Material.at(nCounter).Ambient = mModel.Material.at(nCounter).Diffuse;
         mModel.Texture.at(nCounter) = nullptr;
-        if (pMaterial[nCounter].pTextureFilename && pMaterial[nCounter].pTextureFilename[0])
+
+        //テクスチャファイルがあれば読み込む
+        if (pMaterial[nCounter].pTextureFilename && lstrlenA(pMaterial[nCounter].pTextureFilename))
         {
-            // テクスチャファイルを読み込む
-            hResult = D3DXCreateTextureFromFile(pDevice, (LPCTSTR)pMaterial[nCounter].pTextureFilename, &mModel.Texture[nCounter]);
+            strTexturePath = pMaterial[nCounter].pTextureFilename;
+            strTexturePathT = szDirectory + tstring(strTexturePath.begin(), strTexturePath.end());
+            hResult = D3DXCreateTextureFromFile(pDevice, strTexturePathT.data(), &mModel.Texture.at(nCounter));
             if (FAILED(hResult))
             {
+                MessageBox(nullptr, TEXT("モデルのテクスチャの読み込みに失敗しました"), data.FileName.data(), MB_ICONSTOP | MB_OK);
                 mModel.Texture.at(nCounter) = nullptr;
-                Uninitialize();
                 return hResult;
             }
         }
@@ -100,8 +121,18 @@ HRESULT MODELMANAGER::Create(const FILEPARAMETER& data)
     //法線がなければ追加
     if (!(mModel.Mesh->GetFVF() & D3DFVF_NORMAL))
     {
-        mModel.Mesh->CloneMeshFVF(mModel.Mesh->GetOptions(), mModel.Mesh->GetFVF() | D3DFVF_NORMAL, pDevice, &pTempMesh);
-        D3DXComputeNormals(pTempMesh, nullptr);
+        hResult = mModel.Mesh->CloneMeshFVF(mModel.Mesh->GetOptions(), mModel.Mesh->GetFVF() | D3DFVF_NORMAL, pDevice, &pTempMesh);
+        if (FAILED(hResult))
+        {
+            MessageBox(nullptr, TEXT("モデルのメッシュデータの複製に失敗しました"), data.FileName.data(), MB_ICONSTOP | MB_OK);
+            return hResult;
+        }
+        hResult = D3DXComputeNormals(pTempMesh, nullptr);
+        if (FAILED(hResult))
+        {
+            MessageBox(nullptr, TEXT("モデルのメッシュデータの法線の付与に失敗しました"), data.FileName.data(), MB_ICONSTOP | MB_OK);
+            return hResult;
+        }
         SAFE_RELEASE(mModel.Mesh);
         mModel.Mesh = pTempMesh;
     }
@@ -141,7 +172,7 @@ HRESULT MODELMANAGER::Initialize(LPCTSTR filename)
     hResult = Load(conList, filename);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("オブジェクトリストの読み込みに失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
+        MessageBox(nullptr, TEXT("モデルリストの読み込みに失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
         Uninitialize();
         return hResult;
     }
@@ -151,7 +182,7 @@ HRESULT MODELMANAGER::Initialize(LPCTSTR filename)
     {
         if (FAILED(Create(data)))
         {
-            MessageBox(nullptr, TEXT("オブジェクトデータの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
+            MessageBox(nullptr, TEXT("モデルデータの作成に失敗しました"), TEXT("初期化エラー"), MB_ICONSTOP | MB_OK);
             Uninitialize();
             return hResult;
         }
@@ -228,7 +259,7 @@ void MODELMANAGER::Uninitialize(void)
         SAFE_RELEASE((data.second->MaterialBuffer));
         for (auto& texture : data.second->Texture)
         {
-            SAFE_RELEASE((texture));
+            SAFE_RELEASE(texture);
         }
     }
     Model.clear();

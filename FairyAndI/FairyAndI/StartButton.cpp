@@ -17,6 +17,6 @@ void STARTBUTTON::Behavior(void)
 {
     if (INPUTMANAGER::GetMouseButton(MOUSEBUTTON_LEFT, TRIGGER))
     {
-        SCENEMANAGER::SetScene(SCENE_GAME);
+        SCENEMANAGER::SetScene(SCENE_SELECT);
     }
 }

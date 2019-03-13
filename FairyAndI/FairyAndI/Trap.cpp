@@ -67,10 +67,12 @@ HRESULT TRAP::Initialize(LPCTSTR texturename, tstring type, D3DXVECTOR3 position
     HRESULT hResult;
 
     //---初期化処理---//
+    Transform.Position = position;
     Transform.Rotation = rotation;
+    BornTime = 0;
 
     //---ビルボードの作成---//
-    hResult = BillBoard.Initialize(texturename, D3DXVECTOR2(50.0F, 50.0F), Transform.Rotation.y > 0.0F);
+    hResult = BillBoard.Initialize(texturename, D3DXVECTOR2(5.0F, 5.0F), Transform.Rotation.y > 0.0F);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("罠の初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -129,12 +131,15 @@ void TRAP::Uninitialize(void)
 /////////////////////////////////////////////
 void TRAP::Update(void)
 {
-    /*if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
+    Gray = SQUAREGAUGE::GetFairyTime();
+    if (Gray)
     {
-        Gray = !Gray;
-    }*/
+        return;
+    }
 
-	Gray = SQUAREGAUGE::GetFairyTime();
-
+    if (++BornTime > 60)
+    {
+        ACTORMANAGER::Destroy(this);
+    }
     BillBoard.Update();
 }

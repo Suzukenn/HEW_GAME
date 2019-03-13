@@ -15,6 +15,27 @@ std::unordered_map<tstring, WAVCONTROLLER> SOUNDMANAGER::WaveSound;           //
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
+//関数名：CheckPlay
+//
+//機能：サウンドの再生済み確認
+//
+//引数：(tstring)サウンド名
+//
+//戻り値：(bool)判定結果
+/////////////////////////////////////////////
+bool SOUNDMANAGER::CheckPlay(tstring label)
+{
+    //---各種宣言---//
+    XAUDIO2_VOICE_STATE sState;
+
+    //状態取得
+    SourceVoice.at(label)->GetState(&sState);
+
+    //---再生判定---//
+    return sState.BuffersQueued ? true : false;
+}
+
+/////////////////////////////////////////////
 //関数名：Create
 //
 //機能：ソースボイスの作成

@@ -3,8 +3,9 @@
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "IceGimmick.h"
-#include "InputManager.h"
 #include "ModelManager.h"
+#include "ShaderManager.h"
+#include "Skill.h"
 #include "SquareGauge.h"
 
 //＝＝＝関数定義＝＝＝//
@@ -39,7 +40,7 @@ ICEGIMMICK::~ICEGIMMICK(void)
 /////////////////////////////////////////////
 //関数名：Draw
 //
-//機能：氷の壁ギミックの描画
+//機能：氷壁ギミックの描画
 //
 //引数：なし
 //
@@ -58,7 +59,6 @@ void ICEGIMMICK::Draw(void)
 
     //設定
     Transform.MakeWorldMatrix(mtxWorld);
-    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---描画---//
     //描画対象チェック
@@ -70,13 +70,13 @@ void ICEGIMMICK::Draw(void)
     }
 
     //描画
-    pModel->Draw(Gray);
+    pModel->Draw(Shader, TEXT("NonTextureModel"), (UINT)Gray, mtxWorld);
 }
 
 /////////////////////////////////////////////
 //関数名：Initialize
 //
-//機能：氷の壁ギミックの初期化
+//機能：氷壁ギミックの初期化
 //
 //引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
@@ -91,9 +91,10 @@ HRESULT ICEGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECT
 	//初期設定
     Transform.Position = position;
     Transform.Rotation = rotation;
-    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
+    Transform.Scale = D3DXVECTOR3(800.0F, 800.0F, 800.0F);
     Gray = false;
-    Tag = TEXT("Gimmick");
+    Small = false;
+    Tag = TEXT("IceGimmick");
 
     //---モデルの読み込み---//
     hResult = MODELMANAGER::GetModel(modelfile, Model);
@@ -104,8 +105,17 @@ HRESULT ICEGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECT
 		return hResult;
 	}
 
+    //---シェーダーの取得---//
+    hResult = SHADERMANAGER::GetShader(TEXT("MODEL"), Shader);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("氷壁ギミック描画用のシェーダーの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
+        return hResult;
+    }
+
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToOBB(Transform.Position, D3DXVECTOR3(3.0F, 3.0F, 3.0F), TEXT("Object"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Gimmick"), this);
 
 	return hResult;
 }
@@ -121,17 +131,23 @@ HRESULT ICEGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECT
 /////////////////////////////////////////////
 void ICEGIMMICK::OnCollision(COLLISION* opponent)
 {
-	if (opponent->Owner->GetTag().find(TEXT("Hot")) != tstring::npos)
-	{
-		ACTORMANAGER::Destroy(this);
-		COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+    if (opponent->Owner->GetTag() == TEXT("Bullet") || opponent->Owner->GetTag() == TEXT("Grenade"))
+    {
+        SKILL* Skill = dynamic_cast<SKILL*>(opponent->Owner);
+        if (Skill)
+        {
+            if (Skill->GetType() == TEXT("HOT"))
+            {
+                Small = true;
+            }
+        }
     }
 }
 
 /////////////////////////////////////////////
 //関数名：Uninitialize
 //
-//機能：氷の壁ギミックの終了
+//機能：氷壁ギミックの終了
 //
 //引数：なし
 //
@@ -154,7 +170,7 @@ void ICEGIMMICK::Uninitialize(void)
 /////////////////////////////////////////////
 //関数名：Update
 //
-//機能：氷の壁ギミックの更新
+//機能：氷壁ギミックの更新
 //
 //引数：なし
 //
@@ -162,9 +178,21 @@ void ICEGIMMICK::Uninitialize(void)
 /////////////////////////////////////////////
 void ICEGIMMICK::Update(void)
 {	
-   /* if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
-    {
-        Gray = !Gray;
-    }*/
 	Gray = SQUAREGAUGE::GetFairyTime();
+    if (Gray)
+    {
+        return;
+    }
+
+    if (Small)
+    {
+        Transform.Scale.x -= 8.0F;
+        Transform.Scale.y -= 8.0F;
+        Transform.Scale.z -= 8.0F;
+        if (Transform.Scale.x < 0.0F)
+        {
+            ACTORMANAGER::Destroy(this);
+            COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+        }
+    }
 }

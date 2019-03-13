@@ -2,7 +2,9 @@
 #include "Fade.h"
 #include "GameClear.h"
 #include "GameOver.h"
-#include "GameScene.h"
+#include "GameScene01.h"
+#include "GameScene02.h"
+#include "GameScene03.h"
 #include "SceneManager.h"
 #include "SelectScene.h"
 #include "Title.h"
@@ -123,8 +125,16 @@ void SCENEMANAGER::Update(void)
                 Scene.reset(new SELECTSCENE());
                 break;
 
-            case SCENE_GAME:
-                Scene.reset(new GAME());
+            case SCENE_GAME01:
+                Scene.reset(new GAME01());
+                break;
+
+            case SCENE_GAME02:
+                Scene.reset(new GAME02());
+                break;
+
+            case SCENE_GAME03:
+                Scene.reset(new GAME03());
                 break;
 
             case SCENE_GAMEOVER:

@@ -2,12 +2,11 @@
 #include "ActorManager.h"
 #include "BatteryCannon.h"
 #include "CollisionManager.h"
-#include "InputManager.h"
 #include "Model.h"
 #include "ModelManager.h"
+#include "Skill.h"
 #include "Sphere.h"
 #include "SquareGauge.h"
-#include "Player.h"
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -41,7 +40,7 @@ BATTERYCANNON::~BATTERYCANNON(void)
 /////////////////////////////////////////////
 //関数名：Draw
 //
-//機能：弾丸の描画
+//機能：砲弾の描画
 //
 //引数：なし
 //
@@ -78,7 +77,7 @@ void BATTERYCANNON::Draw(void)
 /////////////////////////////////////////////
 //関数名：Initialize
 //
-//機能：弾丸の初期化
+//機能：砲弾の初期化
 //
 //引数：(LPCTSTR)モデル名,(D3DXVECTOR3)位置,(D3DXVECTOR3)向き
 //
@@ -94,7 +93,7 @@ HRESULT BATTERYCANNON::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXV
     Transform.Rotation = rotation;
     Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
     BornTime = 0;
-    Move = D3DXVECTOR3(-sinf(Transform.Rotation.y) * 1.5F, 0.0F, -cosf(Transform.Rotation.y) * 1.5F);
+    Move = D3DXVECTOR3(sinf(Transform.Rotation.y) * 1.5F, 0.0F, 0.0F);
     Tag = TEXT("BatteryCannon");
 
     //---モデルの読み込み---//
@@ -107,7 +106,7 @@ HRESULT BATTERYCANNON::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXV
     }
 
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.5F, TEXT("Object"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.5F, TEXT("BatteryCannon"), this);
 
     return hResult;
 }
@@ -126,7 +125,14 @@ void BATTERYCANNON::OnCollision(COLLISION* opponent)
     //跳ね返った動き
     if (opponent->Owner->GetTag() == TEXT("Wall"))
     {
-        Move.x = -Move.x;
+        SKILL* Skill = dynamic_cast<SKILL*>(opponent->Owner);
+        if (Skill)
+        {
+            if (Skill->GetType() == TEXT("SOFT"))
+            {
+                Move.x = -Move.x;
+            }
+        }
     }
     else
     {
@@ -138,7 +144,7 @@ void BATTERYCANNON::OnCollision(COLLISION* opponent)
 /////////////////////////////////////////////
 //関数名：Uninitialize
 //
-//機能：弾丸の終了
+//機能：砲弾の終了
 //
 //引数：なし
 //
@@ -161,7 +167,7 @@ void BATTERYCANNON::Uninitialize(void)
 /////////////////////////////////////////////
 //関数名：Update
 //
-//機能：弾丸の更新
+//機能：砲弾の更新
 //
 //引数：なし
 //
@@ -169,14 +175,9 @@ void BATTERYCANNON::Uninitialize(void)
 /////////////////////////////////////////////
 void BATTERYCANNON::Update(void)
 {
- /*   if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
-    {
-        Gray = !Gray;
-    }*/
-
 	Gray = SQUAREGAUGE::GetFairyTime();
 
-    if (!Gray)
+    if (Gray)
     {
         return;
     }

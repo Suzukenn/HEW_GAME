@@ -1,1 +1,4 @@
-Data/SelectScene/BackGround/BackGround.png BACKGROUND
+Data/SelectScene/BackGround.png BACKGROUND
+Data/SelectScene/Stage01.png STAGE01
+Data/SelectScene/Stage02.png STAGE02
+Data/SelectScene/Stage03.png STAGE03

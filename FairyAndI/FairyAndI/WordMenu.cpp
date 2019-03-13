@@ -275,8 +275,8 @@ void WORDMENU::Update(void)
                 }
                 else
                 {
-                    SOUNDMANAGER::Stop(TEXT("SE_SHOT"));
-                    SOUNDMANAGER::Play(TEXT("SE_SHOT"));
+                    SOUNDMANAGER::Stop(TEXT("SE_FAIRYCANCEL"));
+                    SOUNDMANAGER::Play(TEXT("SE_FAIRYCANCEL"));
                 }
             }
             else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
@@ -309,8 +309,8 @@ void WORDMENU::Update(void)
                 }
                 else
                 {
-                    SOUNDMANAGER::Stop(TEXT("SE_SHOT"));
-                    SOUNDMANAGER::Play(TEXT("SE_SHOT"));
+                    SOUNDMANAGER::Stop(TEXT("SE_FAIRYCANCEL"));
+                    SOUNDMANAGER::Play(TEXT("SE_FAIRYCANCEL"));
                 }
             }
             else if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))

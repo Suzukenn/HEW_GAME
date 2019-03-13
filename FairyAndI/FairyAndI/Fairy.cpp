@@ -1,5 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "ActorManager.h"
+#include "AnimationModelManager.h"
 #include "Collision.h"
 #include "CollisionManager.h"
 #include "Fairy.h"
@@ -7,11 +8,15 @@
 #include "ModelManager.h"
 #include "Player.h"
 #include "SideViewCamera.h"
+#include "SoundManager.h"
 #include "Sphere.h"
 #include "SquareGauge.h"
 
 //＝＝＝定数・マクロ定義＝＝＝//
 #define	VALUE_ROTATE_FAIRY	(D3DX_PI * 0.02F)		// 回転速度
+
+//＝＝＝グローバル宣言＝＝＝//
+static D3DXVECTOR3 FairyPosition;
 
 //＝＝＝関数定義＝＝＝//
 /////////////////////////////////////////////
@@ -23,9 +28,9 @@
 //
 //戻り値：なし
 /////////////////////////////////////////////
-FAIRY::FAIRY(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+FAIRY::FAIRY(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
-    Initialize(modelname, position, rotation);
+    Initialize(position, rotation);
 }
 
 /////////////////////////////////////////////
@@ -50,7 +55,7 @@ void FAIRY::Draw(void)
     Transform.MakeWorldMatrix(mtxWorld);
 
     //---描画---//
-    Model.Draw(mtxWorld, false);
+    Model->Draw(mtxWorld, false);
 }
 
 /////////////////////////////////////////////
@@ -62,7 +67,7 @@ void FAIRY::Draw(void)
 //
 //戻り値：(HRESULT)処理の成否
 /////////////////////////////////////////////
-HRESULT FAIRY::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 rotation)
+HRESULT FAIRY::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 {
     //---各種宣言---//
     HRESULT hResult;
@@ -80,7 +85,7 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 r
     State = STATE_WAIT;
 
     //---モデルの読み込み---//
-    hResult = Model.Initialize(modelfile, 1.0F);
+    hResult = ANIMATIONMODELMANAGER::GetModel(TEXT("FAIRY"), Model);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("フェアリーのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -89,11 +94,11 @@ HRESULT FAIRY::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECTOR3 r
     }
     else
     {
-        Model.ChangeAnimation(STATE_WAIT);
+        Model->ChangeAnimation(STATE_WAIT);
     }
 
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Character"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Fairy"), this);
 
 	return hResult;
 }
@@ -179,7 +184,7 @@ bool FAIRY::SearchElement(D3DXVECTOR3& destination)
 /////////////////////////////////////////////
 void FAIRY::Uninitialize(void)
 {
-    Model.Uninitialize();
+    Model->Uninitialize();
 }
 
 /////////////////////////////////////////////
@@ -211,18 +216,25 @@ void FAIRY::Update(void)
     //ボタンを押したら思考状態へ移行
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
+        SOUNDMANAGER::Stop(TEXT("SE_FAIRY_BOOTTIME"));
+        SOUNDMANAGER::Play(TEXT("SE_FAIRY_BOOTTIME"));
         bThink = !bThink;
-        Model.ChangeAnimation(bThink ? STATE_THINK : (DWORD)State);
+        Model->ChangeAnimation(bThink ? STATE_THINK : (DWORD)State);
     }
 	else if (SQUAREGAUGE::GetFairyTime() == false)
 	{
+        SOUNDMANAGER::Stop(TEXT("SE_FAIRY_EXITTIME"));
+        SOUNDMANAGER::Play(TEXT("SE_FAIRY_EXITTIME"));
 		bThink = false;
-		Model.ChangeAnimation(bThink ? STATE_THINK : (DWORD)State);
+		Model->ChangeAnimation(bThink ? STATE_THINK : (DWORD)State);
 	}
 
     //ボタンを押したらアイテムを取りに行く
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_X, TRIGGER))
     {
+        SOUNDMANAGER::Stop(TEXT("SE_FAIRY_BOOTTIME"));
+        SOUNDMANAGER::Play(TEXT("SE_FAIRY_BOOTTIME"));
+
         Collection = SearchElement(ElementPosition);
     }
 
@@ -236,8 +248,8 @@ void FAIRY::Update(void)
     else
     {
         //妖精とプレイヤーの距離の算出
-        vecFairyDistance.x = PLAYER::GetPlayerPosition().x - Transform.Position.x;
-        vecFairyDistance.y = PLAYER::GetPlayerPosition().y + 20.0F - Transform.Position.y;
+        vecFairyDistance.x = PLAYER::GetPlayerPosition().x + 15.0F - Transform.Position.x;
+        vecFairyDistance.y = PLAYER::GetPlayerPosition().y + 15.0F - Transform.Position.y;
         Transform.Rotation.y = 90.0F * ((PLAYER::GetPlayerPosition().x > Transform.Position.x) - (PLAYER::GetPlayerPosition().x < Transform.Position.x));
     }
 
@@ -251,7 +263,7 @@ void FAIRY::Update(void)
 
     //移動量格納
     Move.x = cosf(ToTargetAngle) * VALUE_MOVE_FAIRY;
-    Move.y = sinf(ToTargetAngle) * VALUE_MOVE_FAIRY + (sinf(D3DXToRadian(-180.0F) + D3DX_PI / 60.0F * nFrameCount) + 1.0F) * 0.5F;
+    Move.y = sinf(ToTargetAngle) * VALUE_MOVE_FAIRY + (sinf(D3DXToRadian(-180.0F) + D3DX_PI / 60.0F * nFrameCount) + 1.0F) * 0.2F;
 
     if (!Collection)
     {
@@ -266,38 +278,30 @@ void FAIRY::Update(void)
         }
     }
     //アニメーションの変更
-	if (!bThink)
+	if (bThink)
 	{
-		State = Move.x == 0.0F ? STATE_WAIT : STATE_MOVE;
-		Model.ChangeAnimation((DWORD)State);
+        Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
+        Transform.Rotation.y = 180.0F;
 	}
+    else
+    {
+        State = Move.x == 0.0F ? STATE_WAIT : STATE_MOVE;
+        Model->ChangeAnimation((DWORD)State);
+    }
 
-    //プレイヤーとの当たり判定
-		//if (CollisionBall(&Position, &playerPos, 15.0F, 15.0F))
-		//{
-  //          //右向き
-		//	if (Rotation.y == rotCamera.y - D3DX_PI * 0.5F)
-		//	{
-  //              if (Position.x > playerPos.x - 15.0F)
-  //              {
-  //                  Move.x = -(VALUE_MOVE_FAIRY) / 3.0F;
-  //              }
-  //              else
-  //              {
-  //                  Move.x = 0.0F;
-  //              }
-		//	}
-		//	else if (Rotation.y == rotCamera.y + D3DX_PI * 0.5F)
-		//	{
-  //              if (Position.x < playerPos.x + 15.0F)
-  //              {
-  //                  Move.x = VALUE_MOVE_FAIRY / 3.0F;
-  //              }
-  //              else
-  //              {
-  //                  Move.x = 0.0F;
-  //              }
-  //          }
-		//	return;
-		//}
+    FairyPosition = Transform.Position;
+}
+
+/////////////////////////////////////////////
+//関数名：GetFairyPosition
+//
+//機能：フェアリーの位置の取得
+//
+//引数：なし
+//
+//戻り値：(D#DXVECTOR3)位置
+/////////////////////////////////////////////
+D3DXVECTOR3 FAIRY::GetFairyPosition(void)
+{
+    return FairyPosition;
 }

@@ -8,13 +8,15 @@
 #include "Skill.h"
 
 //‘O•ûéŒ¾//
-class OBB;
+class SPHERE;
 
 //ƒNƒ‰ƒXéŒ¾//
 class WALL final : public SKILL
 {
     private:
-        OBB* Collision;
+        DWORD BornTime;
+
+        SPHERE* Collision;
 
     public:
         WALL(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3);
