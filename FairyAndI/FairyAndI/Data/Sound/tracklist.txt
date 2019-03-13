@@ -21,3 +21,4 @@ Data/Sound/SE/Game/Skill/TypeRiceCake.wav 0 SE_SKILL_TYPERICECAKE
 Data/Sound/SE/Game/Skill/TypeRock.wav 0 SE_SKILL_TYPEROCK
 Data/Sound/SE/Game/Enemy/EnemyDead.wav 0 SE_ENEMY_DEAD
 Data/Sound/SE/Game/Enemy/Slime.wav 0 SE_ENEMY_SLIME
+Data/Sound/SE/Game/Player/Walk.wav 1 SE_PLAYER_WALK

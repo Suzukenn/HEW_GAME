@@ -5,6 +5,7 @@
 #include "FireGimmick.h"
 #include "InputManager.h"
 #include "ModelManager.h"
+#include "ShaderManager.h"
 #include "Skill.h"
 #include "SquareGauge.h"
 
@@ -59,7 +60,6 @@ void FIREGIMMICK::Draw(void)
 
     //設定
     Transform.MakeWorldMatrix(mtxWorld);
-    GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---描画---//
     //描画対象チェック
@@ -71,7 +71,7 @@ void FIREGIMMICK::Draw(void)
     }
 
     //描画
-    pModel->Draw(Gray);
+    pModel->Draw(Shader, TEXT("NonTextureModel"), (UINT)Gray, mtxWorld);
 }
 
 /////////////////////////////////////////////
@@ -92,9 +92,10 @@ HRESULT FIREGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVEC
 	//初期設定
     Transform.Position = position;
     Transform.Rotation = rotation;
-    Transform.Scale = D3DXVECTOR3(1.0F, 1.0F, 1.0F);
+    Transform.Scale = D3DXVECTOR3(700.0F, 700.0F, 700.0F);
     Gray = false;
-	Tag = TEXT("Gimmick");
+    Small = false;
+	Tag = TEXT("FireGimmick");
 
     //---モデルの読み込み---//
     hResult = MODELMANAGER::GetModel(modelfile, Model);
@@ -105,8 +106,17 @@ HRESULT FIREGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVEC
 		return hResult;
 	}
 
+    //---シェーダーの取得---//
+    hResult = SHADERMANAGER::GetShader(TEXT("MODEL"), Shader);
+    if (FAILED(hResult))
+    {
+        MessageBox(nullptr, TEXT("氷壁ギミック描画用のシェーダーの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        Uninitialize();
+        return hResult;
+    }
+
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToOBB(Transform.Position, D3DXVECTOR3(3.0F, 3.0F, 3.0F), TEXT("Gimmick"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.0F, TEXT("Gimmick"), this);
 
 	return hResult;
 }
@@ -127,20 +137,12 @@ void FIREGIMMICK::OnCollision(COLLISION* opponent)
         SKILL* Skill = dynamic_cast<SKILL*>(opponent->Owner);
         if (Skill)
         {
-            if (Skill->GetType() == TEXT("HOT") || Skill->GetType() == TEXT("ICE"))
+            if (Skill->GetType() == TEXT("HOT") || Skill->GetType() == TEXT("SOFT"))
             {
-                ACTORMANAGER::Destroy(this);
-                COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+                Small = true;
             }
         }
     }
-
-	//if (opponent->Owner->GetTag().find(TEXT("HotIce")) != tstring::npos ||
-	//	opponent->Owner->GetTag().find(TEXT("SoftIce")) != tstring::npos)
-	//{
-	//	ACTORMANAGER::Destroy(this);
-	//	COLLISIONMANAGER::Destroy((COLLISION*)Collision);
- //   }
 }
 
 /////////////////////////////////////////////
@@ -177,11 +179,21 @@ void FIREGIMMICK::Uninitialize(void)
 /////////////////////////////////////////////
 void FIREGIMMICK::Update(void)
 {	
-    /*if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
-    {
-        Gray = !Gray;
-    }*/
-
 	Gray = SQUAREGAUGE::GetFairyTime();
+    if (Gray)
+    {
+        return;
+    }
 
+    if (Small)
+    {
+        Transform.Scale.x -= 1.0F;
+        Transform.Scale.y -= 1.0F;
+        Transform.Scale.z -= 1.0F;
+        if (Transform.Scale.x < 0.0F)
+        {
+            ACTORMANAGER::Destroy(this);
+            COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+        }
+    }
 }

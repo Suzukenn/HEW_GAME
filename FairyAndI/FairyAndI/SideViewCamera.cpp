@@ -12,7 +12,7 @@
 #define	CAM_POS_R_X			(0.0f)					// カメラの注視点初期位置(X座標)
 #define	CAM_POS_R_Y			(50.0f)					// カメラの注視点初期位置(Y座標)
 #define	CAM_POS_R_Z			(0.0f)					// カメラの注視点初期位置(Z座標)
-#define CAM_MAX_WID			1400.0F
+#define CAM_MAX_WID			2400.0F
 #define CAM_MIN_WID			0.0F
 
 //＝＝＝グローバル宣言＝＝＝//

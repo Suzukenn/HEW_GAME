@@ -1,4 +1,8 @@
-﻿  TrainingScene.cpp
+﻿  Fairy.cpp
   コード生成しています。
-d:\documents\hal�ۑ�\2�n\he\hew_game\fairyandi\fairyandi\wordplate.cpp : fatal error C1083: コンパイラの中間生成物 ファイルを開けません。'D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.ipdb':Permission denied
-LINK : fatal error LNK1257: コードの生成に失敗しました。
+  196 of 6200 functions ( 3.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    185 functions had inline decision re-evaluated but remain unchanged
+  コード生成が終了しました。
+  FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.exe
+  FairyAndI.vcxproj -> D:\Documents\HAL課題\2年\HE\HEW_GAME\FairyAndI\x64\Release\FairyAndI.pdb (Full PDB)

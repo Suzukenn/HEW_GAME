@@ -69,7 +69,7 @@ void SELECTSCENE::Draw(void)
 {
 	Back.Draw();
 
-	for (int nConter = 0; nConter < 3; ++nConter)
+	for (int nConter = 0; nConter < Button.size(); ++nConter)
 	{
 		if (Select == nConter)
 		{
@@ -98,39 +98,42 @@ HRESULT SELECTSCENE::Initialize(void)
 	HRESULT hResult;
 	D3DXVECTOR2 ButtonPos;
 
-	ButtonPos = D3DXVECTOR2(200.0F, 500.0F);
+    LPCTSTR strTextureName[3] = { TEXT("STAGE01"), TEXT("STAGE02"), TEXT("STAGE03") };
+
+    //---初期化処理---//
+	ButtonPos = D3DXVECTOR2(100.0F, 300.0F);
 	dwTicks = 0;
 	dwMask = 8;
 	Select = 0;
 
 	//各ボタンの行き先
-	Button.at(0).SetSelectStage(SCENE_GAMEOVER);
-	Button.at(1).SetSelectStage(SCENE_TITLE);
-	Button.at(2).SetSelectStage(SCENE_GAMECLEAR);
+	Button.at(0).SetSelectStage(SCENE_GAME01);
+	Button.at(1).SetSelectStage(SCENE_GAME01);
+	Button.at(2).SetSelectStage(SCENE_GAME01);
 
 	//---テクスチャの読み込み---//
 	hResult = TEXTUREMANAGER::Initialize(TEXT("Data/SelectScene/TextureList.txt"));
 	if (FAILED(hResult))
 	{
-		return E_FAIL;
+		return hResult;
 	}
 
 	//---オブジェクトの初期化---//
 	hResult = Back.Initialize(TEXT("BACKGROUND"));
 	if (FAILED(hResult))
 	{
-		return E_FAIL;
+		return hResult;
 	}
 
 	for (int nConter = 0; nConter < 3; ++nConter)
 	{
-		hResult = Button.at(nConter).Initialize(TEXT("BACKGROUND"), ButtonPos, D3DXVECTOR2(200.0F, 50.0F));
+		hResult = Button.at(nConter).Initialize(strTextureName[nConter], ButtonPos, D3DXVECTOR2(300.0F, 225.0F));
 		if (FAILED(hResult))
 		{
-			return E_FAIL;
+			return hResult;
 		}
 
-		ButtonPos.x += 300.0F;
+		ButtonPos.x += 400.0F;
 	}
 
 	FADE::SetFade(FADE_IN);

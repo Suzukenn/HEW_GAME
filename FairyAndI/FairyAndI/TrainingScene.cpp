@@ -107,23 +107,27 @@ HRESULT TRAINING::Initialize(void)
     CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3(50.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
 
     //ìG
-    CHARACTERFACTORY::InstantiateSlime(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
+    //CHARACTERFACTORY::InstantiateSlime(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
     //CHARACTERFACTORY::InstantiateWood(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
     //CHARACTERFACTORY::InstantiateWood(D3DXVECTOR3(150.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
 
     //ÉGÉåÉÅÉìÉg
-    //OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3(100.0F, 0.0F, 0.0F));
-    //OBJECTFACTORY::InstantiateIceElement(D3DXVECTOR3(-50.0F, 0.0F, 0.0F));
-    //OBJECTFACTORY::InstantiateRockElement(D3DXVECTOR3(-100.0F, 0.0F, 0.0F));
-    //OBJECTFACTORY::InstantiateRiceCakeElement(D3DXVECTOR3(50.0F, 0.0F, 0.0F));
+    //OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3(100.0F, 10.0F, 0.0F));
+    //OBJECTFACTORY::InstantiateIceElement(D3DXVECTOR3(100.0F, 10.0F, 0.0F));
+    //OBJECTFACTORY::InstantiateRockElement(D3DXVECTOR3(100.0F, 10.0F, 0.0F));
+    //OBJECTFACTORY::InstantiateRiceCakeElement(D3DXVECTOR3(100.0F, 10.0F, 0.0F));
 
     //ÉMÉ~ÉbÉN
-    GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(100.0F, 0.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
-	//OBJECTFACTORY::InstantiateGoal(D3DXVECTOR3(150.0F, 0.0F, 0.0F));
+    GIMMICKFACTORY::InstantiateBatteryGimmick(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
+    //GIMMICKFACTORY::InstantiateFireGimmick(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
+    //GIMMICKFACTORY::InstantiateIceGimmick(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
+    //GIMMICKFACTORY::InstantiateWoodGimmick(D3DXVECTOR3(100.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+    //OBJECTFACTORY::InstantiateGoal(D3DXVECTOR3(100.0F, 10.0F, 0.0F));
 
     //ínå`
     //hResult = Field.Initialize(TEXT("Data/Common/Model/Field/Field.x"), TEXT("Field"), D3DXVECTOR3(0.0F, -10.0F, 0.0F), D3DXVECTOR3(20.0F, 20.0F, 20.0F));
-    hResult = Field.Initialize(TEXT("Data/GameScene/Model/Field/Stage01.x"), TEXT("Field"), D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.1F, 1.0F, 1.0F));
+    //hResult = Field.Initialize(TEXT("Data/GameScene/Model/Field/Stage01.x"), TEXT("Field"), D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(0.1F, 1.0F, 1.0F));
+    hResult = Field.Initialize(TEXT("Data/GameScene/Model/Field/new Stage01.x"), TEXT("Field"), D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(1.0F, 1.0F, 1.0F));
     if (FAILED(hResult))
     {
         return hResult;
@@ -136,7 +140,7 @@ HRESULT TRAINING::Initialize(void)
     }
 
     //îwåi
-    hResult = Back.Initialize(TEXT("BACKGROUND_BACK"), D3DXVECTOR3(0.0F, -12.0F, 80.0F), D3DXVECTOR2(320.0F, 120.0F));
+    hResult = Back.Initialize(TEXT("BACKGROUND_BACK"), D3DXVECTOR3(0.0F, -12.0F, 80.0F), D3DXVECTOR2(321.0F, 120.0F));
     if (FAILED(hResult))
     {
         return hResult;
@@ -240,8 +244,8 @@ void TRAINING::Update(void)
     ACTORMANAGER::Update();
     DIRECTIONALLIGHT::Update();
     COLLISIONMANAGER::Update();
-    Back.Update(0.0075F);
-    Back_Front.Update(0.015F);
+    Back.Update(0.00075F, true);
+    Back_Front.Update(0.0015F);
     Canvas.Update();
 
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))

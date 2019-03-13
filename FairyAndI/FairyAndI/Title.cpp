@@ -94,6 +94,7 @@ void TITLE::Draw(void)
 			break;
 
 		case MODE_MANUAL:
+            Config.Draw();
 			break;
 
 		default:
@@ -172,12 +173,23 @@ HRESULT TITLE::Initialize(void)
 		return hResult;
 	}
 
-	//カーソル
-	hResult = Cursor.Initialize(TEXT("CURSOR"), CursorPos, D3DXVECTOR2(100.0F, 100.0F));
-	if (FAILED(hResult))
-	{
-		return hResult;
-	}
+    //カーソル
+    hResult = Cursor.Initialize(TEXT("CURSOR"), CursorPos, D3DXVECTOR2(100.0F, 100.0F));
+    if (FAILED(hResult))
+    {
+        return hResult;
+    }
+
+    //キーコンフィグ
+    hResult = Config.Initialize(TEXT("CONFIG"));
+    if (FAILED(hResult))
+    {
+        return hResult;
+    }
+    else
+    {
+        Config.SetAlpha(0);
+    }
 
     //---BGM再生---//
     SOUNDMANAGER::Play(TEXT("BGM_TITLE"));
@@ -211,6 +223,7 @@ void TITLE::Uninitialize(void)
 		SelectButton.at(nConter).Uninitialize();
 	}
 	Cursor.Uninitialize();
+    Config.Uninitialize();
 
     //---テクスチャの削除---//
     TEXTUREMANAGER::Uninitialize();
@@ -293,13 +306,20 @@ void TITLE::Update(void)
 				break;
 
 			case MODE_MANUAL:
-                SCENEMANAGER::SetScene(SCENE_TRAINING);
+                Config.SetAlpha(255);
+                if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, 0xFFFF, TRIGGER))
+                {
+                    Mode = MODE_SELECT;
+                    SOUNDMANAGER::Stop(TEXT("SE_CANCEL"));
+                    SOUNDMANAGER::Play(TEXT("SE_CANCEL"));
+                }
                 break;
 
 			default:
 				break;
 		}
 	}
+
 	//フェードアウトが終わっていたら
 	if (FADE::CheckFadeEnd(FADE_OUT))
 	{

@@ -137,14 +137,13 @@ void ANIMATIONMODEL::ChangeAnimation(DWORD animationnumber)
     else
     {
         CurrentTrack = animationnumber;
+        SetTime(0.0);
 
         //アニメーションを最初の位置から再生させる
         if (FAILED(AnimationController->SetTrackAnimationSet(0, AnimationData.at(animationnumber))))
         {
             MessageBox(nullptr, TEXT("アニメーションの変更に失敗しました"), TEXT("描画エラー"), MB_ICONSTOP | MB_OK);
-            exit(EXIT_FAILURE);
         }
-
     }
 }
 

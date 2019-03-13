@@ -67,7 +67,6 @@ void GOAL::Draw(void)
 
     //設定
     Transform.MakeWorldMatrix(mtxWorld);
-    //GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---描画---//
     //描画対象チェック
@@ -79,7 +78,6 @@ void GOAL::Draw(void)
     }
 
     //描画
-    //pModel->Draw(Gray);
     pModel->Draw(Shader, TEXT("NonTextureModel"), (UINT)Gray, mtxWorld);
 }
 
@@ -102,7 +100,7 @@ HRESULT GOAL::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVECTOR3 ro
     // 位置・向きの初期設定
     Transform.Position = position;
     Transform.Rotation = rotation;
-    Transform.Scale = D3DXVECTOR3(200.0F, 200.0F, 200.0F);
+    Transform.Scale = D3DXVECTOR3(100.0F, 100.0F, 100.0F);
     Gray = false;
     Tag = TEXT("Goal");
 

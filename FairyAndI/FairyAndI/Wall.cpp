@@ -68,7 +68,7 @@ HRESULT WALL::Initialize(LPCTSTR texturename, tstring type, D3DXVECTOR3 position
     Transform.Rotation = rotation;
     BornTime = 0;
     //---ビルボードの作成---//
-    hResult = BillBoard.Initialize(texturename, D3DXVECTOR2(50.0F, 50.0F), Transform.Rotation.y > 0.0F);
+    hResult = BillBoard.Initialize(texturename, D3DXVECTOR2(5.0F, 5.0F), Transform.Rotation.y > 0.0F);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("壁の初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);

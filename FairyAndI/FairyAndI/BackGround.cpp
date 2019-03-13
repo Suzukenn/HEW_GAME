@@ -1,6 +1,7 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
 #include "BackGround.h"
 #include "InputManager.h"
+#include "Player.h"
 #include "TextureManager.h"
 #include "SideViewCamera.h"
 
@@ -69,21 +70,48 @@ void BACKGROUND::Uninitialize(void)
 //
 //戻り値：なし
 /////////////////////////////////////////////
-void BACKGROUND::Update(float value)
+void BACKGROUND::Update(float value, bool nonstickmove)
 {
     //---各種宣言---//
     float Stick;
+
+    if (PLAYER::GetPlayerState() == PLAYERSTATE_ATTACK || PLAYER::GetPlayerState() == PLAYERSTATE_DAMAGE)
+    {
+        return;
+    }
 
     Stick = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT).x;
 
     if (Stick)
     {
         Position.x += 0.5F * Stick;
-        Billboard.MoveTexture(value * Stick);
+        if (Position.x < 0.0F)
+        {
+            Position.x = 0.0F;
+            if (nonstickmove)
+            {
+                Billboard.MoveTexture(value);
+            }
+        }
+        else if (Position.x > 1500.0F)
+        {
+            Position.x = 1500.0F;
+            if (nonstickmove)
+            {
+                Billboard.MoveTexture(value);
+            }
+        }
+        else
+        {
+            Billboard.MoveTexture(value * Stick);
+        }
     }
     else
     {
-        Billboard.MoveTexture(value);
+        if (nonstickmove)
+        {
+            Billboard.MoveTexture(value);
+        }
     }
     Billboard.Update();
 }

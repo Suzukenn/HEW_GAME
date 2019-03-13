@@ -9,7 +9,7 @@
 
 //‘O•ûéŒ¾//
 class SPHERE;
-//class OBB;
+
 //ƒNƒ‰ƒXéŒ¾//
 class BATTERYGIMMICK final : public GAMEOBJECT
 {
@@ -19,7 +19,6 @@ class BATTERYGIMMICK final : public GAMEOBJECT
 		std::weak_ptr<MODEL> Model;
         std::weak_ptr<SHADER> Shader;
 		SPHERE* Collision;
-		//OBB* Collision;
 
 	public:
 		BATTERYGIMMICK(LPCTSTR, D3DXVECTOR3, D3DXVECTOR3);

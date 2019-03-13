@@ -8,16 +8,18 @@
 #include "Model.h"
 
 //‘O•ûéŒ¾//
-class OBB;
+class SPHERE;
 
 //ƒNƒ‰ƒXéŒ¾//
 class ICEGIMMICK final : public GAMEOBJECT
 {
 	private:
         bool Gray;
+        bool Small;
 
 		std::weak_ptr<MODEL> Model;
-        OBB* Collision;
+        std::weak_ptr<SHADER> Shader;
+        SPHERE* Collision;
 
 	public:
 

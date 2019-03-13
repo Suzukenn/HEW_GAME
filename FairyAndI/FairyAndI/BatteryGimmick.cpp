@@ -60,7 +60,6 @@ void BATTERYGIMMICK::Draw(void)
 
     //ê›íË
     Transform.MakeWorldMatrix(mtxWorld);
-    //GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---ï`âÊ---//
     //ï`âÊëŒè€É`ÉFÉbÉN
@@ -116,9 +115,8 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DX
         return hResult;
     }
 
-
     //---ìñÇΩÇËîªíËÇÃïtó^---//
-	Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Battery"), this);
+	Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Battery"), this);
 
 	return hResult;
 }
@@ -186,16 +184,17 @@ void BATTERYGIMMICK::Update(void)
     }
 
     BulletPosition = Transform.Position;
+    Transform.Position.y += 10.0F;
 
 	if (PLAYER::GetPlayerPosition().x < Transform.Position.x)
 	{
         Transform.Rotation.y = 270.0F;
-        BulletPosition.x -= 10.0F;
+        BulletPosition.x -= 20.0F;
 	}
 	else if (PLAYER::GetPlayerPosition().x > Transform.Position.x)
 	{
         Transform.Rotation.y = 90.0F;
-		BulletPosition.x += 10.0F;
+		BulletPosition.x += 20.0F;
 	}
 
     //2ïbåoÇ¡ÇΩÇÁ

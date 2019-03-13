@@ -5,3 +5,4 @@ Data/Title/Cursor.png CURSOR
 Data/Title/PushButton.png PUSHBUTTON
 Data/Title/GameStart.png GAMESTART
 Data/Title/ControlManual.png MANUAL
+Data/Title/Config.png CONFIG

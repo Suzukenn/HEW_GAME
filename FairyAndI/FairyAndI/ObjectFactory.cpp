@@ -20,7 +20,7 @@
 void OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3 position)
 {
     //---生成---//
-    ACTORMANAGER::GameObject.emplace_back(new ELEMENT(TEXT("FIRE"), TEXT("FIRE"), position, D3DXVECTOR3(0.0F, 0.0F, 0.0F), D3DXVECTOR3(1000.0F, 1000.0F, 1000.0F)));
+    ACTORMANAGER::GameObject.emplace_back(new ELEMENT(TEXT("FIRE"), TEXT("FIRE"), position, D3DXVECTOR3(0.0F, 0.0F, 0.0F), D3DXVECTOR3(100.0F, 100.0F, 100.0F)));
 }
 
 /////////////////////////////////////////////
@@ -50,7 +50,7 @@ void OBJECTFACTORY::InstantiateGoal(D3DXVECTOR3 position)
 void OBJECTFACTORY::InstantiateIceElement(D3DXVECTOR3 position)
 {
     //---生成---//
-    ACTORMANAGER::GameObject.emplace_back(new ELEMENT(TEXT("ICE"), TEXT("ICE"), position, D3DXVECTOR3(0.0F, 0.0F, 0.0F), D3DXVECTOR3(1000.0F, 1000.0F, 1000.0F)));
+    ACTORMANAGER::GameObject.emplace_back(new ELEMENT(TEXT("ICE"), TEXT("ICE"), position, D3DXVECTOR3(0.0F, 0.0F, 0.0F), D3DXVECTOR3(500.0F, 500.0F, 500.0F)));
 }
 
 /////////////////////////////////////////////
@@ -84,9 +84,9 @@ void OBJECTFACTORY::InstantiateRockElement(D3DXVECTOR3 position)
 }
 
 /////////////////////////////////////////////
-//関数名：InstantiateRockElement
+//関数名：InstantiateSlimeBullet
 //
-//機能：岩のエレメントの生成
+//機能：スライムの弾の生成
 //
 //引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
 //
@@ -99,9 +99,9 @@ void OBJECTFACTORY::InstantiateSlimeBullet(D3DXVECTOR3 position, D3DXVECTOR3 rot
 }
 
 /////////////////////////////////////////////
-//関数名：InstantiateRockElement
+//関数名：InstantiateWoodBullet
 //
-//機能：岩のエレメントの生成
+//機能：お化けの木の弾の生成
 //
 //引数：(D3DXVECTOR3)位置,(D3DXVECTOR3)回転
 //

@@ -4,6 +4,7 @@
 #include "CollisionManager.h"
 #include "Model.h"
 #include "ModelManager.h"
+#include "Skill.h"
 #include "Sphere.h"
 #include "SquareGauge.h"
 
@@ -124,7 +125,14 @@ void BATTERYCANNON::OnCollision(COLLISION* opponent)
     //’µ‚Ë•Ô‚Á‚½“®‚«
     if (opponent->Owner->GetTag() == TEXT("Wall"))
     {
-        Move.x = -Move.x;
+        SKILL* Skill = dynamic_cast<SKILL*>(opponent->Owner);
+        if (Skill)
+        {
+            if (Skill->GetType() == TEXT("SOFT"))
+            {
+                Move.x = -Move.x;
+            }
+        }
     }
     else
     {

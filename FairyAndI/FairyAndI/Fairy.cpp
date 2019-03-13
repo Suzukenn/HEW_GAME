@@ -8,6 +8,7 @@
 #include "ModelManager.h"
 #include "Player.h"
 #include "SideViewCamera.h"
+#include "SoundManager.h"
 #include "Sphere.h"
 #include "SquareGauge.h"
 
@@ -215,11 +216,15 @@ void FAIRY::Update(void)
     //ボタンを押したら思考状態へ移行
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_Y, TRIGGER))
     {
+        SOUNDMANAGER::Stop(TEXT("SE_FAIRY_BOOTTIME"));
+        SOUNDMANAGER::Play(TEXT("SE_FAIRY_BOOTTIME"));
         bThink = !bThink;
         Model->ChangeAnimation(bThink ? STATE_THINK : (DWORD)State);
     }
 	else if (SQUAREGAUGE::GetFairyTime() == false)
 	{
+        SOUNDMANAGER::Stop(TEXT("SE_FAIRY_EXITTIME"));
+        SOUNDMANAGER::Play(TEXT("SE_FAIRY_EXITTIME"));
 		bThink = false;
 		Model->ChangeAnimation(bThink ? STATE_THINK : (DWORD)State);
 	}
@@ -227,6 +232,9 @@ void FAIRY::Update(void)
     //ボタンを押したらアイテムを取りに行く
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_X, TRIGGER))
     {
+        SOUNDMANAGER::Stop(TEXT("SE_FAIRY_BOOTTIME"));
+        SOUNDMANAGER::Play(TEXT("SE_FAIRY_BOOTTIME"));
+
         Collection = SearchElement(ElementPosition);
     }
 
