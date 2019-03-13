@@ -70,6 +70,8 @@ HRESULT TRAP::Initialize(LPCTSTR texturename, tstring type, D3DXVECTOR3 position
     Transform.Position = position;
     Transform.Rotation = rotation;
     BornTime = 0;
+	Tag = TEXT("Trap");
+	Type = type;
 
     //---ビルボードの作成---//
     hResult = BillBoard.Initialize(texturename, D3DXVECTOR2(5.0F, 5.0F), Transform.Rotation.y > 0.0F);
@@ -80,7 +82,7 @@ HRESULT TRAP::Initialize(LPCTSTR texturename, tstring type, D3DXVECTOR3 position
     }
 
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.5F, TEXT("Skill"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Skill"), this);
 
     return hResult;
 }

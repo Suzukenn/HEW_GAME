@@ -67,7 +67,7 @@ HRESULT GRENADE::Initialize(LPCTSTR texturename, tstring type, D3DXVECTOR3 posit
 
     //---èâä˙âªèàóù---//
     Transform.Position = position;
-    Transform.Rotation = rotation;
+	Transform.Rotation = rotation;
     BornTime = 0;
     Move = D3DXVECTOR3(sinf(Transform.Rotation.y), 3.0F, 0.0F);
     Tag = TEXT("Grenade");
@@ -82,7 +82,7 @@ HRESULT GRENADE::Initialize(LPCTSTR texturename, tstring type, D3DXVECTOR3 posit
     }
 
     //---ìñÇΩÇËîªíËÇÃïtó^---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.5F, TEXT("Skill"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Skill"), this);
 
 	return hResult;
 }

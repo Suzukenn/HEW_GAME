@@ -4,6 +4,7 @@
 #include "CollisionManager.h"
 #include "Model.h"
 #include "ModelManager.h"
+#include "ShaderManager.h"
 #include "Skill.h"
 #include "Sphere.h"
 #include "SquareGauge.h"
@@ -71,7 +72,7 @@ void BATTERYCANNON::Draw(void)
     }
 
     //描画
-    pModel->Draw(Gray);
+	pModel->Draw(Shader, TEXT("NonTextureModel"), (UINT)Gray, mtxWorld);
 }
 
 /////////////////////////////////////////////
@@ -105,8 +106,17 @@ HRESULT BATTERYCANNON::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXV
         return hResult;
     }
 
+	//---シェーダーの取得---//
+	hResult = SHADERMANAGER::GetShader(TEXT("MODEL"), Shader);
+	if (FAILED(hResult))
+	{
+		MessageBox(nullptr, TEXT("大樹ギミック描画用のシェーダーの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+		Uninitialize();
+		return hResult;
+	}
+
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.5F, TEXT("BatteryCannon"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("BatteryCannon"), this);
 
     return hResult;
 }

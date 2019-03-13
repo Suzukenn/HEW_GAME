@@ -7,15 +7,6 @@
 #include "GameObject.h"
 #include "Main.h"
 
-//—ñ‹“Œ^’è‹`//
-//typedef enum
-//{
-//	ENEMYSTATE_NORMAL,
-//	ENEMYSTATE_BATTLE,
-//	ENEMYSTATE_RETURN,
-//	MAX_ENEMYSTATE
-//} ENEMYSTATE;
-
 //‘O•ûéŒ¾//
 class SPHERE;
 
@@ -28,8 +19,6 @@ class ENEMY : public GAMEOBJECT
 
 		std::shared_ptr<ANIMATIONMODEL> Model;
 		SPHERE* Collision;
-
-		//ENEMYSTATE StateType;
 
 	public:
 		HRESULT Initialize(LPCTSTR, tstring, D3DXVECTOR3, D3DXVECTOR3, D3DXVECTOR3);

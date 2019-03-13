@@ -115,7 +115,7 @@ HRESULT ICEGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVECT
     }
 
     //---“–‚½‚è”»’è‚Ì•t—^---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Gimmick"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 13.0F, TEXT("Gimmick"), this);
 
 	return hResult;
 }

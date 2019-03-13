@@ -18,6 +18,7 @@ class BATTERYCANNON final : public GAMEOBJECT
         DWORD BornTime;
         bool Gray;
 
+		std::weak_ptr<SHADER> Shader;
         std::weak_ptr<MODEL> Model;
         SPHERE* Collision;
 

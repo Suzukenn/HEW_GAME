@@ -34,6 +34,7 @@ class PLAYER final : public GAMEOBJECT
         PLAYERSTATE State;
         int Vibration;
         int AnimationTime;
+		int NotCollision;
         bool Gray;
         bool Jump;
         bool IsGround;

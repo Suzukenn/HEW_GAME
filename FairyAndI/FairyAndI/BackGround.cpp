@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "TextureManager.h"
 #include "SideViewCamera.h"
+#include "SquareGauge.h"
 
 //ÅÅÅÅÅÅä÷êîíËã`ÅÅÅÅÅÅ//
 /////////////////////////////////////////////
@@ -79,12 +80,17 @@ void BACKGROUND::Update(float value, bool nonstickmove)
     {
         return;
     }
+	else if (SQUAREGAUGE::GetFairyTime())
+	{
+		return;
+	}
+
+	Position.x = PLAYER::GetPlayerPosition().x;
 
     Stick = INPUTMANAGER::GetGamePadStick(GAMEPADNUMBER_1P, GAMEPADDIRECTION_LEFT).x;
 
     if (Stick)
     {
-        Position.x += 0.5F * Stick;
         if (Position.x < 0.0F)
         {
             Position.x = 0.0F;
@@ -95,7 +101,6 @@ void BACKGROUND::Update(float value, bool nonstickmove)
         }
         else if (Position.x > 1500.0F)
         {
-            Position.x = 1500.0F;
             if (nonstickmove)
             {
                 Billboard.MoveTexture(value);

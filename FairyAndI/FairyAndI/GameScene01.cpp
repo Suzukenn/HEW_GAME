@@ -8,6 +8,7 @@
 #include "DirectionalLight.h"
 #include "Fade.h"
 #include "GameScene01.h"
+#include "GameOver.h"
 #include "GimmickFactory.h"
 #include "InputManager.h"
 #include "ModelManager.h"
@@ -97,18 +98,20 @@ HRESULT GAME01::Initialize(void)
 
     //---オブジェクトの初期化処理---//
     //キャラクター
-    CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(50.0F, 50.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
+    CHARACTERFACTORY::InstantiatePlayer(D3DXVECTOR3(50.0F, 50.0F, 0.0F), D3DXVECTOR3(0.0F, 90.0F, 0.0F));
     CHARACTERFACTORY::InstantiateFairy(D3DXVECTOR3(50.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 0.0F, 0.0F));
 
     //敵
-    CHARACTERFACTORY::InstantiateSlime(D3DXVECTOR3(700.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 270.0F, 0.0F));
+	CHARACTERFACTORY::InstantiateSlime(D3DXVECTOR3(700.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, -90.0F, 0.0F));
+	CHARACTERFACTORY::InstantiateSlime(D3DXVECTOR3(900.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, -90.0F, 0.0F));
 
     //エレメント
-    OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3(300.0F, 10.0F, 0.0F));
+	OBJECTFACTORY::InstantiateFireElement(D3DXVECTOR3(300.0F, 10.0F, 0.0F));
+	OBJECTFACTORY::InstantiateIceElement(D3DXVECTOR3(400.0F, 10.0F, 0.0F));
 
     //ギミック
-    GIMMICKFACTORY::InstantiateWoodGimmick(D3DXVECTOR3(500.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
-    OBJECTFACTORY::InstantiateGoal(D3DXVECTOR3(1000.0F, 10.0F, 0.0F));
+	GIMMICKFACTORY::InstantiateWoodGimmick(D3DXVECTOR3(500.0F, 10.0F, 0.0F), D3DXVECTOR3(0.0F, 180.0F, 0.0F));
+	OBJECTFACTORY::InstantiateGoal(D3DXVECTOR3(1000.0F, 10.0F, 0.0F));
 
     //地形
     hResult = Field.Initialize(TEXT("Data/GameScene/Model/Field/Stage01.x"), TEXT("Field"), D3DXVECTOR3(0.0F, 10.0F, 0.0F), D3DXVECTOR3(1.0F, 1.0F, 1.0F));
@@ -151,6 +154,7 @@ HRESULT GAME01::Initialize(void)
     }
 
     FADE::SetFade(FADE_IN);
+	GAMEOVER::SetRetryScene(SCENE_GAME01);
 
     //---BGM再生---//
     SOUNDMANAGER::Play(TEXT("BGM_GAME"));
@@ -201,8 +205,6 @@ void GAME01::Uninitialize(void)
 /////////////////////////////////////////////
 void GAME01::Update(void)
 {
-    //---各種宣言---//
-
     //---オブジェクトの更新処理---//
     SIDEVIEWCAMERA::Update(PLAYER::GetPlayerPosition());
     ACTORMANAGER::Update();

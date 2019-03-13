@@ -17,7 +17,7 @@
 
 //＝＝＝定数・マクロ定義＝＝＝//
 #define GRAVITY 0.018F
-#define JUMP 2.0F
+#define JUMP 0.75F
 
 //＝＝＝グローバル宣言＝＝＝//
 int hp;
@@ -90,6 +90,7 @@ HRESULT PLAYER::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
     IsGround = false;
     Vibration = 0;
     AnimationTime = 0;
+	NotCollision = 0;
     Move = D3DXVECTOR3(0.0F, 0.0F, 0.0F);
     VibrationPower = D3DXVECTOR2(0.0F, 0.0F);
     Tag = TEXT("Player");
@@ -126,10 +127,23 @@ void PLAYER::OnCollision(COLLISION* opponent)
 {
 	if (opponent->Owner->GetTag() == TEXT("Enemy") || opponent->Owner->GetTag() == TEXT("EnemyBullet") || opponent->Owner->GetTag() == TEXT("FireGimmick"))
 	{
-        Transform.Position.x -=5.0F;
-        Model->ChangeAnimation(PLAYERSTATE_DAMAGE);
-        --HP;
-    }
+		if (!NotCollision)
+		{
+			Transform.Position.x -= 15.0F;
+			Model->ChangeAnimation(PLAYERSTATE_DAMAGE);
+			Model->SetSpeed(1.3);
+			--HP;
+			State = PLAYERSTATE_DAMAGE;
+			AnimationTime = 90;
+			VibrationPower = D3DXVECTOR2(0.7F, 0.7F);
+			Vibration = 45;
+			NotCollision = 240;
+		}
+	}
+	else
+	{
+		Transform.Position.x -= Move.x;
+	}
 }
 
 /////////////////////////////////////////////
@@ -144,14 +158,10 @@ void PLAYER::OnCollision(COLLISION* opponent)
 void PLAYER::Uninitialize(void)
 {
     Model->Uninitialize();
-
     ACTORMANAGER::Destroy(this);
-
-    if (Collision)
-    {
-        COLLISIONMANAGER::Destroy((COLLISION*)Collision);
-        Collision = nullptr;
-    }
+    COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+    Collision = nullptr;
+	INPUTMANAGER::StopGamePadVibration(GAMEPADNUMBER_1P);
 }
 
 /////////////////////////////////////////////
@@ -166,7 +176,6 @@ void PLAYER::Uninitialize(void)
 void PLAYER::Update(void)
 {
     //---各種宣言---//
-    float fAfterYPosition;
     D3DXVECTOR3 vecInstancePosition;
     D3DXVECTOR2 vecStickVector;
     D3DXVECTOR3 vecCameraRotation;
@@ -212,17 +221,17 @@ void PLAYER::Update(void)
     }
 
     //着地判定
-    if (FIELD::CheckField(&D3DXVECTOR3(Transform.Position.x, Transform.Position.y - 11.0F, Transform.Position.z), &D3DXVECTOR3(0.0F, 1.0F, 0.0F), fAfterYPosition))
-    {
-        Transform.Position.y = fAfterYPosition + 11.0F;
-        Move.y = 0.0F;
-        Jump = false;
-        IsGround = true;
-        if (State != PLAYERSTATE_ATTACK)
-        {
-            State = PLAYERSTATE_WAIT;
-        }
-    }
+	if (Transform.Position.y <= 11.0F)
+	{
+		Transform.Position.y = 11.0F;
+		Move.y = 0.0F;
+		Jump = false;
+		IsGround = true;
+		if (State != PLAYERSTATE_ATTACK && State != PLAYERSTATE_DAMAGE)
+		{
+		    State = PLAYERSTATE_WAIT;
+		}
+	}
     else
     {
         State = PLAYERSTATE_FALL;
@@ -231,7 +240,7 @@ void PLAYER::Update(void)
 
     //---モデル操作---//
     //移動
-    if (State != PLAYERSTATE_ATTACK && vecStickVector != D3DXVECTOR2(0.0F, 0.0F))
+    if (State != PLAYERSTATE_ATTACK && State != PLAYERSTATE_DAMAGE && vecStickVector != D3DXVECTOR2(0.0F, 0.0F))
     {
         Move.x += VALUE_MOVE_PLAYER * vecStickVector.x;
 
@@ -254,7 +263,7 @@ void PLAYER::Update(void)
     }
 
 	//ジャンプ
-    if (!Jump && State != PLAYERSTATE_ATTACK)
+    if (!Jump && State != PLAYERSTATE_ATTACK && State != PLAYERSTATE_DAMAGE)
     {
         if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_A, TRIGGER))
         {
@@ -273,12 +282,16 @@ void PLAYER::Update(void)
         }
     }
 
+	if (State == PLAYERSTATE_DAMAGE)
+	{
+		if (!--AnimationTime)
+		{
+			State = PLAYERSTATE_WAIT;
+			Model->SetSpeed(1.0);
+		}
+	}
 
 	//---位置情報更新---//
-    //移動を反映
-    Transform.Position += Move;
-	Collision->Position = Transform.Position;
-
 	//移動制限
 	if (Transform.Position.y < 0.0F)
 	{
@@ -293,6 +306,10 @@ void PLAYER::Update(void)
 	{
         Transform.Position.x = 50.0F;
 	}
+
+	//移動を反映
+	Transform.Position += Move;
+	Collision->Position = Transform.Position;
 
     //---スキル生成---//
     if (INPUTMANAGER::GetGamePadButton(GAMEPADNUMBER_1P, XINPUT_GAMEPAD_B, TRIGGER))
@@ -333,6 +350,11 @@ void PLAYER::Update(void)
             State = PLAYERSTATE_WAIT;
         }
     }
+
+	if (NotCollision)
+	{
+		--NotCollision;
+	}
 
     Model->ChangeAnimation(State);
 

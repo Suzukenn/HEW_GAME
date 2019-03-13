@@ -116,7 +116,7 @@ HRESULT BATTERYGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DX
     }
 
     //---“–‚½‚è”»’è‚Ì•t—^---//
-	Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Battery"), this);
+	Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 13.0F, TEXT("Battery"), this);
 
 	return hResult;
 }

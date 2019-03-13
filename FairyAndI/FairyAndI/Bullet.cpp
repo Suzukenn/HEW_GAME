@@ -68,7 +68,9 @@ HRESULT BULLET::Initialize(LPCTSTR texturename, tstring type, D3DXVECTOR3 positi
     //---初期化処理---//
     Transform.Position = position;
     Transform.Rotation = rotation;
-    Move = D3DXVECTOR3(sinf(Transform.Rotation.y) * 1.5F, 0.0F, 0.0F);//-cosf(Transform.Rotation.y) * 1.5F);
+    Move = D3DXVECTOR3(sinf(Transform.Rotation.y) * 1.5F, 0.0F, 0.0F);
+	Tag = TEXT("Bullet");
+	Type = type;
 
     //---ビルボードの作成---//
     hResult = BillBoard.Initialize(texturename, D3DXVECTOR2(5.0F, 5.0F), Transform.Rotation.y > 0.0F);

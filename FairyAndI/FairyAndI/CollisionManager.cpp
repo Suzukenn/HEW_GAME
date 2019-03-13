@@ -243,20 +243,20 @@ void COLLISIONMANAGER::Update(void)
                 continue;
             }
 
-            //OBBで確認
-            pObb = dynamic_cast<OBB*>(*itrOpponent);
-            if (pObb)
-            {
-                bHit = (*itrBase)->CheckCollisionToOBB(pObb);
-            }
+			//球で確認
+			pSphere = dynamic_cast<SPHERE*>(*itrOpponent);
+			if (pSphere)
+			{
+				bHit = (*itrBase)->CheckCollisionToSphere(pSphere);
+			}
             else
             {
-                //球で確認
-                pSphere = dynamic_cast<SPHERE*>(*itrOpponent);
-                if (pSphere)
-                {
-                    bHit = (*itrBase)->CheckCollisionToSphere(pSphere);
-                }
+				//OBBで確認
+				pObb = dynamic_cast<OBB*>(*itrOpponent);
+				if (pObb)
+				{
+					bHit = (*itrBase)->CheckCollisionToOBB(pObb);
+				}
             }
             
             //衝突リストに登録

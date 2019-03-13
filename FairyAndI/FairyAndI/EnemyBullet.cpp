@@ -59,14 +59,13 @@ void ENEMYBULLET::Draw(void)
 
     //Ý’è
     Transform.MakeWorldMatrix(mtxWorld);
-    //GetDevice()->SetTransform(D3DTS_WORLD, &mtxWorld);
 
     //---•`‰æ---//
     //•`‰æ‘ÎÛƒ`ƒFƒbƒN
     pModel = Model.lock();
     if (!pModel)
     {
-        MessageBox(nullptr, TEXT("–C‘äƒMƒ~ƒbƒN‚Ìƒ‚ƒfƒ‹î•ñ‚ÌŽæ“¾‚ÉŽ¸”s‚µ‚Ü‚µ‚½"), TEXT("•`‰æƒGƒ‰["), MB_OK);
+        MessageBox(nullptr, TEXT("“G’e‚Ìƒ‚ƒfƒ‹î•ñ‚ÌŽæ“¾‚ÉŽ¸”s‚µ‚Ü‚µ‚½"), TEXT("•`‰æƒGƒ‰["), MB_OK);
         return;
     }
 
@@ -92,7 +91,7 @@ HRESULT ENEMYBULLET::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVEC
     //---‰Šú‰»ˆ—---//
     Transform.Position = position;
     Transform.Rotation = rotation;
-    Transform.Scale = D3DXVECTOR3(10.0F, 10.0F, 10.0F);
+    Transform.Scale = modelname == TEXT("SLIMEBULLET") ? D3DXVECTOR3(3.0F, 3.0F, 3.0F) : D3DXVECTOR3(10.0F, 10.0F, 10.0F);
     BornTime = 0;
     Move = D3DXVECTOR3(-sinf(Transform.Rotation.y) * 1.5F, 0.0F, 0.0F);
     Gray = false;
@@ -117,7 +116,7 @@ HRESULT ENEMYBULLET::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVEC
     }
 
     //---“–‚½‚è”»’è‚Ì•t—^---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.5F, TEXT("EnemyBullet"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, Transform.Scale.x, TEXT("EnemyBullet"), this);
 
     return hResult;
 }
@@ -134,7 +133,11 @@ HRESULT ENEMYBULLET::Initialize(LPCTSTR modelname, D3DXVECTOR3 position, D3DXVEC
 void ENEMYBULLET::OnCollision(COLLISION* opponent)
 {
     ACTORMANAGER::Destroy(this);
-    COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+	if (Collision)
+	{
+		COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+		Collision = nullptr;
+	}
 }
 
 /////////////////////////////////////////////
@@ -180,9 +183,12 @@ void ENEMYBULLET::Update(void)
         ACTORMANAGER::Destroy(this);
         COLLISIONMANAGER::Destroy((COLLISION*)Collision);
     }
-    else
-    {
-        Transform.Position += Move;
-        Collision->Position = Transform.Position;
-    }
+	else
+	{
+		Transform.Position += Move;
+		if (Collision)
+		{
+			Collision->Position = Transform.Position;
+		}
+	}
 }

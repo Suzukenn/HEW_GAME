@@ -1,4 +1,6 @@
 //＝＝＝ヘッダファイル読み込み＝＝＝//
+#include "Fade.h"
+#include "SceneManager.h"
 #include "Timer.h"
 #include "Texture.h"
 #include "TextureManager.h"
@@ -150,17 +152,17 @@ void TIMER::Update(void)
 	timer = Timer;
 
 	///シーンの切替（タイムオーバー）
-	//if (Timer < 1)
-	//{
-	//	//if (EndFadeIn())
-	//	//{
-	//	//	StartFadeOut();
-	//	//}
-	//	//if (EndFadeOut())
-	//	//{
-	//	//	SetScene(SCENE_GAMEOVER);
-	//	//}
-	//}
+	if (Timer < 1)
+	{
+		if (FADE::CheckFadeEnd(FADE_IN))
+		{
+			FADE::SetFade(FADE_OUT);
+		}
+		if (FADE::CheckFadeEnd(FADE_OUT))
+		{
+			SCENEMANAGER::SetScene(SCENE_GAMEOVER);
+		}
+	}
 
 	nCnt++;
 	if (nCnt > 60)

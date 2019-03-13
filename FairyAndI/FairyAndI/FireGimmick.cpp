@@ -101,7 +101,7 @@ HRESULT FIREGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVEC
     hResult = MODELMANAGER::GetModel(modelfile, Model);
     if (FAILED(hResult))
 	{
-        MessageBox(nullptr, TEXT("炎の壁ギミックのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("炎壁ギミックのモデル情報の取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
 		return hResult;
 	}
@@ -110,13 +110,13 @@ HRESULT FIREGIMMICK::Initialize(LPCTSTR modelfile, D3DXVECTOR3 position, D3DXVEC
     hResult = SHADERMANAGER::GetShader(TEXT("MODEL"), Shader);
     if (FAILED(hResult))
     {
-        MessageBox(nullptr, TEXT("氷壁ギミック描画用のシェーダーの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
+        MessageBox(nullptr, TEXT("炎壁ギミック描画用のシェーダーの取得に失敗しました"), TEXT("初期化エラー"), MB_OK);
         Uninitialize();
         return hResult;
     }
 
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.0F, TEXT("Gimmick"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 13.0F, TEXT("Gimmick"), this);
 
 	return hResult;
 }
@@ -187,9 +187,9 @@ void FIREGIMMICK::Update(void)
 
     if (Small)
     {
-        Transform.Scale.x -= 1.0F;
-        Transform.Scale.y -= 1.0F;
-        Transform.Scale.z -= 1.0F;
+        Transform.Scale.x -= 7.0F;
+        Transform.Scale.y -= 7.0F;
+        Transform.Scale.z -= 7.0F;
         if (Transform.Scale.x < 0.0F)
         {
             ACTORMANAGER::Destroy(this);

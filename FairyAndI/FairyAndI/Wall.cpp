@@ -67,8 +67,11 @@ HRESULT WALL::Initialize(LPCTSTR texturename, tstring type, D3DXVECTOR3 position
     Transform.Position = position;
     Transform.Rotation = rotation;
     BornTime = 0;
+	Tag = TEXT("Wall");
+	Type = type;
+
     //---ビルボードの作成---//
-    hResult = BillBoard.Initialize(texturename, D3DXVECTOR2(5.0F, 5.0F), Transform.Rotation.y > 0.0F);
+    hResult = BillBoard.Initialize(texturename, D3DXVECTOR2(50.0F, 50.0F), Transform.Rotation.y > 0.0F);
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("壁の初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
@@ -77,7 +80,7 @@ HRESULT WALL::Initialize(LPCTSTR texturename, tstring type, D3DXVECTOR3 position
 
 
     //---当たり判定の付与---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 3.5F, TEXT("Wall"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Wall"), this);
 
     return hResult;
 }
@@ -133,7 +136,7 @@ void WALL::Update(void)
         return;
     }
 
-    if (++BornTime > 60)
+    if (++BornTime > 90)
     {
         ACTORMANAGER::Destroy(this);
     }

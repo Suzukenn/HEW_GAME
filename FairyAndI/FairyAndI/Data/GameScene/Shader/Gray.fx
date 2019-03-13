@@ -8,11 +8,9 @@ sampler MeshTextureSampler =
 sampler_state
 {
     Texture = <Texture>;    //対象のテクスチャ(外部から受け取ります)  
-    MinFilter = LINEAR;     //縮小時のサンプリング(LINEAR→線形補完)
 
-    //MagFilter = LINEAR;     //拡大時
-    //MinFilter = LINEAR;     //縮小時
-    //MipFilter = LINEAR;     //ミップマップ
+    MagFilter = LINEAR;     //拡大時
+    MinFilter = LINEAR;     //縮小時
 };
 
 //＝＝＝構造体定義＝＝＝//

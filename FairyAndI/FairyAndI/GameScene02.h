@@ -7,7 +7,6 @@
 #include "Canvas.h"
 #include "Field.h"
 #include "FlexibleCamera.h"
-#include "Ground.h"
 #include "Main.h"
 
 //ƒNƒ‰ƒXéŒ¾//
@@ -18,7 +17,6 @@ private:
 	BACKGROUND Back_Front;
 	CANVAS Canvas;
 	FIELD Field;
-	GROUND Ground;
 	FLEXIBLECAMERA FlexibleCamera;
 
 	bool Mode;

@@ -351,8 +351,9 @@ HRESULT SetupEnvironment(HWND handle)
     d3dpp.BackBufferHeight = (UINT)SCREEN_HEIGHT;			    //ゲーム画面サイズ(高さ)
     d3dpp.BackBufferFormat = d3ddm.Format;				        //バックバッファフォーマットはディスプレイモードに合わせて設定
     d3dpp.SwapEffect = D3DSWAPEFFECT_DISCARD;	                //映像信号に同期してフリップする
-    d3dpp.Windowed = TRUE;					                    //ウィンドウモード
-    d3dpp.EnableAutoDepthStencil = TRUE;				        //デプスバッファ（Ｚバッファ）とステンシルバッファを作成
+	d3dpp.Windowed = FALSE;					                    //ウィンドウモード
+	//d3dpp.Windowed = TRUE;					                    //ウィンドウモード
+	d3dpp.EnableAutoDepthStencil = TRUE;				        //デプスバッファ（Ｚバッファ）とステンシルバッファを作成
     d3dpp.AutoDepthStencilFormat = D3DFMT_D24S8;		        //デプスバッファとして24bit、ステンシルバッファとして8bitを使う
     d3dpp.FullScreen_RefreshRateInHz = 0;						//リフレッシュレート
     d3dpp.PresentationInterval = D3DPRESENT_INTERVAL_IMMEDIATE;	//垂直同期信号に同期しない

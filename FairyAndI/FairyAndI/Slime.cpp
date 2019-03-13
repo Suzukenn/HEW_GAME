@@ -51,20 +51,7 @@ SLIME::~SLIME(void)
 /////////////////////////////////////////////
 void SLIME::Draw(void)
 {
-    //---äeéÌêÈåæ---//
-    D3DXMATRIX mtxWorld;
-
-    //---ÉèÅ[ÉãÉhÉ}ÉgÉäÉNÉXÇÃê›íË---//
-    //èâä˙âª
-    D3DXMatrixIdentity(&mtxWorld);
-
-    //ê›íË
-    Transform.MakeWorldMatrix(mtxWorld);
-
-    //---ï`âÊ---//
-    Model->Draw(mtxWorld, false);
-
-    //ENEMY::Draw();
+    ENEMY::Draw();
 }
 
 /////////////////////////////////////////////
@@ -83,7 +70,7 @@ HRESULT SLIME::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
 
     //---èâä˙âªèàóù---//
     //èâä˙ê›íË
-    hResult = ENEMY::Initialize(TEXT("SLIME"), TEXT("Slime"), position, rotation, D3DXVECTOR3(450.0F, 450.0F, 450.0F));
+    hResult = ENEMY::Initialize(TEXT("SLIME"), TEXT("Enemy"), position, rotation, D3DXVECTOR3(450.0F, 450.0F, 450.0F));
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("ÉXÉâÉCÉÄÇÃèâä˙âªÇ…é∏îsÇµÇ‹ÇµÇΩ"), TEXT("èâä˙âªÉGÉâÅ["), MB_OK);
@@ -95,7 +82,7 @@ HRESULT SLIME::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
     Move = D3DXVECTOR3(-0.1F, 0.0F, 0.0F);
 
     //---ìñÇΩÇËîªíËÇÃïtó^---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Enemy"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 4.5F, TEXT("Enemy"), this);
 
     return hResult;
 }
@@ -135,6 +122,11 @@ void SLIME::Uninitialize(void)
 {
     //---äJï˙---//
     ENEMY::Uninitialize();
+	if (Collision)
+	{
+		COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+		Collision = nullptr;
+	}
 }
 
 /////////////////////////////////////////////
@@ -165,7 +157,7 @@ void SLIME::Update(void)
                 //2ïbé~Ç‹ÇÈ
                 if (++nStopCount > 120)
                 {
-                    Transform.Rotation.y = -Transform.Rotation.y;
+					Transform.Rotation.y = -Transform.Rotation.y;
                     Move.x = -Move.x;
                     nStopCount = 0;
                 }
@@ -177,17 +169,34 @@ void SLIME::Update(void)
             }
 
             //---ìGÇÃçıìG---//
-            if (ENEMY::SearchTarget(PlayerPosition, VISIBILITY))
-            {
-                if (AttackCool)
-                {
-                    --AttackCool;
-                }
-                else
-                {
-                    State = SLIMESTATE_ATTACK;
-                }
-            }
+			if (PlayerPosition.x < Transform.Position.x + VISIBILITY && PlayerPosition.x > Transform.Position.x)
+			{
+				if (Transform.Rotation.y == 90.0F)
+				{
+					if (AttackCool)
+					{
+						--AttackCool;
+					}
+					else
+					{
+						State = SLIMESTATE_ATTACK;
+					}
+				}
+			}
+			else if (PlayerPosition.x > Transform.Position.x - VISIBILITY && PlayerPosition.x < Transform.Position.x)
+			{
+				if (Transform.Rotation.y == -90.0F)
+				{
+					if (AttackCool)
+					{
+						--AttackCool;
+					}
+					else
+					{
+						State = SLIMESTATE_ATTACK;
+					}
+				}
+			}
             break;
 
         case SLIMESTATE_ATTACK:
@@ -197,7 +206,7 @@ void SLIME::Update(void)
             if (++nAttackCount > 60)
             {
                 //çUåÇ
-                OBJECTFACTORY::InstantiateSlimeBullet(Transform.Position, Transform.Rotation);
+                OBJECTFACTORY::InstantiateSlimeBullet(Transform.Position, D3DXVECTOR3(Transform.Rotation.x, -Transform.Rotation.y, Transform.Rotation.z));
                 Model->ChangeAnimation(SLIMESTATE_MOVE);
                 AttackCool = 120;
                 nAttackCount = 0;

@@ -108,8 +108,8 @@ HRESULT SELECTSCENE::Initialize(void)
 
 	//各ボタンの行き先
 	Button.at(0).SetSelectStage(SCENE_GAME01);
-	Button.at(1).SetSelectStage(SCENE_GAME01);
-	Button.at(2).SetSelectStage(SCENE_GAME01);
+	Button.at(1).SetSelectStage(SCENE_GAME02);
+	Button.at(2).SetSelectStage(SCENE_GAME03);
 
 	//---テクスチャの読み込み---//
 	hResult = TEXTUREMANAGER::Initialize(TEXT("Data/SelectScene/TextureList.txt"));

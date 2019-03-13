@@ -69,7 +69,7 @@ HRESULT WOOD::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
     HRESULT hResult;
 
     //---‰Šú‰»ˆ—---//
-    hResult = ENEMY::Initialize(TEXT("WOOD"), TEXT("Wood"), position, rotation, D3DXVECTOR3(300.0F, 300.0F, 300.0F));
+    hResult = ENEMY::Initialize(TEXT("WOOD"), TEXT("Enemy"), position, rotation, D3DXVECTOR3(300.0F, 300.0F, 300.0F));
     if (FAILED(hResult))
     {
         MessageBox(nullptr, TEXT("–Ø‚ÌƒIƒoƒP‚Ì‰Šú‰»‚ÉŽ¸”s‚µ‚Ü‚µ‚½"), TEXT("‰Šú‰»ƒGƒ‰["), MB_OK);
@@ -80,7 +80,7 @@ HRESULT WOOD::Initialize(D3DXVECTOR3 position, D3DXVECTOR3 rotation)
     State = WOODSTATE_WAIT;
 
     //---“–‚½‚è”»’è‚Ì•t—^---//
-    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 10.0F, TEXT("Enemy"), this);
+    Collision = COLLISIONMANAGER::InstantiateToSphere(Transform.Position, 5.0F, TEXT("Enemy"), this);
 
     return hResult;
 }
@@ -120,6 +120,12 @@ void WOOD::Uninitialize(void)
 {
     //---ŠJ•ú---//
     ENEMY::Uninitialize();
+	if (Collision)
+	{
+		COLLISIONMANAGER::Destroy((COLLISION*)Collision);
+		Collision = nullptr;
+	}
+
 }
 
 /////////////////////////////////////////////
@@ -152,8 +158,8 @@ void WOOD::Update(void)
             }
 
             //---“G‚Ìõ“G---//
-            if (ENEMY::SearchTarget(PlayerPosition, VISIBILITY))
-            {
+			if (fabsf(Transform.Position.x - PlayerPosition.x) >= 50.0F)
+			{
                 if (!AttackCool)
                 {
                     State = WOODSTATE_ATTACK;

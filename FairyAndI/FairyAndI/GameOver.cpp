@@ -104,7 +104,6 @@ HRESULT GAMEOVER::Initialize(void)
 	LogoAlpha = 0;
 	CursorPos = D3DXVECTOR2(350.0F, 400.0F);
 	Select = 0;
-	RetryScene = SCENE_GAMECLEAR;			//ç°ÇæÇØå„Ç≈è¡Ç∑Ç±Ç∆
 
     hResult = TEXTUREMANAGER::Initialize(TEXT("Data/GameOver/TextureList.txt"));
     if (FAILED(hResult))

@@ -92,7 +92,7 @@ HRESULT CANVAS::Initialize(void)
     }
 
     //タイマー
-	hResult = Timer.Initialize(TEXT("TIMER"), D3DXVECTOR2(580.0F, 30.0F), D3DXVECTOR2(30.0F, 60.0F), 100);
+	hResult = Timer.Initialize(TEXT("TIMER"), D3DXVECTOR2(580.0F, 30.0F), D3DXVECTOR2(30.0F, 60.0F), 200);
 	if (FAILED(hResult))
 	{
 		MessageBox(nullptr, TEXT("アイテムの初期化に失敗しました"), TEXT("初期化エラー"), MB_OK);
